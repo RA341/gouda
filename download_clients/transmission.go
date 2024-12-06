@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/hekmon/transmissionrpc/v3"
 	"net/url"
-	"strconv"
 )
 
 type TransmissionClient struct {
@@ -55,18 +54,17 @@ func (tm *TransmissionClient) Health() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (tm *TransmissionClient) CheckTorrentStatus(torrentIds []string) ([]TorrentStatus, error) {
-	var cleanIds []int64
+func (tm *TransmissionClient) CheckTorrentStatus(torrentIds []int64) ([]TorrentStatus, error) {
+	//var cleanIds []int64
+	//for _, stringIds := range torrentIds {
+	//	convId, err := strconv.Atoi(stringIds)
+	//	if err != nil {
+	//		// todo logs !!!
+	//	}
+	//	cleanIds = append(cleanIds, int64(convId))
+	//}
 
-	for _, stringIds := range torrentIds {
-		convId, err := strconv.Atoi(stringIds)
-		if err != nil {
-			// todo logs !!!
-		}
-		cleanIds = append(cleanIds, int64(convId))
-	}
-
-	infos, err := tm.Client.TorrentGetAllFor(context.TODO(), cleanIds)
+	infos, err := tm.Client.TorrentGetAllFor(context.TODO(), torrentIds)
 	if err != nil {
 		return nil, err
 	}
@@ -78,6 +76,7 @@ func (tm *TransmissionClient) CheckTorrentStatus(torrentIds []string) ([]Torrent
 			Name:            *info.Name,
 			PercentProgress: fmt.Sprintf("%.2f", *info.PercentDone),
 			DownloadPath:    *info.DownloadDir,
+			Status:          info.Status.String(),
 		})
 	}
 

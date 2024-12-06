@@ -1,2 +1,4 @@
 /bin/
 torrents
+.env
+config.json

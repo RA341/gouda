@@ -1,0 +1,17 @@
+services:
+  transmissionprivate:
+    container_name: transmissionpriv
+    image: lscr.io/linuxserver/transmission:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+      - USER=admin
+      - PASS=admin
+      - PEERPORT=9696
+    volumes:
+      - D:\Downloads\testdata:/downloads # change this to a dir you want before running
+    ports:
+      - "9092:9091"
+      - "9696:9696"
+    restart: unless-stopped
