@@ -3,3 +3,6 @@ transmission:
 
 build:
 	go build -o bin/debug
+
+build:
+	go build -o bin/debug

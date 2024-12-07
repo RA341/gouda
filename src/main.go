@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/RA341/gouda/api"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"gouda/api"
 	"log"
 	"net/http"
 )

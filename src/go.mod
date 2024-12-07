@@ -1,4 +1,4 @@
-module gouda
+module github.com/RA341/gouda
 
 go 1.23.3
 
