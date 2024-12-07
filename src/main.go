@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"gouda/api"
 	"log"
 	"net/http"
 )
-import api "gouda/api"
 
 var ff = "https://file-examples.com/wp-content/storage/2017/02/file-sample_100kB.doc"
 
@@ -39,6 +40,12 @@ func main() {
 
 	// api setup
 	ginRouter := gin.Default()
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
+
+	ginRouter.Use(cors.New(corsConfig))
 
 	ginRouter.HEAD("/", func(context *gin.Context) {
 		context.Status(http.StatusOK)

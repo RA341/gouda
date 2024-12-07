@@ -105,5 +105,24 @@ func SetupAuthRouter(r *gin.Engine) *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	})
 
+	authRouter.GET("/test", func(c *gin.Context) {
+		tokenString := c.GetHeader("Authorization")
+		if tokenString == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing authorization header"})
+			c.Abort()
+			return
+		}
+
+		token, err := verifyToken(tokenString)
+
+		if err != nil || !token {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.Abort()
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"token": token})
+	})
+
 	return r
 }

@@ -7,6 +7,7 @@ import (
 	"gouda/api"
 	"log"
 	"os"
+	"strconv"
 )
 
 var (
@@ -49,6 +50,18 @@ func InitConfig() error {
 	viper.SetDefault("server.port", "9862")
 	viper.SetDefault("user.name", user)
 	viper.SetDefault("user.password", pass)
+
+	uid, err := strconv.Atoi(os.Getenv("GOUDA_UID"))
+	if err != nil {
+		uid = 1000
+	}
+	viper.SetDefault("user.uid", uid)
+
+	gid, err := strconv.Atoi(os.Getenv("GOUDA_UID"))
+	if err != nil {
+		gid = 1000
+	}
+	viper.SetDefault("user.gid", gid)
 
 	// default dirs
 	downloadDir := os.Getenv("GOUDA_DOWNLOAD_DIR")
