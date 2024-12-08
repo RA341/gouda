@@ -66,19 +66,29 @@ jobs:
 #        tag_name: ${{ steps.tagName.outputs.tag }}
 #      env:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: lowecase REPO
       run: |
         echo "REPO=${GITHUB_REPOSITORY@L}" >> "${GITHUB_ENV}"
 
-    - name: Login to GHCR registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    ## docker image build
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-    - name: build and push version tagged image
-      run: |
-        docker build . -t ghcr.io/${REPO}:${{ steps.tagName.outputs.tag }}
-        docker push ghcr.io/${REPO}:${{ steps.tagName.outputs.tag }}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: build and push latest tagged image
-      run: | 
-        docker build . -t ghcr.io/${REPO}:latest
-        docker push ghcr.io/${REPO}:latest
+    - name: Build and push version tagged
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/gouda:${{ steps.tagName.outputs.tag }}
+
+    - name: Build and push latest tagged
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/gouda:latest
