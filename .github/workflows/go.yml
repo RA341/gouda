@@ -66,14 +66,17 @@ jobs:
 #        tag_name: ${{ steps.tagName.outputs.tag }}
 #      env:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: lowecase REPO
+      run: |
+        echo "REPO=${GITHUB_REPOSITORY@L}" >> "${GITHUB_ENV}"
 
     - name: Login to GHCR registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     - name: build and push version tagged image
       run: |
-        docker build . -t ghcr.io/${{ lower(github.repository) }}:${{ steps.tagName.outputs.tag }}
-        docker push ghcr.io/${{ lower(github.repository) }}:${{ steps.tagName.outputs.tag }}
+        docker build . -t ghcr.io/${REPO}:${{ steps.tagName.outputs.tag }}
+        docker push ghcr.io/${REPO}:${{ steps.tagName.outputs.tag }}
 
     - name: build and push latest tagged image
       run: | 
