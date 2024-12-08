@@ -30,6 +30,11 @@ func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
 		categories := viper.GetStringSlice("categories")
 		categories = append(categories, req.Category)
 		viper.Set("categories", categories)
+		err := viper.WriteConfig()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
@@ -49,6 +54,11 @@ func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
 			}
 		}
 		viper.Set("categories", newCategories)
+		err := viper.WriteConfig()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
