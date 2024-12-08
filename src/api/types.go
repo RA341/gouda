@@ -19,3 +19,11 @@ type TorrentRequest struct {
 type ProgressRequest struct {
 	IDs []string `json:"ids"`
 }
+
+type CatRequest struct {
+	Category string `json:"category"`
+}
+
+type CatList struct {
+	Categories []string `json:"categories"`
+}
