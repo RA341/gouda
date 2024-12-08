@@ -1,0 +1,81 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "release" ]
+
+jobs:
+
+  tag-release:
+    name: tag-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+      - name: install plugins
+        run: npm install --no-save @semantic-release/git @semantic-release/changelog -D
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+
+  build:
+    needs:
+      - tag-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23.3'
+
+    - name: 'Get tag'
+      id: tagName
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
+    # todo binary release
+#    - name: Build
+#      run: go build -ldflags "-w -s -X ctrl/core/updater.Version=${{ steps.tagName.outputs.tag }}" -o gouda_${{ steps.tagName.outputs.tag }}
+#    - name: Upload Release Asset
+#      uses: softprops/action-gh-release@v2
+#      with:
+#        files: |
+#          ctrl_linux_${{ steps.tagName.outputs.tag }}
+#        tag_name: ${{ steps.tagName.outputs.tag }}
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Login to GHCR registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: build and push version tagged image
+      run: |
+        docker build . -t ghcr.io/${{ github.repository }}:${{ steps.tagName.outputs.tag }}
+        docker push ghcr.io/${{ github.repository }}:${{ steps.tagName.outputs.tag }}
+
+    - name: build and push latest tagged image
+      run: | 
+        docker build . -t ghcr.io/${{ github.repository }}:latest
+        docker push ghcr.io/${{ github.repository }}:latest
