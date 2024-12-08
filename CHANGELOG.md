@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/RA341/gouda/compare/v1.1.0...v1.1.1) (2024-12-08)
+
+
+### Bug Fixes
+
+* write to config ([a5c5e6d](https://github.com/RA341/gouda/commit/a5c5e6df8fda467edd877c61a46e76e2eef40b7a))
+
 # [1.1.0](https://github.com/RA341/gouda/compare/v1.0.5...v1.1.0) (2024-12-08)
 
 
