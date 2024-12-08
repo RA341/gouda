@@ -10,7 +10,7 @@ func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
 	protected := r.Group("/category")
 	protected.Use(authMiddleware())
 
-	protected.GET("/", func(c *gin.Context) {
+	protected.GET("/list", func(c *gin.Context) {
 		catogories := viper.GetStringSlice("categories")
 		catList := CatList{Categories: catogories}
 		if catogories == nil {
@@ -20,7 +20,7 @@ func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
 		c.JSON(http.StatusOK, catList)
 	})
 
-	protected.POST("/", func(c *gin.Context) {
+	protected.POST("/add", func(c *gin.Context) {
 		var req CatRequest
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -34,7 +34,7 @@ func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
 
-	protected.DELETE("/", func(c *gin.Context) {
+	protected.DELETE("/del", func(c *gin.Context) {
 		var req CatRequest
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
