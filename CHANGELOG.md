@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/RA341/gouda/compare/v1.0.4...v1.0.5) (2024-12-08)
+
+
+### Bug Fixes
+
+* cleanup dockerfile ([c3282d8](https://github.com/RA341/gouda/commit/c3282d8868a3f556b9e59f56ee087091b82c117a))
+
 ## [1.0.4](https://github.com/RA341/gouda/compare/v1.0.3...v1.0.4) (2024-12-08)
 
 
