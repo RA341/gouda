@@ -72,10 +72,10 @@ jobs:
 
     - name: build and push version tagged image
       run: |
-        docker build . -t ghcr.io/${{ github.repository }}:${{ steps.tagName.outputs.tag }}
-        docker push ghcr.io/${{ github.repository }}:${{ steps.tagName.outputs.tag }}
+        docker build . -t ghcr.io/${{ lower(github.repository) }}:${{ steps.tagName.outputs.tag }}
+        docker push ghcr.io/${{ lower(github.repository) }}:${{ steps.tagName.outputs.tag }}
 
     - name: build and push latest tagged image
       run: | 
-        docker build . -t ghcr.io/${{ github.repository }}:latest
-        docker push ghcr.io/${{ github.repository }}:latest
+        docker build . -t ghcr.io/${{ lower(github.repository) }}:latest
+        docker push ghcr.io/${{ lower(github.repository) }}:latest
