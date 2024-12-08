@@ -2,11 +2,10 @@
 
 A companion app for myanonmouse users to download stuff quickly
 
-components -
+Components:
+* [frontend](https://github.com/ra341/brie)
 
-[frontend](https://github.com/ra341/brie)
-
-[extension](https://github.com/ra341/parmesan)
+* [extension](https://github.com/ra341/parmesan)
 
 ## Features
 
@@ -32,30 +31,12 @@ docker run -d \
 ```
 
 ### Docker Compose Example
-```yaml
-version: "3.8"
-services:
-  gouda:
-    image: ras334/gouda
-    container_name: gouda
-    environment:
-      - GOUDA_USERNAME=your_username
-      - GOUDA_PASS=your_secure_password
-      - GOUDA_UID=1000
-      - GOUDA_GID=1000
-      - GOUDA_DOWNLOAD_DIR=/appdata/downloads
-      - GOUDA_DEFAULT_DIR=/appdata/complete
-      - GOUDA_TORRENT_DIR=/appdata/torrents
-    ports:
-      - "9862:9862"
-    volumes:
-      - ./appdata:/appdata
-    restart: unless-stopped
-```
+
+Look at the example docker compose here [docker-compose](test-docker-compose.yml) and adapt it your needs.
 
 
 Once running, access the web interface at `http://your-ip:9862` to configure:
-- Torrent client settings (qBittorrent, Transmission, etc.)
+- Torrent client settings (qBittorrent, Transmission, etc.) (currently only transmission is supported)
 - Download categories and paths
 - Additional application settings
 

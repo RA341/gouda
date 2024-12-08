@@ -19,6 +19,7 @@ services:
 
   gouda:
     container_name: gouda
+    image: ras334/gouda:latest
     build:
       context: .
     ports:
