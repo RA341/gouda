@@ -28,7 +28,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 	sourceGID := viper.GetInt("user.gid")
 
 	// Create target directory if it doesn't exist
-	err = os.MkdirAll(targetDir, sourceStat.Mode())
+	err = os.MkdirAll(targetDir, 0o770)
 	if err != nil {
 		return fmt.Errorf("failed to create target directory: %w", err)
 	}
@@ -73,7 +73,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 
 		// If it's a directory, create it in target with proper ownership
 		if d.IsDir() {
-			if err := os.MkdirAll(targetPath, info.Mode()); err != nil {
+			if err := os.MkdirAll(targetPath, 0o770); err != nil {
 				return fmt.Errorf("failed to create directory %s: %w", targetPath, err)
 			}
 
@@ -137,7 +137,7 @@ func DownloadTorrentFile(downloadLink string, downloadPath string) (string, erro
 		filename = path.Base(downloadLink)
 	}
 
-	if err := os.MkdirAll(downloadPath, 0755); err != nil {
+	if err := os.MkdirAll(downloadPath, 0775); err != nil {
 		return "", fmt.Errorf("failed to create directories: %v", err)
 	}
 
