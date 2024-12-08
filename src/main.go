@@ -10,14 +10,9 @@ import (
 	"github.com/spf13/viper"
 	"net/http"
 	"os"
-	"path/filepath"
 )
 
-var ff = "https://file-examples.com/wp-content/storage/2017/02/file-sample_100kB.doc"
-
 func main() {
-	log.Info().Msgf(filepath.Base("sample/downloads/Storm Bound (Places of Power 4 )  Leonard Petracci.epub"))
-
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	err := InitConfig()
