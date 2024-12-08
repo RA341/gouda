@@ -6,5 +6,5 @@ components -
 
 [frontend](https://github.com/ra341/brie)
 
-[extension](https://github.com/ra341/parmesean)
+[extension](https://github.com/ra341/parmesan)
 
