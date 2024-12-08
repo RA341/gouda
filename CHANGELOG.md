@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/RA341/gouda/compare/v1.0.2...v1.0.3) (2024-12-08)
+
+
+### Bug Fixes
+
+* added categories ([0e18e50](https://github.com/RA341/gouda/commit/0e18e5083041ffef782b0029235e3563f37fd891))
+
 ## [1.0.2](https://github.com/RA341/gouda/compare/v1.0.1...v1.0.2) (2024-12-08)
 
 
