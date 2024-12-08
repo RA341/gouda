@@ -1,4 +1,23 @@
 services:
+  gouda:
+    container_name: gouda
+    image: ras334/gouda:latest
+    build:
+      context: .
+    ports:
+      - "9862:9862"
+    environment:
+      - GOUDA_USERNAME=admin
+      - GOUDA_PASS=admin
+      - GOUDA_UID=1000
+      - GOUDA_GID=1000
+      - GOUDA_DOWNLOAD_DIR=/media/downloads
+      - GOUDA_DEFAULT_DIR=/media/complete
+      - GOUDA_TORRENT_DIR=/media/downloads/torrents
+    volumes:
+      - D:\Dev\Go\mam\gouda\sample:/media
+      - D:\Dev\Go\mam\gouda\sample\config:/appdata/config
+
   transmissionprivate:
     container_name: transmissionpriv
     image: lscr.io/linuxserver/transmission:latest
@@ -16,22 +35,3 @@ services:
       - "9092:9091"
       - "9161:9161"
     restart: unless-stopped
-
-  gouda:
-    container_name: gouda
-    image: ras334/gouda:latest
-    build:
-      context: .
-    ports:
-      - "9862:9862"
-    environment:
-      - GOUDA_UID=1000
-      - GOUDA_GID=1000
-      - GOUDA_DOWNLOAD_DIR=/media/downloads
-      - GOUDA_DEFAULT_DIR=/media/complete
-      - GOUDA_TORRENT_DIR=/media/downloads/torrents
-    env_file:
-      - .env
-    volumes:
-      - D:\Dev\Go\mam\gouda\sample:/media
-      - D:\Dev\Go\mam\gouda\sample\config:/appdata/config
