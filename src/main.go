@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/RA341/gouda/api"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -48,6 +49,7 @@ func main() {
 	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
 	ginRouter.Use(cors.New(corsConfig))
 
+	ginRouter.Use(static.Serve("/", static.LocalFile("./web", false)))
 	ginRouter.HEAD("/", func(context *gin.Context) {
 		context.Status(http.StatusOK)
 	})
