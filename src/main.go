@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/RA341/gouda/api"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -46,9 +47,9 @@ func main() {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
 	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
-
 	ginRouter.Use(cors.New(corsConfig))
 
+	ginRouter.Use(static.Serve("/", static.LocalFile("./web", false)))
 	ginRouter.HEAD("/", func(context *gin.Context) {
 		context.Status(http.StatusOK)
 	})
@@ -56,6 +57,7 @@ func main() {
 	r := api.SetupAuthRouter(ginRouter)
 	r = apiEnv.SetupTorrentClientEndpoints(r)
 	r = apiEnv.SetupCategoryEndpoints(r)
+	r = apiEnv.SetupSettingsEndpoints(r)
 
 	port := viper.GetString("server.port")
 	err = r.Run(fmt.Sprintf(":%s", port))

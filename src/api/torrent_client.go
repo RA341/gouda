@@ -92,7 +92,7 @@ func AddTorrent(env *Env, request TorrentRequest) error {
 
 func ProcessDownloads(env *Env, torrentId int64, author, book, category string) {
 	timeRunning := time.Second * 0
-	timeout := viper.GetDuration(fmt.Sprintf("download.timeout"))
+	timeout := time.Minute * viper.GetDuration(fmt.Sprintf("download.timeout"))
 
 	for {
 		log.Info().Msgf("getting torrent info with id:%d", torrentId)
