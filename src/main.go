@@ -5,17 +5,24 @@ import (
 	"github.com/RA341/gouda/api"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 var ff = "https://file-examples.com/wp-content/storage/2017/02/file-sample_100kB.doc"
 
 func main() {
+	log.Info().Msgf(filepath.Base("sample/downloads/Storm Bound (Places of Power 4 )  Leonard Petracci.epub"))
+
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
 	err := InitConfig()
 	if err != nil {
-		log.Fatal("Failed to get config ", err)
+		log.Fatal().Err(err).Msgf("Failed to get config")
 	}
 
 	apiEnv := api.Env{}
@@ -31,10 +38,10 @@ func main() {
 		})
 
 		if err == nil {
-			fmt.Print("Loaded torrent client", viper.GetString("torrent_client.type"))
+			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.type"))
 			apiEnv.DownloadClient = client
 		} else {
-			log.Fatal("Failed to initialize torrent client", err)
+			log.Error().Err(err).Msgf("Failed to initialize torrent client")
 		}
 	}
 
@@ -57,6 +64,6 @@ func main() {
 	port := viper.GetString("server.port")
 	err = r.Run(fmt.Sprintf(":%s", port))
 	if err != nil {
-		log.Fatal(err)
+		log.Error().Err(err).Msgf("Failed to start server")
 	}
 }

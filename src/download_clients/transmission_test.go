@@ -1,7 +1,8 @@
 package download_clients
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
+
 	"os"
 	"testing"
 )
@@ -44,7 +45,7 @@ func TestHealth(t *testing.T) {
 			t.Errorf("Health check failed=%v", err)
 		}
 
-		log.Println(clientName, info)
+		log.Debug().Msgf(clientName, info)
 	})
 
 }

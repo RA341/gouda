@@ -2,10 +2,10 @@ package mam
 
 import (
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"io"
 	"io/fs"
-	"log"
 	"mime"
 	"net/http"
 	"os"
@@ -15,34 +15,6 @@ import (
 
 // anon mouse related functions
 
-func HardlinkAndNameFiles(downloadPath, destinationPath, author, bookName string) error {
-	// create folder at destination
-	finalDestPath := path.Join(destinationPath, author, bookName)
-	finalDestPath, err := filepath.Abs(finalDestPath)
-	if err != nil {
-		return err
-	}
-
-	err = os.MkdirAll(finalDestPath, 0o660)
-	if err != nil {
-		return err
-	}
-
-	err = os.Chown(finalDestPath, viper.GetInt("user.uid"), viper.GetInt("user.gid"))
-	if err != nil {
-		return err
-	}
-
-	// hardlink
-	//get all sub folders
-	err = HardLinkFolder(downloadPath, finalDestPath)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // HardLinkFolder creates hard links of all files from source folder to target folder
 // and maintains the original UID/GID
 func HardLinkFolder(sourceDir, targetDir string) error {
@@ -50,9 +22,6 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 	sourceStat, err := os.Stat(sourceDir)
 	if err != nil {
 		return fmt.Errorf("source directory error: %w", err)
-	}
-	if !sourceStat.IsDir() {
-		return fmt.Errorf("source path is not a directory")
 	}
 
 	sourceUID := viper.GetInt("user.uid")
@@ -64,9 +33,21 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 		return fmt.Errorf("failed to create target directory: %w", err)
 	}
 
-	// Set UID/GID for target directory
-	if err := os.Chown(targetDir, sourceUID, sourceGID); err != nil {
-		return fmt.Errorf("failed to set ownership of target directory: %w", err)
+	// Handle based on whether source is file or directory
+	if !sourceStat.IsDir() {
+		// For single file, create the parent directory if needed
+		sourceFile := filepath.Base(sourceDir)
+		log.Debug().Msgf("Target path is: %s", sourceFile)
+
+		targetDir = fmt.Sprintf("%s/%s", targetDir, sourceFile)
+		log.Info().Err(err).Msgf("Source is a file, final dest path will be %s", targetDir)
+
+		// Create hard link for the file
+		if err := createHardLink(sourceDir, targetDir, sourceUID, sourceGID, sourceStat.Mode()); err != nil {
+			return fmt.Errorf("failed to create hard link from %s to %s: %w", sourceDir, targetDir, err)
+		}
+
+		return nil
 	}
 
 	// Walk through the source directory
@@ -94,11 +75,6 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 		if d.IsDir() {
 			if err := os.MkdirAll(targetPath, info.Mode()); err != nil {
 				return fmt.Errorf("failed to create directory %s: %w", targetPath, err)
-			}
-
-			// Set directory ownership
-			if err := os.Chown(targetPath, viper.GetInt("user.uid"), viper.GetInt("user.gid")); err != nil {
-				return fmt.Errorf("failed to set ownership of directory %s: %w", targetPath, err)
 			}
 
 			return nil
@@ -132,11 +108,6 @@ func createHardLink(oldPath, newPath string, uid, gid int, mode fs.FileMode) err
 		return err
 	}
 
-	// Set the ownership and permissions
-	if err := os.Chown(newPath, uid, gid); err != nil {
-		return fmt.Errorf("failed to set ownership: %w", err)
-	}
-
 	if err := os.Chmod(newPath, mode); err != nil {
 		return fmt.Errorf("failed to set permissions: %w", err)
 	}
@@ -152,7 +123,7 @@ func DownloadTorrentFile(downloadLink string, downloadPath string) (string, erro
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			log.Fatal("failed to close response body")
+			log.Fatal().Err(err).Msgf("failed to close response body")
 		}
 	}(resp.Body)
 
@@ -180,7 +151,7 @@ func DownloadTorrentFile(downloadLink string, downloadPath string) (string, erro
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			log.Fatalf("failed to close response body")
+			log.Fatal().Err(err).Msgf("failed to close response body")
 		}
 	}(file)
 

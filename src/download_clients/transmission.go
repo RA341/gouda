@@ -15,7 +15,13 @@ type TransmissionClient struct {
 }
 
 func InitTransmission(transmissionUrl, protocol, user, pass string) (DownloadClient, error) {
-	clientStr := fmt.Sprintf("%s://%s:%s@%s/transmission/rpc", protocol, user, pass, transmissionUrl)
+	clientStr := ""
+	if user != "" && pass != "" {
+		clientStr = fmt.Sprintf("%s://%s:%s@%s/transmission/rpc", protocol, user, pass, transmissionUrl)
+	} else {
+		clientStr = fmt.Sprintf("%s://%s/transmission/rpc", protocol, transmissionUrl)
+	}
+
 	endpoint, err := url.Parse(clientStr)
 	if err != nil {
 		return nil, err
@@ -54,31 +60,15 @@ func (tm *TransmissionClient) Health() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (tm *TransmissionClient) CheckTorrentStatus(torrentIds []int64) ([]TorrentStatus, error) {
-	//var cleanIds []int64
-	//for _, stringIds := range torrentIds {
-	//	convId, err := strconv.Atoi(stringIds)
-	//	if err != nil {
-	//		// todo logs !!!
-	//	}
-	//	cleanIds = append(cleanIds, int64(convId))
-	//}
-
-	infos, err := tm.Client.TorrentGetAllFor(context.TODO(), torrentIds)
+func (tm *TransmissionClient) CheckTorrentStatus(torrentIds int64) (TorrentStatus, error) {
+	info, err := tm.Client.TorrentGetAllFor(context.TODO(), []int64{torrentIds})
 	if err != nil {
-		return nil, err
+		return TorrentStatus{}, err
 	}
 
-	var resultList []TorrentStatus
-
-	for _, info := range infos {
-		resultList = append(resultList, TorrentStatus{
-			Name:            *info.Name,
-			PercentProgress: fmt.Sprintf("%.2f", *info.PercentDone),
-			DownloadPath:    *info.DownloadDir,
-			Status:          info.Status.String(),
-		})
-	}
-
-	return resultList, nil
+	return TorrentStatus{
+		Name:         *info[0].Name,
+		DownloadPath: *info[0].DownloadDir,
+		Status:       info[0].Status.String(),
+	}, nil
 }

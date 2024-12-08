@@ -8,10 +8,29 @@ services:
       - TZ=${TZ}
       - USER=admin
       - PASS=admin
-      - PEERPORT=9696
+      - PEERPORT=9161
     volumes:
-      - D:\Downloads\testdata:/downloads # change this to a dir you want before running
+      - D:\Dev\Go\mam\gouda\sample:/media
+      - D:\Dev\Go\mam\gouda\sample\transmission\config:/config
     ports:
       - "9092:9091"
-      - "9696:9696"
+      - "9161:9161"
     restart: unless-stopped
+
+  gouda:
+    container_name: gouda
+    build:
+      context: .
+    ports:
+      - "9862:9862"
+    environment:
+      - GOUDA_UID=1000
+      - GOUDA_GID=1000
+      - GOUDA_DOWNLOAD_DIR=/media/downloads
+      - GOUDA_DEFAULT_DIR=/media/complete
+      - GOUDA_TORRENT_DIR=/media/downloads/torrents
+    env_file:
+      - .env
+    volumes:
+      - D:\Dev\Go\mam\gouda\sample:/media
+      - D:\Dev\Go\mam\gouda\sample\config:/appdata/config

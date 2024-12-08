@@ -4,5 +4,5 @@ transmission:
 build:
 	go build -o bin/debug
 
-build:
-	go build -o bin/debug
+dkdg:
+	docker compose -f test-docker-compose.yml up --build

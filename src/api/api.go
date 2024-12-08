@@ -1,10 +1,10 @@
 package api
 
 import (
-	clients "gouda/download_clients"
+	clients "github.com/RA341/gouda/download_clients"
 )
 
 type Env struct {
 	DownloadClient  clients.DownloadClient
-	activeDownloads []int64
+	ActiveDownloads []int64
 }

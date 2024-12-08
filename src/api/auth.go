@@ -4,8 +4,8 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
 	"os"
 )
@@ -37,13 +37,12 @@ func verifyToken(token string) (bool, error) {
 		return true, nil
 	}
 
-	// todo login token
 	tok := viper.GetString("user.session")
 	if tok == token {
 		return true, nil
 	}
 
-	log.Println("Failed to match token")
+	log.Error().Msgf("Failed to match token")
 	return false, nil
 }
 
