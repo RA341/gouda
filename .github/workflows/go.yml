@@ -84,11 +84,13 @@ jobs:
     - name: Build and push version tagged
       uses: docker/build-push-action@v6
       with:
+        no-cache: 'false'
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/gouda:${{ steps.tagName.outputs.tag }}
 
     - name: Build and push latest tagged
       uses: docker/build-push-action@v6
       with:
+        no-cache: 'false'
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/gouda:latest
