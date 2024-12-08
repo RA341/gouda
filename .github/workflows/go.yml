@@ -80,5 +80,5 @@ jobs:
 
     - name: build and push latest tagged image
       run: | 
-        docker build . -t ghcr.io/${{ lower(github.repository) }}:latest
-        docker push ghcr.io/${{ lower(github.repository) }}:latest
+        docker build . -t ghcr.io/${REPO}:latest
+        docker push ghcr.io/${REPO}:latest
