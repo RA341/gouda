@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"strconv"
-	"time"
 )
 
 const filePerm = 0o770
@@ -52,7 +51,7 @@ func InitConfig() error {
 	viper.SetDefault("server.port", "9862")
 	viper.SetDefault("user.name", user)
 	viper.SetDefault("user.password", pass)
-	viper.SetDefault("download.timeout", time.Minute*15)
+	viper.SetDefault("download.timeout", 15)
 
 	uid, err := strconv.Atoi(os.Getenv("GOUDA_UID"))
 	if err != nil {

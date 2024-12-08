@@ -46,7 +46,6 @@ func main() {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
 	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
-
 	ginRouter.Use(cors.New(corsConfig))
 
 	ginRouter.HEAD("/", func(context *gin.Context) {
@@ -56,6 +55,7 @@ func main() {
 	r := api.SetupAuthRouter(ginRouter)
 	r = apiEnv.SetupTorrentClientEndpoints(r)
 	r = apiEnv.SetupCategoryEndpoints(r)
+	r = apiEnv.SetupSettingsEndpoints(r)
 
 	port := viper.GetString("server.port")
 	err = r.Run(fmt.Sprintf(":%s", port))
