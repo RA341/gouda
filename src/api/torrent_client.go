@@ -90,15 +90,15 @@ func AddTorrent(env *Env, request TorrentRequest) error {
 	return nil
 }
 
-func ProcessDownloads(env *Env, torrentId int64, author, book, category string) {
+func ProcessDownloads(env *Env, torrentId string, author, book, category string) {
 	timeRunning := time.Second * 0
 	timeout := time.Minute * viper.GetDuration(fmt.Sprintf("download.timeout"))
 
 	for {
-		log.Info().Msgf("getting torrent info with id:%d", torrentId)
+		log.Info().Msgf("getting torrent info with id:%s", torrentId)
 		info, err := env.DownloadClient.CheckTorrentStatus(torrentId)
 		if err != nil {
-			log.Warn().Msgf("Failed to get info with id: %d", torrentId)
+			log.Warn().Msgf("Failed to get info with id: %s", torrentId)
 			break
 		} else {
 			if info.Status == "seeding" {
@@ -164,6 +164,23 @@ func InitializeTorrentClient(details TorrentClient) (clients.DownloadClient, err
 		}
 
 		return transmission, nil
+	} else if details.Type == "qbit" {
+		qbit, err := clients.InitQbit(details.Host, details.Protocol, details.User, details.Password)
+		if err != nil {
+			return nil, err
+		}
+
+		viper.Set("torrent_client.name", details.Type)
+		viper.Set("torrent_client.host", details.Host)
+		viper.Set("torrent_client.protocol", details.Protocol)
+		viper.Set("torrent_client.user", details.User)
+		viper.Set("torrent_client.password", details.Password)
+		err = viper.WriteConfig()
+		if err != nil {
+			return nil, err
+		}
+
+		return qbit, nil
 	} else {
 		return nil, errors.New(fmt.Sprintf("Unsupported torrent client: %s", details.Type))
 	}
