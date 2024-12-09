@@ -3,7 +3,7 @@
 A companion app for myanonmouse users to download stuff quickly
 
 Components:
-* [frontend](https://github.com/ra341/brie)
+* [frontend](./brie)
 
 * [extension](https://github.com/ra341/parmesan)
 
