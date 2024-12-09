@@ -17,7 +17,7 @@ RUN flutter doctor
 RUN flutter config --enable-web
 
 # Clone your repository
-COPY ./brie /app
+RUN git clone https://github.com/RA341/brie /app
 WORKDIR /app/
 
 # Build Flutter web
