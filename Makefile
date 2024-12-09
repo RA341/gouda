@@ -4,5 +4,8 @@ transmission:
 build:
 	go build -o bin/debug
 
-dkdg:
+dkcb:
 	docker compose -f test-docker-compose.yml up --build
+
+dkbd:
+	docker build . -t ras344/gouda:dev
