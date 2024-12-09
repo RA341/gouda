@@ -34,6 +34,7 @@ docker run -d \
 
 Look at the example docker compose here [docker-compose](test-docker-compose.yml) and adapt it your needs.
 
+
 Once running, access the web interface at `http://your-ip:9862` to configure:
 - Torrent client settings (qBittorrent, Transmission, etc.) (currently only transmission is supported)
 - Download categories and paths
@@ -59,42 +60,10 @@ Once running, access the web interface at `http://your-ip:9862` to configure:
 ### Volume Mounts
 
 The container requires a volume mount for persistent storage:
-
-I recommend the following dir structure (it follows [trash guides](https://trash-guides.info/File-and-Folder-Structure/))
-
-Store all your media in a folder
-```
-/media
- | /downloads
- | /audiobooks
- | /comics
+```bash
+-v /path/to/data:/appdata
 ```
 
-Gouda will use the category used when downloading the media, for example, if you use 'manga' category, 
-then gouda will create a folder 
-```
-/media
-| /downloads
-| /audiobooks
-| /comics
-| /manga <--- automatically created by gouda if it doesn't exist
- | /author
-  | /name
-   | <final file or folder downloaded automatically hardlinked> 
-```
-
-#### Final mounts
-
-* config - `<your path to config>`:`/appdata/config`
-
-* media - `<path to media folder>`:`/media`
-
-##### Transmission should also be mounted the same way
-
-* media - `<path to media folder>`:`/media`
-
-
-If no paths are given:
 This will create the following directory structure:
 ```
 /appdata/
