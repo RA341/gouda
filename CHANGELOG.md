@@ -1,3 +1,18 @@
+## [1.2.1](https://github.com/RA341/gouda/compare/v1.2.0...v1.2.1) (2024-12-09)
+
+
+### Bug Fixes
+
+* broken ui repo ([ddb209a](https://github.com/RA341/gouda/commit/ddb209aa4759ed3b2dcc73964231501990d0df60))
+
+
+### Reverts
+
+* Revert "ci: removed no cache" ([d5b1e3f](https://github.com/RA341/gouda/commit/d5b1e3fe5b968a8fdd06cf1da06c429a115ee62b))
+* Revert "docs: readme" ([8d79fc6](https://github.com/RA341/gouda/commit/8d79fc687ea2d1aeeecc71afc8e61f20c74528c2))
+* Revert "feat: moved frontend to core" ([ba7dd4f](https://github.com/RA341/gouda/commit/ba7dd4f2c8218e34629ecc079ef33aa80a00c3e8))
+* Revert "fix(ui): cleanup" ([957e655](https://github.com/RA341/gouda/commit/957e6554650a8e120527125d684c2c6da255603e))
+
 # [1.2.0](https://github.com/RA341/gouda/compare/v1.1.1...v1.2.0) (2024-12-09)
 
 
