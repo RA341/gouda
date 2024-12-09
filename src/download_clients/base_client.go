@@ -3,9 +3,9 @@ package download_clients
 // todo doc strings for all functions
 
 type DownloadClient interface {
-	DownloadTorrent(torrent string, downloadPath string) (int64, error)
+	DownloadTorrent(torrent string, downloadPath string) (string, error)
 
-	CheckTorrentStatus(torrentId int64) (TorrentStatus, error)
+	CheckTorrentStatus(torrentId string) (TorrentStatus, error)
 
 	Health() (string, string, error)
 }

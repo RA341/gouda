@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/hekmon/transmissionrpc/v3"
 	"net/url"
+	"strconv"
 )
 
 type TransmissionClient struct {
@@ -37,12 +38,12 @@ func InitTransmission(transmissionUrl, protocol, user, pass string) (DownloadCli
 	}, nil
 }
 
-func (tm *TransmissionClient) DownloadTorrent(torrent string, downloadPath string) (int64, error) {
+func (tm *TransmissionClient) DownloadTorrent(torrent string, downloadPath string) (string, error) {
 	torrentResult, err := tm.Client.TorrentAddFileDownloadDir(context.Background(), torrent, downloadPath)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
-	return *torrentResult.ID, nil
+	return strconv.FormatInt(*torrentResult.ID, 10), nil
 }
 
 func (tm *TransmissionClient) Health() (string, string, error) {
@@ -60,8 +61,13 @@ func (tm *TransmissionClient) Health() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (tm *TransmissionClient) CheckTorrentStatus(torrentIds int64) (TorrentStatus, error) {
-	info, err := tm.Client.TorrentGetAllFor(context.TODO(), []int64{torrentIds})
+func (tm *TransmissionClient) CheckTorrentStatus(torrentIds string) (TorrentStatus, error) {
+	finalId, err := strconv.Atoi(torrentIds)
+	if err != nil {
+		return TorrentStatus{}, err
+	}
+
+	info, err := tm.Client.TorrentGetAllFor(context.TODO(), []int64{int64(finalId)})
 	if err != nil {
 		return TorrentStatus{}, err
 	}
