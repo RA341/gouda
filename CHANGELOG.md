@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/RA341/gouda/compare/v1.1.1...v1.2.0) (2024-12-09)
+
+
+### Bug Fixes
+
+* **ui:** cleanup ([f7eed1f](https://github.com/RA341/gouda/commit/f7eed1fac255939b6f6770e4489e9f489ebfd4ac))
+
+
+### Features
+
+* moved frontend to core ([56b7866](https://github.com/RA341/gouda/commit/56b78662cd97d4ad6f258404eb101069545db057))
+
 ## [1.1.1](https://github.com/RA341/gouda/compare/v1.1.0...v1.1.1) (2024-12-08)
 
 
