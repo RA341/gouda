@@ -67,10 +67,6 @@ jobs:
 #      env:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: lowecase REPO
-      run: |
-        echo "REPO=${GITHUB_REPOSITORY@L}" >> "${GITHUB_ENV}"
-
     ## docker image build
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
