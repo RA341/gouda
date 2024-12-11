@@ -9,11 +9,9 @@ Components:
 
 ## Features
 
-- Web-based interface for managing downloads
 - Integration with transmission torrent client
 - Category-based organization for downloads
 - Automated file management and permissions handling
-- Secure authentication system
 
 ## Docker Setup
 
