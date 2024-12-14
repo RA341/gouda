@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: RootView().animate().fade(duration: 600.ms),
+      home: RootView(),
     );
   }
 }
