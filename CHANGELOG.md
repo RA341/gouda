@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/RA341/gouda/compare/v1.3.0...v1.3.1) (2024-12-14)
+
+
+### Bug Fixes
+
+* **ui:** changed copy button color ([1736042](https://github.com/RA341/gouda/commit/1736042083f376af191d6d3b800948abb76ff38d))
+
 # [1.3.0](https://github.com/RA341/gouda/compare/v1.2.1...v1.3.0) (2024-12-14)
 
 
