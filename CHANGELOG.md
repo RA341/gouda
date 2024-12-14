@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/RA341/gouda/compare/v1.3.2...v1.3.3) (2024-12-14)
+
+
+### Bug Fixes
+
+* **ui:** removed fade in, add back later ([e4e55b3](https://github.com/RA341/gouda/commit/e4e55b30775f19270ac18133412d75967f5bbf13))
+
 ## [1.3.2](https://github.com/RA341/gouda/compare/v1.3.1...v1.3.2) (2024-12-14)
 
 
