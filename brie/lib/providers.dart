@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:brie/api.dart';
 import 'package:brie/config.dart';
-import 'package:brie/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'models.dart';
@@ -22,6 +18,10 @@ final checkTokenProvider = FutureProvider<bool>((ref) async {
   print('Token');
   print(token);
   return api.testToken(token: token);
+});
+
+final pageIndexListProvider = StateProvider<int>((ref) {
+  return 0;
 });
 
 final settingsProvider = FutureProvider<Settings>((ref) async {

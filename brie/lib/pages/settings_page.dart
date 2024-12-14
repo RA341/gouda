@@ -1,8 +1,8 @@
 import 'package:brie/api.dart';
 import 'package:brie/models.dart';
-import 'package:brie/pages/category_page.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -13,44 +13,23 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSettings = ref.watch(settingsProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Gouda'),
-        actions: [
-          ElevatedButton(
-            onPressed: () async => await Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => SettingsPage()),
-            ),
-            child: Text('Settings'),
-          ),
-          SizedBox(width: 20),
-          ElevatedButton(
-            onPressed: () async => await Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => CategoryPage()),
-            ),
-            child: Text('Categories'),
-          )
-        ],
-      ),
-      body: currentSettings.when(
-        data: (data) => SettingsView(settings: data),
-        error: (error, stackTrace) => Center(
-          child: Column(
-            children: [
-              Text('Error', style: TextStyle(fontSize: 30)),
-              Text(error.toString())
-            ],
-          ),
+    return currentSettings.when(
+      data: (data) => SettingsView(settings: data),
+      error: (error, stackTrace) => Center(
+        child: Column(
+          children: [
+            Text('Error', style: TextStyle(fontSize: 30)),
+            Text(error.toString())
+          ],
         ),
-        loading: () => Center(child: CircularProgressIndicator()),
       ),
+      loading: () => Center(child: CircularProgressIndicator()),
     );
   }
 }
 
 const headerStyle = TextStyle(fontSize: 28);
+const maxSettingsWidth = 300.0;
 
 class SettingsView extends HookConsumerWidget {
   const SettingsView({super.key, required this.settings});
@@ -81,9 +60,9 @@ class SettingsView extends HookConsumerWidget {
         useTextEditingController(text: settings.torrentProtocol);
     final torrentUser = useTextEditingController(text: settings.torrentUser);
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 300),
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 150),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -92,7 +71,42 @@ class SettingsView extends HookConsumerWidget {
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Divider(thickness: 4),
             ),
-            createUpdateButtons('Apikey', apiKey),
+            SizedBox(
+              // width: maxSettingsWidth,
+              child: ListTile(
+                title: Container(
+                  decoration: ShapeDecoration(
+                    shape: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      apiKey.text,
+                      style: TextStyle(overflow: TextOverflow.clip),
+                    ),
+                  ),
+                ),
+                trailing: IconButton(
+                  onPressed: () async {
+                    await Clipboard.setData(ClipboardData(text: apiKey.text));
+
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Apikey copied'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.copy),
+                ),
+              ),
+            ),
             createUpdateButtons('Server Port', serverPort),
             createUpdateButtons(
               'Download Check timeout (In minutes)',
@@ -219,12 +233,15 @@ class SettingsView extends HookConsumerWidget {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
-      child: TextField(
-        controller: controller,
-        onEditingComplete: editingController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: input,
+      child: SizedBox(
+        // width: maxSettingsWidth,
+        child: TextField(
+          controller: controller,
+          onEditingComplete: editingController,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: input,
+          ),
         ),
       ),
     );

@@ -4,10 +4,8 @@ import 'package:brie/pages/category_page.dart';
 import 'package:brie/pages/settings_page.dart';
 import 'package:brie/pages/setup_page.dart';
 import 'package:brie/providers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:universal_html/html.dart' as html;
 
 import 'config.dart';
 
@@ -32,7 +30,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.green, brightness: Brightness.dark),
+          seedColor: Colors.green,
+          brightness: Brightness.dark,
+        ),
         useMaterial3: true,
       ),
       home: RootView(),
@@ -72,32 +72,18 @@ class MainView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const routeList = [
+      CategoryPage(),
+      SettingsPage(),
+    ];
+
+    final pageIndex = ref.watch(pageIndexListProvider);
+
     return Scaffold(
       body: Row(
         children: [
           Sidebar(),
-          Expanded(
-            child: Navigator(
-              initialRoute: '/categories',
-              onGenerateRoute: (RouteSettings settings) {
-                WidgetBuilder builder;
-                print(settings.name);
-                switch (settings.name) {
-                  case '/':
-                  case '/categories':
-                    builder = (ctx) => const CategoryPage();
-                  case '/settings':
-                    builder = (ctx) => const SettingsPage();
-                  default:
-                    throw Exception('Invalid route: ${settings.name}');
-                }
-                return MaterialPageRoute<void>(
-                  builder: builder,
-                  settings: settings,
-                );
-              },
-            ),
-          ),
+          Expanded(child: routeList[pageIndex]),
         ],
       ),
     );
