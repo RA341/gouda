@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:brie/api.dart';
+import 'package:brie/config.dart';
 import 'package:brie/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,13 @@ final basePathProvider = StateProvider<String>((ref) {
     return html.window.location.toString();
   }
   return '';
+});
+
+final checkTokenProvider = FutureProvider<bool>((ref) async {
+  final token = (prefs.get('apikey') ?? "").toString();
+  print('Token');
+  print(token);
+  return api.testToken(token: token);
 });
 
 final settingsProvider = FutureProvider<Settings>((ref) async {

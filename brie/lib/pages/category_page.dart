@@ -1,4 +1,4 @@
-import 'package:brie/main.dart';
+import 'package:brie/api.dart';
 import 'package:brie/pages/settings_page.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';

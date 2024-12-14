@@ -1,4 +1,4 @@
-import 'package:brie/main.dart';
+import 'package:brie/api.dart';
 import 'package:brie/models.dart';
 import 'package:brie/pages/category_page.dart';
 import 'package:brie/providers.dart';
