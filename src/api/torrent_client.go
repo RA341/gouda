@@ -14,11 +14,10 @@ import (
 	"time"
 )
 
-func (api *Env) SetupTorrentClientEndpoints(r *gin.Engine) *gin.Engine {
-	protected := r.Group("/torrent")
-	protected.Use(authMiddleware())
+func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
+	endpoints := r.Group("/torrent")
 
-	protected.POST("/addTorrentClient", func(c *gin.Context) {
+	endpoints.POST("/addTorrentClient", func(c *gin.Context) {
 		var req TorrentClient
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -36,7 +35,7 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.Engine) *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
 
-	protected.GET("/torrentclient", func(c *gin.Context) {
+	endpoints.GET("/torrentclient", func(c *gin.Context) {
 		client := TorrentClient{
 			User:     viper.GetString("torrent_client.user"),
 			Password: viper.GetString("torrent_client.password"),
@@ -47,7 +46,7 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.Engine) *gin.Engine {
 		c.JSON(http.StatusOK, client)
 	})
 
-	protected.POST("/addTorrent", func(c *gin.Context) {
+	endpoints.POST("/addTorrent", func(c *gin.Context) {
 		if api.DownloadClient == nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Download client is not setup"})
 			return
