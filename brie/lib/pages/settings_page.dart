@@ -103,7 +103,7 @@ class SettingsView extends HookConsumerWidget {
                       ),
                     );
                   },
-                  icon: Icon(Icons.copy),
+                  icon: Icon(Icons.copy, color: Colors.white),
                 ),
               ),
             ),
