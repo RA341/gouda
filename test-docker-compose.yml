@@ -17,6 +17,8 @@ services:
     volumes:
       - D:\Dev\Go\mam\gouda\sample:/media
       - D:\Dev\Go\mam\gouda\sample\config:/appdata/config
+    profiles:
+      - ""
 
   transmissionprivate:
     container_name: transmissionpriv
@@ -35,3 +37,5 @@ services:
       - "9092:9091"
       - "9161:9161"
     restart: unless-stopped
+    profiles:
+      - tor

@@ -6,9 +6,8 @@ import (
 	"net/http"
 )
 
-func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
+func (api *Env) SetupCategoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	protected := r.Group("/category")
-	protected.Use(authMiddleware())
 
 	protected.GET("/list", func(c *gin.Context) {
 		catogories := viper.GetStringSlice("categories")
@@ -36,7 +35,9 @@ func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"status": "success"})
+		catList := getCategories()
+
+		c.JSON(http.StatusOK, catList)
 	})
 
 	protected.DELETE("/del", func(c *gin.Context) {
@@ -60,8 +61,18 @@ func (api *Env) SetupCategoryEndpoints(r *gin.Engine) *gin.Engine {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"status": "success"})
+		catList := getCategories()
+		c.JSON(http.StatusOK, catList)
 	})
 
 	return r
+}
+
+func getCategories() CatList {
+	catogories := viper.GetStringSlice("categories")
+	catList := CatList{Categories: catogories}
+	if catogories == nil {
+		catList = CatList{Categories: []string{}}
+	}
+	return catList
 }

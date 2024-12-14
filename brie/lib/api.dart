@@ -1,12 +1,16 @@
 import 'dart:convert';
 
 import 'package:brie/config.dart';
+import 'package:brie/main.dart';
 import 'package:brie/pages/settings_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'main.dart';
 import 'models.dart';
+import 'package:universal_html/html.dart' as html;
+
+var api = GoudaApi();
 
 class GoudaApi {
   late String basePath;
@@ -17,18 +21,31 @@ class GoudaApi {
   late SettingsApi settingsApi;
 
   GoudaApi({
-    required this.basePath,
     this.apiKey = '',
   }) {
+    final (apiBasePath, basePath) = makeBasePath();
+    this.basePath = basePath;
+
     categoryApi = CategoryApi(
-      baseUrl: basePath,
+      baseUrl: apiBasePath,
       defaultHeader: defaultHeaders(),
     );
 
     settingsApi = SettingsApi(
-      baseUrl: basePath,
+      baseUrl: apiBasePath,
       defaultHeader: defaultHeaders(),
     );
+  }
+
+  (String, String) makeBasePath() {
+    basePath =
+        kDebugMode ? 'http://localhost:9862' : html.window.location.toString();
+
+    basePath = basePath.endsWith('/')
+        ? basePath.substring(0, basePath.length - 1)
+        : basePath;
+
+    return ('$basePath/api', basePath);
   }
 
   Map<String, String> defaultHeaders({Map<String, String>? input1}) {
@@ -42,13 +59,15 @@ class GoudaApi {
   }
 
   void updateClients() {
+    final (apiBasePath, _) = makeBasePath();
+
     categoryApi = CategoryApi(
-      baseUrl: basePath,
+      baseUrl: apiBasePath,
       defaultHeader: defaultHeaders(),
     );
 
     settingsApi = SettingsApi(
-      baseUrl: basePath,
+      baseUrl: apiBasePath,
       defaultHeader: defaultHeaders(),
     );
   }
@@ -78,12 +97,32 @@ class GoudaApi {
       await Navigator.pushReplacement(
         ctx,
         MaterialPageRoute(
-          builder: (context) => SettingsPage(),
+          builder: (context) => MainView(),
         ),
       );
     } catch (e) {
       throw Exception('Error occurred while logging in: $e');
     }
+  }
+
+  Future<bool> testToken({required String token}) async {
+    print('Verifying token');
+
+    if (token == '') {
+      return false;
+    }
+
+    final response = await http.get(
+      Uri.parse('$basePath/auth/test'),
+      headers: defaultHeaders(),
+    );
+
+    if (response.statusCode != 200) {
+      print('Failed to verify token: ${response.statusCode}');
+      return false;
+    }
+
+    return true;
   }
 
   // Add Torrent Client

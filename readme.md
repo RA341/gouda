@@ -3,17 +3,15 @@
 A companion app for myanonmouse users to download stuff quickly
 
 Components:
-* [frontend](https://github.com/ra341/brie)
+* [frontend](./brie)
 
 * [extension](https://github.com/ra341/parmesan)
 
 ## Features
 
-- Web-based interface for managing downloads
 - Integration with transmission torrent client
 - Category-based organization for downloads
 - Automated file management and permissions handling
-- Secure authentication system
 
 ## Docker Setup
 

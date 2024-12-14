@@ -9,3 +9,7 @@ dkcb:
 
 dkbd:
 	docker build . -t ras344/gouda:dev
+
+tor:
+	docker compose --profile tor -f test-docker-compose.yml up
+

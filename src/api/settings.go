@@ -6,9 +6,8 @@ import (
 	"net/http"
 )
 
-func (api *Env) SetupSettingsEndpoints(r *gin.Engine) *gin.Engine {
+func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	protected := r.Group("/settings")
-	protected.Use(authMiddleware())
 
 	protected.POST("/update", func(c *gin.Context) {
 		var settings SettingsJson

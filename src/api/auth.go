@@ -4,12 +4,12 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"net/http"
 	"os"
 )
-import "github.com/gin-gonic/gin"
 
 type LoginRequest struct {
 	Username string `json:"username"`
@@ -25,7 +25,6 @@ func GenerateToken(len int) (string, error) {
 	return hex.EncodeToString(b), nil
 }
 
-// TODO: Implement actual authentication
 func verifyToken(token string) (bool, error) {
 	if os.Getenv("DEBUG") == "true" {
 		//fmt.Println("Warning app is running in debug mode auth is ignored")
@@ -64,7 +63,7 @@ func checkUserPass(user, pass string) (string, error) {
 	return "", errors.New("incorrect username or password error")
 }
 
-func authMiddleware() gin.HandlerFunc {
+func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {

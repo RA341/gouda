@@ -55,9 +55,11 @@ func main() {
 	})
 
 	r := api.SetupAuthRouter(ginRouter)
-	r = apiEnv.SetupTorrentClientEndpoints(r)
-	r = apiEnv.SetupCategoryEndpoints(r)
-	r = apiEnv.SetupSettingsEndpoints(r)
+	apiGroup := r.Group("/api")
+	apiGroup.Use(api.AuthMiddleware())
+	apiGroup = apiEnv.SetupTorrentClientEndpoints(apiGroup)
+	apiGroup = apiEnv.SetupCategoryEndpoints(apiGroup)
+	apiGroup = apiEnv.SetupSettingsEndpoints(apiGroup)
 
 	port := viper.GetString("server.port")
 	err = r.Run(fmt.Sprintf(":%s", port))
