@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/RA341/gouda/compare/v1.3.1...v1.3.2) (2024-12-14)
+
+
+### Bug Fixes
+
+* **ui:** added splash and fade in transition ([7d2c903](https://github.com/RA341/gouda/commit/7d2c9035ba2b8094bbf6dc5f447f60b9af8357ae))
+
 ## [1.3.1](https://github.com/RA341/gouda/compare/v1.3.0...v1.3.1) (2024-12-14)
 
 
