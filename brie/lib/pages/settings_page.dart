@@ -203,6 +203,8 @@ class SettingsView extends HookConsumerWidget {
     TextEditingController controller,
     String label,
   ) {
+    final selectedIndex = options.indexOf(controller.text);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -210,7 +212,7 @@ class SettingsView extends HookConsumerWidget {
           Text(label),
           SizedBox(width: 20),
           DropdownMenu<String>(
-            initialSelection: options.first,
+            initialSelection: options[selectedIndex == -1 ? 0 : selectedIndex],
             onSelected: (String? value) =>
                 controller.text = value ?? options.first,
             dropdownMenuEntries:

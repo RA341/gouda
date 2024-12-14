@@ -5,6 +5,7 @@ import 'package:brie/pages/settings_page.dart';
 import 'package:brie/pages/setup_page.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: RootView(),
+      home: RootView().animate().fade(duration: 600.ms),
     );
   }
 }
