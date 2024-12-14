@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/RA341/gouda/compare/v1.2.1...v1.3.0) (2024-12-14)
+
+
+### Bug Fixes
+
+* changed int64 id to string id ([7f52875](https://github.com/RA341/gouda/commit/7f52875b5c22b64642d91eed8390fea0e497714a))
+
+
+### Features
+
+* added qbit support ([a609d46](https://github.com/RA341/gouda/commit/a609d46a238b09c5b2164132ceb934617abb6386))
+* changed endpoints ([9ffe90d](https://github.com/RA341/gouda/commit/9ffe90dd9d32cfab6fd856b27e8aa88fa16deed2))
+
 ## [1.2.1](https://github.com/RA341/gouda/compare/v1.2.0...v1.2.1) (2024-12-09)
 
 
