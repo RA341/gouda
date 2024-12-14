@@ -19,6 +19,7 @@ services:
       - D:\Dev\Go\mam\gouda\sample\config:/appdata/config
     profiles:
       - ""
+      - gou
 
   transmissionprivate:
     container_name: transmissionpriv
@@ -39,3 +40,4 @@ services:
     restart: unless-stopped
     profiles:
       - tor
+      - ""

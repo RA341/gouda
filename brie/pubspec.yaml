@@ -19,6 +19,7 @@ dependencies:
   flutter_hooks: ^0.20.5
   hooks_riverpod: ^2.6.1
   shared_preferences: ^2.3.3
+  flutter_animate:
 
 dev_dependencies:
   custom_lint:
