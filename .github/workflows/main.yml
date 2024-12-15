@@ -1,7 +1,7 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
-name: Go
+name: staging build
 
 on:
   push:
@@ -19,24 +19,33 @@ jobs:
         with:
           fetch-depth: 0
 
-      ## docker image build
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Set up Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Check for existing PR
+        id: check_pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing_prs=$(gh pr list --base release --head main --json number --jq length)
+          if [ "$existing_prs" -gt "0" ]; then
+            echo "Existing PR found, skipping creation"
+            echo "has_pr=true" >> $GITHUB_OUTPUT
+          else
+            echo "No existing PR found"
+            echo "has_pr=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Build and push version tagged
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/gouda:dev
-          labels: |
-            org.opencontainers.image.title=gouda-dev
-            org.opencontainers.image.description=This is a devlop verrion for gouda app to preview new features, not recommended for actual use
-            org.opencontainers.image.source=https://github.com/RA341/gouda
-            org.opencontainers.image.version=develop
+      - name: Create branch and PR to release
+        if: steps.check_pr.outputs.has_pr == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base release \
+            --head main \
+            --title "[TODO] Automated merge from main" \
+            --body "Automated PR to sync changes from main to release branch. Add changes info here"
+            --draft
