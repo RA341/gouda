@@ -27,7 +27,7 @@ jobs:
       - name: Check for existing PR
         id: check_pr
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         run: |
           existing_prs=$(gh pr list --base release --head main --json number --jq length)
           if [ "$existing_prs" -gt "0" ]; then
@@ -41,7 +41,7 @@ jobs:
       - name: Create branch and PR to release
         if: steps.check_pr.outputs.has_pr == 'false'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         run: |
           gh pr create \
             --base release \
