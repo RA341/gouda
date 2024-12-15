@@ -30,7 +30,7 @@ docker run -d \
 
 ### Docker Compose Example
 
-Look at the example docker compose here [docker-compose](test-docker-compose.yml) and adapt it your needs.
+Look at the example docker compose here [docker-compose](prod-docker-compose.yml) and adapt it your needs.
 
 Once running, access the web interface at `http://your-ip:9862` to configure:
 - Torrent client settings (qBittorrent, Transmission, etc.) (currently only transmission is supported)

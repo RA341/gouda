@@ -92,3 +92,8 @@ jobs:
           ${{ secrets.DOCKERHUB_USERNAME }}/gouda:latest
           ${{ secrets.DOCKERHUB_USERNAME }}/gouda:${{ steps.tagName.outputs.tag }}
           ${{ secrets.DOCKERHUB_USERNAME }}/gouda:${{ steps.major_version.outputs.major }}
+        labels: |
+          org.opencontainers.image.title=gouda
+          org.opencontainers.image.description=This is the stable version for gouda app.
+          org.opencontainers.image.source=https://github.com/RA341/gouda
+          org.opencontainers.image.version=${{ steps.tagName.outputs.tag }}

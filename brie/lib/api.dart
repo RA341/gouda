@@ -92,14 +92,6 @@ class GoudaApi {
       await prefs.setString('apikey', apiKey);
 
       updateClients();
-
-      if (!ctx.mounted) return;
-      await Navigator.pushReplacement(
-        ctx,
-        MaterialPageRoute(
-          builder: (context) => MainView(),
-        ),
-      );
     } catch (e) {
       throw Exception('Error occurred while logging in: $e');
     }
