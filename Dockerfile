@@ -15,6 +15,7 @@ RUN git clone https://github.com/flutter/flutter.git /flutter
 ENV PATH="/flutter/bin:${PATH}"
 RUN flutter doctor
 RUN flutter config --enable-web
+RUN flutter config --no-cli-animations
 
 # Clone your repository
 COPY ./brie /app
