@@ -46,16 +46,16 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.23.3'
-
     - name: 'Get tag'
       id: tagName
       uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
     # todo binary release
+#    - name: Set up Go
+#      uses: actions/setup-go@v4
+#      with:
+#        go-version: '1.23.3'
+
 #    - name: Build
 #      run: go build -ldflags "-w -s -X ctrl/core/updater.Version=${{ steps.tagName.outputs.tag }}" -o gouda_${{ steps.tagName.outputs.tag }}
 #    - name: Upload Release Asset
