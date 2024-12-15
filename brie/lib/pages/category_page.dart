@@ -71,6 +71,9 @@ class CategoriesView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider).valueOrNull;
+    final downloadPath = settings?.completeFolder;
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 120),
@@ -83,9 +86,21 @@ class CategoriesView extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Card(
                   key: ValueKey(categories[index]),
-                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
-                    title: Text(categories[index]),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(categories[index]),
+                        Padding(
+                          padding: EdgeInsets.only(right: 40),
+                          child: Text(downloadPath == null
+                              ? ""
+                              : 'Complete path:  $downloadPath/${categories[index]}', style: TextStyle(color: Colors.green),),
+                        )
+                      ],
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {

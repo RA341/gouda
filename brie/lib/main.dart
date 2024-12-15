@@ -48,10 +48,10 @@ class RootView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final testToken = ref.watch(checkTokenProvider);
 
-    return testToken.when(
-      data: (data) => data ? MainView() : LoginPage(),
-      error: (error, stackTrace) => Scaffold(
-        body: Center(
+    return Scaffold(
+      body: testToken.when(
+        data: (data) => data ? MainView() : LoginPage(),
+        error: (error, stackTrace) => Center(
           child: Column(
             children: [
               Text('An error occurred'),
@@ -60,9 +60,7 @@ class RootView extends ConsumerWidget {
             ],
           ),
         ),
-      ),
-      loading: () => Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        loading: () => Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -80,13 +78,11 @@ class MainView extends ConsumerWidget {
 
     final pageIndex = ref.watch(pageIndexListProvider);
 
-    return Scaffold(
-      body: Row(
-        children: [
-          Sidebar(),
-          Expanded(child: routeList[pageIndex]),
-        ],
-      ),
+    return Row(
+      children: [
+        Sidebar(),
+        Expanded(child: routeList[pageIndex]),
+      ],
     );
   }
 }

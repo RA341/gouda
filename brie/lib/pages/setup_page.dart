@@ -15,75 +15,73 @@ class LoginPage extends HookConsumerWidget {
     final userName = useTextEditingController(text: kDebugMode ? 'admin' : '');
     final pass = useTextEditingController(text: kDebugMode ? 'admin' : '');
 
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Setup page', style: TextStyle(fontSize: 30)),
-              SizedBox(height: 50),
-              AutofillGroup(
-                child: SizedBox(
-                  width: 200,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20),
-                      TextField(
-                        autofillHints: [AutofillHints.username],
-                        controller: userName,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Username",
-                        ),
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Setup page', style: TextStyle(fontSize: 30)),
+            SizedBox(height: 50),
+            AutofillGroup(
+              child: SizedBox(
+                width: 200,
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    TextField(
+                      autofillHints: [AutofillHints.username],
+                      controller: userName,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Username",
                       ),
-                      SizedBox(height: 20),
-                      TextField(
-                        autofillHints: [AutofillHints.password],
-                        controller: pass,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Password",
-                        ),
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      autofillHints: [AutofillHints.password],
+                      controller: pass,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Password",
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      if (!context.mounted) return;
-                      await api.login(
-                        context,
-                        user: userName.text,
-                        pass: pass.text,
-                      );
-                    } catch (e) {
-                      print(e);
-                      if (!context.mounted) return;
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    if (!context.mounted) return;
+                    await api.login(
+                      context,
+                      user: userName.text,
+                      pass: pass.text,
+                    );
+                  } catch (e) {
+                    print(e);
+                    if (!context.mounted) return;
 
-                      await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Column(
-                            children: [
-                              Text('An error occured'),
-                              Text(e.toString())
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  },
-                  child: Text('Submit'),
-                ),
-              )
-            ],
-          ),
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          children: [
+                            Text('An error occured'),
+                            Text(e.toString())
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                child: Text('Submit'),
+              ),
+            )
+          ],
         ),
       ),
     );
