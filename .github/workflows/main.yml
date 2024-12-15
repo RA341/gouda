@@ -48,4 +48,3 @@ jobs:
             --head main \
             --title "[TODO] Automated merge from main" \
             --body "Automated PR to sync changes from main to release branch. Add changes info here"
-            --draft
