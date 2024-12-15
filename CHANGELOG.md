@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/RA341/gouda/compare/v1.3.3...v1.3.4) (2024-12-15)
+
+
+### Bug Fixes
+
+* **ui:** show full path in cat rows ([2de667f](https://github.com/RA341/gouda/commit/2de667f038d51f7447ccf47868f0bec90351e865))
+
 ## [1.3.3](https://github.com/RA341/gouda/compare/v1.3.2...v1.3.3) (2024-12-14)
 
 
