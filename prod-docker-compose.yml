@@ -1,3 +1,4 @@
+# This is a example docker compose file that can be used in your setup
 services:
   gouda:
     container_name: gouda
