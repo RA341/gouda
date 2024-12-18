@@ -19,3 +19,5 @@ tor:
 	docker compose down
 	docker compose --profile tor up --force-recreate
 
+ui:
+	cd brie && flutter build web

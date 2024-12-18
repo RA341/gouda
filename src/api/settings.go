@@ -1,6 +1,7 @@
 package api
 
 import (
+	models "github.com/RA341/gouda/models"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
@@ -10,7 +11,7 @@ func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	protected := r.Group("/settings")
 
 	protected.POST("/update", func(c *gin.Context) {
-		var settings SettingsJson
+		var settings models.SettingsJson
 		if err := c.BindJSON(&settings); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -47,7 +48,7 @@ func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	})
 
 	protected.GET("/retrieve", func(c *gin.Context) {
-		settings := SettingsJson{
+		settings := models.SettingsJson{
 			ApiKey:               viper.GetString("apikey"),
 			ServerPort:           viper.GetString("server.port"),
 			DownloadCheckTimeout: viper.GetInt("download.timeout"),
