@@ -1,10 +1,7 @@
 package api
 
 import (
-	"errors"
-	"fmt"
-	clients "github.com/RA341/gouda/download_clients"
-	"github.com/RA341/gouda/mam"
+	"github.com/RA341/gouda/download_clients"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
 	"github.com/gin-gonic/gin"
@@ -22,13 +19,19 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup
 			return
 		}
 
-		initializeTorrentClient, err := InitializeTorrentClient(req)
+		newTorrentClient, err := download_clients.InitializeTorrentClient(req)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error initializing client": err.Error()})
+			return
+		}
+
+		err = download_clients.WriteTorrentConfig(req)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error saving client": err.Error()})
 			return
 		}
 
-		api.DownloadClient = initializeTorrentClient
+		api.DownloadClient = newTorrentClient
 
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
@@ -71,7 +74,7 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup
 func AddTorrent(env *Env, request models.TorrentRequest) error {
 	torrentDir := viper.GetString("folder.torrents")
 
-	file, err := mam.DownloadTorrentFile(request.FileLink, torrentDir)
+	file, err := service.DownloadTorrentFile(request.FileLink, torrentDir)
 	if err != nil {
 		return err
 	}
@@ -85,49 +88,4 @@ func AddTorrent(env *Env, request models.TorrentRequest) error {
 	go service.ProcessDownloads(&env.DownloadClient, torrent, request.Author, request.Book, request.Category)
 
 	return nil
-}
-
-func InitializeTorrentClient(details models.TorrentClient) (clients.DownloadClient, error) {
-	if details.Type == "transmission" {
-		transmission, err := clients.InitTransmission(details.Host, details.Protocol, details.User, details.Password)
-		if err != nil {
-			return nil, err
-		}
-
-		_, _, err = transmission.Health()
-		if err != nil {
-			return nil, err
-		}
-
-		viper.Set("torrent_client.name", details.Type)
-		viper.Set("torrent_client.host", details.Host)
-		viper.Set("torrent_client.protocol", details.Protocol)
-		viper.Set("torrent_client.user", details.User)
-		viper.Set("torrent_client.password", details.Password)
-		err = viper.WriteConfig()
-		if err != nil {
-			return nil, err
-		}
-
-		return transmission, nil
-	} else if details.Type == "qbit" {
-		qbit, err := clients.InitQbit(details.Host, details.Protocol, details.User, details.Password)
-		if err != nil {
-			return nil, err
-		}
-
-		viper.Set("torrent_client.name", details.Type)
-		viper.Set("torrent_client.host", details.Host)
-		viper.Set("torrent_client.protocol", details.Protocol)
-		viper.Set("torrent_client.user", details.User)
-		viper.Set("torrent_client.password", details.Password)
-		err = viper.WriteConfig()
-		if err != nil {
-			return nil, err
-		}
-
-		return qbit, nil
-	} else {
-		return nil, errors.New(fmt.Sprintf("Unsupported torrent client: %s", details.Type))
-	}
 }
