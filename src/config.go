@@ -16,7 +16,7 @@ const filePerm = 0o770
 func InitConfig() error {
 	err := godotenv.Load()
 	if err != nil {
-		log.Warn().Err(err).Msgf("Error loading .env file")
+		log.Warn().Err(err).Msgf("could not load .env file, if you do not have \".env\" file you can ignore this warning")
 	}
 
 	baseDir := "./appdata"
