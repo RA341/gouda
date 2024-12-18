@@ -9,11 +9,25 @@ import (
 	"github.com/spf13/viper"
 	"net/http"
 	"os"
+	"sync"
 )
 
 type LoginRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+// cache os.getenv('debug') value for perf
+var (
+	cachedEnvVar string
+	envVarOnce   sync.Once
+)
+
+func GetCachedEnv() string {
+	envVarOnce.Do(func() {
+		cachedEnvVar = os.Getenv("DEBUG")
+	})
+	return cachedEnvVar
 }
 
 func GenerateToken(len int) (string, error) {
@@ -26,8 +40,7 @@ func GenerateToken(len int) (string, error) {
 }
 
 func verifyToken(token string) (bool, error) {
-	if os.Getenv("DEBUG") == "true" {
-		//fmt.Println("Warning app is running in debug mode auth is ignored")
+	if GetCachedEnv() == "true" {
 		return true, nil
 	}
 

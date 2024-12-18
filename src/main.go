@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/RA341/gouda/api"
+	"github.com/RA341/gouda/download_clients"
 	models "github.com/RA341/gouda/models"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -22,11 +23,15 @@ func main() {
 		log.Fatal().Err(err).Msgf("Failed to get config")
 	}
 
+	if os.Getenv("DEBUG") == "true" {
+		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
+	}
+
 	apiEnv := api.Env{}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {
-		client, err := api.InitializeTorrentClient(models.TorrentClient{
+		client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
 			User:     viper.GetString("torrent_client.user"),
 			Password: viper.GetString("torrent_client.password"),
 			Protocol: viper.GetString("torrent_client.protocol"),
