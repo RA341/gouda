@@ -1,7 +1,6 @@
 package download_clients
 
 import (
-	"errors"
 	"fmt"
 	models "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
@@ -32,7 +31,7 @@ func InitializeTorrentClient(details models.TorrentClient) (DownloadClient, erro
 		log.Debug().Msgf("Successfully connected to qbit")
 		return qbit, nil
 	} else {
-		return nil, errors.New(fmt.Sprintf("Unsupported torrent client: %s", details.Type))
+		return nil, fmt.Errorf("unsupported torrent client: %s", details.Type)
 	}
 }
 

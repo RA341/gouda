@@ -4,7 +4,6 @@ package download_clients
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/hekmon/transmissionrpc/v3"
 	"net/url"
@@ -53,8 +52,8 @@ func (tm *TransmissionClient) Health() (string, string, error) {
 	}
 
 	if !ok {
-		return "", "", errors.New(fmt.Sprintf("Remote transmission RPC version (v%d) is incompatible with the transmission library (v%d): remote needs at least v%d",
-			serverVersion, transmissionrpc.RPCVersion, serverMinimumVersion))
+		return "", "", fmt.Errorf("remote transmission RPC version (v%d) is incompatible with the transmission library (v%d): remote needs at least v%d",
+			serverVersion, transmissionrpc.RPCVersion, serverMinimumVersion)
 	}
 
 	return "transmission", fmt.Sprintf("Remote transmission RPC version (v%d) is compatible with our transmissionrpc library (v%d)\n",

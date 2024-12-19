@@ -21,7 +21,7 @@ func ProcessDownloads(clientPointer *download_clients.DownloadClient, torrentId 
 	downloadClient := *clientPointer
 
 	timeRunning := time.Second * 0
-	timeout := time.Minute * viper.GetDuration(fmt.Sprintf("download.timeout"))
+	timeout := time.Minute * viper.GetDuration("download.timeout")
 
 	for {
 		log.Info().Msgf("getting torrent info with id:%s", torrentId)
