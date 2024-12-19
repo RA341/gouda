@@ -30,7 +30,7 @@ func ProcessDownloads(clientPointer *download_clients.DownloadClient, torrentId 
 			log.Warn().Msgf("Failed to get info with id: %s", torrentId)
 			break
 		} else {
-			if info.Status == "seeding" {
+			if info.DownloadComplete {
 				destPath := viper.GetString("folder.defaults")
 				catPath := fmt.Sprintf("%s/%s", destPath, category)
 				destPath = fmt.Sprintf("%s/%s/%s", catPath, author, book)
@@ -196,6 +196,10 @@ func DownloadTorrentFile(downloadLink string, downloadPath string) (string, erro
 	if err != nil {
 		return "", fmt.Errorf("failed to make request: %v", err)
 	}
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("invalid http code: %d, reason: %s", resp.StatusCode, resp.Status)
+	}
+
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
@@ -216,8 +220,6 @@ func DownloadTorrentFile(downloadLink string, downloadPath string) (string, erro
 	if err := os.MkdirAll(downloadPath, 0775); err != nil {
 		return "", fmt.Errorf("failed to create directories: %v", err)
 	}
-
-	fmt.Println("Created dit")
 
 	destPath := fmt.Sprintf("%s/%s", downloadPath, filename)
 	file, err := os.Create(destPath)

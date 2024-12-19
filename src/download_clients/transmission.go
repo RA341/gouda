@@ -72,9 +72,15 @@ func (tm *TransmissionClient) CheckTorrentStatus(torrentIds string) (TorrentStat
 		return TorrentStatus{}, err
 	}
 
+	complete := false
+	if info[0].Status.String() == "seeding" {
+		complete = true
+	}
+
 	return TorrentStatus{
-		Name:         *info[0].Name,
-		DownloadPath: *info[0].DownloadDir,
-		Status:       info[0].Status.String(),
+		Name:             *info[0].Name,
+		DownloadPath:     *info[0].DownloadDir,
+		DownloadComplete: complete,
+		Status:           info[0].Status.String(),
 	}, nil
 }

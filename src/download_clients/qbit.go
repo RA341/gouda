@@ -99,10 +99,16 @@ func (qbitClient *QbitClient) CheckTorrentStatus(torrentIds string) (TorrentStat
 		return TorrentStatus{}, err
 	}
 
+	complete := false
+	if info.State == "uploading" {
+		complete = true
+	}
+
 	return TorrentStatus{
-		Name:         info.Name,
-		DownloadPath: info.SavePath,
-		Status:       info.State,
+		Name:             info.Name,
+		DownloadPath:     info.SavePath,
+		DownloadComplete: complete,
+		Status:           info.State,
 	}, nil
 }
 
