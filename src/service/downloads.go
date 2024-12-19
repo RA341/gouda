@@ -41,7 +41,7 @@ func ProcessDownloads(clientPointer *download_clients.DownloadClient, torrentId 
 
 				err := HardLinkFolder(info.DownloadPath, destPath)
 				if err != nil {
-					log.Error().Err(err).Msgf("Failed to link info with id: %d", torrentId)
+					log.Error().Err(err).Msgf("Failed to link info with id: %s", torrentId)
 					break
 				}
 
@@ -50,7 +50,7 @@ func ProcessDownloads(clientPointer *download_clients.DownloadClient, torrentId 
 				log.Info().Msgf("Changing file perm to %d:%d", sourceUID, sourceGID)
 				err = recursiveChown(catPath, sourceUID, sourceGID)
 				if err != nil {
-					log.Error().Err(err).Msgf("Failed to chown info with id: %d", torrentId)
+					log.Error().Err(err).Msgf("Failed to chown info with id: %s", torrentId)
 					break
 				}
 
@@ -59,7 +59,7 @@ func ProcessDownloads(clientPointer *download_clients.DownloadClient, torrentId 
 			}
 
 			if timeout < timeRunning {
-				log.Error().Msgf("Maximum timeout reached abandoning check for %d:%s after %s, max timeout was set to %s, check your torrent downloadClient or increase timeout in settings", torrentId, info.Name, timeRunning.String(), timeout)
+				log.Error().Msgf("Maximum timeout reached abandoning check for %s:%s after %s, max timeout was set to %s, check your torrent downloadClient or increase timeout in settings", torrentId, info.Name, timeRunning.String(), timeout)
 				break
 			}
 
@@ -96,9 +96,6 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 		return fmt.Errorf("source directory error: %w", err)
 	}
 
-	sourceUID := viper.GetInt("user.uid")
-	sourceGID := viper.GetInt("user.gid")
-
 	// Create target directory if it doesn't exist
 	err = os.MkdirAll(targetDir, 0o775)
 	if err != nil {
@@ -115,7 +112,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 		log.Info().Err(err).Msgf("Source is a file, final dest path will be %s", targetDir)
 
 		// Create hard link for the file
-		if err := createHardLink(sourceDir, targetDir, sourceUID, sourceGID, sourceStat.Mode()); err != nil {
+		if err := createHardLink(sourceDir, targetDir, sourceStat.Mode()); err != nil {
 			return fmt.Errorf("failed to create hard link from %s to %s: %w", sourceDir, targetDir, err)
 		}
 
@@ -153,7 +150,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 		}
 
 		// Create hard link for files
-		err = createHardLink(path, targetPath, viper.GetInt("user.uid"), viper.GetInt("user.gid"), info.Mode())
+		err = createHardLink(path, targetPath, info.Mode())
 		if err != nil {
 			return fmt.Errorf("failed to create hard link from %s to %s: %w", path, targetPath, err)
 		}
@@ -163,7 +160,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 }
 
 // createHardLink creates a hard link with proper ownership and permissions
-func createHardLink(oldPath, newPath string, uid, gid int, mode fs.FileMode) error {
+func createHardLink(oldPath, newPath string, mode fs.FileMode) error {
 	if runtime.GOOS == "windows" {
 		return errors.New("hardlinking on windows is not supported")
 	}
