@@ -118,7 +118,7 @@ class SettingsView extends HookConsumerWidget {
               child: Divider(thickness: 4),
             ),
             createDropDown(
-              ["transmission"],
+              ["transmission", "qbit"],
               clientType,
               "Torrent Client Type",
             ),

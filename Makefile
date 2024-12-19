@@ -5,7 +5,7 @@ dkcb:
 	docker compose up --build
 
 dkbd:
-	docker build . -t ras344/gouda:local
+	docker build . -t ras344/gouda:local --no-cache
 
 main:
 	docker compose down
