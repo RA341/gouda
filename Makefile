@@ -6,7 +6,7 @@ dkcb:
 
 lint:
 	clear
-	golangci-lint run
+	cd src && golangci-lint run
 
 dkbd:
 	docker build . -t ras344/gouda:local --no-cache

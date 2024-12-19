@@ -1,6 +1,7 @@
 package service
 
 import (
+	types "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
 	"gorm.io/gorm"
@@ -28,5 +29,20 @@ func InitDB(dbPath string) (*gorm.DB, error) {
 
 	log.Info().Msgf("Connected to database at: %s", dbPath)
 
+	// migrations
+	err = migrate(db)
+	if err != nil {
+		return nil, err
+	}
+	log.Info().Msgf("Migration complete")
+
 	return db, nil
+}
+
+func migrate(db *gorm.DB) error {
+	err := db.AutoMigrate(&types.Categories{}, &types.TorrentRequest{})
+	if err != nil {
+		return err
+	}
+	return nil
 }

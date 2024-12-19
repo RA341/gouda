@@ -16,7 +16,7 @@ type TorrentRequest struct {
 	Author   string `json:"author"`
 	Book     string `json:"book"`
 	Category string `json:"category"`
-	MAMUrl   string `json:"mam_url"`
+	MAMUrl   string `json:"mam_url" gorm:"uniqueIndex"`
 }
 
 type ProgressRequest struct {
