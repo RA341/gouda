@@ -3,7 +3,6 @@ package download_clients
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/hekmon/transmissionrpc/v3"
 	"github.com/rs/zerolog/log"
@@ -78,18 +77,17 @@ func (qbitClient *QbitClient) DownloadTorrent(torrent string, downloadPath strin
 }
 
 func (qbitClient *QbitClient) Health() (string, string, error) {
-	serverVersion, serverMinimumVersion, err := qbitClient.Health()
+	serverVersion, err := qbitClient.GetAPIVersion()
 	if err != nil {
 		return "", "", err
 	}
 
 	// todo
 	if serverVersion == "" {
-		return "", "", errors.New(fmt.Sprintf("Remote transmission RPC version (v%s) is incompatible with the transmission library (v%d): remote needs at least v%d",
-			serverVersion, transmissionrpc.RPCVersion, serverMinimumVersion))
+		return "", "", fmt.Errorf("qbit version (v%s)", serverVersion)
 	}
 
-	return "qbit", fmt.Sprintf("Remote transmission RPC version (v%s) is compatible with our transmissionrpc library (v%d)\n",
+	return "qbit", fmt.Sprintf("Qbit (v%s) is compatible (v%d)\n",
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
