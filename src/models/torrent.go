@@ -1,5 +1,7 @@
 package types
 
+import "gorm.io/gorm"
+
 type TorrentClient struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
@@ -9,6 +11,7 @@ type TorrentClient struct {
 }
 
 type TorrentRequest struct {
+	gorm.Model
 	FileLink string `json:"file_link"`
 	Author   string `json:"author"`
 	Book     string `json:"book"`

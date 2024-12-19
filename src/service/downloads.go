@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/RA341/gouda/download_clients"
+	models "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"io"
@@ -14,10 +15,42 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"sync"
 	"time"
 )
 
+// run status check only the first time
+// statuscheck will handle checks until all downloads are complete
+var once sync.Once
+
+func AddTorrent(client *download_clients.DownloadClient, request models.TorrentRequest) error {
+	dClient := *client
+	torrentDir := viper.GetString("folder.torrents")
+
+	file, err := DownloadTorrentFile(request.FileLink, torrentDir)
+	if err != nil {
+		return err
+	}
+
+	downloadsDir := viper.GetString("folder.downloads")
+	torrent, err := dClient.DownloadTorrent(file, downloadsDir)
+	if err != nil {
+		return err
+	}
+
+	once.Do(func() {
+		log.Debug().Msgf("Starting status check")
+		go ProcessDownloads(&dClient, torrent, request.Author, request.Book, request.Category)
+	})
+
+	return nil
+}
+
 func ProcessDownloads(clientPointer *download_clients.DownloadClient, torrentId string, author, book, category string) {
+	defer func() {
+		log.Debug().Msgf("Download process complete, reseting sync.once")
+		once = sync.Once{}
+	}()
 	downloadClient := *clientPointer
 
 	timeRunning := time.Second * 0

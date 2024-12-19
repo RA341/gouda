@@ -59,7 +59,7 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup
 			return
 		}
 
-		err := AddTorrent(api, req)
+		err := service.AddTorrent(&api.DownloadClient, req)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -69,23 +69,4 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup
 	})
 
 	return r
-}
-
-func AddTorrent(env *Env, request models.TorrentRequest) error {
-	torrentDir := viper.GetString("folder.torrents")
-
-	file, err := service.DownloadTorrentFile(request.FileLink, torrentDir)
-	if err != nil {
-		return err
-	}
-
-	downloadsDir := viper.GetString("folder.downloads")
-	torrent, err := env.DownloadClient.DownloadTorrent(file, downloadsDir)
-	if err != nil {
-		return err
-	}
-
-	go service.ProcessDownloads(&env.DownloadClient, torrent, request.Author, request.Book, request.Category)
-
-	return nil
 }
