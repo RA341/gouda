@@ -1,6 +1,7 @@
 package api
 
 import (
+	models "github.com/RA341/gouda/models"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
@@ -11,16 +12,16 @@ func (api *Env) SetupCategoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 
 	protected.GET("/list", func(c *gin.Context) {
 		catogories := viper.GetStringSlice("categories")
-		catList := CatList{Categories: catogories}
+		catList := models.CatList{Categories: catogories}
 		if catogories == nil {
-			catList = CatList{Categories: []string{}}
+			catList = models.CatList{Categories: []string{}}
 		}
 
 		c.JSON(http.StatusOK, catList)
 	})
 
 	protected.POST("/add", func(c *gin.Context) {
-		var req CatRequest
+		var req models.CatRequest
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -41,7 +42,7 @@ func (api *Env) SetupCategoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	})
 
 	protected.DELETE("/del", func(c *gin.Context) {
-		var req CatRequest
+		var req models.CatRequest
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -68,11 +69,11 @@ func (api *Env) SetupCategoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	return r
 }
 
-func getCategories() CatList {
+func getCategories() models.CatList {
 	catogories := viper.GetStringSlice("categories")
-	catList := CatList{Categories: catogories}
+	catList := models.CatList{Categories: catogories}
 	if catogories == nil {
-		catList = CatList{Categories: []string{}}
+		catList = models.CatList{Categories: []string{}}
 	}
 	return catList
 }

@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/RA341/gouda/api"
+	"github.com/RA341/gouda/download_clients"
+	models "github.com/RA341/gouda/models"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -21,11 +23,15 @@ func main() {
 		log.Fatal().Err(err).Msgf("Failed to get config")
 	}
 
+	if os.Getenv("DEBUG") == "true" {
+		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
+	}
+
 	apiEnv := api.Env{}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {
-		client, err := api.InitializeTorrentClient(api.TorrentClient{
+		client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
 			User:     viper.GetString("torrent_client.user"),
 			Password: viper.GetString("torrent_client.password"),
 			Protocol: viper.GetString("torrent_client.protocol"),
@@ -34,7 +40,7 @@ func main() {
 		})
 
 		if err == nil {
-			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.type"))
+			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.name"))
 			apiEnv.DownloadClient = client
 		} else {
 			log.Error().Err(err).Msgf("Failed to initialize torrent client")
@@ -49,7 +55,13 @@ func main() {
 	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
 	ginRouter.Use(cors.New(corsConfig))
 
-	ginRouter.Use(static.Serve("/", static.LocalFile("./web", false)))
+	if os.Getenv("IS_DOCKER") == "true" {
+		ginRouter.Use(static.Serve("/", static.LocalFile("./web", false)))
+	} else {
+		log.Info().Msgf("Frontend is served from brie/build/web")
+		ginRouter.Use(static.Serve("/", static.LocalFile("./brie/build/web", false)))
+	}
+
 	ginRouter.HEAD("/", func(context *gin.Context) {
 		context.Status(http.StatusOK)
 	})

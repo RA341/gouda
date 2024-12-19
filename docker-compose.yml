@@ -21,7 +21,8 @@ services:
     profiles:
       - ""
       - gou
-
+    depends_on:
+      - tprv
   # uses latest image pushed on main
   main:
     container_name: gouda
@@ -40,9 +41,9 @@ services:
       - D:\Dev\Go\mam\gouda\sample:/media
       - D:\Dev\Go\mam\gouda\sample\config:/appdata/config
     profiles:
-      - ""
-      - gou
       - main
+    depends_on:
+      - tprv
 
   tprv:
     container_name: transmissionpriv
@@ -62,6 +63,7 @@ services:
       - "9161:9161"
     restart: unless-stopped
     profiles:
+      - gou
       - tor
       - ""
       - main

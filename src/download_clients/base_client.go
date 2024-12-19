@@ -11,7 +11,8 @@ type DownloadClient interface {
 }
 
 type TorrentStatus struct {
-	Name         string `json:"name"`
-	DownloadPath string `json:"download_path"`
-	Status       string `json:"status"`
+	Name             string `json:"name"`
+	DownloadPath     string `json:"download_path"`
+	DownloadComplete bool   `json:"download-complete"`
+	Status           string `json:"status"`
 }

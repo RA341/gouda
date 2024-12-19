@@ -33,11 +33,30 @@ type QbitClient struct {
 	Cookie     *http.Cookie
 }
 
+// defaultQbitTransport custom transport to define referrer headers in all qbit requests
+// ref: https://stackoverflow.com/questions/54088660/add-headers-for-each-http-request-using-client
+type defaultQbitTransport struct {
+	defaultHeaders map[string]string
+}
+
+func (t *defaultQbitTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	for key, value := range t.defaultHeaders {
+		req.Header.Set(key, value)
+	}
+	return http.DefaultTransport.RoundTrip(req)
+}
+
 func InitQbit(qbitUrl, protocol, user, pass string) (DownloadClient, error) {
-	clientStr := fmt.Sprintf("%s://%s/", protocol, qbitUrl)
+	clientStr := fmt.Sprintf("%s://%s", protocol, qbitUrl)
+	customTransport := defaultQbitTransport{
+		defaultHeaders: map[string]string{
+			"Referer": fmt.Sprintf("%s://%s", protocol, qbitUrl),
+		},
+	}
+
 	client := &QbitClient{
 		BaseURL:    clientStr,
-		HTTPClient: &http.Client{},
+		HTTPClient: &http.Client{Transport: &customTransport},
 		Cookie:     nil,
 	}
 
@@ -80,10 +99,16 @@ func (qbitClient *QbitClient) CheckTorrentStatus(torrentIds string) (TorrentStat
 		return TorrentStatus{}, err
 	}
 
+	complete := false
+	if info.State == "uploading" {
+		complete = true
+	}
+
 	return TorrentStatus{
-		Name:         info.Name,
-		DownloadPath: info.SavePath,
-		Status:       info.State,
+		Name:             info.Name,
+		DownloadPath:     info.SavePath,
+		DownloadComplete: complete,
+		Status:           info.State,
 	}, nil
 }
 
