@@ -1,3 +1,17 @@
+## [1.3.6](https://github.com/RA341/gouda/compare/v1.3.5...v1.3.6) (2024-12-19)
+
+
+### Bug Fixes
+
+* added qbit referer header and refactored some functions ([a725190](https://github.com/RA341/gouda/commit/a7251901126ff075a0a5f6558d49cc29927bb972))
+* changed file creation perm ([d242990](https://github.com/RA341/gouda/commit/d242990525cb28d0e9c2dc2f457b87cc2ae72fe0))
+* changed status check to bool ([ca44ea9](https://github.com/RA341/gouda/commit/ca44ea9de2cf2fd52504e7f327c032250e33acbd))
+
+
+### Performance Improvements
+
+* added debug variable cache ([52d38d4](https://github.com/RA341/gouda/commit/52d38d40fca517329c1b51deb9ae33e23c13aff7))
+
 ## [1.3.5](https://github.com/RA341/gouda/compare/v1.3.4...v1.3.5) (2024-12-15)
 
 
