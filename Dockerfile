@@ -1,23 +1,8 @@
 # Stage 1: Flutter build
-FROM debian:latest AS flutter_builder
+FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
-# Install required dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    unzip \
-    xz-utils \
-    zip \
-    libglu1-mesa
+RUN flutter config --enable-web --no-cli-animations && flutter doctor
 
-# Install Flutter
-RUN git clone https://github.com/flutter/flutter.git /flutter
-ENV PATH="/flutter/bin:${PATH}"
-RUN flutter doctor
-RUN flutter config --enable-web
-RUN flutter config --no-cli-animations
-
-# Clone your repository
 COPY ./brie /app
 WORKDIR /app/
 
@@ -29,12 +14,8 @@ FROM golang:1.23-alpine AS go_builder
 
 WORKDIR /app
 
-RUN apk update
-
-# Copy the Go source code
 COPY ./src .
 
-# Get dependencies
 RUN go mod tidy
 
 # Build optimized binary without debugging symbols
