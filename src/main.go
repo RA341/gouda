@@ -5,6 +5,7 @@ import (
 	"github.com/RA341/gouda/api"
 	"github.com/RA341/gouda/download_clients"
 	models "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/service"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -27,7 +28,18 @@ func main() {
 		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
 	}
 
-	apiEnv := api.Env{}
+	dbPath := viper.GetString("DB_PATH")
+	if dbPath == "" {
+		log.Fatal().Msgf("DB_PATH is empty")
+	}
+	db, err := service.InitDB(dbPath)
+	if err != nil {
+		log.Fatal().Err(err).Msgf("Failed to start database")
+	}
+
+	apiEnv := api.Env{
+		Database: db,
+	}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {

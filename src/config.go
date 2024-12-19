@@ -40,6 +40,9 @@ func InitConfig() error {
 	viper.SetConfigType("json")
 	viper.AddConfigPath(configDir)
 
+	// set database path
+	viper.SetDefault("DB_PATH", fmt.Sprintf("%s/gouda_database.db", configDir))
+
 	// set apikey
 	key, err := api.GenerateToken(32)
 	if err != nil {
