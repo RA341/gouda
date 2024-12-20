@@ -40,7 +40,7 @@ func InitDB(dbPath string) (*gorm.DB, error) {
 }
 
 func migrate(db *gorm.DB) error {
-	err := db.AutoMigrate(&types.Categories{}, &types.TorrentRequest{})
+	err := db.AutoMigrate(&types.Categories{}, &types.RequestTorrent{})
 	if err != nil {
 		return err
 	}
