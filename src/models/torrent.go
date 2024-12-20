@@ -1,6 +1,8 @@
 package types
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type TorrentClient struct {
 	User     string `json:"user"`
@@ -10,15 +12,14 @@ type TorrentClient struct {
 	Type     string `json:"type"`
 }
 
-type TorrentRequest struct {
+type RequestTorrent struct {
 	gorm.Model
-	FileLink string `json:"file_link"`
-	Author   string `json:"author"`
-	Book     string `json:"book"`
-	Category string `json:"category"`
-	MAMUrl   string `json:"mam_url" gorm:"uniqueIndex"`
-}
-
-type ProgressRequest struct {
-	IDs []string `json:"ids"`
+	FileLink    string `json:"file_link"`
+	Author      string `json:"author"`
+	Book        string `json:"book"`
+	Category    string `json:"category"`
+	MAMBookID   uint64 `json:"mam_book_id" gorm:"uniqueIndex"`
+	Status      string `json:"status,omitempty"`
+	TorrentId   string `json:"torrent_id,omitempty"`
+	TimeRunning uint   `json:"time_running,omitempty"`
 }

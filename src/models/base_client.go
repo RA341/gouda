@@ -1,4 +1,4 @@
-package download_clients
+package types
 
 // todo doc strings for all functions
 
