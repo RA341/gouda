@@ -4,7 +4,18 @@ build:
 dkcb:
 	docker compose up --build
 
+lint:
+	clear
+	cd src && golangci-lint run
+
 dkbd:
+	docker build . -t ras344/gouda:local
+
+prune:
+	docker image prune -f
+
+# no cache build
+dkc:
 	docker build . -t ras344/gouda:local --no-cache
 
 main:

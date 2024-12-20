@@ -1,13 +1,14 @@
 package download_clients
 
 import (
+	models "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
 
 	"os"
 	"testing"
 )
 
-var client DownloadClient
+var client models.DownloadClient
 
 func TestMain(m *testing.M) {
 	var err error

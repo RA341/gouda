@@ -1,9 +1,9 @@
 package types
 
-type CatRequest struct {
-	Category string `json:"category"`
-}
+import "gorm.io/gorm"
 
-type CatList struct {
-	Categories []string `json:"categories"`
+// Categories gorm category table
+type Categories struct {
+	gorm.Model
+	Category string `json:"category" gorm:"unique"`
 }

@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+type Env models.Env
+
 func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	endpoints := r.Group("/torrent")
 
@@ -53,13 +55,19 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup
 			return
 		}
 
-		var req models.TorrentRequest
+		var req models.RequestTorrent
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		err := AddTorrent(api, req)
+		err := service.SaveTorrentReq(api.Database, &req)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"Unable to save info to database": err.Error()})
+			return
+		}
+
+		err = service.AddTorrent((*models.Env)(api), &req)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -69,23 +77,4 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup
 	})
 
 	return r
-}
-
-func AddTorrent(env *Env, request models.TorrentRequest) error {
-	torrentDir := viper.GetString("folder.torrents")
-
-	file, err := service.DownloadTorrentFile(request.FileLink, torrentDir)
-	if err != nil {
-		return err
-	}
-
-	downloadsDir := viper.GetString("folder.downloads")
-	torrent, err := env.DownloadClient.DownloadTorrent(file, downloadsDir)
-	if err != nil {
-		return err
-	}
-
-	go service.ProcessDownloads(&env.DownloadClient, torrent, request.Author, request.Book, request.Category)
-
-	return nil
 }
