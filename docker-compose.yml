@@ -1,7 +1,7 @@
 # This is an example docker compose file that can be used in your setup
 services:
   gouda:
-    container_name: gouda
+    container_name: gouda-local
     image: ras334/gouda:local
     build:
       context: .
@@ -23,27 +23,6 @@ services:
       - gou
     depends_on:
       - tprv
-  # uses latest image pushed on main
-  main:
-    container_name: gouda
-    image: ras334/gouda:dev
-    ports:
-      - "9862:9862"
-    environment:
-      - GOUDA_USERNAME=admin
-      - GOUDA_PASS=admin
-      - GOUDA_UID=1000
-      - GOUDA_GID=1000
-      - GOUDA_DOWNLOAD_DIR=/media/downloads
-      - GOUDA_DEFAULT_DIR=/media/complete
-      - GOUDA_TORRENT_DIR=/media/downloads/torrents
-    volumes:
-      - D:\Dev\Go\mam\gouda\sample:/media
-      - D:\Dev\Go\mam\gouda\sample\config:/appdata/config
-    profiles:
-      - main
-    depends_on:
-      - tprv
 
   tprv:
     container_name: transmissionpriv
@@ -57,7 +36,6 @@ services:
       - PEERPORT=9161
     volumes:
       - D:\Dev\Go\mam\gouda\sample:/media
-      - D:\Dev\Go\mam\gouda\sample\transmission\config:/config
     ports:
       - "9092:9091"
       - "9161:9161"
