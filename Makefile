@@ -14,9 +14,14 @@ dkbd:
 prune:
 	docker image prune -f
 
+devp:
+	docker build . -t ras334/gouda:dev
+	docker login
+	docker push ras334/gouda:dev
+
 # no cache build
 dkc:
-	docker build . -t ras344/gouda:local --no-cache
+	docker build . -t ras334/gouda:local --no-cache
 
 main:
 	docker compose down
@@ -24,7 +29,7 @@ main:
 
 loc:
 	docker compose down
-	docker compose --profile local up --force-recreate
+	docker compose --profile local up --build --force-recreate
 
 
 gou:
