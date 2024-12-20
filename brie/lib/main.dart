@@ -1,6 +1,7 @@
 import 'package:brie/api.dart';
 import 'package:brie/components/sidebar.dart';
 import 'package:brie/pages/category_page.dart';
+import 'package:brie/pages/history_page.dart';
 import 'package:brie/pages/settings_page.dart';
 import 'package:brie/pages/setup_page.dart';
 import 'package:brie/providers.dart';
@@ -72,6 +73,7 @@ class MainView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const routeList = [
+      HistoryPage(),
       CategoryPage(),
       SettingsPage(),
     ];

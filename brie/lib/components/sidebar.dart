@@ -40,7 +40,7 @@ class Sidebar extends ConsumerWidget {
                   backgroundColor: pageIndex == 0 ? activeButtonColor : null,
                 ),
                 child: Text(
-                  'Categories',
+                  'History',
                 ),
                 onPressed: () async {
                   ref.read(pageIndexListProvider.notifier).state = 0;
@@ -53,9 +53,23 @@ class Sidebar extends ConsumerWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: pageIndex == 1 ? activeButtonColor : null,
                 ),
-                child: Text('Settings'),
+                child: Text(
+                  'Categories',
+                ),
                 onPressed: () async {
                   ref.read(pageIndexListProvider.notifier).state = 1;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: buttonDivider),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: pageIndex == 2 ? activeButtonColor : null,
+                ),
+                child: Text('Settings'),
+                onPressed: () async {
+                  ref.read(pageIndexListProvider.notifier).state = 2;
                 },
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:brie/api.dart';
 import 'package:brie/models.dart';
+import 'package:brie/pages/utils.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -176,17 +177,11 @@ class SettingsView extends HookConsumerWidget {
                       ref.invalidate(settingsProvider);
                     } catch (e) {
                       if (!context.mounted) return;
-                      showDialog(
-                        context: context,
-                        builder: (context) => Column(
-                          children: [
-                            Text(
-                              'Error updating settings',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            Text(e.toString())
-                          ],
-                        ),
+                      showErrorDialog(
+                        context,
+                        'Error saving settings',
+                        '',
+                        e.toString(),
                       );
                     }
                   },

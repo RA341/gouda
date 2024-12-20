@@ -1,4 +1,5 @@
 import 'package:brie/api.dart';
+import 'package:brie/pages/utils.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -66,17 +67,11 @@ class LoginPage extends HookConsumerWidget {
                   } catch (e) {
                     print(e);
                     if (!context.mounted) return;
-
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                          children: [
-                            Text('An error occured'),
-                            Text(e.toString())
-                          ],
-                        );
-                      },
+                    showErrorDialog(
+                      context,
+                      'Unable to login',
+                      '',
+                      e.toString(),
                     );
                   }
                 },

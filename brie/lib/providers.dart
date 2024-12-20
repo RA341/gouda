@@ -28,6 +28,12 @@ final settingsProvider = FutureProvider<Settings>((ref) async {
   return await api.settingsApi.list();
 });
 
-final categoryListProvider = FutureProvider<List<String>>((ref) async {
+final categoryListProvider = FutureProvider<List<(String, int)>>((ref) async {
   return await api.categoryApi.listCategory();
+});
+
+final requestHistoryProvider = FutureProvider<List<Book>>((ref) async {
+
+
+  return api.historyApi.getTorrentHistory();
 });
