@@ -199,7 +199,7 @@ func (qbitClient *QbitClient) getTorrentList() ([]TorrentInfo, error) {
 
 // CheckStatus retrieves the current status of a torrent by its hash
 func (qbitClient *QbitClient) CheckStatus(hashes []string) (*[]TorrentInfo, error) {
-	if hashes == nil || len(hashes) == 0 {
+	if len(hashes) == 0 {
 		return nil, fmt.Errorf("hashlist is empty")
 	}
 
