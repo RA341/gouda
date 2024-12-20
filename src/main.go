@@ -83,6 +83,7 @@ func main() {
 	apiGroup.Use(api.AuthMiddleware())
 	apiGroup = apiEnv.SetupTorrentClientEndpoints(apiGroup)
 	apiGroup = apiEnv.SetupCategoryEndpoints(apiGroup)
+	apiGroup = apiEnv.SetupHistoryEndpoints(apiGroup)
 	_ = apiEnv.SetupSettingsEndpoints(apiGroup)
 
 	port := viper.GetString("server.port")

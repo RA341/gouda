@@ -6,7 +6,7 @@ dkcb:
 
 lint:
 	clear
-	cd src && golangci-lint run
+	golangci-lint run
 
 dkbd:
 	docker build . -t ras344/gouda:local
@@ -21,6 +21,11 @@ dkc:
 main:
 	docker compose down
 	docker compose --profile main up --force-recreate
+
+loc:
+	docker compose down
+	docker compose --profile local up --force-recreate
+
 
 gou:
 	docker compose down

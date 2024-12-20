@@ -20,9 +20,8 @@ services:
       - D:\Dev\Go\mam\gouda\sample\config:/appdata/config
     profiles:
       - ""
+      - local
       - gou
-    depends_on:
-      - tprv
 
   tprv:
     container_name: transmissionpriv
