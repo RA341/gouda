@@ -7,6 +7,7 @@ import (
 	"github.com/hekmon/transmissionrpc/v3"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type TorrentInfo struct {
@@ -78,7 +79,7 @@ func (qbitClient *QbitClient) CheckTorrentStatus(torrentIds []string) ([]models.
 
 	for _, info := range *infos {
 		complete := false
-		if info.State == "uploading" {
+		if info.State == "uploading" || info.State == "stalledUP" || info.State == "forcedUP" {
 			complete = true
 		}
 
@@ -206,19 +207,21 @@ func (qbitClient *QbitClient) CheckStatus(hashes []string) (*[]TorrentInfo, erro
 	for _, hash := range hashes {
 		finalHashQuery = fmt.Sprintf("%s|%s", finalHashQuery, hash)
 	}
+	finalHashQuery = strings.Trim(finalHashQuery, "|")
 
 	var torrents []TorrentInfo
 	resp, err := resty.New().R().
+		SetCookie(qbitClient.cookie).
 		SetHeaders(*qbitClient.defaultHeaders).
 		SetResult(&torrents).
 		Get(fmt.Sprintf("%s/api/v2/torrents/info?hashes=%s", qbitClient.BaseURL, finalHashQuery))
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get status, request failed: %d", resp.StatusCode())
+		return nil, fmt.Errorf("failed to get infos: code: %d, body: %s", resp.StatusCode(), resp.String())
 	}
 
 	if resp.StatusCode() != http.StatusOK {
-		return nil, fmt.Errorf("failed to get status, status code: %d", resp.StatusCode())
+		return nil, fmt.Errorf("failed to get infos: Invalid status code: %d, body: %s", resp.StatusCode(), resp.String())
 	}
 
 	if len(torrents) == 0 {
