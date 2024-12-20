@@ -79,34 +79,38 @@ func ProcessDownloads(env *models.Env, torrentId string, torrentInfo *models.Req
 		once = sync.Once{}
 	}()
 
-	timeRunning := time.Second * 0
-	activeTorrentsCheck := 1 * time.Minute
+	databaseTimeRunning := 0 * time.Second
+	databaseCheck := 1 * time.Minute
+	databaseCheckTimeout := 1 * time.Second
+
 	log.Debug().Msgf("Torrent Check timeout is set at %v", viper.GetDuration("download.timeout"))
 	torrentCheckTimeout := time.Minute * viper.GetDuration("download.timeout")
 
 	for {
 		activeTorrents, err := fetchDownloadingTorrents(env.Database)
 		if err != nil {
-			log.Warn().Msgf("Failed to get active torrents from database... retrying")
-			if timeRunning > activeTorrentsCheck {
-				log.Error().Msgf("Unable to get active torrents from database, stopping check")
+			if databaseTimeRunning > databaseCheck {
+				log.Error().Msgf("Max timeout reached Current running %s: limit: %s,Unable to get active torrents from database, stopping check",
+					databaseTimeRunning.String(),
+					databaseCheck.String(),
+				)
 				break
 			}
+			log.Warn().Msgf("Failed to get active torrents from database... retrying")
 
-			timeout := 1 * time.Second
-			timeRunning += timeout
-			time.Sleep(timeout)
+			databaseTimeRunning += databaseCheckTimeout
+			time.Sleep(databaseCheckTimeout)
 			continue
 		}
 		// reset database check counter
-		timeRunning = time.Second * 0
+		databaseTimeRunning = time.Second * 0
 
 		if len(activeTorrents) == 0 {
 			log.Info().Msgf("No active torrents found")
 			break
 		}
 
-		var torrentMap map[string]*models.RequestTorrent
+		var torrentMap = make(map[string]*models.RequestTorrent)
 		var torrentIds []string
 		for _, torrent := range activeTorrents {
 			torrentMap[torrent.TorrentId] = &torrent
@@ -126,12 +130,15 @@ func ProcessDownloads(env *models.Env, torrentId string, torrentInfo *models.Req
 				err := finalizeDownload(torrentInfo, &torrentStatus, torrentId)
 				if err != nil {
 					log.Error().Err(err).Msgf("Failed to finalize download for %s", torrentStatus.Name)
+					torrentMap[torrentStatus.ID].Status = err.Error()
+					env.Database.Save(torrentMap[torrentStatus.ID])
 					continue
 				}
 
 				// update database entry
 				torrentMap[torrentStatus.ID].Status = "complete"
 				env.Database.Save(torrentMap[torrentStatus.ID])
+				continue
 			}
 
 			// timeout reached
