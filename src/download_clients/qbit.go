@@ -1,17 +1,12 @@
 package download_clients
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
+	models "github.com/RA341/gouda/models"
+	"github.com/go-resty/resty/v2"
 	"github.com/hekmon/transmissionrpc/v3"
-	"github.com/rs/zerolog/log"
-	"io"
-	"mime/multipart"
 	"net/http"
 	"net/url"
-	"os"
-	"path/filepath"
 )
 
 type TorrentInfo struct {
@@ -27,36 +22,18 @@ type APIVersion struct {
 }
 
 type QbitClient struct {
-	BaseURL    string
-	HTTPClient *http.Client
-	Cookie     *http.Cookie
+	BaseURL        string
+	defaultHeaders *map[string]string
+	cookie         *http.Cookie
 }
 
-// defaultQbitTransport custom transport to define referrer headers in all qbit requests
-// ref: https://stackoverflow.com/questions/54088660/add-headers-for-each-http-request-using-client
-type defaultQbitTransport struct {
-	defaultHeaders map[string]string
-}
-
-func (t *defaultQbitTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	for key, value := range t.defaultHeaders {
-		req.Header.Set(key, value)
-	}
-	return http.DefaultTransport.RoundTrip(req)
-}
-
-func InitQbit(qbitUrl, protocol, user, pass string) (DownloadClient, error) {
+func InitQbit(qbitUrl, protocol, user, pass string) (models.DownloadClient, error) {
 	clientStr := fmt.Sprintf("%s://%s", protocol, qbitUrl)
-	customTransport := defaultQbitTransport{
-		defaultHeaders: map[string]string{
+	client := &QbitClient{
+		BaseURL: clientStr,
+		defaultHeaders: &map[string]string{
 			"Referer": fmt.Sprintf("%s://%s", protocol, qbitUrl),
 		},
-	}
-
-	client := &QbitClient{
-		BaseURL:    clientStr,
-		HTTPClient: &http.Client{Transport: &customTransport},
-		Cookie:     nil,
 	}
 
 	err := client.Login(user, pass)
@@ -91,23 +68,30 @@ func (qbitClient *QbitClient) Health() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (qbitClient *QbitClient) CheckTorrentStatus(torrentIds string) (TorrentStatus, error) {
-	info, err := qbitClient.CheckStatus(torrentIds)
+func (qbitClient *QbitClient) CheckTorrentStatus(torrentIds []string) ([]models.TorrentStatus, error) {
+	infos, err := qbitClient.CheckStatus(torrentIds)
 	if err != nil {
-		return TorrentStatus{}, err
+		return []models.TorrentStatus{}, err
 	}
 
-	complete := false
-	if info.State == "uploading" {
-		complete = true
+	var result []models.TorrentStatus
+
+	for _, info := range *infos {
+		complete := false
+		if info.State == "uploading" {
+			complete = true
+		}
+
+		result = append(result, models.TorrentStatus{
+			Name:             info.Name,
+			DownloadPath:     info.SavePath,
+			DownloadComplete: complete,
+			Status:           info.State,
+			ID:               info.Hash,
+		})
 	}
 
-	return TorrentStatus{
-		Name:             info.Name,
-		DownloadPath:     info.SavePath,
-		DownloadComplete: complete,
-		Status:           info.State,
-	}, nil
+	return result, nil
 }
 
 // Login authenticates with the qBittorrent WebUI
@@ -116,29 +100,27 @@ func (qbitClient *QbitClient) Login(username, password string) error {
 	data.Set("username", username)
 	data.Set("password", password)
 
-	resp, err := qbitClient.HTTPClient.PostForm(qbitClient.BaseURL+"/api/v2/auth/login", data)
+	resp, err := resty.New().R().
+		SetHeaders(*qbitClient.defaultHeaders).
+		SetFormDataFromValues(data).
+		Post(qbitClient.BaseURL + "/api/v2/auth/login")
+
 	if err != nil {
 		return fmt.Errorf("login request failed: %w", err)
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Error().Err(err).Msg("failed to close response body")
-		}
-	}(resp.Body)
 
-	if resp.StatusCode == http.StatusForbidden {
+	if resp.StatusCode() == http.StatusForbidden {
 		return fmt.Errorf("login failed: IP is banned for too many failed attempts")
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("login failed with status: %d", resp.StatusCode)
+	if resp.StatusCode() != http.StatusOK {
+		return fmt.Errorf("login failed with status: %d", resp.StatusCode())
 	}
 
 	// Store the SID cookie
 	for _, cookie := range resp.Cookies() {
 		if cookie.Name == "SID" {
-			qbitClient.Cookie = cookie
+			qbitClient.cookie = cookie
 			return nil
 		}
 	}
@@ -148,97 +130,37 @@ func (qbitClient *QbitClient) Login(username, password string) error {
 
 // GetAPIVersion retrieves the WebAPI version
 func (qbitClient *QbitClient) GetAPIVersion() (string, error) {
-	req, err := http.NewRequest("GET", qbitClient.BaseURL+"/api/v2/app/webapiVersion", nil)
+	resp, err := resty.New().R().
+		SetCookie(qbitClient.cookie).
+		Get(qbitClient.BaseURL + "/api/v2/app/webapiVersion")
 	if err != nil {
-		return "", fmt.Errorf("failed to create request: %w", err)
+		return "", fmt.Errorf("failed to call qbit: %w", err)
 	}
 
-	if qbitClient.Cookie != nil {
-		req.AddCookie(qbitClient.Cookie)
+	if resp.StatusCode() != http.StatusOK {
+		return "", fmt.Errorf("failed to get version, status: %d", resp.StatusCode())
 	}
 
-	resp, err := qbitClient.HTTPClient.Do(req)
-	if err != nil {
-		return "", fmt.Errorf("version request failed: %w", err)
-	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Error().Err(err).Msg("failed to close response body")
-		}
-	}(resp.Body)
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to get version, status: %d", resp.StatusCode)
-	}
-
-	version, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", fmt.Errorf("failed to read version response: %w", err)
-	}
-
-	return string(version), nil
+	return resp.String(), nil
 }
 
 // AddTorrent uploads a torrent file and starts downloading
 func (qbitClient *QbitClient) AddTorrent(torrentFilePath, downloadPath string, category string) (string, error) {
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
+	resp, err := resty.New().R().
+		SetCookie(qbitClient.cookie).
+		SetFile("torrents", torrentFilePath).
+		SetMultipartFormData(map[string]string{
+			"savepath": downloadPath,
+			"category": category,
+		}).
+		Post(qbitClient.BaseURL + "/api/v2/torrents/add")
 
-	// Add the torrent file
-	file, err := writer.CreateFormFile("torrents", filepath.Base(torrentFilePath))
 	if err != nil {
-		return "", fmt.Errorf("failed to create form file: %w", err)
+		return "", fmt.Errorf("failed to call qbit api: %w", err)
 	}
 
-	torrentData, err := os.ReadFile(torrentFilePath)
-	if err != nil {
-		return "", fmt.Errorf("failed to read torrent file: %w", err)
-	}
-
-	if _, err = file.Write(torrentData); err != nil {
-		return "", fmt.Errorf("failed to write torrent data: %w", err)
-	}
-
-	// Add the save path
-	if err = writer.WriteField("savepath", downloadPath); err != nil {
-		return "", fmt.Errorf("failed to add save path: %w", err)
-	}
-
-	// Add category if provided
-	if category != "" {
-		if err = writer.WriteField("category", category); err != nil {
-			return "", fmt.Errorf("failed to add category: %w", err)
-		}
-	}
-
-	if err = writer.Close(); err != nil {
-		return "", fmt.Errorf("failed to close multipart writer: %w", err)
-	}
-
-	req, err := http.NewRequest("POST", qbitClient.BaseURL+"/api/v2/torrents/add", body)
-	if err != nil {
-		return "", fmt.Errorf("failed to create request: %w", err)
-	}
-
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	if qbitClient.Cookie != nil {
-		req.AddCookie(qbitClient.Cookie)
-	}
-
-	resp, err := qbitClient.HTTPClient.Do(req)
-	if err != nil {
-		return "", fmt.Errorf("add torrent request failed: %w", err)
-	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Fatal().Err(err).Msg("failed to close response body")
-		}
-	}(resp.Body)
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to add torrent, status: %d", resp.StatusCode)
+	if resp.StatusCode() != http.StatusOK {
+		return "", fmt.Errorf("failed to add torrent, status: %d", resp.StatusCode())
 	}
 
 	// Get the hash from torrent list
@@ -255,70 +177,53 @@ func (qbitClient *QbitClient) AddTorrent(torrentFilePath, downloadPath string, c
 	return "", fmt.Errorf("torrent was added but hash not found")
 }
 
-// CheckStatus retrieves the current status of a torrent by its hash
-func (qbitClient *QbitClient) CheckStatus(hash string) (*TorrentInfo, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/api/v2/torrents/info?hashes=%s", qbitClient.BaseURL, hash), nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-
-	if qbitClient.Cookie != nil {
-		req.AddCookie(qbitClient.Cookie)
-	}
-
-	resp, err := qbitClient.HTTPClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("status request failed: %w", err)
-	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Fatal().Err(err).Msg("failed to close response body")
-		}
-	}(resp.Body)
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to get status, status code: %d", resp.StatusCode)
-	}
-
-	var torrents []TorrentInfo
-	if err := json.NewDecoder(resp.Body).Decode(&torrents); err != nil {
-		return nil, fmt.Errorf("failed to decode response: %w", err)
-	}
-
-	if len(torrents) == 0 {
-		return nil, fmt.Errorf("torrent not found")
-	}
-
-	return &torrents[0], nil
-}
-
 // Helper function to get torrent list
 func (qbitClient *QbitClient) getTorrentList() ([]TorrentInfo, error) {
-	req, err := http.NewRequest("GET", qbitClient.BaseURL+"/api/v2/torrents/info", nil)
-	if err != nil {
-		return nil, err
-	}
-
-	if qbitClient.Cookie != nil {
-		req.AddCookie(qbitClient.Cookie)
-	}
-
-	resp, err := qbitClient.HTTPClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Fatal().Err(err).Msg("failed to close response body")
-		}
-	}(resp.Body)
-
 	var torrents []TorrentInfo
-	if err := json.NewDecoder(resp.Body).Decode(&torrents); err != nil {
+	resp, err := resty.New().R().
+		SetCookie(qbitClient.cookie).
+		SetResult(&torrents).
+		Get(qbitClient.BaseURL + "/api/v2/torrents/info")
+
+	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return nil, fmt.Errorf("failed to list torrents, status: %d, body:%s", resp.StatusCode(), resp.String())
 	}
 
 	return torrents, nil
+}
+
+// CheckStatus retrieves the current status of a torrent by its hash
+func (qbitClient *QbitClient) CheckStatus(hashes []string) (*[]TorrentInfo, error) {
+	if hashes == nil || len(hashes) == 0 {
+		return nil, fmt.Errorf("hashlist is empty")
+	}
+
+	finalHashQuery := ""
+	for _, hash := range hashes {
+		finalHashQuery = fmt.Sprintf("%s|%s", finalHashQuery, hash)
+	}
+
+	var torrents []TorrentInfo
+	resp, err := resty.New().R().
+		SetHeaders(*qbitClient.defaultHeaders).
+		SetResult(&torrents).
+		Get(fmt.Sprintf("%s/api/v2/torrents/info?hashes=%s", qbitClient.BaseURL, finalHashQuery))
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get status, request failed: %d", resp.StatusCode())
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return nil, fmt.Errorf("failed to get status, status code: %d", resp.StatusCode())
+	}
+
+	if len(torrents) == 0 {
+		return nil, fmt.Errorf("torrent list is empty")
+	}
+
+	return &torrents, nil
 }

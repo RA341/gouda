@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func InitializeTorrentClient(details models.TorrentClient) (DownloadClient, error) {
+func InitializeTorrentClient(details models.TorrentClient) (models.DownloadClient, error) {
 	if details.Type == "transmission" {
 		transmission, err := InitTransmission(details.Host, details.Protocol, details.User, details.Password)
 		if err != nil {

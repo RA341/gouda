@@ -1,11 +1,11 @@
 package download_clients
 
-// todo logger
-
 import (
 	"context"
 	"fmt"
+	models "github.com/RA341/gouda/models"
 	"github.com/hekmon/transmissionrpc/v3"
+	"github.com/rs/zerolog/log"
 	"net/url"
 	"strconv"
 )
@@ -14,7 +14,7 @@ type TransmissionClient struct {
 	Client *transmissionrpc.Client
 }
 
-func InitTransmission(transmissionUrl, protocol, user, pass string) (DownloadClient, error) {
+func InitTransmission(transmissionUrl, protocol, user, pass string) (models.DownloadClient, error) {
 	clientStr := ""
 	if user != "" && pass != "" {
 		clientStr = fmt.Sprintf("%s://%s:%s@%s/transmission/rpc", protocol, user, pass, transmissionUrl)
@@ -60,26 +60,38 @@ func (tm *TransmissionClient) Health() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (tm *TransmissionClient) CheckTorrentStatus(torrentIds string) (TorrentStatus, error) {
-	finalId, err := strconv.Atoi(torrentIds)
+func (tm *TransmissionClient) CheckTorrentStatus(torrentIds []string) ([]models.TorrentStatus, error) {
+	var intIds []int64
+	for _, torrentId := range torrentIds {
+		finalId, err := strconv.Atoi(torrentId)
+		if err != nil {
+			log.Error().Err(err).Msgf("Unable to convert torrent id: %s to int64", torrentId)
+			return []models.TorrentStatus{}, err
+		}
+		intIds = append(intIds, int64(finalId))
+	}
+
+	infos, err := tm.Client.TorrentGetAllFor(context.TODO(), intIds)
 	if err != nil {
-		return TorrentStatus{}, err
+		return []models.TorrentStatus{}, err
 	}
 
-	info, err := tm.Client.TorrentGetAllFor(context.TODO(), []int64{int64(finalId)})
-	if err != nil {
-		return TorrentStatus{}, err
+	var results []models.TorrentStatus
+
+	for _, info := range infos {
+		complete := false
+		if info.Status.String() == "seeding" {
+			complete = true
+		}
+
+		results = append(results, models.TorrentStatus{
+			ID:               strconv.FormatInt(*info.ID, 10),
+			Name:             *info.Name,
+			DownloadPath:     *info.DownloadDir,
+			DownloadComplete: complete,
+			Status:           info.Status.String(),
+		})
 	}
 
-	complete := false
-	if info[0].Status.String() == "seeding" {
-		complete = true
-	}
-
-	return TorrentStatus{
-		Name:             *info[0].Name,
-		DownloadPath:     *info[0].DownloadDir,
-		DownloadComplete: complete,
-		Status:           info[0].Status.String(),
-	}, nil
+	return results, nil
 }

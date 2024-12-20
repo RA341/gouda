@@ -5,7 +5,7 @@ package download_clients
 type DownloadClient interface {
 	DownloadTorrent(torrent string, downloadPath string) (string, error)
 
-	CheckTorrentStatus(torrentId string) (TorrentStatus, error)
+	CheckTorrentStatus(torrentId []string) ([]TorrentStatus, error)
 
 	Health() (string, string, error)
 }
@@ -15,4 +15,5 @@ type TorrentStatus struct {
 	DownloadPath     string `json:"download_path"`
 	DownloadComplete bool   `json:"download-complete"`
 	Status           string `json:"status"`
+	ID               string `json:"id"`
 }
