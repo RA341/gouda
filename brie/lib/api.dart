@@ -28,8 +28,9 @@ class GoudaApi {
   }
 
   (String, String) makeBasePath() {
-    basePath =
-        kDebugMode ? 'http://localhost:9862' : html.window.location.toString();
+    basePath = kDebugMode
+        ? ('http://localhost:9862')
+        : html.window.location.toString();
 
     basePath = basePath.endsWith('/')
         ? basePath.substring(0, basePath.length - 1)
@@ -93,8 +94,6 @@ class GoudaApi {
   }
 
   Future<bool> testToken({required String token}) async {
-    print('Verifying token');
-
     if (token == '') {
       return false;
     }
@@ -262,5 +261,16 @@ class HistoryApi {
     final tmp = jsonDecode(response.body) as List<dynamic>;
     final res = tmp.map((e) => Book.fromJson(e)).toList();
     return res;
+  }
+
+  Future<void> retryBookRequest(String id) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/history/retry/$id'),
+      headers: defaultHeader,
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed retry: ${response.statusCode}');
+    }
   }
 }

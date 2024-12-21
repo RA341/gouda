@@ -15,8 +15,6 @@ final basePathProvider = StateProvider<String>((ref) {
 
 final checkTokenProvider = FutureProvider<bool>((ref) async {
   final token = (prefs.get('apikey') ?? "").toString();
-  print('Token');
-  print(token);
   return api.testToken(token: token);
 });
 

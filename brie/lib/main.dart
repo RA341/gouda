@@ -3,19 +3,17 @@ import 'package:brie/components/sidebar.dart';
 import 'package:brie/pages/category_page.dart';
 import 'package:brie/pages/history_page.dart';
 import 'package:brie/pages/settings_page.dart';
-import 'package:brie/pages/setup_page.dart';
+import 'package:brie/pages/auth_page.dart';
 import 'package:brie/providers.dart';
+import 'package:brie/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'config.dart';
 
 Future<void> main() async {
   await PreferencesService.init();
 
   final apikey = prefs.getString('apikey') ?? '';
-
   api = GoudaApi(apiKey: apikey);
 
   runApp(const ProviderScope(child: MyApp()));
@@ -79,6 +77,7 @@ class MainView extends ConsumerWidget {
     ];
 
     final pageIndex = ref.watch(pageIndexListProvider);
+    final settings = ref.watch(settingsProvider).value;
 
     return Row(
       children: [
