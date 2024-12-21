@@ -1,3 +1,22 @@
+# [1.4.0](https://github.com/RA341/gouda/compare/v1.3.6...v1.4.0) (2024-12-21)
+
+
+### Bug Fixes
+
+* db logging only on debug ([a7d7ef7](https://github.com/RA341/gouda/commit/a7d7ef7bea4a2234bb83abf16e4a68ae0fd5f76c))
+* docker base image to alpine ([f6fc98a](https://github.com/RA341/gouda/commit/f6fc98a9f32e997f79c5aa8b1753b9e833fdbe8d))
+* linter warnings ([f97cc24](https://github.com/RA341/gouda/commit/f97cc24707ee268ff0acdad4a6d4b888fee139b8))
+* process downloads is fully independent ([bac4b60](https://github.com/RA341/gouda/commit/bac4b60e34e90509ca0997061494d6dce1a0e941))
+* **ui:** general improvements ([bbabfb7](https://github.com/RA341/gouda/commit/bbabfb7ad747b9d00006f00d9a693f60aa0a5f0d))
+
+
+### Features
+
+* added more history endpoints ([d759ddd](https://github.com/RA341/gouda/commit/d759ddd856b890d5e3fedc855f9a8005d16a4029))
+* added request history ([6584e0a](https://github.com/RA341/gouda/commit/6584e0ab2fc9415b874698ab1b913d7b548e14f0))
+* changed status check signature ([1e9b30a](https://github.com/RA341/gouda/commit/1e9b30a4d9f6a448f157335dce2ee6c6f3f07330))
+* switched to sqlite for storage, changed api specs ([04fd3f3](https://github.com/RA341/gouda/commit/04fd3f3718c8977fbc04345dfb14128890d5dda7))
+
 ## [1.3.6](https://github.com/RA341/gouda/compare/v1.3.5...v1.3.6) (2024-12-19)
 
 
