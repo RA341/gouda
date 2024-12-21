@@ -14,12 +14,13 @@ type TorrentClient struct {
 
 type RequestTorrent struct {
 	gorm.Model
-	FileLink    string `json:"file_link" gorm:"-"`
-	Author      string `json:"author"`
-	Book        string `json:"book"`
-	Category    string `json:"category"`
-	MAMBookID   uint64 `json:"mam_book_id" gorm:"uniqueIndex;check:mam_book_id > 0"`
-	Status      string `json:"status,omitempty"`
-	TorrentId   string `json:"torrent_id,omitempty"`
-	TimeRunning uint   `json:"time_running,omitempty"`
+	FileLink            string `json:"file_link" gorm:"-"`
+	Author              string `json:"author"`
+	Book                string `json:"book"`
+	Category            string `json:"category"`
+	MAMBookID           uint64 `json:"mam_book_id" gorm:"uniqueIndex;check:mam_book_id > 0"`
+	Status              string `json:"status,omitempty"`
+	TorrentId           string `json:"torrent_id,omitempty"`
+	TimeRunning         uint   `json:"time_running,omitempty"`
+	TorrentFileLocation string `json:"torrent_file_loc,omitempty"`
 }
