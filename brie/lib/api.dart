@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:brie/config.dart';
-import 'package:brie/main.dart';
-import 'package:brie/pages/settings_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,27 +17,20 @@ class GoudaApi {
 
   late CategoryApi categoryApi;
   late SettingsApi settingsApi;
+  late HistoryApi historyApi;
 
   GoudaApi({
     this.apiKey = '',
   }) {
     final (apiBasePath, basePath) = makeBasePath();
     this.basePath = basePath;
-
-    categoryApi = CategoryApi(
-      baseUrl: apiBasePath,
-      defaultHeader: defaultHeaders(),
-    );
-
-    settingsApi = SettingsApi(
-      baseUrl: apiBasePath,
-      defaultHeader: defaultHeaders(),
-    );
+    updateClients();
   }
 
   (String, String) makeBasePath() {
-    basePath =
-        kDebugMode ? 'http://localhost:9862' : html.window.location.toString();
+    basePath = kDebugMode
+        ? ('http://localhost:9862')
+        : html.window.location.toString();
 
     basePath = basePath.endsWith('/')
         ? basePath.substring(0, basePath.length - 1)
@@ -70,6 +61,11 @@ class GoudaApi {
       baseUrl: apiBasePath,
       defaultHeader: defaultHeaders(),
     );
+
+    historyApi = HistoryApi(
+      defaultHeader: defaultHeaders(),
+      baseUrl: apiBasePath,
+    );
   }
 
   Future<void> login(
@@ -98,8 +94,6 @@ class GoudaApi {
   }
 
   Future<bool> testToken({required String token}) async {
-    print('Verifying token');
-
     if (token == '') {
       return false;
     }
@@ -188,19 +182,19 @@ class CategoryApi {
     }
   }
 
-  Future<void> deleteCategory(String cat) async {
+  Future<void> deleteCategory(int catId, String catName) async {
     final resp = await http.delete(
       Uri.parse('$baseUrl/category/del'),
-      body: jsonEncode({"category": cat}),
+      body: jsonEncode({"ID": catId, "category": catName}),
       headers: defaultHeader,
     );
 
     if (resp.statusCode != 200) {
-      throw Exception("Failed to add category $cat, ${resp.body}");
+      throw Exception("Failed to add category $catId, ${resp.body}");
     }
   }
 
-  Future<List<String>> listCategory() async {
+  Future<List<(String, int)>> listCategory() async {
     final resp = await http.get(
       Uri.parse('$baseUrl/category/list'),
       headers: defaultHeader,
@@ -210,9 +204,8 @@ class CategoryApi {
       throw Exception("Failed to list category, ${resp.body}");
     }
 
-    final tmp = (jsonDecode(resp.body) as Map<String, dynamic>)['categories']
-        as List<dynamic>;
-    return tmp.map((e) => e.toString()).toList();
+    final tmp = (jsonDecode(resp.body) as List<dynamic>);
+    return tmp.map((e) => (e['category'] as String, e['ID'] as int)).toList();
   }
 }
 
@@ -246,5 +239,38 @@ class SettingsApi {
 
     final tmp = jsonDecode(response.body) as Map<String, dynamic>;
     return Settings.fromJson(tmp);
+  }
+}
+
+class HistoryApi {
+  final Map<String, String> defaultHeader;
+  final String baseUrl;
+
+  HistoryApi({required this.defaultHeader, required this.baseUrl});
+
+  Future<List<Book>> getTorrentHistory() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/history/all'),
+      headers: defaultHeader,
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to get history: ${response.statusCode}');
+    }
+
+    final tmp = jsonDecode(response.body) as List<dynamic>;
+    final res = tmp.map((e) => Book.fromJson(e)).toList();
+    return res;
+  }
+
+  Future<void> retryBookRequest(String id) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/history/retry/$id'),
+      headers: defaultHeader,
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed retry: ${response.statusCode}');
+    }
   }
 }

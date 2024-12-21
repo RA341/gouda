@@ -1,4 +1,5 @@
 import 'package:brie/api.dart';
+import 'package:brie/pages/utils.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -36,8 +37,20 @@ class CategoryPage extends HookConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ElevatedButton(
                       onPressed: () async {
-                        await api.categoryApi
-                            .addCategory(addCategories.text.trim());
+                        try {
+                          await api.categoryApi
+                              .addCategory(addCategories.text.trim());
+                          addCategories.clear();
+                        } catch (e) {
+                          print(e);
+                          if (!context.mounted) return;
+                          showErrorDialog(
+                            context,
+                            'Error adding category',
+                            'You may have tried to add a category that already exists',
+                            e.toString(),
+                          );
+                        }
                         ref.invalidate(categoryListProvider);
                       },
                       child: Text('Add'),
@@ -67,7 +80,7 @@ class CategoryPage extends HookConsumerWidget {
 class CategoriesView extends ConsumerWidget {
   const CategoriesView(this.categories, {super.key});
 
-  final List<String> categories;
+  final List<(String, int)> categories;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -80,31 +93,36 @@ class CategoriesView extends ConsumerWidget {
         child: ListView.builder(
           itemCount: categories.length,
           itemBuilder: (context, index) {
+            final (catName, catId) = categories[index];
+
             return SizedBox(
               width: 300,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Card(
-                  key: ValueKey(categories[index]),
+                  key: ValueKey(catName),
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(categories[index]),
+                        Text(catName),
                         Padding(
                           padding: EdgeInsets.only(right: 40),
-                          child: Text(downloadPath == null
-                              ? ""
-                              : 'Complete path:  $downloadPath/${categories[index]}', style: TextStyle(color: Colors.green),),
+                          child: Text(
+                            downloadPath == null
+                                ? ""
+                                : 'Complete path:  $downloadPath/$catName',
+                            style: TextStyle(color: Colors.green),
+                          ),
                         )
                       ],
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        await api.categoryApi.deleteCategory(categories[index]);
+                        await api.categoryApi.deleteCategory(catId, catName);
                         ref.invalidate(categoryListProvider);
                       },
                     ),
