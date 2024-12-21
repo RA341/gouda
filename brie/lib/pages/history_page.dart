@@ -77,7 +77,7 @@ class HistoryView extends ConsumerWidget {
             itemCount: requestHistory.length,
             itemBuilder: (context, index) {
               final request = requestHistory[index];
-              final mamUrl = 'https://www.myanonmouse.net/t/${request.mamBookId}';
+              final mamUrl = 'https://www.myanonamouse.net/t/${request.mamBookId}';
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
