@@ -1,10 +1,12 @@
 package api
 
 import (
+	"fmt"
 	"github.com/RA341/gouda/download_clients"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"net/http"
 )
@@ -67,8 +69,14 @@ func (api *Env) SetupTorrentClientEndpoints(r *gin.RouterGroup) *gin.RouterGroup
 			return
 		}
 
-		err = service.AddTorrent((*models.Env)(api), &req)
+		err = service.AddTorrent((*models.Env)(api), &req, true)
 		if err != nil {
+			req.Status = fmt.Sprintf("failed %s", err.Error())
+			res := api.Database.Save(&req)
+			if res.Error != nil {
+				log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
+			}
+
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}

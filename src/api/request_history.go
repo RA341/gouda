@@ -2,6 +2,7 @@ package api
 
 import (
 	models "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -19,6 +20,34 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 		}
 
 		c.JSON(http.StatusOK, &torrents)
+	})
+
+	group.DELETE("/delete/:id", func(c *gin.Context) {
+
+	})
+
+	group.GET("/retry/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		if id == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error retrieving request ID": "Make sure to pass the Id in path param, for example: /retry/12"})
+			return
+		}
+
+		var torrRequest models.RequestTorrent
+
+		resp := api.Database.First(&torrRequest, id)
+		if resp.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error retrieving request": resp.Error.Error()})
+			return
+		}
+
+		err := service.AddTorrent((*models.Env)(api), &torrRequest, false)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error retrying request": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"Success": "Added to retry"})
 	})
 
 	return r
