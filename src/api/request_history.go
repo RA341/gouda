@@ -53,6 +53,24 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 		c.JSON(http.StatusOK, gin.H{"deleted request": id})
 	})
 
+	group.GET("/exists/:mamId", func(c *gin.Context) {
+		id := c.Param("id")
+		if id == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error retrieving request ID": "Make sure to pass the Id in path param, for example: /retry/12"})
+			return
+		}
+
+		var torrRequest models.RequestTorrent
+
+		resp := api.Database.Where("mam_book_id = ?", id).First(&torrRequest)
+		if resp.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error retrieving request": resp.Error.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"Exists": torrRequest})
+	})
+
 	group.GET("/retry/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		if id == "" {
