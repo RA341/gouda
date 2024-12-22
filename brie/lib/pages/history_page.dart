@@ -139,6 +139,7 @@ class HistoryView extends ConsumerWidget {
                           try {
                             await api.historyApi
                                 .deleteBookRequest(request.id.toString());
+                            ref.invalidate(requestHistoryProvider);
                           } catch (e) {
                             if (!context.mounted) return;
                             showErrorDialog(

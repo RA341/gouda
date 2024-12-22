@@ -274,7 +274,7 @@ class HistoryApi {
   }
 
   Future<void> deleteBookRequest(String id) async {
-    final response = await http.get(
+    final response = await http.delete(
       Uri.parse('$baseUrl/history/delete/$id'),
       headers: defaultHeader,
     );
