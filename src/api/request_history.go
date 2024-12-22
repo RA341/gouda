@@ -34,6 +34,8 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 			c.JSON(http.StatusInternalServerError, gin.H{"error deleting request": resp.Error.Error()})
 			return
 		}
+
+		c.JSON(http.StatusOK, gin.H{"deleted request": id})
 	})
 
 	group.GET("/retry/:id", func(c *gin.Context) {
