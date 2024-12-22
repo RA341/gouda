@@ -22,14 +22,12 @@ class GoudaApi {
   GoudaApi({
     this.apiKey = '',
   }) {
-    final (apiBasePath, basePath) = makeBasePath();
-    this.basePath = basePath;
     updateClients();
   }
 
   (String, String) makeBasePath() {
     basePath = kDebugMode
-        ? ('http://localhost:9862')
+        ? ('https://gouda.dumbapps.org' ?? 'http://localhost:9862')
         : html.window.location.toString();
 
     basePath = basePath.endsWith('/')
@@ -50,7 +48,8 @@ class GoudaApi {
   }
 
   void updateClients() {
-    final (apiBasePath, _) = makeBasePath();
+    final (apiBasePath, basePath) = makeBasePath();
+    this.basePath = basePath;
 
     categoryApi = CategoryApi(
       baseUrl: apiBasePath,
@@ -266,6 +265,17 @@ class HistoryApi {
   Future<void> retryBookRequest(String id) async {
     final response = await http.get(
       Uri.parse('$baseUrl/history/retry/$id'),
+      headers: defaultHeader,
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed retry: ${response.statusCode}');
+    }
+  }
+
+  Future<void> deleteBookRequest(String id) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/history/delete/$id'),
       headers: defaultHeader,
     );
 

@@ -13,7 +13,7 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	group.GET("/all", func(c *gin.Context) {
 		var torrents []models.RequestTorrent
 
-		resp := api.Database.Find(&torrents)
+		resp := api.Database.Order("created_at desc").Find(&torrents)
 		if resp.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error retrieving torrent history": resp.Error.Error()})
 			return
@@ -23,7 +23,17 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 	})
 
 	group.DELETE("/delete/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		if id == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error retrieving request ID": "Make sure to pass the Id in path param, for example: /retry/12"})
+			return
+		}
 
+		resp := api.Database.Unscoped().Delete(&models.RequestTorrent{}, id)
+		if resp.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error deleting request": resp.Error.Error()})
+			return
+		}
 	})
 
 	group.GET("/retry/:id", func(c *gin.Context) {

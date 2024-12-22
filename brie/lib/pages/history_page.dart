@@ -77,7 +77,8 @@ class HistoryView extends ConsumerWidget {
             itemCount: requestHistory.length,
             itemBuilder: (context, index) {
               final request = requestHistory[index];
-              final mamUrl = 'https://www.myanonamouse.net/t/${request.mamBookId}';
+              final mamUrl =
+                  'https://www.myanonamouse.net/t/${request.mamBookId}';
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -89,7 +90,15 @@ class HistoryView extends ConsumerWidget {
                   subtitle: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      makeText('Status: ${request.status.truncate(20)}'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          'Status: ${request.status.truncate(20)}',
+                          style: TextStyle(
+                            color: statusColor(request.status.toLowerCase()),
+                          ),
+                        ),
+                      ),
                       makeText(
                           'Download location: ${settings?.completeFolder}/${request.category}'),
                       makeText('Added: ${timeago.format(request.createdAt)}'),
@@ -128,9 +137,8 @@ class HistoryView extends ConsumerWidget {
                       IconButton(
                         onPressed: () async {
                           try {
-                            // todo add delete endpoint
-                            // await api.historyApi.retryBookRequest(request.id.toString());
-                            print('Unimplemented');
+                            await api.historyApi
+                                .deleteBookRequest(request.id.toString());
                           } catch (e) {
                             if (!context.mounted) return;
                             showErrorDialog(
@@ -150,6 +158,18 @@ class HistoryView extends ConsumerWidget {
               );
             },
           );
+  }
+}
+
+Color? statusColor(String text) {
+  if (text.toLowerCase().startsWith('complete')) {
+    return null;
+  } else if (text.toLowerCase().startsWith('downloading')) {
+    return Colors.amberAccent;
+  } else if (text.toLowerCase().startsWith('error')) {
+    return Colors.redAccent;
+  } else {
+    return null;
   }
 }
 
