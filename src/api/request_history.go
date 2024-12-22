@@ -5,6 +5,7 @@ import (
 	"github.com/RA341/gouda/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 )
 
 func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
@@ -29,9 +30,23 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 			return
 		}
 
+		var torrent models.RequestTorrent
+		result := api.Database.First(&torrent, id)
+		if result.Error != nil {
+			// Handle error - record not found or other DB error
+			c.JSON(http.StatusInternalServerError, gin.H{"error getting item": result.Error.Error()})
+			return
+		}
+
 		resp := api.Database.Unscoped().Delete(&models.RequestTorrent{}, id)
 		if resp.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error deleting request": resp.Error.Error()})
+			return
+		}
+
+		err := os.Remove(torrent.TorrentFileLocation)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"Unable to delete the torrent file": resp.Error.Error()})
 			return
 		}
 
