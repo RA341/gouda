@@ -8,14 +8,15 @@ Most of the features offered by readarr are overkill for me, I just want to down
 
 So I made this, key difference is that gouda is best used from within myanonamouse site, without leaving it. Hence, it is designed to work with the [extension](https://github.com/ra341/parmesan).
 
-A normal usage will look like, 
+Normal usage would look like, 
 
 * You tell the extension to download the media while you are browsing myanonamouse. 
 
 * gouda then downloads the torrent file, sends it to the download client.
 
-* Gouda will continue to monitor download until, 
-  * its complete it then hardlinks it to the location you specify (think of hardlinking like moving the file without copying, so it exists in 2 locations at the same time)
+* gouda will continue to monitor downloads until,
+  * its complete 
+    *  then hardlinks to the location you specify (think of hardlinking like moving the file without copying, so it exists in 2 locations at the same time)
   * If the download fails or if it takes to long (default limit is 15 minutes, this can be changed), gouda stops monitoring and does nothing.
 
 * No need to manually go in and create the folders or mess with the download files!!.
@@ -43,9 +44,15 @@ Q. How does it download the torrent file without authentication
 
 A. MAM torrent file download links do not require authentication, since they are pretty much useless without an active account on the site.
 
-## Installation
+## Installation and requirements
 
-Currently, gouda is only packaged with docker, (standalone binaries are planned)
+Currently, gouda is only packaged with docker, (standalone binaries are planned).
+
+Therefore, you will need 
+
+1. Basic understanding of Docker and Docker compose.
+2. Use transmission or qbit as your download clients.
+3. Strucure your files as mentioned [here](#volume-mounts)
 
 ### Docker Compose Example
 
@@ -82,42 +89,43 @@ I recommend the following dir structure (it follows [trash guides](https://trash
 Store all your media in a single folder, for eg:
 ```
 /media
- | /downloads
- | /audiobooks
+ | /downloads <-- this where your download client will store files
+ | /audiobooks <-- these are the final destination of your files (more info below)
  | /comics
 ```
 
-Gouda will use the category used when downloading the media, for example, if you used 'manga' category, 
-then gouda will create a folder 
+****If you use multiple hard drives, look into https://github.com/trapexit/mergerfs and combine your storage pool.****
+
+###### Categories
+
+Gouda uses category sent when downloading the media, for example, if you used 'manga' category, 
+then gouda will do the following 
 ```
 /media
 | /downloads
 | /audiobooks
 | /comics
 | /manga <--- automatically created by gouda if it doesn't exist
- | /author
+ | /author <--- sub folders are also created 
   | /name
    | <final file or folder downloaded automatically hardlinked>
 ```
 
-##### Final mounts
+###### Final mounts
 
 * config -
-  * You can set this path to any folder you want this will never be used for hardlinking or downloading
+  * You can set this path to any folder you want. 
+  * used to store the app database and config.
   * `<your path to config>`:`/appdata/config`
 
 Assuming you follow the above dir structure, use the following volume mounts
-
-* media - 
-  * Make sure this mount is exactly the same as you mount it in your download client  
   * `<path to media folder>`:`/media`
     * For example if your media folder is located at `/home/deep_thought/media` then the mount would look like
       * `/home/deep_thought/media`:`/media`
-      * And your download client mount would also look like
-      * `/home/deep_thought/media`:`/media`
-
-* Transmission or Qbit should also be mounted the same way
-  * media - `<path to media folder>`:`/media`
+  * Transmission or Qbit should also be mounted the same way
+    * `<path to media folder>`:`/media`
+    * Using the above example, your download client mount would look like 
+    * `/home/deep_thought/media`:`/media`
 
 There is also an [example docker compose](./prod-docker-compose.yml) with a download client you can refer to.
 
