@@ -64,6 +64,7 @@ Once running, access the web interface at `http://your-ip:9862` to configure:
 - Torrent client settings (only qBittorrent and Transmission are supported at the moment)
 - Set the Download categories
 - Other application settings
+- Next [setup the extension](https://github.com/ra341/parmesan).
 
 #### Environment Variables
 
@@ -82,11 +83,11 @@ Once running, access the web interface at `http://your-ip:9862` to configure:
 | `GOUDA_DEFAULT_DIR` | Directory for completed downloads | `/appdata/complete` |
 | `GOUDA_TORRENT_DIR` | Directory for torrent files | `/appdata/torrents` |
 
-##### Volume Mounts
+### Folder structure
 
-I recommend the following dir structure (it follows [trash guides](https://trash-guides.info/File-and-Folder-Structure/)), to get hardlink support.
+I recommend the following dir structure (it follows [trash guides](https://trash-guides.info/File-and-Folder-Structure/)), required to get hardlink support.
 
-Store all your media in a single folder, for eg:
+You need to store all your media in a single folder, for eg:
 ```
 /media
  | /downloads <-- this where your download client will store files
