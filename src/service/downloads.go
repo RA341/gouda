@@ -151,9 +151,9 @@ func MonitorDownloads(env *models.Env) {
 			env.Database.Save(requestInfo)
 			log.Info().Msgf("Torrent check for %s with status:%s\nTime running:%s, checking again in a minute",
 				torrentStatus.Name, torrentStatus.Status, torrentDuration.String())
-
-			time.Sleep(1 * time.Minute)
 		}
+
+		time.Sleep(1 * time.Minute)
 	}
 
 }
