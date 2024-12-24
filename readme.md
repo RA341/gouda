@@ -35,7 +35,7 @@ Therefore, you will need
 
 Look at the example docker compose here [docker-compose](prod-docker-compose.yml) and adapt it your needs.
 
-Note: docker requires specific folder structure or else hardlinks will not work ([more info](#volume-mounts))
+Note: docker requires specific folder structure or else hardlinks will not work ([setup guide](#folder-structure))
 
 Once running, access the web interface at `http://your-ip:9862` to configure:
 - Torrent client settings (only qBittorrent and Transmission are supported at the moment)
