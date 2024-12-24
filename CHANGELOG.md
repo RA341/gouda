@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/RA341/gouda/compare/v1.4.0...v1.4.1) (2024-12-24)
+
+
+### Bug Fixes
+
+* moved timeout out of for loop ([99b4bae](https://github.com/RA341/gouda/commit/99b4bae40b032e895fada8d48d1f2b574a651480))
+
 # [1.4.0](https://github.com/RA341/gouda/compare/v1.3.6...v1.4.0) (2024-12-21)
 
 
