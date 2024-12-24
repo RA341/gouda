@@ -1,13 +1,13 @@
 import 'dart:async';
 
+import 'package:brie/api/history_api.dart';
 import 'package:brie/models.dart';
-import 'package:brie/pages/utils.dart';
+import 'package:brie/ui/utils.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:brie/api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HistoryPage extends ConsumerStatefulWidget {
@@ -119,7 +119,7 @@ class HistoryView extends ConsumerWidget {
                       IconButton(
                         onPressed: () async {
                           try {
-                            await api.historyApi
+                            await histApi
                                 .retryBookRequest(request.id.toString());
                           } catch (e) {
                             if (!context.mounted) return;
@@ -137,7 +137,7 @@ class HistoryView extends ConsumerWidget {
                       IconButton(
                         onPressed: () async {
                           try {
-                            await api.historyApi
+                            await histApi
                                 .deleteBookRequest(request.id.toString());
                             ref.invalidate(requestHistoryProvider);
                           } catch (e) {

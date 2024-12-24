@@ -1,5 +1,5 @@
-import 'package:brie/api.dart';
-import 'package:brie/pages/utils.dart';
+import 'package:brie/api/category_api.dart';
+import 'package:brie/ui/utils.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -38,8 +38,7 @@ class CategoryPage extends HookConsumerWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         try {
-                          await api.categoryApi
-                              .addCategory(addCategories.text.trim());
+                          await catApi.addCategory(addCategories.text.trim());
                           addCategories.clear();
                         } catch (e) {
                           print(e);
@@ -122,7 +121,7 @@ class CategoriesView extends ConsumerWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        await api.categoryApi.deleteCategory(catId, catName);
+                        await catApi.deleteCategory(catId, catName);
                         ref.invalidate(categoryListProvider);
                       },
                     ),

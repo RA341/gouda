@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
@@ -65,7 +66,7 @@ func checkUserPass(user, pass string) (string, error) {
 	if username == user && password == pass {
 		tok, err := GenerateToken(32)
 		if err != nil {
-			return "", errors.Join(errors.New("failed to generate token"), err)
+			return "", fmt.Errorf("failed to generate token %v", err)
 		}
 
 		viper.Set("user.session", tok)

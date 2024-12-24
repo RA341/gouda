@@ -37,9 +37,7 @@ func main() {
 		log.Fatal().Err(err).Msgf("Failed to start database")
 	}
 
-	apiEnv := api.Env{
-		Database: db,
-	}
+	apiEnv := api.Env{Database: db}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {

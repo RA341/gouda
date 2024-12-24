@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	models "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
@@ -14,7 +13,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"runtime"
 	"sync"
 	"time"
 )
@@ -73,44 +71,27 @@ func AddTorrent(env *models.Env, request *models.RequestTorrent, downloadFile bo
 	}
 
 	once.Do(func() {
-		log.Debug().Msgf("Starting status check")
-		go ProcessDownloads(env)
+		log.Debug().Msgf("Starting downloads monitoring")
+		go MonitorDownloads(env)
 	})
 
 	return nil
 }
 
-func ProcessDownloads(env *models.Env) {
+func MonitorDownloads(env *models.Env) {
 	defer func() {
-		log.Debug().Msgf("Download check complete, reseting sync.once")
+		log.Debug().Msgf("Monitoring complete, reseting sync.once")
 		once = sync.Once{}
 	}()
-
-	databaseTimeRunning := 0 * time.Second
-	databaseCheck := 1 * time.Minute
-	databaseCheckTimeout := 1 * time.Second
 
 	torrentCheckTimeout := time.Minute * viper.GetDuration("download.timeout")
 	log.Debug().Msgf("Torrent Check timeout is set at %v", torrentCheckTimeout)
 
 	for {
-		activeTorrentIds, err := fetchDownloadingTorrentsIds(env.Database)
+		activeTorrentIds, err := getActiveTorrentsLoop(env.Database)
 		if err != nil {
-			if databaseTimeRunning > databaseCheck {
-				log.Error().Msgf("Max timeout reached Current running %s: limit: %s,Unable to get active torrents from database, stopping check",
-					databaseTimeRunning.String(),
-					databaseCheck.String(),
-				)
-				break
-			}
-			log.Warn().Msgf("Failed to get active torrents from database... retrying")
-
-			databaseTimeRunning += databaseCheckTimeout
-			time.Sleep(databaseCheckTimeout)
-			continue
+			break
 		}
-		// reset database check counter
-		databaseTimeRunning = time.Second * 0
 
 		if len(activeTorrentIds) == 0 {
 			log.Info().Msgf("No active torrents found")
@@ -119,7 +100,8 @@ func ProcessDownloads(env *models.Env) {
 
 		statuses, err := env.DownloadClient.CheckTorrentStatus(activeTorrentIds)
 		if err != nil {
-			log.Warn().Err(err).Msgf("Failed to check torrent status")
+			log.Warn().Err(err).Msgf("Failed to check torrent status, retrying")
+			continue
 		}
 
 		for _, torrentStatus := range statuses {
@@ -135,9 +117,6 @@ func ProcessDownloads(env *models.Env) {
 			}
 
 			if torrentStatus.DownloadComplete {
-				log.Info().Msgf("Torrent: %s complete", torrentStatus.Name)
-
-				// hardlink
 				err := finalizeDownload(&requestInfo, &torrentStatus)
 				if err != nil {
 					log.Error().Err(err).Msgf("Failed to finalize download for %s", torrentStatus.Name)
@@ -172,25 +151,25 @@ func ProcessDownloads(env *models.Env) {
 			env.Database.Save(requestInfo)
 			log.Info().Msgf("Torrent check for %s with status:%s\nTime running:%s, checking again in a minute",
 				torrentStatus.Name, torrentStatus.Status, torrentDuration.String())
-
-			time.Sleep(1 * time.Minute)
 		}
+
+		time.Sleep(1 * time.Minute)
 	}
 
 }
 
-func finalizeDownload(torrentInfo *models.RequestTorrent, torrentStatus *models.TorrentStatus) error {
+func finalizeDownload(torrentRequest *models.RequestTorrent, torrentStatus *models.TorrentStatus) error {
 	destPath := viper.GetString("folder.defaults")
-	catPath := fmt.Sprintf("%s/%s", destPath, torrentInfo.Category)
-	destPath = fmt.Sprintf("%s/%s/%s", catPath, torrentInfo.Author, torrentInfo.Book)
+	catPath := fmt.Sprintf("%s/%s", destPath, torrentRequest.Category)
+	destPath = fmt.Sprintf("%s/%s/%s", catPath, torrentRequest.Author, torrentRequest.Book)
 
 	torrentStatus.DownloadPath = fmt.Sprintf("%s/%s", torrentStatus.DownloadPath, torrentStatus.Name)
 
-	log.Info().Msgf("Torrent %s complete, linking to download location: %s ------> destination: %s", torrentStatus.Name, torrentStatus.DownloadPath, destPath)
+	log.Info().Msgf("Torrent %s complete, linking download location: %s ------> destination: %s", torrentStatus.Name, torrentStatus.DownloadPath, destPath)
 
 	err := HardLinkFolder(torrentStatus.DownloadPath, destPath)
 	if err != nil {
-		log.Error().Err(err).Msgf("Failed to link info with id: %s", torrentInfo.TorrentId)
+		log.Error().Err(err).Msgf("Failed to link info with id: %s", torrentRequest.TorrentId)
 		return err
 	}
 
@@ -199,12 +178,42 @@ func finalizeDownload(torrentInfo *models.RequestTorrent, torrentStatus *models.
 	log.Info().Msgf("Changing file perm to %d:%d", sourceUID, sourceGID)
 	err = recursiveChown(catPath, sourceUID, sourceGID)
 	if err != nil {
-		log.Error().Err(err).Msgf("Failed to chown info with id: %s", torrentInfo.TorrentId)
+		log.Error().Err(err).Msgf("Failed to chown info with id: %s", torrentRequest.TorrentId)
 		return err
 	}
 
 	log.Info().Msgf("Download complete: %s and hardlinked to %s", torrentStatus.Name, destPath)
 	return nil
+}
+
+// getActiveTorrentsLoop loops until we get the list of ids to check for or until max timeout is reached
+func getActiveTorrentsLoop(db *gorm.DB) ([]string, error) {
+	// counter for current loop
+	databaseTimeRunning := 0 * time.Second
+	// max limit to check
+	databaseCheckLimit := 1 * time.Minute
+	// amount of time to pause the check for
+	databaseCheckTimeout := 1 * time.Second
+
+	for {
+		activeTorrentIds, err := fetchDownloadingTorrentsIds(db)
+		if err != nil {
+			if databaseTimeRunning > databaseCheckLimit {
+				log.Error().Msgf("Max timeout reached Current running %s: limit: %s,Unable to get active torrents from database, stopping check, verify your database connection",
+					databaseTimeRunning.String(),
+					databaseCheckLimit.String(),
+				)
+
+				return []string{}, fmt.Errorf("unable to get active torrents even after %s", databaseCheckLimit.String())
+			}
+			log.Warn().Msgf("Failed to get active torrents from database... retrying")
+
+			databaseTimeRunning += databaseCheckTimeout
+			time.Sleep(databaseCheckTimeout)
+			continue
+		}
+		return activeTorrentIds, nil
+	}
 }
 
 func fetchDownloadingTorrentsIds(db *gorm.DB) ([]string, error) {
@@ -312,10 +321,6 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 
 // createHardLink creates a hard link with proper ownership and permissions
 func createHardLink(oldPath, newPath string, mode fs.FileMode) error {
-	if runtime.GOOS == "windows" {
-		return errors.New("hardlinking on windows is not supported")
-	}
-
 	// Ensure the target directory exists
 	targetDir := filepath.Dir(newPath)
 	if err := os.MkdirAll(targetDir, 0755); err != nil {
@@ -339,7 +344,7 @@ func createHardLink(oldPath, newPath string, mode fs.FileMode) error {
 	return nil
 }
 
-func DownloadTorrentFile(downloadLink string, downloadPath string) (string, error) {
+func DownloadTorrentFile(downloadLink, downloadPath string) (string, error) {
 	resp, err := http.Get(downloadLink)
 	if err != nil {
 		return "", fmt.Errorf("failed to make request: %v", err)
