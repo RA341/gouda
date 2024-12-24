@@ -1,6 +1,6 @@
-import 'package:brie/api.dart';
+import 'package:brie/api/settings_api.dart';
 import 'package:brie/models.dart';
-import 'package:brie/pages/utils.dart';
+import 'package:brie/ui/utils.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -153,7 +153,7 @@ class SettingsView extends HookConsumerWidget {
               child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      await api.settingsApi.update(
+                      await settingsApi.update(
                         Settings(
                           apiKey: apiKey.text,
                           serverPort: serverPort.text,

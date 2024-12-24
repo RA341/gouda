@@ -1,6 +1,6 @@
-import 'package:brie/api.dart';
-import 'package:brie/pages/utils.dart';
+import 'package:brie/api/auth_api.dart';
 import 'package:brie/providers.dart';
+import 'package:brie/ui/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -55,8 +55,7 @@ class LoginPage extends HookConsumerWidget {
                 onPressed: () async {
                   try {
                     if (!context.mounted) return;
-                    await api.login(
-                      context,
+                    await authApi.login(
                       user: userName.text,
                       pass: pass.text,
                     );

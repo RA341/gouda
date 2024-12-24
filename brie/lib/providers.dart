@@ -1,4 +1,7 @@
-import 'package:brie/api.dart';
+import 'package:brie/api/auth_api.dart';
+import 'package:brie/api/category_api.dart';
+import 'package:brie/api/history_api.dart';
+import 'package:brie/api/settings_api.dart';
 import 'package:brie/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +18,7 @@ final basePathProvider = StateProvider<String>((ref) {
 
 final checkTokenProvider = FutureProvider<bool>((ref) async {
   final token = (prefs.get('apikey') ?? "").toString();
-  return api.testToken(token: token);
+  return authApi.testToken(token: token);
 });
 
 final pageIndexListProvider = StateProvider<int>((ref) {
@@ -23,15 +26,13 @@ final pageIndexListProvider = StateProvider<int>((ref) {
 });
 
 final settingsProvider = FutureProvider<Settings>((ref) async {
-  return await api.settingsApi.list();
+  return await settingsApi.list();
 });
 
 final categoryListProvider = FutureProvider<List<(String, int)>>((ref) async {
-  return await api.categoryApi.listCategory();
+  return await catApi.listCategory();
 });
 
 final requestHistoryProvider = FutureProvider<List<Book>>((ref) async {
-
-
-  return api.historyApi.getTorrentHistory();
+  return histApi.getTorrentHistory();
 });
