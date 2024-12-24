@@ -4,9 +4,9 @@ A download automation tool, designed specifically for myanonamouse users.
 
 Think of it like a minimal alternative to [readarr](https://github.com/Readarr/Readarr).
 
-Most of the features offered by readarr are overkill for me, I just want to download my books without adding the entire authors collection to the monitor.
+Most of the features offered by readarr are overkill for me, I just want to download my media without monitoring the entire authors' collection.
 
-So I made this, key difference is that gouda is best used from within myanonamouse site, without leaving it. Hence, it is designed to work with the [extension](https://github.com/ra341/parmesan).
+So I made this, key difference is that gouda is designed to be used from within myanonamouse site, without leaving it. Hence, it is intended to work with the [extension](https://github.com/ra341/parmesan).
 
 Normal usage would look like, 
 
@@ -16,33 +16,10 @@ Normal usage would look like,
 
 * gouda will continue to monitor downloads until,
   * its complete 
-    *  then hardlinks to the location you specify (think of hardlinking like moving the file without copying, so it exists in 2 locations at the same time)
+    *  then hardlinks (move without copying) to save storage space, to the location you specify.
   * If the download fails or if it takes to long (default limit is 15 minutes, this can be changed), gouda stops monitoring and does nothing.
 
 * No need to manually go in and create the folders or mess with the download files!!.
-
-### FAQ
-
-Q. Will this mess with my ratio or remove the download from my download client?
-
-A. No. Gouda only checks the download status from your torrent client, it will NEVER modify, 
-delete or otherwise touch the file at the download location.
-
-If gouda is unable to hardlink the downloaded file it will only display error, and no further action will be taken by gouda.
-
-Q. Does this work with freeleech and personal freeleech torrents
-
-A. Yes!, As long as you buy the torrent as freeleech (or if it is already set as freeleech) before sending it to gouda, 
-it will behave as if you started download yourself and will not affect your ratio.
-
-Q. Is it secure or against myanonamouse TOS
-
-A. I have been using it for a while now, and it has not caused any problems on the site for me, this tool mimics what someone would do normally on the site,
-The extension and the app are fully local, and open source you can check the code for yourself, or ask chatgpt ;)
-
-Q. How does it download the torrent file without authentication
-
-A. MAM torrent file download links do not require authentication, since they are pretty much useless without an active account on the site.
 
 ## Installation and requirements
 
@@ -52,9 +29,9 @@ Therefore, you will need
 
 1. Basic understanding of Docker and Docker compose.
 2. Use transmission or qbit as your download clients.
-3. Strucure your files as mentioned [here](#volume-mounts)
+3. Structure your files as mentioned [here](#volume-mounts)
 
-### Docker Compose Example
+### Docker Compose
 
 Look at the example docker compose here [docker-compose](prod-docker-compose.yml) and adapt it your needs.
 
@@ -83,7 +60,7 @@ Once running, access the web interface at `http://your-ip:9862` to configure:
 | `GOUDA_DEFAULT_DIR` | Directory for completed downloads | `/appdata/complete` |
 | `GOUDA_TORRENT_DIR` | Directory for torrent files | `/appdata/torrents` |
 
-### Folder structure
+#### Folder structure
 
 I recommend the following dir structure (it follows [trash guides](https://trash-guides.info/File-and-Folder-Structure/)), required to get hardlink support.
 
@@ -97,7 +74,7 @@ You need to store all your media in a single folder, for eg:
 
 ****If you use multiple hard drives, look into https://github.com/trapexit/mergerfs and combine your storage pool.****
 
-###### Categories
+#### Categories
 
 Gouda uses category sent when downloading the media, for example, if you used 'manga' category, 
 then gouda will do the following 
@@ -112,7 +89,7 @@ then gouda will do the following
    | <final file or folder downloaded automatically hardlinked>
 ```
 
-###### Final mounts
+### Final mounts
 
 * config -
   * You can set this path to any folder you want. 
@@ -140,3 +117,31 @@ This will create the following directory structure:
 └── torrents/      # Torrent files
 ```
 
+## Help and suggestions
+
+If you need help, encounter a bug, or want a new feature   
+
+start a discussion here https://github.com/RA341/gouda/discussions 
+
+## FAQ
+
+Q. Will this mess with my ratio or remove the download from my download client?
+
+A. No. Gouda only checks the download status from your torrent client, it will NEVER modify,
+delete or otherwise touch the file at the download location.
+
+If gouda is unable to hardlink the downloaded file it will only display error, and no further action will be taken by gouda.
+
+Q. Does this work with freeleech and personal freeleech torrents
+
+A. Yes!, As long as you buy the torrent as freeleech (or if it is already set as freeleech) before sending it to gouda,
+it will behave as if you started download yourself and will not affect your ratio.
+
+Q. Is it secure or against myanonamouse TOS
+
+A. I have been using it for a while now, and it has not caused any problems on the site for me, this tool mimics what someone would do normally on the site,
+The extension and the app are fully local, and open source you can check the code for yourself, or ask chatgpt ;)
+
+Q. How does it download the torrent file without authentication
+
+A. MAM torrent file download links do not require authentication, since they are pretty much useless without an active account on the site.
