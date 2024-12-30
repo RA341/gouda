@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"syscall"
 )
 
 func main() {
@@ -33,9 +32,7 @@ func main() {
 	// Start the API server
 	apiServer := exec.Command(fullApiPath)
 	if runtime.GOOS == "windows" {
-		apiServer.SysProcAttr = &syscall.SysProcAttr{
-			CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP,
-		}
+		applyOSSpecificAttr(apiServer)
 	}
 
 	err := apiServer.Start()
