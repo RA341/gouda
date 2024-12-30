@@ -1,0 +1,13 @@
+set shell := ["powershell.exe", "-c"]
+
+win:
+    ./windows/build.ps1
+
+[working-directory: 'build_output']
+rwin:
+    just win
+    .\launcher.exe
+
+[working-directory: 'build_output']
+cleanw:
+    rm -r *

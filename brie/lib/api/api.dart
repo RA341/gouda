@@ -76,7 +76,7 @@ class GoudaApi {
   (String, String) _makeBasePath() {
     basePath = kDebugMode
         ? ('https://gouda.dumbapps.org/' ?? 'http://localhost:9862')
-        : html.window.location.toString();
+        : (kIsWeb ? html.window.location.toString() : 'http://localhost:9862');
 
     basePath = basePath.endsWith('/')
         ? basePath.substring(0, basePath.length - 1)
