@@ -2,10 +2,19 @@ import 'dart:convert';
 
 import 'package:brie/api/api.dart';
 import 'package:brie/models.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final settingsApi = SettingsApi();
+final settingsApiProvider = Provider<SettingsApi>((ref) {
+  final client = ref.watch(apiClientProvider);
+  return SettingsApi(client);
+});
 
 class SettingsApi {
+  final Dio apiClient;
+
+  SettingsApi(this.apiClient);
+
   Future<void> update(Settings config) async {
     final response = await apiClient.post(
       '/settings/update',

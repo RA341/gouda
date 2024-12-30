@@ -1,8 +1,9 @@
+import 'package:brie/api/api.dart';
 import 'package:brie/api/auth_api.dart';
-import 'package:brie/providers.dart';
-import 'package:brie/ui/utils.dart';
+import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -11,8 +12,10 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userName = useTextEditingController(text: kDebugMode ? 'admin' : '');
-    final pass = useTextEditingController(text: kDebugMode ? 'admin' : '');
+    final userName = useTextEditingController(
+        text: kDebugMode ? (dotenv.maybeGet('GOUDA_USERNAME') ?? 'admin') : '');
+    final pass = useTextEditingController(
+        text: kDebugMode ? (dotenv.maybeGet('GOUDA_PASS') ?? 'admin') : '');
 
     return Center(
       child: Padding(
@@ -20,7 +23,7 @@ class LoginPage extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Setup page', style: TextStyle(fontSize: 30)),
+            Text('Login', style: TextStyle(fontSize: 30)),
             SizedBox(height: 50),
             AutofillGroup(
               child: SizedBox(
@@ -55,11 +58,11 @@ class LoginPage extends HookConsumerWidget {
                 onPressed: () async {
                   try {
                     if (!context.mounted) return;
-                    await authApi.login(
+                    await ref.read(authApiProvider).login(
                       user: userName.text,
                       pass: pass.text,
                     );
-                    ref.invalidate(checkTokenProvider);
+                    ref.invalidate(apiTokenProvider);
                   } catch (e) {
                     print(e);
                     if (!context.mounted) return;
@@ -79,6 +82,4 @@ class LoginPage extends HookConsumerWidget {
       ),
     );
   }
-
-  Future<void> checkUrlAndLogin(String host, String user, String pass) async {}
 }

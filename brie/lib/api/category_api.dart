@@ -1,11 +1,18 @@
 import 'dart:convert';
 
 import 'package:brie/api/api.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final catApi = CategoryApi();
+final catProvider = Provider<CategoryApi>((ref) {
+  final client = ref.watch(apiClientProvider);
+  return CategoryApi(client);
+});
 
 class CategoryApi {
-  CategoryApi();
+  final Dio apiClient;
+
+  CategoryApi(this.apiClient);
 
   Future<void> addCategory(String cat) async {
     final resp = await apiClient.post(

@@ -1,4 +1,3 @@
-import 'package:brie/api/api.dart';
 import 'package:brie/config.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/auth_page.dart';
@@ -8,13 +7,12 @@ import 'package:brie/ui/history_page.dart';
 import 'package:brie/ui/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
+  await dotenv.load();
   await PreferencesService.init();
-
-  final apikey = prefs.getString('apikey') ?? '';
-  apiInst.init(apiKey: apikey);
 
   runApp(const ProviderScope(child: MyApp()));
 }

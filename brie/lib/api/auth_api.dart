@@ -3,15 +3,23 @@ import 'dart:convert';
 import 'package:brie/api/api.dart';
 import 'package:brie/config.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final authApi = AuthApi();
+final authApiProvider = Provider<AuthApi>((ref) {
+  final client = ref.watch(apiClientProvider);
+  return AuthApi(client);
+});
 
 class AuthApi {
+  final Dio apiClient;
+
+  AuthApi(this.apiClient);
+
   Future<void> login({
     required String user,
     required String pass,
   }) async {
-    final response = await authClient.post(
+    final response = await apiClient.post(
       '/auth/login',
       data: jsonEncode({"username": user, "password": pass}),
     );
@@ -20,11 +28,8 @@ class AuthApi {
       throw Exception('Failed to load users: ${response.statusCode}');
     }
 
-    apiInst.apiKey = response.data['token'];
-    await prefs.setString('apikey', apiInst.apiKey);
-
-    // reinitialize clients with new api key
-    apiInst.setupApiClients();
+    final tok = response.data['token'];
+    await prefs.setString('apikey', tok);
   }
 
   Future<bool> testToken({required String token}) async {
@@ -32,7 +37,7 @@ class AuthApi {
       return false;
     }
 
-    final response = await authClient.get(
+    final response = await apiClient.get(
       '/auth/test',
       options: Options(headers: {'Authorization': token}),
     );

@@ -1,87 +1,71 @@
+import 'package:brie/config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_html/html.dart' as html;
 
-var apiInst = GoudaApi.instance;
-var apiClient = apiInst.apiClient;
-var authClient = apiInst.authClient;
+final apiTokenProvider = Provider<String>((ref) {
+  return prefs.getString('apikey') ?? '';
+});
 
-class GoudaApi {
-  String basePath = '';
-  String apiBasePath = '';
+final basePathProvider = Provider<String>((ref) {
+  // setup for future feature to modify base path from within the client
+  final basePath = prefs.getString('basePath');
 
-  String apiKey = '';
+  final finalPath = basePath ??
+      (kDebugMode
+          ? (dotenv.maybeGet('PROD_URL') ?? 'http://localhost:9862')
+          : html.window.location.toString());
 
-  late Dio apiClient;
-  late Dio authClient;
+  print('Base path is: $finalPath');
 
-  static GoudaApi? _instance;
+  return "${finalPath.endsWith('/') ? finalPath.substring(0, finalPath.length - 1) : finalPath}/api";
+});
 
-  GoudaApi._();
+final apiClientProvider = Provider<Dio>((ref) {
+  final token = ref.watch(apiTokenProvider);
+  final apiBasePath = ref.watch(basePathProvider);
+  final client = setupApiClients(authToken: token, basePath: apiBasePath);
 
-  // Get singleton instance
-  static GoudaApi get instance {
-    _instance ??= GoudaApi._();
-    return _instance!;
+  ref.onDispose(() => client.close());
+
+  return client;
+});
+
+Dio setupApiClients({required String authToken, required String basePath}) {
+  final apiClient = _initApiClient(basePath: basePath, authToken: authToken);
+
+  if (kDebugMode) {
+    apiClient.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+    ));
+
+    apiClient.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+    ));
   }
 
-  // Initialize SharedPreferences
-  Future<void> init({String apiKey = ''}) async {
-    final (apiBasePath, basePath) = _makeBasePath();
-    this.basePath = basePath;
-    this.apiBasePath = apiBasePath;
+  return apiClient;
+}
 
-    this.apiKey = apiKey;
-    // separate this into a function because we will use this to
-    // reinitialize the api clients when a user logs in and the api token is updated
-    setupApiClients();
-  }
-
-  void setupApiClients() {
-    authClient = _initApiClient(basePath);
-    apiClient = _initApiClient(apiBasePath);
-
-    if (kDebugMode) {
-      apiClient.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ));
-
-      authClient.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ));
-    }
-  }
-
-  Dio _initApiClient(String basePath) {
-    return Dio(
-      BaseOptions(
-        baseUrl: basePath,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': apiKey
-        },
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 3),
-        validateStatus: (status) {
-          // don't throw errors on on non 200 codes
-          return true;
-        },
-      ),
-    );
-  }
-
-  (String, String) _makeBasePath() {
-    basePath = kDebugMode
-        ? ('https://gouda.dumbapps.org/' ?? 'http://localhost:9862')
-        : html.window.location.toString();
-
-    basePath = basePath.endsWith('/')
-        ? basePath.substring(0, basePath.length - 1)
-        : basePath;
-
-    return ('$basePath/api', basePath);
-  }
+Dio _initApiClient({required String basePath, required String authToken}) {
+  return Dio(
+    BaseOptions(
+      baseUrl: basePath,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': authToken
+      },
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 3),
+      validateStatus: (status) {
+        // don't throw errors on on non 200 codes
+        return true;
+      },
+    ),
+  );
 }

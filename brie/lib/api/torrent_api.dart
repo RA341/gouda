@@ -2,12 +2,21 @@ import 'dart:convert';
 
 import 'package:brie/api/api.dart';
 import 'package:brie/models.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final torrentClient = TorrentApi();
+final torrentApiProvider = Provider<TorrentApi>((ref) {
+  final client = ref.watch(apiClientProvider);
+  return TorrentApi(client);
+});
 
 class TorrentApi {
+  final Dio apiClient;
+
+  TorrentApi(this.apiClient);
+
   // Add Torrent Client
-  static Future<void> addTorrentClient(TorrentClient client) async {
+  Future<void> addTorrentClient(TorrentClient client) async {
     try {
       final response = await apiClient.post(
         '/torrents/addTorrentClient',
@@ -23,12 +32,12 @@ class TorrentApi {
   }
 
   // Get Torrent Client
-  static Future<TorrentClient> getTorrentClient() async {
+  Future<TorrentClient> getTorrentClient() async {
     try {
       final response = await apiClient.get('/torrents/torrentclient');
 
       if (response.statusCode == 200) {
-        return TorrentClient.fromJson(jsonDecode(response.data));
+        return TorrentClient.fromJson((response.data));
       } else {
         throw Exception('Failed to get torrent client: ${response.data}');
       }
@@ -38,7 +47,7 @@ class TorrentApi {
   }
 
   // Add Torrent
-  static Future<void> addTorrent(TorrentRequest request) async {
+  Future<void> addTorrent(TorrentRequest request) async {
     try {
       final response = await apiClient.post(
         '/torrents/addTorrent',

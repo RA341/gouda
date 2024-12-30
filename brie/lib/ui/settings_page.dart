@@ -1,7 +1,7 @@
 import 'package:brie/api/settings_api.dart';
 import 'package:brie/models.dart';
-import 'package:brie/ui/utils.dart';
 import 'package:brie/providers.dart';
+import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -153,26 +153,26 @@ class SettingsView extends HookConsumerWidget {
               child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      await settingsApi.update(
-                        Settings(
-                          apiKey: apiKey.text,
-                          serverPort: serverPort.text,
-                          downloadCheckTimeout:
-                              int.parse(downloadCheckTimeout.text),
-                          completeFolder: completeFolder.text,
-                          downloadFolder: downloadFolder.text,
-                          torrentsFolder: torrentsFolder.text,
-                          username: username.text,
-                          password: password.text,
-                          userID: int.parse(userID.text),
-                          groupID: int.parse(groupID.text),
-                          torrentHost: torrentHost.text,
-                          torrentName: clientType.text,
-                          torrentPassword: torrentPassword.text,
-                          torrentProtocol: torrentProtocol.text,
-                          torrentUser: torrentUser.text,
-                        ),
-                      );
+                      await ref.watch(settingsApiProvider).update(
+                            Settings(
+                              apiKey: apiKey.text,
+                              serverPort: serverPort.text,
+                              downloadCheckTimeout:
+                                  int.parse(downloadCheckTimeout.text),
+                              completeFolder: completeFolder.text,
+                              downloadFolder: downloadFolder.text,
+                              torrentsFolder: torrentsFolder.text,
+                              username: username.text,
+                              password: password.text,
+                              userID: int.parse(userID.text),
+                              groupID: int.parse(groupID.text),
+                              torrentHost: torrentHost.text,
+                              torrentName: clientType.text,
+                              torrentPassword: torrentPassword.text,
+                              torrentProtocol: torrentProtocol.text,
+                              torrentUser: torrentUser.text,
+                            ),
+                          );
 
                       ref.invalidate(settingsProvider);
                     } catch (e) {
