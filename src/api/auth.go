@@ -98,7 +98,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-func SetupAuthRouter(r *gin.Engine) *gin.Engine {
+func SetupAuthRouter(r *gin.RouterGroup) {
 	authRouter := r.Group("/auth")
 
 	authRouter.POST("/login", func(c *gin.Context) {
@@ -135,6 +135,4 @@ func SetupAuthRouter(r *gin.Engine) *gin.Engine {
 
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	})
-
-	return r
 }

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
+func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) {
 	protected := r.Group("/settings")
 
 	protected.POST("/update", func(c *gin.Context) {
@@ -69,5 +69,4 @@ func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 		c.JSON(http.StatusOK, settings)
 	})
 
-	return r
 }

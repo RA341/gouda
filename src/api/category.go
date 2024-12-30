@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func (api *Env) SetupCategoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
+func (api *Env) SetupCategoryEndpoints(r *gin.RouterGroup) {
 	protected := r.Group("/category")
 
 	protected.GET("/list", func(c *gin.Context) {
@@ -58,6 +58,4 @@ func (api *Env) SetupCategoryEndpoints(r *gin.RouterGroup) *gin.RouterGroup {
 
 		c.JSON(http.StatusOK, gin.H{"category deleted": req.Category})
 	})
-
-	return r
 }

@@ -28,16 +28,16 @@ func main() {
 		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
 	}
 
-	dbPath := viper.GetString("DB_PATH")
+	dbPath := viper.GetString("db_path")
 	if dbPath == "" {
-		log.Fatal().Msgf("DB_PATH is empty")
+		log.Fatal().Msgf("db_path is empty")
 	}
 	db, err := service.InitDB(dbPath)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to start database")
 	}
 
-	apiEnv := api.Env{Database: db}
+	apiContext := api.Env{Database: db}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {
@@ -51,41 +51,43 @@ func main() {
 
 		if err == nil {
 			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.name"))
-			apiEnv.DownloadClient = client
+			apiContext.DownloadClient = client
 		} else {
 			log.Error().Err(err).Msgf("Failed to initialize torrent client")
 		}
 	}
 
 	// api setup
-	ginRouter := gin.Default()
+	apiServer := gin.Default()
 
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
 	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
-	ginRouter.Use(cors.New(corsConfig))
+	apiServer.Use(cors.New(corsConfig))
 
 	if os.Getenv("IS_DOCKER") == "true" {
-		ginRouter.Use(static.Serve("/", static.LocalFile("./web", false)))
+		apiServer.Use(static.Serve("/", static.LocalFile("./web", false)))
 	} else {
 		log.Info().Msgf("Frontend is served from brie/build/web")
-		ginRouter.Use(static.Serve("/", static.LocalFile("./brie/build/web", false)))
+		apiServer.Use(static.Serve("/", static.LocalFile("./brie/build/web", false)))
 	}
 
-	ginRouter.HEAD("/", func(context *gin.Context) {
+	apiServer.HEAD("/", func(context *gin.Context) {
 		context.Status(http.StatusOK)
 	})
 
-	r := api.SetupAuthRouter(ginRouter)
-	apiGroup := r.Group("/api")
-	apiGroup.Use(api.AuthMiddleware())
-	apiGroup = apiEnv.SetupTorrentClientEndpoints(apiGroup)
-	apiGroup = apiEnv.SetupCategoryEndpoints(apiGroup)
-	apiGroup = apiEnv.SetupHistoryEndpoints(apiGroup)
-	_ = apiEnv.SetupSettingsEndpoints(apiGroup)
+	// This way, /api/auth/* endpoints will be accessible without authentication,
+	// while all other /api/* endpoints will require authentication.
+	api.SetupAuthRouter(apiServer.Group("/api"))
+	protectedApiRoutes := apiServer.Group("/api")
+	protectedApiRoutes.Use(api.AuthMiddleware())
+	apiContext.SetupTorrentClientEndpoints(protectedApiRoutes)
+	apiContext.SetupCategoryEndpoints(protectedApiRoutes)
+	apiContext.SetupHistoryEndpoints(protectedApiRoutes)
+	apiContext.SetupSettingsEndpoints(protectedApiRoutes)
 
 	port := viper.GetString("server.port")
-	err = r.Run(fmt.Sprintf(":%s", port))
+	err = apiServer.Run(fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Error().Err(err).Msgf("Failed to start server")
 	}
