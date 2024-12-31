@@ -47,7 +47,7 @@ COPY ./launcher .
 RUN go mod tidy
 
 # Build optimized binary without debugging symbols
-RUN go build -ldflags "-s -w" -o launcher
+RUN go build -ldflags "-s -w" -o gouda-launcher
 
 
 # Stage 3: Final stage
@@ -59,6 +59,6 @@ COPY --from=api_builder /app/gouda ./api/
 
 COPY --from=flutter_builder /app/build/linux/x64/release/bundle/* ./frontend/
 
-COPY --from=launcher_builder /app/launcher ./
+COPY --from=launcher_builder /app/gouda-launcher ./
 
 CMD ["/bin/sh", "-c", "cp -r /build/* /output/"]

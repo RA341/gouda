@@ -2,11 +2,11 @@
 
 Create the following directory structure:
 ```
-CopyYourApp/
+Gouda/
 ├── api/
-│   └── server.exe    (your compiled Go API server)
+│   └── gouda.exe    (your compiled Go API server)
 ├── frontend/
-│   └── myapp.exe     (your compiled Flutter Windows app)
+│   └── brie.exe     (your compiled Flutter Windows app)
 └── launcher.exe      (compiled from main.go)
 ```
 

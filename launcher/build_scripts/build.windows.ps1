@@ -31,7 +31,7 @@ try
     Set-Location "../launcher"
     # use '.' instead of 'main.go' becasue applyOSSpecificAttr
     # will not be able to located if main.go is used
-    go build -o "$buildDir\launcher.exe" -ldflags "-H=windowsgui" .
+    go build -o "$buildDir\gouda-launcher.exe" -ldflags "-H=windowsgui" .
 
     Write-Host "Build completed successfully!" -ForegroundColor Green
 }

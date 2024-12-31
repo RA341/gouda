@@ -10,7 +10,7 @@ win:
 rwin:
     just cleanw
     just win
-    .\launcher.exe
+    .\gouda-launcher.exe
 
 [working-directory: 'build_output/windows']
 cleanw:
