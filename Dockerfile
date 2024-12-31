@@ -20,7 +20,7 @@ COPY ./src .
 # for sqlite
 ENV CGO_ENABLED=1
 
-RUN apk update && apk add gcc musl-dev
+RUN apk update && apk add --no-cache gcc musl-dev
 
 RUN go mod tidy
 
