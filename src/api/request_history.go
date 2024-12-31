@@ -15,7 +15,7 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) {
 	group := r.Group("/history")
 
 	group.GET("/all", func(c *gin.Context) {
-		limit := 30 // default limit
+		limit := 20 // default limit
 		offset := 0 // default offset
 
 		// Parse limit from query
@@ -46,13 +46,24 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) {
 
 		var torrents []models.RequestTorrent
 
-		resp := api.Database.Limit(limit).Offset(offset).Order("created_at desc").Find(&torrents)
+		resp := api.Database.
+			Order("created_at desc").
+			Offset(offset).
+			Limit(limit).
+			Find(&torrents)
+
 		if resp.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error retrieving torrent history": resp.Error.Error()})
 			return
 		}
 
-		c.JSON(http.StatusOK, &torrents)
+		count, err := api.countRecords()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error unable to get record count": resp.Error.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"torrents": &torrents, "count": count})
 	})
 
 	group.DELETE("/delete/:id", func(c *gin.Context) {
@@ -182,4 +193,14 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) {
 
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
+}
+
+func (api *Env) countRecords() (int64, error) {
+	var count int64 = 0
+	resp := api.Database.Model(&models.RequestTorrent{}).Count(&count)
+	if resp.Error != nil {
+		// Handle error - record not found or other DB error
+		return count, resp.Error
+	}
+	return count, nil
 }
