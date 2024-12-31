@@ -12,17 +12,40 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
+	"gopkg.in/natefinch/lumberjack.v2"
 	"net/http"
 	"os"
 )
 
 func main() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	consoleWriter := zerolog.ConsoleWriter{
+		Out:        os.Stderr,
+		TimeFormat: "2006-01-02 15:04:05",
+	}
+
+	log.Logger = log.Output(consoleWriter).
+		With().
+		Caller().
+		Logger()
 
 	err := InitConfig()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to get config")
 	}
+
+	logRotator := &lumberjack.Logger{
+		Filename:   viper.GetString("log_dir"),
+		MaxSize:    10, // MB
+		MaxBackups: 5,  // number of backups
+		MaxAge:     30, // days
+		Compress:   true,
+	}
+
+	// reinitialize logger with log file output
+	log.Logger = log.Output(zerolog.MultiLevelWriter(consoleWriter, logRotator)).
+		With().
+		Caller().
+		Logger()
 
 	if os.Getenv("DEBUG") == "true" {
 		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")

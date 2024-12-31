@@ -31,6 +31,10 @@ func InitConfig() error {
 		return err
 	}
 
+	// create log directory
+	logDir := fmt.Sprintf("%s/logs/app.log", configDir)
+	viper.SetDefault("log_dir", logDir)
+
 	user, pass := os.Getenv("GOUDA_USERNAME"), os.Getenv("GOUDA_PASS")
 	if user == "" || pass == "" {
 		log.Fatal().Msgf("A username and password must be set. use GOUDA_USERNAME and GOUDA_PASS environment variables or add them to .env file from where you are executing this program")
