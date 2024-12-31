@@ -1,7 +1,10 @@
-set shell := ["powershell.exe", "-c"]
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+
+list:
+    just --list
 
 win:
-    ./build.windows.ps1
+    ./build_scripts/build.windows.ps1
 
 [working-directory: 'build_output/windows']
 rwin:
@@ -13,9 +16,8 @@ rwin:
 cleanw:
     rm -r *
 
-
 lin:
-    docker build -f linux.Dockerfile -t launcher:builder ..
+    docker build -f build_scripts/linux.Dockerfile -t launcher:builder ..
     docker run --rm -v {{justfile_directory()}}/build_output/linux/:/output/ launcher:builder
 
 [working-directory: 'build_output/linux']

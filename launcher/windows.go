@@ -15,5 +15,6 @@ import (
 func applyOSSpecificAttr(apiServer *exec.Cmd) {
 	apiServer.SysProcAttr = &syscall.SysProcAttr{
 		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP,
+		HideWindow:    true, // hide api window
 	}
 }

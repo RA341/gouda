@@ -29,7 +29,9 @@ try
     # 3. Build launcher
     Write-Host "Building launcher..." -ForegroundColor Green
     Set-Location "../launcher"
-    go build -o "$buildDir\launcher.exe" -ldflags "-H=windowsgui" main.go
+    # use '.' instead of 'main.go' becasue applyOSSpecificAttr
+    # will not be able to located if main.go is used
+    go build -o "$buildDir\launcher.exe" -ldflags "-H=windowsgui" .
 
     Write-Host "Build completed successfully!" -ForegroundColor Green
 }
