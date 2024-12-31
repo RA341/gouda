@@ -128,7 +128,7 @@ class HistoryView extends ConsumerWidget {
                             makeText(
                                 'Download location: ${settings?.completeFolder}/${request.category}'),
                             makeText(
-                                'Added: ${timeago.format(request.createdAt)}'),
+                                'Added: ${timeago.format(request.createdAt ?? DateTime(1900))}'),
                             TextButton(
                               onPressed: () async {
                                 final url = Uri.parse(mamUrl);
