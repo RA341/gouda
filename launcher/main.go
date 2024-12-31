@@ -2,12 +2,13 @@ package main
 
 import (
 	"github.com/rs/zerolog/log"
-	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 )
+
+// todo add logging rollover and limits via lumberjack
 
 func main() {
 	// Get the resources directory for macOS bundle
@@ -26,60 +27,54 @@ func main() {
 
 	fullApiPath := filepath.Join(appDir, "api", apiExecutable)
 	fullFrontendPath := filepath.Join(appDir, "frontend", frontendExecutable)
-
 	log.Info().Str("fullApiPath", fullApiPath).Str("full frontend path", fullFrontendPath).Msg("fullApiPath")
 
-	// Start the API server
+	///////////////////////////////////////////////////////////////////////////////////////
+	// Start the API server with output redirected to the log file
+	// Create/open a log file
+	apiLogFile, err := os.OpenFile("api_server.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to open log file")
+	}
+	defer func(logFile *os.File) {
+		err := logFile.Close()
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to close log file")
+		}
+	}(apiLogFile)
+
+	// Start the API server with output redirected to the log file
 	apiServer := exec.Command(fullApiPath)
-	if runtime.GOOS == "windows" {
-		applyOSSpecificAttr(apiServer)
+	apiServer.Stdout = apiLogFile
+	apiServer.Stderr = apiLogFile
+	applyOSSpecificAttr(apiServer)
+	err = apiServer.Start()
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to start api server")
 	}
 
-	err := apiServer.Start()
+	///////////////////////////////////////////////////////////////////////////////////////
+	flutterLogFile, err := os.OpenFile("flutter.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
-		log.Error().Err(err).Msg("Unable to start API server")
+		log.Fatal().Err(err).Msg("Failed to open log file")
 	}
-
-	// If you want to also write raw output to separate files
-	stdoutFile, err := os.Create(filepath.Join(".", "api-stdout.log"))
-	if err != nil {
-		log.Error().Msgf("Error creating stdout file: %v", err)
-		os.Exit(1)
-	}
-	defer func(stdoutFile *os.File) {
-		err := stdoutFile.Close()
+	defer func(logFile *os.File) {
+		err := logFile.Close()
 		if err != nil {
-			log.Error().Err(err).Msg("Error closing stdout file")
+			log.Fatal().Err(err).Msg("Failed to close log file")
 		}
-	}(stdoutFile)
+	}(flutterLogFile)
 
-	stderrFile, err := os.Create(filepath.Join(".", "api-stderr.log"))
-	if err != nil {
-		log.Error().Msgf("Error creating stderr file: %v", err)
-		os.Exit(1)
-	}
-	defer func(stderrFile *os.File) {
-		err := stderrFile.Close()
-		if err != nil {
-			log.Error().Err(err).Msg("Error closing stderr file")
-		}
-	}(stderrFile)
-
-	apiServer.Stdout = io.MultiWriter(stdoutFile)
-	apiServer.Stderr = io.MultiWriter(stderrFile)
-	//
-	//apiServer.Stdout = os.Stdout
-	//apiServer.Stderr = os.Stderr
-
-	// Start Flutter frontend
+	// Flutter frontend
 	flutterApp := exec.Command(filepath.Join(fullFrontendPath))
-	flutterApp.Stdout = os.Stdout
-	flutterApp.Stderr = os.Stderr
+	flutterApp.Stdout = flutterLogFile
+	flutterApp.Stderr = flutterLogFile
 
 	err = flutterApp.Run()
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to start frontend application")
 	}
+	///////////////////////////////////////////////////////////////////////////////////////
 
 	// Cleanup
 	if apiServer.Process != nil {
