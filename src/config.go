@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-const filePerm = 0o770
+const filePerm = 0o775
 
 func InitConfig() error {
 	err := godotenv.Load()
@@ -41,7 +41,7 @@ func InitConfig() error {
 	viper.AddConfigPath(configDir)
 
 	// set database path
-	viper.SetDefault("DB_PATH", fmt.Sprintf("%s/gouda_database.db", configDir))
+	viper.SetDefault("db_path", fmt.Sprintf("%s/gouda_database.db", configDir))
 
 	// set apikey
 	key, err := api.GenerateToken(32)

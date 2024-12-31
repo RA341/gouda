@@ -17,6 +17,8 @@ type RequestTorrent struct {
 	FileLink            string `json:"file_link" gorm:"-"`
 	Author              string `json:"author"`
 	Book                string `json:"book"`
+	Series              string `json:"series"`
+	SeriesNumber        uint   `json:"series_number"`
 	Category            string `json:"category"`
 	MAMBookID           uint64 `json:"mam_book_id" gorm:"uniqueIndex;check:mam_book_id > 0"`
 	Status              string `json:"status,omitempty"`
