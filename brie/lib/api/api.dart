@@ -61,7 +61,7 @@ Dio _initApiClient({required String basePath, required String authToken}) {
         'Authorization': authToken
       },
       connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 3),
+      receiveTimeout: const Duration(seconds: 5),
       validateStatus: (status) {
         // don't throw errors on on non 200 codes
         return true;

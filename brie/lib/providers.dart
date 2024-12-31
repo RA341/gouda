@@ -37,11 +37,18 @@ final requestHistoryProvider =
 class RequestHistoryNotifier extends AsyncNotifier<List<Book>> {
   var limit = 20;
   var offset = 0;
+  var totalRecords = 0;
 
   @override
   Future<List<Book>> build() async {
     final histApi = ref.watch(historyApiProvider);
-    return await histApi.getTorrentHistory(limit: limit, offset: offset);
+    final (records, count) = await histApi.getTorrentHistory(
+      limit: limit,
+      offset: offset,
+    );
+
+    totalRecords = count;
+    return records;
   }
 
   Future<void> paginateForward() async {
@@ -58,7 +65,15 @@ class RequestHistoryNotifier extends AsyncNotifier<List<Book>> {
     final histApi = ref.watch(historyApiProvider);
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      return await histApi.getTorrentHistory(limit: limit, offset: offset);
+      final (books, count) = await histApi.getTorrentHistory(
+        limit: limit,
+        offset: offset * limit,
+      );
+
+      totalRecords = count;
+      return books;
     });
   }
+
+  bool lastPage() => totalRecords ~/ limit == offset;
 }

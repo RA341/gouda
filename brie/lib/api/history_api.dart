@@ -13,16 +13,20 @@ class HistoryApi {
 
   HistoryApi(this.apiClient);
 
-  Future<List<Book>> getTorrentHistory({int limit = 20, int offset = 0}) async {
-    final response = await apiClient.get('/history/all?$limit&$offset');
+  Future<(List<Book>, int)> getTorrentHistory({int limit = 20, int offset = 0}) async {
+    final response = await apiClient.get(
+      '/history/all',
+      queryParameters: {'limit': limit, 'offset': offset},
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to get history: ${response.statusCode}');
     }
 
-    final tmp = response.data as List<dynamic>;
-    final res = tmp.map((e) => Book.fromJson(e)).toList();
-    return res;
+    final tmp = response.data as Map<String, dynamic>;
+    final res = (tmp['torrents'] as List<dynamic>).map((e) => Book.fromJson(e)).toList();
+    final count = tmp['count'] as int;
+    return (res, count);
   }
 
   Future<void> retryBookRequest(String id) async {
