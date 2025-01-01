@@ -160,6 +160,42 @@ class Settings {
       'torrent_user': torrentUser,
     };
   }
+
+  Settings copyWith({
+    String? apiKey,
+    String? serverPort,
+    int? downloadCheckTimeout,
+    String? completeFolder,
+    String? downloadFolder,
+    String? torrentsFolder,
+    String? username,
+    String? password,
+    int? userID,
+    int? groupID,
+    String? torrentHost,
+    String? torrentName,
+    String? torrentPassword,
+    String? torrentProtocol,
+    String? torrentUser,
+  }) {
+    return Settings(
+      apiKey: apiKey ?? this.apiKey,
+      serverPort: serverPort ?? this.serverPort,
+      downloadCheckTimeout: downloadCheckTimeout ?? this.downloadCheckTimeout,
+      completeFolder: completeFolder ?? this.completeFolder,
+      downloadFolder: downloadFolder ?? this.downloadFolder,
+      torrentsFolder: torrentsFolder ?? this.torrentsFolder,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      userID: userID ?? this.userID,
+      groupID: groupID ?? this.groupID,
+      torrentHost: torrentHost ?? this.torrentHost,
+      torrentName: torrentName ?? this.torrentName,
+      torrentPassword: torrentPassword ?? this.torrentPassword,
+      torrentProtocol: torrentProtocol ?? this.torrentProtocol,
+      torrentUser: torrentUser ?? this.torrentUser,
+    );
+  }
 }
 
 class Book {

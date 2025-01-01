@@ -5,6 +5,7 @@ import 'package:brie/ui/category_page.dart';
 import 'package:brie/ui/components/sidebar.dart';
 import 'package:brie/ui/history_page.dart';
 import 'package:brie/ui/settings_page.dart';
+import 'package:brie/ui/setup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -44,10 +45,16 @@ class RootView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final testToken = ref.watch(checkTokenProvider);
+    final settings = ref.watch(settingsProvider);
+    final firstTimeSetup = settings.valueOrNull?.torrentHost.isEmpty;
 
     return Scaffold(
       body: testToken.when(
-        data: (data) => data ? MainView() : LoginPage(),
+        data: (data) => data
+            ? firstTimeSetup ?? true
+                ? SetupPage()
+                : MainView()
+            : LoginPage(),
         error: (error, stackTrace) => Center(
           child: Column(
             children: [

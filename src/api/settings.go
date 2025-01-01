@@ -1,8 +1,10 @@
 package api
 
 import (
+	"github.com/RA341/gouda/download_clients"
 	models "github.com/RA341/gouda/models"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"net/http"
 )
@@ -16,6 +18,21 @@ func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		// test torrent settings
+		client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
+			User:     settings.TorrentUser,
+			Password: settings.TorrentPassword,
+			Protocol: settings.TorrentProtocol,
+			Host:     settings.TorrentHost,
+			Type:     settings.TorrentName,
+		})
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to initialize torrent client")
+			c.JSON(http.StatusBadRequest, gin.H{"Unable to save torrent client, check torrent client details": err.Error()})
+			return
+		}
+		api.DownloadClient = client
 
 		// general
 		viper.Set("apikey", settings.ApiKey)
@@ -38,7 +55,7 @@ func (api *Env) SetupSettingsEndpoints(r *gin.RouterGroup) {
 		viper.Set("torrent_client.user", settings.TorrentUser)
 
 		// Save the configuration to file
-		err := viper.WriteConfig()
+		err = viper.WriteConfig()
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

@@ -70,3 +70,97 @@ void showErrorDialog(
     },
   );
 }
+
+Widget createUpdateButtons(
+  String input,
+  TextEditingController controller, {
+  void Function()? editingController,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 20),
+    child: SizedBox(
+      // width: maxSettingsWidth,
+      child: TextField(
+        controller: controller,
+        onEditingComplete: editingController,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: input,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget createDropDown(
+  List<String> options,
+  TextEditingController controller,
+  String label,
+) {
+  final selectedIndex = options.indexOf(controller.text);
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 10),
+    child: Column(
+      children: [
+        Text(label),
+        SizedBox(width: 20),
+        DropdownMenu<String>(
+          initialSelection: options[selectedIndex == -1 ? 0 : selectedIndex],
+          onSelected: (String? value) =>
+              controller.text = value ?? options.first,
+          dropdownMenuEntries:
+              options.map<DropdownMenuEntry<String>>((String value) {
+            return DropdownMenuEntry<String>(
+              value: value,
+              label: value,
+            );
+          }).toList(),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget createUpdateButtons2(
+  String input,
+  TextEditingController controller, {
+  void Function()? editingController,
+  String hintText = '',
+  List<String> autofillHints = const [],
+}) {
+  return SizedBox(
+    child: TextField(
+      autofillHints: autofillHints,
+      controller: controller,
+      onEditingComplete: editingController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: input,
+        hintText: hintText,
+      ),
+    ),
+  );
+}
+
+Widget createDropDown2(
+  List<String> options,
+  ValueNotifier<String> controller,
+  String hintText,
+) {
+  final selectedIndex = options.indexOf(controller.value);
+
+  return DropdownMenu<String>(
+    label: Text(hintText),
+    requestFocusOnTap: false,
+    // disable text editing
+    initialSelection: options[selectedIndex == -1 ? 0 : selectedIndex],
+    onSelected: (String? value) => controller.value = value ?? options.first,
+    dropdownMenuEntries: options.map<DropdownMenuEntry<String>>((String value) {
+      return DropdownMenuEntry<String>(
+        value: value,
+        label: value,
+      );
+    }).toList(),
+  );
+}

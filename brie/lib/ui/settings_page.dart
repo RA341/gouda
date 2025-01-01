@@ -1,6 +1,8 @@
 import 'package:brie/api/settings_api.dart';
 import 'package:brie/models.dart';
 import 'package:brie/providers.dart';
+import 'package:brie/ui/components/torrent_client.dart';
+import 'package:brie/ui/components/user_auth.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,17 +51,18 @@ class SettingsView extends HookConsumerWidget {
         useTextEditingController(text: settings.downloadFolder);
     final torrentsFolder =
         useTextEditingController(text: settings.torrentsFolder);
+    // user stuff
     final username = useTextEditingController(text: settings.username);
     final password = useTextEditingController(text: settings.password);
     final userID = useTextEditingController(text: settings.userID.toString());
     final groupID = useTextEditingController(text: settings.groupID.toString());
+    // torrent stuff
+    final clientType = useState(settings.torrentName);
+    final torrentProtocol = useState(settings.torrentProtocol);
     final torrentHost = useTextEditingController(text: settings.torrentHost);
-    final clientType = useTextEditingController(text: settings.torrentName);
+    final torrentUser = useTextEditingController(text: settings.torrentUser);
     final torrentPassword =
         useTextEditingController(text: settings.torrentPassword);
-    final torrentProtocol =
-        useTextEditingController(text: settings.torrentProtocol);
-    final torrentUser = useTextEditingController(text: settings.torrentUser);
 
     return SingleChildScrollView(
       child: Padding(
@@ -113,33 +116,32 @@ class SettingsView extends HookConsumerWidget {
               'Download Check timeout (In minutes)',
               downloadCheckTimeout,
             ),
-            Text('Torrent Client', style: headerStyle),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Divider(thickness: 4),
             ),
-            createDropDown(
-              ["transmission", "qbit"],
-              clientType,
-              "Torrent Client Type",
+            TorrentClientInput(
+              torrentUsername: torrentUser,
+              torrentPassword: torrentPassword,
+              torrentProtocol: torrentProtocol,
+              torrentUrl: torrentHost,
+              torrentClientType: clientType,
             ),
-            createDropDown(
-              ["http", "https"],
-              torrentProtocol,
-              "Torrent Client Protocol",
-            ),
-            createUpdateButtons('Torrent Host', torrentHost),
-            createUpdateButtons('Torrent Username', torrentUser),
-            createUpdateButtons('Torrent Password', torrentPassword),
-            Text('User Settings', style: headerStyle),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Divider(thickness: 4),
             ),
-            createUpdateButtons('Username', username),
-            createUpdateButtons('Password', password),
-            createUpdateButtons('Linux UID', userID),
-            createUpdateButtons('Linux GID', groupID),
+            UserAuth(
+              username: username,
+              password: password,
+              showLinuxPermissions: true,
+              linuxGID: groupID,
+              linuxUID: userID,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Divider(thickness: 4),
+            ),
             Text('Folder Settings', style: headerStyle),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
@@ -153,7 +155,7 @@ class SettingsView extends HookConsumerWidget {
               child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      await ref.watch(settingsApiProvider).update(
+                      await ref.read(settingsApiProvider).update(
                             Settings(
                               apiKey: apiKey.text,
                               serverPort: serverPort.text,
@@ -167,9 +169,9 @@ class SettingsView extends HookConsumerWidget {
                               userID: int.parse(userID.text),
                               groupID: int.parse(groupID.text),
                               torrentHost: torrentHost.text,
-                              torrentName: clientType.text,
+                              torrentName: clientType.value,
                               torrentPassword: torrentPassword.text,
-                              torrentProtocol: torrentProtocol.text,
+                              torrentProtocol: torrentProtocol.value,
                               torrentUser: torrentUser.text,
                             ),
                           );
@@ -188,57 +190,6 @@ class SettingsView extends HookConsumerWidget {
                   child: Text('Update Settings')),
             )
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget createDropDown(
-    List<String> options,
-    TextEditingController controller,
-    String label,
-  ) {
-    final selectedIndex = options.indexOf(controller.text);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Text(label),
-          SizedBox(width: 20),
-          DropdownMenu<String>(
-            initialSelection: options[selectedIndex == -1 ? 0 : selectedIndex],
-            onSelected: (String? value) =>
-                controller.text = value ?? options.first,
-            dropdownMenuEntries:
-                options.map<DropdownMenuEntry<String>>((String value) {
-              return DropdownMenuEntry<String>(
-                value: value,
-                label: value,
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget createUpdateButtons(
-    String input,
-    TextEditingController controller, {
-    void Function()? editingController,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: SizedBox(
-        // width: maxSettingsWidth,
-        child: TextField(
-          controller: controller,
-          onEditingComplete: editingController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: input,
-          ),
         ),
       ),
     );

@@ -22,7 +22,7 @@ class SettingsApi {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to update config: ${response.statusCode}');
+      throw Exception('Failed to update config: ${response.statusCode}\nMessage: ${response.data}');
     }
   }
 

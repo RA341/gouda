@@ -33,7 +33,6 @@ final requestHistoryProvider =
   return RequestHistoryNotifier();
 });
 
-// The public methods on this class will be what allow the UI to modify the state.
 class RequestHistoryNotifier extends AsyncNotifier<List<Book>> {
   var limit = 20;
   var offset = 0;
