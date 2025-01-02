@@ -2,10 +2,13 @@ package api
 
 import (
 	"fmt"
+	"github.com/RA341/gouda/download_clients"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
+	"gorm.io/gorm"
 	"net/http"
 	"os"
 	"strconv"
@@ -13,6 +16,30 @@ import (
 
 func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) {
 	group := r.Group("/history")
+
+	group.POST("/search", func(c *gin.Context) {
+		var query models.RequestTorrent
+		if err := c.BindJSON(&query); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		var torrents []models.RequestTorrent
+
+		dbQuery := api.Database.
+			Order("created_at desc").
+			Offset(0).
+			Limit(10)
+		dbQuery = buildSearchQuery(query, dbQuery)
+
+		dbQuery.Find(&torrents)
+		if dbQuery.Error != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": dbQuery.Error.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, &torrents)
+	})
 
 	group.GET("/all", func(c *gin.Context) {
 		limit := 20 // default limit
@@ -163,8 +190,18 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) {
 
 	group.POST("/addTorrent", func(c *gin.Context) {
 		if api.DownloadClient == nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Download client is not setup"})
-			return
+			client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
+				User:     viper.GetString("torrent_client.user"),
+				Password: viper.GetString("torrent_client.password"),
+				Protocol: viper.GetString("torrent_client.protocol"),
+				Host:     viper.GetString("torrent_client.host"),
+				Type:     viper.GetString("torrent_client.name"),
+			})
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"unable to connect to download client": err.Error()})
+				return
+			}
+			api.DownloadClient = client
 		}
 
 		var req models.RequestTorrent
@@ -193,6 +230,38 @@ func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) {
 
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
+}
+
+func buildSearchQuery(search models.RequestTorrent, query *gorm.DB) *gorm.DB {
+	// String fields use LIKE for partial matches
+	if search.Author != "" {
+		query = query.Where("LOWER(author) LIKE LOWER(?)", "%"+search.Author+"%")
+	}
+	if search.Book != "" {
+		query = query.Where("LOWER(book) LIKE LOWER(?)", "%"+search.Book+"%")
+	}
+	if search.Series != "" {
+		query = query.Where("LOWER(series) LIKE LOWER(?)", "%"+search.Series+"%")
+	}
+	if search.Category != "" {
+		query = query.Where("LOWER(category) LIKE LOWER(?)", "%"+search.Category+"%")
+	}
+	if search.Status != "" {
+		query = query.Where("LOWER(status) LIKE LOWER(?)", "%"+search.Status+"%")
+	}
+	if search.TorrentId != "" {
+		query = query.Where("LOWER(torrent_id) LIKE LOWER(?)", "%"+search.TorrentId+"%")
+	}
+
+	// Numeric fields use exact matches
+	if search.SeriesNumber != 0 {
+		query = query.Where("series_number = ?", search.SeriesNumber)
+	}
+	if search.MAMBookID != 0 {
+		query = query.Where("mam_book_id = ?", search.MAMBookID)
+	}
+
+	return query
 }
 
 func (api *Env) countRecords() (int64, error) {
