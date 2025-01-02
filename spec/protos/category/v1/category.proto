@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package category.v1;
+
+option go_package = "github.com/RA341/gouda/generated/category/v1";
+
+service CategoryService {
+  rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse) {}
+  rpc AddCategories(AddCategoriesRequest) returns (AddCategoriesResponse) {}
+  rpc DeleteCategories(DelCategoriesRequest) returns (DelCategoriesResponse) {}
+}
+
+message ListCategoriesRequest {}
+
+message ListCategoriesResponse{
+  repeated Category categories = 1;
+}
+
+message AddCategoriesRequest {
+  string category = 1;
+}
+
+message AddCategoriesResponse {}
+
+
+message DelCategoriesRequest {
+  Category category = 1;
+}
+
+message DelCategoriesResponse {}
+
+message Category {
+  int64 ID = 1;
+  string category = 2;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "github.com/RA341/gouda/generated/auth/v1";
+
+service AuthService {
+  rpc LoadPlugin(AuthRequest) returns (AuthResponse) {}
+}
+
+message AuthRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string authToken = 1;
+}
+

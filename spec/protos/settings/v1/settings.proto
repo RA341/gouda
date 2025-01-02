@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package settings.v1;
+
+option go_package = "github.com/RA341/gouda/generated/settings/v1";
+
+service SettingsService {
+  rpc UpdateSettings(Settings) returns (UpdateSettingsResponse) {}
+  rpc ListSettings(ListSettingsResponse) returns (Settings) {}
+}
+
+message UpdateSettingsResponse {}
+
+message ListSettingsResponse {}
+
+message Settings {
+  // General settings
+  string api_key = 1;
+  string server_port = 2;
+  int32 download_check_timeout = 3;
+
+  // Folder settings
+  string complete_folder = 4;
+  string download_folder = 5;
+  string torrents_folder = 6;
+
+  // User settings
+  string username = 7;
+  string password = 8;
+  int32 user_uid = 9;
+  int32 group_uid = 10;
+
+  // Torrent settings
+  string torrent_host = 11;
+  string torrent_name = 12;
+  string torrent_password = 13;
+  string torrent_protocol = 14;
+  string torrent_user = 15;
+}

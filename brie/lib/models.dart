@@ -163,69 +163,87 @@ class Settings {
 }
 
 class Book {
-  final int id;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int? id;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final DateTime? deletedAt;
-  final String fileLink;
-  final String author;
-  final String book;
-  final String category;
-  final int mamBookId;
+  final String? fileLink;
+  final String? author;
+  final String? book;
+  final String? series;
+  final int? seriesNumber;
+  final String? category;
+  final int? mamBookId;
   final String status;
-  final String torrentId;
+  final String? torrentId;
+  final int? timeRunning;
+  final String? torrentFileLocation;
 
   Book({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
     this.deletedAt,
-    required this.fileLink,
-    required this.author,
-    required this.book,
-    required this.category,
-    required this.mamBookId,
-    required this.status,
-    required this.torrentId,
+    this.fileLink,
+    this.author,
+    this.book,
+    this.series,
+    this.seriesNumber,
+    this.category,
+    this.mamBookId,
+    this.status = '',
+    this.torrentId,
+    this.timeRunning,
+    this.torrentFileLocation,
   });
 
-  // From JSON
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
-      id: json['ID'] as int,
-      createdAt: DateTime.parse(json['CreatedAt'] as String),
-      updatedAt: DateTime.parse(json['UpdatedAt'] as String),
-      deletedAt: json['DeletedAt'] != null
-          ? DateTime.parse(json['DeletedAt'] as String)
+      id: json['id'] as int?,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
           : null,
-      fileLink: json['file_link'] as String,
-      author: json['author'] as String,
-      book: json['book'] as String,
-      category: json['category'] as String,
-      mamBookId: json['mam_book_id'] as int,
-      status: json['status'] as String,
-      torrentId: json['torrent_id'] as String,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
+      deletedAt: json['deleted_at'] != null
+          ? DateTime.parse(json['deleted_at'] as String)
+          : null,
+      fileLink: json['file_link'] as String?,
+      author: json['author'] as String?,
+      book: json['book'] as String?,
+      series: json['series'] as String?,
+      seriesNumber: json['series_number'] as int?,
+      category: json['category'] as String?,
+      mamBookId: json['mam_book_id'] as int?,
+      status: json['status'] as String? ?? "",
+      torrentId: json['torrent_id'] as String?,
+      timeRunning: json['time_running'] as int?,
+      torrentFileLocation: json['torrent_file_loc'] as String?,
     );
   }
 
-  // To JSON
   Map<String, dynamic> toJson() {
     return {
-      'ID': id,
-      'CreatedAt': createdAt.toIso8601String(),
-      'UpdatedAt': updatedAt.toIso8601String(),
-      'DeletedAt': deletedAt?.toIso8601String(),
+      'id': id,
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
+      'deleted_at': deletedAt?.toIso8601String(),
       'file_link': fileLink,
       'author': author,
       'book': book,
+      'series': series,
+      'series_number': seriesNumber,
       'category': category,
       'mam_book_id': mamBookId,
       'status': status,
       'torrent_id': torrentId,
+      'time_running': timeRunning,
+      'torrent_file_loc': torrentFileLocation,
     };
   }
 
-  // Copy with method for immutability
+  // Optional: Add copyWith method for immutability support
   Book copyWith({
     int? id,
     DateTime? createdAt,
@@ -234,10 +252,14 @@ class Book {
     String? fileLink,
     String? author,
     String? book,
+    String? series,
+    int? seriesNumber,
     String? category,
     int? mamBookId,
     String? status,
     String? torrentId,
+    int? timeRunning,
+    String? torrentFileLocation,
   }) {
     return Book(
       id: id ?? this.id,
@@ -247,10 +269,14 @@ class Book {
       fileLink: fileLink ?? this.fileLink,
       author: author ?? this.author,
       book: book ?? this.book,
+      series: series ?? this.series,
+      seriesNumber: seriesNumber ?? this.seriesNumber,
       category: category ?? this.category,
       mamBookId: mamBookId ?? this.mamBookId,
       status: status ?? this.status,
       torrentId: torrentId ?? this.torrentId,
+      timeRunning: timeRunning ?? this.timeRunning,
+      torrentFileLocation: torrentFileLocation ?? this.torrentFileLocation,
     );
   }
 }
