@@ -17,7 +17,7 @@ final basePathProvider = Provider<String>((ref) {
 
   final finalPath = basePath ??
       (kDebugMode
-          ? (dotenv.maybeGet('PROD_URL') ?? 'https://gdev.dumbapps.org/')
+          ? (dotenv.maybeGet('PROD_URL') ?? 'http://localhost:9862')
           : html.window.location.toString());
 
   print('Base path is: $finalPath');

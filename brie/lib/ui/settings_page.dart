@@ -1,10 +1,14 @@
+import 'package:brie/clients/settings_api.dart';
+import 'package:brie/config.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/utils.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:protobuf/protobuf.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -119,12 +123,12 @@ class SettingsView extends HookConsumerWidget {
               child: Divider(thickness: 4),
             ),
             createDropDown(
-              ["transmission", "qbit"],
+              supportedClients,
               clientType,
               "Torrent Client Type",
             ),
             createDropDown(
-              ["http", "https"],
+              supportedProtocols,
               torrentProtocol,
               "Torrent Client Protocol",
             ),
@@ -153,26 +157,27 @@ class SettingsView extends HookConsumerWidget {
               child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      // await ref.watch(settingsApiProvider).update(
-                      //       Settings(
-                      //         apiKey: apiKey.text,
-                      //         serverPort: serverPort.text,
-                      //         downloadCheckTimeout:
-                      //             int.parse(downloadCheckTimeout.text),
-                      //         completeFolder: completeFolder.text,
-                      //         downloadFolder: downloadFolder.text,
-                      //         torrentsFolder: torrentsFolder.text,
-                      //         username: username.text,
-                      //         password: password.text,
-                      //         userID: int.parse(userID.text),
-                      //         groupID: int.parse(groupID.text),
-                      //         torrentHost: torrentHost.text,
-                      //         torrentName: clientType.text,
-                      //         torrentPassword: torrentPassword.text,
-                      //         torrentProtocol: torrentProtocol.text,
-                      //         torrentUser: torrentUser.text,
-                      //       ),
-                      //     );
+                      await ref
+                          .watch(settingsApiProvider)
+                          .update(settings.rebuild(
+                            (settings) => settings
+                              ..apiKey = apiKey.text
+                              ..serverPort = serverPort.text
+                              ..downloadCheckTimeout =
+                                  Int64.parseInt(downloadCheckTimeout.text)
+                              ..completeFolder = completeFolder.text
+                              ..downloadFolder = downloadFolder.text
+                              ..torrentsFolder = torrentsFolder.text
+                              ..username = username.text
+                              ..password = password.text
+                              ..userUid = Int64.parseInt(userID.text)
+                              ..groupUid = Int64.parseInt(groupID.text)
+                              ..torrentHost = torrentHost.text
+                              ..torrentName = clientType.text
+                              ..torrentPassword = torrentPassword.text
+                              ..torrentProtocol = torrentProtocol.text
+                              ..torrentUser = torrentUser.text,
+                          ));
 
                       ref.invalidate(settingsProvider);
                     } catch (e) {

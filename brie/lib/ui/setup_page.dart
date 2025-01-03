@@ -1,4 +1,4 @@
-import 'package:brie/api/settings_api.dart';
+import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/torrent_client.dart';
@@ -7,6 +7,7 @@ import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:protobuf/protobuf.dart';
 
 class SetupPage extends HookConsumerWidget {
   const SetupPage({super.key});
@@ -85,17 +86,16 @@ class SetupPage extends HookConsumerWidget {
                         final currSettings =
                             await ref.read(settingsProvider.future);
 
-                        await ref
-                            .read(settingsApiProvider)
-                            .update(currSettings.copyWith(
-                              username: username.text,
-                              password: password.text,
-                              torrentName: torrentClientType.value,
-                              torrentHost: torrentUrl.text,
-                              torrentProtocol: torrentProtocol.value,
-                              torrentUser: torrentUsername.text,
-                              torrentPassword: torrentPassword.text,
-                            ));
+                        await ref.read(settingsApiProvider).update(
+                              currSettings.rebuild((newSettings) => newSettings
+                                ..username = username.text
+                                ..password = password.text
+                                ..torrentName = torrentClientType.value
+                                ..torrentHost = torrentUrl.text
+                                ..torrentProtocol = torrentProtocol.value
+                                ..torrentUser = torrentUsername.text
+                                ..torrentPassword = torrentPassword.text),
+                            );
 
                         ref.invalidate(settingsProvider);
                       } catch (e) {
