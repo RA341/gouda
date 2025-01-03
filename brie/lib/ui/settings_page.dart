@@ -1,4 +1,4 @@
-import 'package:brie/models.dart';
+import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +50,9 @@ class SettingsView extends HookConsumerWidget {
         useTextEditingController(text: settings.torrentsFolder);
     final username = useTextEditingController(text: settings.username);
     final password = useTextEditingController(text: settings.password);
-    final userID = useTextEditingController(text: settings.userID.toString());
-    final groupID = useTextEditingController(text: settings.groupID.toString());
+    final userID = useTextEditingController(text: settings.userUid.toString());
+    final groupID =
+        useTextEditingController(text: settings.groupUid.toString());
     final torrentHost = useTextEditingController(text: settings.torrentHost);
     final clientType = useTextEditingController(text: settings.torrentName);
     final torrentPassword =

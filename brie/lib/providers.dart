@@ -1,12 +1,12 @@
 import 'package:brie/clients/auth_api.dart';
 import 'package:brie/clients/category_api.dart';
 import 'package:brie/clients/history_api.dart';
+import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/category/v1/category.pb.dart';
 import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
+import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'models.dart';
 
 final checkTokenProvider = FutureProvider<bool>((ref) async {
   final token = ref.watch(apiTokenProvider);
@@ -16,28 +16,13 @@ final checkTokenProvider = FutureProvider<bool>((ref) async {
 
 final pageIndexListProvider = StateProvider<int>((ref) {
   ref.watch(checkTokenProvider);
-  return 1;
+  return 0;
 });
 
-final settingsProvider = FutureProvider<Settings>((ref) async {
-  // final settingsApi = ref.watch(settingsApiProvider);
-  // return await settingsApi.list();
-  return Settings(
-      apiKey: 'apiKey',
-      serverPort: 'serverPort',
-      downloadCheckTimeout: 1,
-      completeFolder: 'completeFolder',
-      downloadFolder: 'downloadFolder',
-      torrentsFolder: 'torrentsFolder',
-      username: 'username',
-      password: 'password',
-      userID: 1,
-      groupID: 1,
-      torrentHost: 'torrentHost',
-      torrentName: 'torrentName',
-      torrentPassword: 'torrentPassword',
-      torrentProtocol: 'torrentProtocol',
-      torrentUser: 'torrentUser');
+final settingsProvider = FutureProvider< Settings>((ref) async {
+  final settingsApi = ref.watch(settingsApiProvider);
+
+  return await settingsApi.list();
 });
 
 final categoryListProvider = FutureProvider<List<Category>>((ref) async {
