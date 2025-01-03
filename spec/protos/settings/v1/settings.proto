@@ -17,7 +17,7 @@ message Settings {
   // General settings
   string api_key = 1;
   string server_port = 2;
-  int32 download_check_timeout = 3;
+  uint64 download_check_timeout = 3;
 
   // Folder settings
   string complete_folder = 4;
@@ -27,8 +27,8 @@ message Settings {
   // User settings
   string username = 7;
   string password = 8;
-  int32 user_uid = 9;
-  int32 group_uid = 10;
+  uint64 user_uid = 9;
+  uint64 group_uid = 10;
 
   // Torrent settings
   string torrent_host = 11;

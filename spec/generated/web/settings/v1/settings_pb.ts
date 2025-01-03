@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3 } from "@bufbuild/protobuf";
+import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
 
 /**
  * @generated from message settings.v1.UpdateSettingsResponse
@@ -85,9 +85,9 @@ export class Settings extends Message<Settings> {
   serverPort = "";
 
   /**
-   * @generated from field: int32 download_check_timeout = 3;
+   * @generated from field: uint64 download_check_timeout = 3;
    */
-  downloadCheckTimeout = 0;
+  downloadCheckTimeout = protoInt64.zero;
 
   /**
    * Folder settings
@@ -119,14 +119,14 @@ export class Settings extends Message<Settings> {
   password = "";
 
   /**
-   * @generated from field: int32 user_uid = 9;
+   * @generated from field: uint64 user_uid = 9;
    */
-  userUid = 0;
+  userUid = protoInt64.zero;
 
   /**
-   * @generated from field: int32 group_uid = 10;
+   * @generated from field: uint64 group_uid = 10;
    */
-  groupUid = 0;
+  groupUid = protoInt64.zero;
 
   /**
    * Torrent settings
@@ -165,14 +165,14 @@ export class Settings extends Message<Settings> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "api_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "server_port", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "download_check_timeout", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 3, name: "download_check_timeout", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 4, name: "complete_folder", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "download_folder", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 6, name: "torrents_folder", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 7, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 8, name: "password", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 9, name: "user_uid", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 10, name: "group_uid", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 9, name: "user_uid", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 10, name: "group_uid", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 11, name: "torrent_host", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 12, name: "torrent_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 13, name: "torrent_password", kind: "scalar", T: 9 /* ScalarType.STRING */ },

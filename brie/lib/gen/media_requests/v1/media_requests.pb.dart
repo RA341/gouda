@@ -553,12 +553,21 @@ class RetryRequest extends $pb.GeneratedMessage {
 }
 
 class RetryResponse extends $pb.GeneratedMessage {
-  factory RetryResponse() => create();
+  factory RetryResponse({
+    Media? media,
+  }) {
+    final $result = create();
+    if (media != null) {
+      $result.media = media;
+    }
+    return $result;
+  }
   RetryResponse._() : super();
   factory RetryResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RetryResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RetryResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'media_requests.v1'), createEmptyInstance: create)
+    ..aOM<Media>(1, _omitFieldNames ? '' : 'media', subBuilder: Media.create)
     ..hasRequiredFields = false
   ;
 
@@ -582,6 +591,17 @@ class RetryResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static RetryResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RetryResponse>(create);
   static RetryResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Media get media => $_getN(0);
+  @$pb.TagNumber(1)
+  set media(Media v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMedia() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMedia() => clearField(1);
+  @$pb.TagNumber(1)
+  Media ensureMedia() => $_ensure(0);
 }
 
 class AddMediaRequest extends $pb.GeneratedMessage {

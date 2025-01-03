@@ -1,235 +1,183 @@
 package api
 
 import (
+	"connectrpc.com/connect"
+	"context"
 	"fmt"
 	"github.com/RA341/gouda/download_clients"
+	v1 "github.com/RA341/gouda/generated/media_requests/v1"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
-	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
-	"net/http"
 	"os"
-	"strconv"
 )
 
-func (api *Env) SetupHistoryEndpoints(r *gin.RouterGroup) {
-	group := r.Group("/history")
+type MediaRequestService struct {
+	api *Env
+}
 
-	group.POST("/search", func(c *gin.Context) {
-		var query models.RequestTorrent
-		if err := c.BindJSON(&query); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+func (mrSrv *MediaRequestService) Search(_ context.Context, req *connect.Request[v1.SearchRequest]) (*connect.Response[v1.SearchResponse], error) {
+	query := req.Msg.MediaQuery
+	log.Debug().Any("query", query).Msg("search request")
 
-		var torrents []models.RequestTorrent
+	dbQuery := mrSrv.api.Database.
+		Order("created_at desc").
+		Offset(0).
+		Limit(10)
 
-		dbQuery := api.Database.
-			Order("created_at desc").
-			Offset(0).
-			Limit(10)
-		dbQuery = buildSearchQuery(query, dbQuery)
+	dbQuery = buildSearchQuery(models.RequestTorrent{
+		FileLink:            query.FileLink,
+		Author:              query.Author,
+		Book:                query.Book,
+		Series:              query.Series,
+		SeriesNumber:        uint(query.SeriesNumber),
+		Category:            query.Category,
+		MAMBookID:           query.MamBookId,
+		Status:              query.Status,
+		TorrentId:           query.TorrentId,
+		TimeRunning:         uint(query.TimeRunning),
+		TorrentFileLocation: query.TorrentFileLocation,
+	}, dbQuery)
 
-		dbQuery.Find(&torrents)
-		if dbQuery.Error != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": dbQuery.Error.Error()})
-			return
-		}
+	var torrents []*models.RequestTorrent
+	res := dbQuery.Find(&torrents)
 
-		c.JSON(http.StatusOK, &torrents)
+	if res.Error != nil {
+		return nil, fmt.Errorf("unable to query database %v", dbQuery.Error.Error())
+	}
+
+	medias := convertToMedias(torrents)
+	results := connect.NewResponse(&v1.SearchResponse{Results: medias})
+	return results, nil
+}
+
+func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v1.ListRequest]) (*connect.Response[v1.ListResponse], error) {
+	limit := req.Msg.Limit
+	offset := req.Msg.Offset
+
+	log.Debug().Int("limit", int(limit)).Int("offset", int(offset)).Msg("history setup endpoints")
+
+	var torrents []*models.RequestTorrent
+
+	resp := mrSrv.api.Database.
+		Order("created_at desc").
+		Offset(int(offset)).
+		Limit(int(limit)).
+		Find(&torrents)
+
+	if resp.Error != nil {
+		return nil, fmt.Errorf("error retrieving torrent history %v", resp.Error.Error())
+	}
+
+	count, err := mrSrv.api.countRecords()
+	if err != nil {
+		return nil, fmt.Errorf("error counting torrent history %v", err.Error())
+	}
+
+	results := connect.NewResponse(&v1.ListResponse{
+		TotalRecords: uint64(count),
+		Results:      convertToMedias(torrents),
 	})
+	return results, nil
+}
 
-	group.GET("/all", func(c *gin.Context) {
-		limit := 20 // default limit
-		offset := 0 // default offset
+func (mrSrv *MediaRequestService) Delete(_ context.Context, req *connect.Request[v1.DeleteRequest]) (*connect.Response[v1.DeleteResponse], error) {
+	var torrent models.RequestTorrent
+	result := mrSrv.api.Database.First(&torrent, req.Msg.Media.ID)
+	if result.Error != nil {
+		return nil, fmt.Errorf("error getting item %v", result.Error.Error())
+	}
 
-		// Parse limit from query
-		if limitQuery := c.Query("limit"); limitQuery != "" {
-			parsedLimit, err := strconv.Atoi(limitQuery)
-			if err != nil || parsedLimit < 0 {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": "Invalid limit parameter",
-				})
-				return
-			}
-			limit = parsedLimit
-		}
+	resp := mrSrv.api.Database.Unscoped().Delete(&models.RequestTorrent{}, req.Msg.Media.ID)
+	if resp.Error != nil {
+		return nil, fmt.Errorf("error deleting request %v", resp.Error.Error())
+	}
 
-		// Parse offset from query
-		if offsetQuery := c.Query("offset"); offsetQuery != "" {
-			parsedOffset, err := strconv.Atoi(offsetQuery)
-			if err != nil || parsedOffset < 0 {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": "Invalid offset parameter",
-				})
-				return
-			}
-			offset = parsedOffset
-		}
+	err := os.Remove(torrent.TorrentFileLocation)
+	if err != nil {
+		return nil, fmt.Errorf("error deleting torrent file %v", resp.Error.Error())
+	}
 
-		log.Debug().Int("limit", limit).Int("offset", offset).Msg("history setup endpoints")
+	return connect.NewResponse(&v1.DeleteResponse{}), nil
+}
 
-		var torrents []models.RequestTorrent
+func (mrSrv *MediaRequestService) Edit(_ context.Context, req *connect.Request[v1.EditRequest]) (*connect.Response[v1.EditResponse], error) {
+	media := req.Msg.Media
 
-		resp := api.Database.
-			Order("created_at desc").
-			Offset(offset).
-			Limit(limit).
-			Find(&torrents)
+	result := mrSrv.api.Database.Save(convertToTorrentRequest(media))
+	if result.Error != nil {
+		return nil, fmt.Errorf("error editing torrent %v", result.Error.Error())
+	}
 
-		if resp.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error retrieving torrent history": resp.Error.Error()})
-			return
-		}
+	return connect.NewResponse(&v1.EditResponse{}), nil
+}
 
-		count, err := api.countRecords()
+func (mrSrv *MediaRequestService) Exists(_ context.Context, req *connect.Request[v1.ExistsRequest]) (*connect.Response[v1.ExistsResponse], error) {
+	mamID := req.Msg.MamId
+
+	var torrent models.RequestTorrent
+	resp := mrSrv.api.Database.Where("mam_book_id = ?", mamID).First(&torrent)
+	if resp.Error != nil {
+		return nil, fmt.Errorf("error retrieving torrent %v", resp.Error.Error())
+	}
+
+	return connect.NewResponse(&v1.ExistsResponse{Media: convertToMedia(&torrent)}), nil
+}
+
+func (mrSrv *MediaRequestService) Retry(_ context.Context, req *connect.Request[v1.RetryRequest]) (*connect.Response[v1.RetryResponse], error) {
+	mediaId := req.Msg.ID
+
+	var torrRequest models.RequestTorrent
+	resp := mrSrv.api.Database.First(&torrRequest, mediaId)
+	if resp.Error != nil {
+		return nil, fmt.Errorf("error retrieving torrent %v", resp.Error.Error())
+	}
+
+	err := service.AddTorrent((*models.Env)(mrSrv.api), &torrRequest, false)
+	if err != nil {
+		return nil, fmt.Errorf("error retrying torrent %v", err.Error())
+	}
+
+	return connect.NewResponse(&v1.RetryResponse{
+		Media: convertToMedia(&torrRequest),
+	}), nil
+}
+
+func (mrSrv *MediaRequestService) AddMedia(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
+	if mrSrv.api.DownloadClient == nil {
+		client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
+			User:     viper.GetString("torrent_client.user"),
+			Password: viper.GetString("torrent_client.password"),
+			Protocol: viper.GetString("torrent_client.protocol"),
+			Host:     viper.GetString("torrent_client.host"),
+			Type:     viper.GetString("torrent_client.name"),
+		})
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error unable to get record count": resp.Error.Error()})
-			return
+			return nil, fmt.Errorf("unable to connect to download client %v", err.Error())
+		}
+		mrSrv.api.DownloadClient = client
+	}
+
+	var torrent models.RequestTorrent
+	err := service.SaveTorrentReq(mrSrv.api.Database, &torrent)
+	if err != nil {
+		return nil, fmt.Errorf("unable to save torrent to DB %v", err.Error())
+	}
+
+	err = service.AddTorrent((*models.Env)(mrSrv.api), &torrent, true)
+	if err != nil {
+		torrent.Status = fmt.Sprintf("failed %s", err.Error())
+		res := mrSrv.api.Database.Save(&req)
+		if res.Error != nil {
+			log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
 		}
 
-		c.JSON(http.StatusOK, gin.H{"torrents": &torrents, "count": count})
-	})
+		return nil, fmt.Errorf("error adding torrent to DB %v", err.Error())
+	}
 
-	group.DELETE("/delete/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		if id == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error retrieving request ID": "Make sure to pass the Id in path param, for example: /retry/12"})
-			return
-		}
-
-		var torrent models.RequestTorrent
-		result := api.Database.First(&torrent, id)
-		if result.Error != nil {
-			// Handle error - record not found or other DB error
-			c.JSON(http.StatusInternalServerError, gin.H{"error getting item": result.Error.Error()})
-			return
-		}
-
-		resp := api.Database.Unscoped().Delete(&models.RequestTorrent{}, id)
-		if resp.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error deleting request": resp.Error.Error()})
-			return
-		}
-
-		err := os.Remove(torrent.TorrentFileLocation)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"Unable to delete the torrent file": resp.Error.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"deleted request": id})
-	})
-
-	group.POST("/edit", func(c *gin.Context) {
-		var req models.RequestTorrent
-		if err := c.BindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		if req.ID == 0 {
-			log.Warn().Msgf("Torrent ID is zero %v", req)
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Could not find item ID"})
-			return
-		}
-
-		var torrent models.RequestTorrent
-		result := api.Database.Save(&torrent)
-		if result.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error getting item": result.Error.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"Updated": req.ID})
-	})
-
-	group.GET("/exists/:mamId", func(c *gin.Context) {
-		id := c.Param("id")
-		if id == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error retrieving request ID": "Make sure to pass the Id in path param, for example: /retry/12"})
-			return
-		}
-
-		var torrRequest models.RequestTorrent
-
-		resp := api.Database.Where("mam_book_id = ?", id).First(&torrRequest)
-		if resp.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error retrieving request": resp.Error.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"Exists": torrRequest})
-	})
-
-	group.GET("/retry/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		if id == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error retrieving request ID": "Make sure to pass the Id in path param, for example: /retry/12"})
-			return
-		}
-
-		var torrRequest models.RequestTorrent
-
-		resp := api.Database.First(&torrRequest, id)
-		if resp.Error != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error retrieving request": resp.Error.Error()})
-			return
-		}
-
-		err := service.AddTorrent((*models.Env)(api), &torrRequest, false)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error retrying request": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"Success": "Added to retry"})
-	})
-
-	group.POST("/addTorrent", func(c *gin.Context) {
-		if api.DownloadClient == nil {
-			client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
-				User:     viper.GetString("torrent_client.user"),
-				Password: viper.GetString("torrent_client.password"),
-				Protocol: viper.GetString("torrent_client.protocol"),
-				Host:     viper.GetString("torrent_client.host"),
-				Type:     viper.GetString("torrent_client.name"),
-			})
-			if err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{"unable to connect to download client": err.Error()})
-				return
-			}
-			api.DownloadClient = client
-		}
-
-		var req models.RequestTorrent
-		if err := c.BindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		err := service.SaveTorrentReq(api.Database, &req)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"Unable to save info to database": err.Error()})
-			return
-		}
-
-		err = service.AddTorrent((*models.Env)(api), &req, true)
-		if err != nil {
-			req.Status = fmt.Sprintf("failed %s", err.Error())
-			res := api.Database.Save(&req)
-			if res.Error != nil {
-				log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
-			}
-
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"status": "success"})
-	})
+	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
 
 func buildSearchQuery(search models.RequestTorrent, query *gorm.DB) *gorm.DB {
@@ -272,4 +220,48 @@ func (api *Env) countRecords() (int64, error) {
 		return count, resp.Error
 	}
 	return count, nil
+}
+
+func convertToMedias(requests []*models.RequestTorrent) []*v1.Media {
+	var medias []*v1.Media
+
+	for _, torrent := range requests {
+		medias = append(medias, convertToMedia(torrent))
+	}
+
+	return medias
+}
+
+func convertToMedia(torrent *models.RequestTorrent) *v1.Media {
+	return &v1.Media{
+		ID:                  uint64(torrent.ID),
+		Author:              torrent.Author,
+		Book:                torrent.Book,
+		Series:              torrent.Series,
+		SeriesNumber:        uint32(torrent.SeriesNumber),
+		Category:            torrent.Category,
+		MamBookId:           torrent.MAMBookID,
+		FileLink:            torrent.FileLink,
+		Status:              torrent.Status,
+		TorrentId:           torrent.TorrentId,
+		TimeRunning:         uint32(torrent.TimeRunning),
+		TorrentFileLocation: torrent.TorrentFileLocation,
+	}
+}
+
+func convertToTorrentRequest(media *v1.Media) *models.RequestTorrent {
+	return &models.RequestTorrent{
+		Model:               gorm.Model{ID: uint(media.ID)},
+		FileLink:            media.FileLink,
+		Author:              media.Author,
+		Book:                media.Book,
+		Series:              media.Series,
+		SeriesNumber:        uint(media.SeriesNumber),
+		Category:            media.Category,
+		MAMBookID:           media.MamBookId,
+		Status:              media.Status,
+		TorrentId:           media.TorrentId,
+		TimeRunning:         uint(media.TimeRunning),
+		TorrentFileLocation: media.TorrentFileLocation,
+	}
 }

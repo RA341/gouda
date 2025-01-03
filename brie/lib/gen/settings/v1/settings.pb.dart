@@ -11,6 +11,7 @@
 
 import 'dart:core' as $core;
 
+import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class UpdateSettingsResponse extends $pb.GeneratedMessage {
@@ -81,14 +82,14 @@ class Settings extends $pb.GeneratedMessage {
   factory Settings({
     $core.String? apiKey,
     $core.String? serverPort,
-    $core.int? downloadCheckTimeout,
+    $fixnum.Int64? downloadCheckTimeout,
     $core.String? completeFolder,
     $core.String? downloadFolder,
     $core.String? torrentsFolder,
     $core.String? username,
     $core.String? password,
-    $core.int? userUid,
-    $core.int? groupUid,
+    $fixnum.Int64? userUid,
+    $fixnum.Int64? groupUid,
     $core.String? torrentHost,
     $core.String? torrentName,
     $core.String? torrentPassword,
@@ -150,14 +151,14 @@ class Settings extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Settings', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'apiKey')
     ..aOS(2, _omitFieldNames ? '' : 'serverPort')
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'downloadCheckTimeout', $pb.PbFieldType.O3)
+    ..a<$fixnum.Int64>(3, _omitFieldNames ? '' : 'downloadCheckTimeout', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOS(4, _omitFieldNames ? '' : 'completeFolder')
     ..aOS(5, _omitFieldNames ? '' : 'downloadFolder')
     ..aOS(6, _omitFieldNames ? '' : 'torrentsFolder')
     ..aOS(7, _omitFieldNames ? '' : 'username')
     ..aOS(8, _omitFieldNames ? '' : 'password')
-    ..a<$core.int>(9, _omitFieldNames ? '' : 'userUid', $pb.PbFieldType.O3)
-    ..a<$core.int>(10, _omitFieldNames ? '' : 'groupUid', $pb.PbFieldType.O3)
+    ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'userUid', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(10, _omitFieldNames ? '' : 'groupUid', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOS(11, _omitFieldNames ? '' : 'torrentHost')
     ..aOS(12, _omitFieldNames ? '' : 'torrentName')
     ..aOS(13, _omitFieldNames ? '' : 'torrentPassword')
@@ -207,9 +208,9 @@ class Settings extends $pb.GeneratedMessage {
   void clearServerPort() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.int get downloadCheckTimeout => $_getIZ(2);
+  $fixnum.Int64 get downloadCheckTimeout => $_getI64(2);
   @$pb.TagNumber(3)
-  set downloadCheckTimeout($core.int v) { $_setSignedInt32(2, v); }
+  set downloadCheckTimeout($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasDownloadCheckTimeout() => $_has(2);
   @$pb.TagNumber(3)
@@ -263,18 +264,18 @@ class Settings extends $pb.GeneratedMessage {
   void clearPassword() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.int get userUid => $_getIZ(8);
+  $fixnum.Int64 get userUid => $_getI64(8);
   @$pb.TagNumber(9)
-  set userUid($core.int v) { $_setSignedInt32(8, v); }
+  set userUid($fixnum.Int64 v) { $_setInt64(8, v); }
   @$pb.TagNumber(9)
   $core.bool hasUserUid() => $_has(8);
   @$pb.TagNumber(9)
   void clearUserUid() => clearField(9);
 
   @$pb.TagNumber(10)
-  $core.int get groupUid => $_getIZ(9);
+  $fixnum.Int64 get groupUid => $_getI64(9);
   @$pb.TagNumber(10)
-  set groupUid($core.int v) { $_setSignedInt32(9, v); }
+  set groupUid($fixnum.Int64 v) { $_setInt64(9, v); }
   @$pb.TagNumber(10)
   $core.bool hasGroupUid() => $_has(9);
   @$pb.TagNumber(10)

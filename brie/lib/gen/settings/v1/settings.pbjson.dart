@@ -37,14 +37,14 @@ const Settings$json = {
   '2': [
     {'1': 'api_key', '3': 1, '4': 1, '5': 9, '10': 'apiKey'},
     {'1': 'server_port', '3': 2, '4': 1, '5': 9, '10': 'serverPort'},
-    {'1': 'download_check_timeout', '3': 3, '4': 1, '5': 5, '10': 'downloadCheckTimeout'},
+    {'1': 'download_check_timeout', '3': 3, '4': 1, '5': 4, '10': 'downloadCheckTimeout'},
     {'1': 'complete_folder', '3': 4, '4': 1, '5': 9, '10': 'completeFolder'},
     {'1': 'download_folder', '3': 5, '4': 1, '5': 9, '10': 'downloadFolder'},
     {'1': 'torrents_folder', '3': 6, '4': 1, '5': 9, '10': 'torrentsFolder'},
     {'1': 'username', '3': 7, '4': 1, '5': 9, '10': 'username'},
     {'1': 'password', '3': 8, '4': 1, '5': 9, '10': 'password'},
-    {'1': 'user_uid', '3': 9, '4': 1, '5': 5, '10': 'userUid'},
-    {'1': 'group_uid', '3': 10, '4': 1, '5': 5, '10': 'groupUid'},
+    {'1': 'user_uid', '3': 9, '4': 1, '5': 4, '10': 'userUid'},
+    {'1': 'group_uid', '3': 10, '4': 1, '5': 4, '10': 'groupUid'},
     {'1': 'torrent_host', '3': 11, '4': 1, '5': 9, '10': 'torrentHost'},
     {'1': 'torrent_name', '3': 12, '4': 1, '5': 9, '10': 'torrentName'},
     {'1': 'torrent_password', '3': 13, '4': 1, '5': 9, '10': 'torrentPassword'},
@@ -56,12 +56,12 @@ const Settings$json = {
 /// Descriptor for `Settings`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List settingsDescriptor = $convert.base64Decode(
     'CghTZXR0aW5ncxIXCgdhcGlfa2V5GAEgASgJUgZhcGlLZXkSHwoLc2VydmVyX3BvcnQYAiABKA'
-    'lSCnNlcnZlclBvcnQSNAoWZG93bmxvYWRfY2hlY2tfdGltZW91dBgDIAEoBVIUZG93bmxvYWRD'
+    'lSCnNlcnZlclBvcnQSNAoWZG93bmxvYWRfY2hlY2tfdGltZW91dBgDIAEoBFIUZG93bmxvYWRD'
     'aGVja1RpbWVvdXQSJwoPY29tcGxldGVfZm9sZGVyGAQgASgJUg5jb21wbGV0ZUZvbGRlchInCg'
     '9kb3dubG9hZF9mb2xkZXIYBSABKAlSDmRvd25sb2FkRm9sZGVyEicKD3RvcnJlbnRzX2ZvbGRl'
     'chgGIAEoCVIOdG9ycmVudHNGb2xkZXISGgoIdXNlcm5hbWUYByABKAlSCHVzZXJuYW1lEhoKCH'
-    'Bhc3N3b3JkGAggASgJUghwYXNzd29yZBIZCgh1c2VyX3VpZBgJIAEoBVIHdXNlclVpZBIbCgln'
-    'cm91cF91aWQYCiABKAVSCGdyb3VwVWlkEiEKDHRvcnJlbnRfaG9zdBgLIAEoCVILdG9ycmVudE'
+    'Bhc3N3b3JkGAggASgJUghwYXNzd29yZBIZCgh1c2VyX3VpZBgJIAEoBFIHdXNlclVpZBIbCgln'
+    'cm91cF91aWQYCiABKARSCGdyb3VwVWlkEiEKDHRvcnJlbnRfaG9zdBgLIAEoCVILdG9ycmVudE'
     'hvc3QSIQoMdG9ycmVudF9uYW1lGAwgASgJUgt0b3JyZW50TmFtZRIpChB0b3JyZW50X3Bhc3N3'
     'b3JkGA0gASgJUg90b3JyZW50UGFzc3dvcmQSKQoQdG9ycmVudF9wcm90b2NvbBgOIAEoCVIPdG'
     '9ycmVudFByb3RvY29sEiEKDHRvcnJlbnRfdXNlchgPIAEoCVILdG9ycmVudFVzZXI=');

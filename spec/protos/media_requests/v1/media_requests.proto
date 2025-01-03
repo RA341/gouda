@@ -50,7 +50,9 @@ message ExistsResponse {
 message RetryRequest {
   uint64 ID = 1;
 }
-message RetryResponse {}
+message RetryResponse {
+  Media media = 1;
+}
 
 message AddMediaRequest {
   Media media = 1;

@@ -151,11 +151,15 @@ final $typed_data.Uint8List retryRequestDescriptor = $convert.base64Decode(
 @$core.Deprecated('Use retryResponseDescriptor instead')
 const RetryResponse$json = {
   '1': 'RetryResponse',
+  '2': [
+    {'1': 'media', '3': 1, '4': 1, '5': 11, '6': '.media_requests.v1.Media', '10': 'media'},
+  ],
 };
 
 /// Descriptor for `RetryResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List retryResponseDescriptor = $convert.base64Decode(
-    'Cg1SZXRyeVJlc3BvbnNl');
+    'Cg1SZXRyeVJlc3BvbnNlEi4KBW1lZGlhGAEgASgLMhgubWVkaWFfcmVxdWVzdHMudjEuTWVkaW'
+    'FSBW1lZGlh');
 
 @$core.Deprecated('Use addMediaRequestDescriptor instead')
 const AddMediaRequest$json = {

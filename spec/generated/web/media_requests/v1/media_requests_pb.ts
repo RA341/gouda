@@ -417,6 +417,11 @@ export class RetryRequest extends Message<RetryRequest> {
  * @generated from message media_requests.v1.RetryResponse
  */
 export class RetryResponse extends Message<RetryResponse> {
+  /**
+   * @generated from field: media_requests.v1.Media media = 1;
+   */
+  media?: Media;
+
   constructor(data?: PartialMessage<RetryResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -425,6 +430,7 @@ export class RetryResponse extends Message<RetryResponse> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "media_requests.v1.RetryResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "media", kind: "message", T: Media },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RetryResponse {

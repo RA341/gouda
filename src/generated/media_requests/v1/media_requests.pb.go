@@ -506,6 +506,7 @@ func (x *RetryRequest) GetID() uint64 {
 
 type RetryResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Media         *Media                 `protobuf:"bytes,1,opt,name=media,proto3" json:"media,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -538,6 +539,13 @@ func (x *RetryResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RetryResponse.ProtoReflect.Descriptor instead.
 func (*RetryResponse) Descriptor() ([]byte, []int) {
 	return file_media_requests_v1_media_requests_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *RetryResponse) GetMedia() *Media {
+	if x != nil {
+		return x.Media
+	}
+	return nil
 }
 
 type AddMediaRequest struct {
@@ -796,8 +804,11 @@ var file_media_requests_v1_media_requests_proto_rawDesc = []byte{
 	0x64, 0x69, 0x61, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x76, 0x31, 0x2e,
 	0x4d, 0x65, 0x64, 0x69, 0x61, 0x52, 0x05, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x22, 0x1e, 0x0a, 0x0c,
 	0x52, 0x65, 0x74, 0x72, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02,
-	0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x49, 0x44, 0x22, 0x0f, 0x0a, 0x0d,
-	0x52, 0x65, 0x74, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x41, 0x0a,
+	0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x49, 0x44, 0x22, 0x3f, 0x0a, 0x0d,
+	0x52, 0x65, 0x74, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2e, 0x0a,
+	0x05, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x6d,
+	0x65, 0x64, 0x69, 0x61, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x65, 0x64, 0x69, 0x61, 0x52, 0x05, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x22, 0x41, 0x0a,
 	0x0f, 0x41, 0x64, 0x64, 0x4d, 0x65, 0x64, 0x69, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x12, 0x2e, 0x0a, 0x05, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
 	0x18, 0x2e, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x73,
@@ -914,26 +925,27 @@ var file_media_requests_v1_media_requests_proto_depIdxs = []int32{
 	14, // 3: media_requests.v1.DeleteRequest.media:type_name -> media_requests.v1.Media
 	14, // 4: media_requests.v1.EditRequest.media:type_name -> media_requests.v1.Media
 	14, // 5: media_requests.v1.ExistsResponse.media:type_name -> media_requests.v1.Media
-	14, // 6: media_requests.v1.AddMediaRequest.media:type_name -> media_requests.v1.Media
-	0,  // 7: media_requests.v1.MediaRequestService.Search:input_type -> media_requests.v1.SearchRequest
-	2,  // 8: media_requests.v1.MediaRequestService.List:input_type -> media_requests.v1.ListRequest
-	4,  // 9: media_requests.v1.MediaRequestService.Delete:input_type -> media_requests.v1.DeleteRequest
-	6,  // 10: media_requests.v1.MediaRequestService.Edit:input_type -> media_requests.v1.EditRequest
-	8,  // 11: media_requests.v1.MediaRequestService.Exists:input_type -> media_requests.v1.ExistsRequest
-	10, // 12: media_requests.v1.MediaRequestService.Retry:input_type -> media_requests.v1.RetryRequest
-	12, // 13: media_requests.v1.MediaRequestService.AddMedia:input_type -> media_requests.v1.AddMediaRequest
-	1,  // 14: media_requests.v1.MediaRequestService.Search:output_type -> media_requests.v1.SearchResponse
-	3,  // 15: media_requests.v1.MediaRequestService.List:output_type -> media_requests.v1.ListResponse
-	5,  // 16: media_requests.v1.MediaRequestService.Delete:output_type -> media_requests.v1.DeleteResponse
-	7,  // 17: media_requests.v1.MediaRequestService.Edit:output_type -> media_requests.v1.EditResponse
-	9,  // 18: media_requests.v1.MediaRequestService.Exists:output_type -> media_requests.v1.ExistsResponse
-	11, // 19: media_requests.v1.MediaRequestService.Retry:output_type -> media_requests.v1.RetryResponse
-	13, // 20: media_requests.v1.MediaRequestService.AddMedia:output_type -> media_requests.v1.AddMediaResponse
-	14, // [14:21] is the sub-list for method output_type
-	7,  // [7:14] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	14, // 6: media_requests.v1.RetryResponse.media:type_name -> media_requests.v1.Media
+	14, // 7: media_requests.v1.AddMediaRequest.media:type_name -> media_requests.v1.Media
+	0,  // 8: media_requests.v1.MediaRequestService.Search:input_type -> media_requests.v1.SearchRequest
+	2,  // 9: media_requests.v1.MediaRequestService.List:input_type -> media_requests.v1.ListRequest
+	4,  // 10: media_requests.v1.MediaRequestService.Delete:input_type -> media_requests.v1.DeleteRequest
+	6,  // 11: media_requests.v1.MediaRequestService.Edit:input_type -> media_requests.v1.EditRequest
+	8,  // 12: media_requests.v1.MediaRequestService.Exists:input_type -> media_requests.v1.ExistsRequest
+	10, // 13: media_requests.v1.MediaRequestService.Retry:input_type -> media_requests.v1.RetryRequest
+	12, // 14: media_requests.v1.MediaRequestService.AddMedia:input_type -> media_requests.v1.AddMediaRequest
+	1,  // 15: media_requests.v1.MediaRequestService.Search:output_type -> media_requests.v1.SearchResponse
+	3,  // 16: media_requests.v1.MediaRequestService.List:output_type -> media_requests.v1.ListResponse
+	5,  // 17: media_requests.v1.MediaRequestService.Delete:output_type -> media_requests.v1.DeleteResponse
+	7,  // 18: media_requests.v1.MediaRequestService.Edit:output_type -> media_requests.v1.EditResponse
+	9,  // 19: media_requests.v1.MediaRequestService.Exists:output_type -> media_requests.v1.ExistsResponse
+	11, // 20: media_requests.v1.MediaRequestService.Retry:output_type -> media_requests.v1.RetryResponse
+	13, // 21: media_requests.v1.MediaRequestService.AddMedia:output_type -> media_requests.v1.AddMediaResponse
+	15, // [15:22] is the sub-list for method output_type
+	8,  // [8:15] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_media_requests_v1_media_requests_proto_init() }
