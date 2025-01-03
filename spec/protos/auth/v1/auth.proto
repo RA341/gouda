@@ -5,7 +5,9 @@ package auth.v1;
 option go_package = "github.com/RA341/gouda/generated/auth/v1";
 
 service AuthService {
-  rpc LoadPlugin(AuthRequest) returns (AuthResponse) {}
+  rpc Authenticate(AuthRequest) returns (AuthResponse) {}
+  rpc Test(AuthResponse) returns (TestResponse) {}
+
 }
 
 message AuthRequest {
@@ -17,3 +19,4 @@ message AuthResponse {
   string authToken = 1;
 }
 
+message TestResponse {}

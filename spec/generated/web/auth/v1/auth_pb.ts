@@ -86,3 +86,34 @@ export class AuthResponse extends Message<AuthResponse> {
   }
 }
 
+/**
+ * @generated from message auth.v1.TestResponse
+ */
+export class TestResponse extends Message<TestResponse> {
+  constructor(data?: PartialMessage<TestResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "auth.v1.TestResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TestResponse {
+    return new TestResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TestResponse {
+    return new TestResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TestResponse {
+    return new TestResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: TestResponse | PlainMessage<TestResponse> | undefined, b: TestResponse | PlainMessage<TestResponse> | undefined): boolean {
+    return proto3.util.equals(TestResponse, a, b);
+  }
+}
+

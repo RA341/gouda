@@ -215,7 +215,7 @@ export class DelCategoriesResponse extends Message<DelCategoriesResponse> {
  */
 export class Category extends Message<Category> {
   /**
-   * @generated from field: int64 ID = 1;
+   * @generated from field: uint64 ID = 1;
    */
   ID = protoInt64.zero;
 
@@ -232,7 +232,7 @@ export class Category extends Message<Category> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "category.v1.Category";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "ID", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 1, name: "ID", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 2, name: "category", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 

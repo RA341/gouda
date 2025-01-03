@@ -22,11 +22,3 @@ build:
 bpsh:
 	make build
 	make push
-
-#remove-dir dir:
-#    #!/usr/bin/env sh
-#    {{if os_family() == "windows"}}
-#        rd /s /q "{{dir}}" 2>NUL || exit 0
-#    {{else}}
-#        rm -rf "{{dir}}"
-#    {{endif}}

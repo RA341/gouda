@@ -82,12 +82,12 @@ final $typed_data.Uint8List delCategoriesResponseDescriptor = $convert.base64Dec
 const Category$json = {
   '1': 'Category',
   '2': [
-    {'1': 'ID', '3': 1, '4': 1, '5': 3, '10': 'ID'},
+    {'1': 'ID', '3': 1, '4': 1, '5': 4, '10': 'ID'},
     {'1': 'category', '3': 2, '4': 1, '5': 9, '10': 'category'},
   ],
 };
 
 /// Descriptor for `Category`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List categoryDescriptor = $convert.base64Decode(
-    'CghDYXRlZ29yeRIOCgJJRBgBIAEoA1ICSUQSGgoIY2F0ZWdvcnkYAiABKAlSCGNhdGVnb3J5');
+    'CghDYXRlZ29yeRIOCgJJRBgBIAEoBFICSUQSGgoIY2F0ZWdvcnkYAiABKAlSCGNhdGVnb3J5');
 

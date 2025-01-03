@@ -275,7 +275,7 @@ class Category extends $pb.GeneratedMessage {
   factory Category.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Category', package: const $pb.PackageName(_omitMessageNames ? '' : 'category.v1'), createEmptyInstance: create)
-    ..aInt64(1, _omitFieldNames ? '' : 'ID', protoName: 'ID')
+    ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'ID', $pb.PbFieldType.OU6, protoName: 'ID', defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOS(2, _omitFieldNames ? '' : 'category')
     ..hasRequiredFields = false
   ;

@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/RA341/gouda/api"
 	"github.com/RA341/gouda/download_clients"
+	grpc "github.com/RA341/gouda/grpc"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"net/http"
 	"os"
@@ -60,7 +59,7 @@ func main() {
 		log.Fatal().Err(err).Msgf("Failed to start database")
 	}
 
-	apiContext := api.Env{Database: db}
+	apiContext := grpc.Env{Database: db}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {
@@ -80,38 +79,30 @@ func main() {
 		}
 	}
 
-	// api setup
-	apiServer := gin.Default()
+	getRouter := grpc.SetupGRPCEndpoints(&apiContext)
 
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
-	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
-	apiServer.Use(cors.New(corsConfig))
-
-	if os.Getenv("IS_DOCKER") == "true" {
-		apiServer.Use(static.Serve("/", static.LocalFile("./web", false)))
-	} else {
-		log.Info().Msgf("Frontend is served from brie/build/web")
-		apiServer.Use(static.Serve("/", static.LocalFile("./brie/build/web", false)))
-	}
-
-	apiServer.HEAD("/", func(context *gin.Context) {
-		context.Status(http.StatusOK)
-	})
-
-	// This way, /api/auth/* endpoints will be accessible without authentication,
-	// while all other /api/* endpoints will require authentication.
-	api.SetupAuthRouter(apiServer.Group("/api"))
-	protectedApiRoutes := apiServer.Group("/api")
-	protectedApiRoutes.Use(api.AuthMiddleware())
-	apiContext.SetupTorrentClientEndpoints(protectedApiRoutes)
-	apiContext.SetupCategoryEndpoints(protectedApiRoutes)
-	apiContext.SetupHistoryEndpoints(protectedApiRoutes)
-	apiContext.SetupSettingsEndpoints(protectedApiRoutes)
+	frontendDir := getFrontendDir()
+	getRouter.Handle("/", frontendDir)
 
 	port := viper.GetString("server.port")
-	err = apiServer.Run(fmt.Sprintf(":%s", port))
+	baseUrl := fmt.Sprintf(":%s", port)
+	log.Info().Str("Listening on:", baseUrl).Msg("")
+
+	err = http.ListenAndServe(
+		baseUrl,
+		// Use h2c so we can serve HTTP/2 without TLS.
+		h2c.NewHandler(getRouter, &http2.Server{}),
+	)
 	if err != nil {
-		log.Error().Err(err).Msgf("Failed to start server")
+		log.Fatal().Err(err).Msgf("Failed to start server")
+	}
+}
+
+func getFrontendDir() http.Handler {
+	if os.Getenv("IS_DOCKER") == "true" {
+		return http.FileServer(http.Dir("./web"))
+	} else {
+		log.Info().Msgf("Frontend is served from brie/build/web")
+		return http.FileServer(http.Dir("./brie/build/web"))
 	}
 }

@@ -127,6 +127,38 @@ class AuthResponse extends $pb.GeneratedMessage {
   void clearAuthToken() => clearField(1);
 }
 
+class TestResponse extends $pb.GeneratedMessage {
+  factory TestResponse() => create();
+  TestResponse._() : super();
+  factory TestResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TestResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TestResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  TestResponse clone() => TestResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  TestResponse copyWith(void Function(TestResponse) updates) => super.copyWith((message) => updates(message as TestResponse)) as TestResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static TestResponse create() => TestResponse._();
+  TestResponse createEmptyInstance() => create();
+  static $pb.PbList<TestResponse> createRepeated() => $pb.PbList<TestResponse>();
+  @$core.pragma('dart2js:noInline')
+  static TestResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TestResponse>(create);
+  static TestResponse? _defaultInstance;
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

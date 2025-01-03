@@ -30,6 +30,6 @@ message DelCategoriesRequest {
 message DelCategoriesResponse {}
 
 message Category {
-  int64 ID = 1;
+  uint64 ID = 1;
   string category = 2;
 }

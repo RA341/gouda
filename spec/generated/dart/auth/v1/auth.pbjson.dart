@@ -39,3 +39,12 @@ const AuthResponse$json = {
 final $typed_data.Uint8List authResponseDescriptor = $convert.base64Decode(
     'CgxBdXRoUmVzcG9uc2USHAoJYXV0aFRva2VuGAEgASgJUglhdXRoVG9rZW4=');
 
+@$core.Deprecated('Use testResponseDescriptor instead')
+const TestResponse$json = {
+  '1': 'TestResponse',
+};
+
+/// Descriptor for `TestResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List testResponseDescriptor = $convert.base64Decode(
+    'CgxUZXN0UmVzcG9uc2U=');
+

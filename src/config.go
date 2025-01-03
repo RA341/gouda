@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/RA341/gouda/api"
+	"github.com/RA341/gouda/service"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
@@ -48,7 +48,7 @@ func InitConfig() error {
 	viper.SetDefault("db_path", fmt.Sprintf("%s/gouda_database.db", configDir))
 
 	// set apikey
-	key, err := api.GenerateToken(32)
+	key, err := service.GenerateToken(32)
 	if err != nil {
 		log.Fatal().Msgf("Failed to create api key")
 	}
