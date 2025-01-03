@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:brie/api/history_api.dart';
 import 'package:brie/models.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/utils.dart';
@@ -146,9 +145,10 @@ class HistoryView extends ConsumerWidget {
                             IconButton(
                               onPressed: () async {
                                 try {
-                                  await ref
-                                      .watch(historyApiProvider)
-                                      .retryBookRequest(request.id.toString());
+                                  // todo
+                                  // await ref
+                                  //     .watch(historyApiProvider)
+                                  //     .retryBookRequest(request.id.toString());
                                 } catch (e) {
                                   if (!context.mounted) return;
                                   showErrorDialog(
@@ -165,9 +165,10 @@ class HistoryView extends ConsumerWidget {
                             IconButton(
                               onPressed: () async {
                                 try {
-                                  await ref
-                                      .watch(historyApiProvider)
-                                      .deleteBookRequest(request.id.toString());
+                                  // todo
+                                  // await ref
+                                  //     .watch(historyApiProvider)
+                                  //     .deleteBookRequest(request.id.toString());
                                   ref.invalidate(requestHistoryProvider);
                                 } catch (e) {
                                   if (!context.mounted) return;

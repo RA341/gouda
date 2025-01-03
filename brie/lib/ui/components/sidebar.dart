@@ -1,5 +1,5 @@
-import 'package:brie/api/api.dart';
 import 'package:brie/config.dart';
+import 'package:brie/grpc/api.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

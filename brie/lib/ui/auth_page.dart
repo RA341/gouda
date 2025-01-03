@@ -1,5 +1,5 @@
-import 'package:brie/api/api.dart';
-import 'package:brie/api/auth_api.dart';
+import 'package:brie/grpc/api.dart';
+import 'package:brie/grpc/auth_api.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

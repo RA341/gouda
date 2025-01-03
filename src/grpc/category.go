@@ -38,7 +38,7 @@ func (catSrv *CategoryServer) AddCategories(_ context.Context, req *connect.Requ
 		return nil, fmt.Errorf("error creating category: %v", err.Error())
 	}
 
-	return nil, nil
+	return connect.NewResponse(&v1.AddCategoriesResponse{}), nil
 }
 func (catSrv *CategoryServer) DeleteCategories(_ context.Context, req *connect.Request[v1.DelCategoriesRequest]) (*connect.Response[v1.DelCategoriesResponse], error) {
 	err := service.DeleteCategory(catSrv.api.Database, &models.Categories{
@@ -49,5 +49,5 @@ func (catSrv *CategoryServer) DeleteCategories(_ context.Context, req *connect.R
 		return nil, fmt.Errorf("error deleting category: %v", err.Error())
 	}
 
-	return nil, nil
+	return connect.NewResponse(&v1.DelCategoriesResponse{}), nil
 }

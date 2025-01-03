@@ -1,10 +1,8 @@
-# This is a example docker compose file that can be used in your setup
+# This is an example docker compose file that can be used in your setup
 services:
   gouda:
     container_name: gouda
     image: ras334/gouda:latest
-    build:
-      context: .
     ports:
       - "9862:9862"
     environment:

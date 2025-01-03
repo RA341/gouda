@@ -8,7 +8,7 @@ import (
 
 func CreateCategory(db *gorm.DB, category string) error {
 	input := models.Categories{Category: category}
-	result := db.Create(input)
+	result := db.Create(&input)
 	if result.Error != nil {
 		return result.Error
 	}

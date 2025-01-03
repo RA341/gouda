@@ -4,9 +4,23 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 gen:
     just build
     docker run --rm -v "{{justfile_directory()}}:/workspace" gouda-proto:latest
+    just go
+    just dart
+
+go:
+    clear
+    echo 'moving go files'
     rm -r ../src/generated/*
     cp -r generated/go/* ../src/generated/
     rm -r generated/go
+
+dart:
+    clear
+    echo 'moving dart files'
+    rm -r ../brie/lib/gen/*
+    cp -r generated/dart/* ../brie/lib/gen/
+    rm -r generated/dart
+
 
 # drop into a shell and interact with the image
 # CTRL+D to exit

@@ -1,8 +1,10 @@
-import 'package:brie/api/category_api.dart';
+import 'package:brie/gen/category/v1/category.pb.dart';
+import 'package:brie/grpc/category_api.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:grpc/grpc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CategoryPage extends HookConsumerWidget {
@@ -38,12 +40,25 @@ class CategoryPage extends HookConsumerWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         try {
+                          if (addCategories.text.isEmpty) {
+                            throw Exception('Empty category');
+                          }
+
                           await ref
                               .watch(catProvider)
                               .addCategory(addCategories.text.trim());
                           addCategories.clear();
+                        } on GrpcError catch (e) {
+                          if (!context.mounted) return;
+                          showErrorDialog(
+                            context,
+                            'Error adding category',
+                            'You may have tried to add a category that already exists',
+                            e.message.toString(),
+                          );
                         } catch (e) {
-                          print(e);
+                          print(
+                              'An  error occurred while adding category ${e.toString()}');
                           if (!context.mounted) return;
                           showErrorDialog(
                             context,
@@ -81,7 +96,7 @@ class CategoryPage extends HookConsumerWidget {
 class CategoriesView extends ConsumerWidget {
   const CategoriesView(this.categories, {super.key});
 
-  final List<(String, int)> categories;
+  final List<Category> categories;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,27 +109,27 @@ class CategoriesView extends ConsumerWidget {
         child: ListView.builder(
           itemCount: categories.length,
           itemBuilder: (context, index) {
-            final (catName, catId) = categories[index];
+            final cat = categories[index];
 
             return SizedBox(
               width: 300,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Card(
-                  key: ValueKey(catName),
+                  key: ValueKey(cat.category),
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(catName),
+                        Text(cat.category),
                         Padding(
                           padding: EdgeInsets.only(right: 40),
                           child: Text(
                             downloadPath == null
                                 ? ""
-                                : 'Complete path:  $downloadPath/$catName',
+                                : 'Complete path:  $downloadPath/${cat.category}',
                             style: TextStyle(color: Colors.green),
                           ),
                         )
@@ -123,9 +138,7 @@ class CategoriesView extends ConsumerWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
-                        await ref
-                            .watch(catProvider)
-                            .deleteCategory(catId, catName);
+                        await ref.watch(catProvider).deleteCategory(cat);
                         ref.invalidate(categoryListProvider);
                       },
                     ),

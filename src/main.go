@@ -6,12 +6,15 @@ import (
 	grpc "github.com/RA341/gouda/grpc"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
+	"github.com/rs/cors"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"gopkg.in/natefinch/lumberjack.v2"
+
+	connectcors "connectrpc.com/cors"
 	"net/http"
 	"os"
 )
@@ -88,10 +91,17 @@ func main() {
 	baseUrl := fmt.Sprintf(":%s", port)
 	log.Info().Str("Listening on:", baseUrl).Msg("")
 
+	middleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: connectcors.AllowedMethods(),
+		AllowedHeaders: append(connectcors.AllowedHeaders(), "Authorization"),
+		ExposedHeaders: connectcors.ExposedHeaders(),
+	})
+
 	err = http.ListenAndServe(
 		baseUrl,
 		// Use h2c so we can serve HTTP/2 without TLS.
-		h2c.NewHandler(getRouter, &http2.Server{}),
+		middleware.Handler(h2c.NewHandler(getRouter, &http2.Server{})),
 	)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to start server")

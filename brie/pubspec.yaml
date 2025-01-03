@@ -18,12 +18,14 @@ dependencies:
   universal_html: ^2.2.4
   flutter_hooks: ^0.20.5
   hooks_riverpod: ^2.6.1
-  shared_preferences: ^2.3.4
+  shared_preferences: ^2.3.5
   flutter_animate: ^4.5.2
   timeago: ^3.7.0
   url_launcher:
   dio: ^5.7.0
   flutter_dotenv:
+  grpc: ^4.0.1
+  protobuf: ^3.1.0
 
 dev_dependencies:
   custom_lint:
