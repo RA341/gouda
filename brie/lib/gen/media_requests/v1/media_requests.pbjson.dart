@@ -71,14 +71,13 @@ final $typed_data.Uint8List listResponseDescriptor = $convert.base64Decode(
 const DeleteRequest$json = {
   '1': 'DeleteRequest',
   '2': [
-    {'1': 'media', '3': 1, '4': 1, '5': 11, '6': '.media_requests.v1.Media', '10': 'media'},
+    {'1': 'requestId', '3': 1, '4': 1, '5': 4, '10': 'requestId'},
   ],
 };
 
 /// Descriptor for `DeleteRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List deleteRequestDescriptor = $convert.base64Decode(
-    'Cg1EZWxldGVSZXF1ZXN0Ei4KBW1lZGlhGAEgASgLMhgubWVkaWFfcmVxdWVzdHMudjEuTWVkaW'
-    'FSBW1lZGlh');
+    'Cg1EZWxldGVSZXF1ZXN0EhwKCXJlcXVlc3RJZBgBIAEoBFIJcmVxdWVzdElk');
 
 @$core.Deprecated('Use deleteResponseDescriptor instead')
 const DeleteResponse$json = {
@@ -199,6 +198,7 @@ const Media$json = {
     {'1': 'torrent_id', '3': 9, '4': 1, '5': 9, '10': 'torrentId'},
     {'1': 'time_running', '3': 10, '4': 1, '5': 13, '10': 'timeRunning'},
     {'1': 'torrent_file_location', '3': 11, '4': 1, '5': 9, '10': 'torrentFileLocation'},
+    {'1': 'createdAt', '3': 13, '4': 1, '5': 9, '10': 'createdAt'},
   ],
 };
 
@@ -210,5 +210,6 @@ final $typed_data.Uint8List mediaDescriptor = $convert.base64Decode(
     '9rX2lkGAcgASgEUgltYW1Cb29rSWQSGwoJZmlsZV9saW5rGAwgASgJUghmaWxlTGluaxIWCgZz'
     'dGF0dXMYCCABKAlSBnN0YXR1cxIdCgp0b3JyZW50X2lkGAkgASgJUgl0b3JyZW50SWQSIQoMdG'
     'ltZV9ydW5uaW5nGAogASgNUgt0aW1lUnVubmluZxIyChV0b3JyZW50X2ZpbGVfbG9jYXRpb24Y'
-    'CyABKAlSE3RvcnJlbnRGaWxlTG9jYXRpb24=');
+    'CyABKAlSE3RvcnJlbnRGaWxlTG9jYXRpb24SHAoJY3JlYXRlZEF0GA0gASgJUgljcmVhdGVkQX'
+    'Q=');
 

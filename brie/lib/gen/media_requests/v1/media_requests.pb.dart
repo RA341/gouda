@@ -234,11 +234,11 @@ class ListResponse extends $pb.GeneratedMessage {
 
 class DeleteRequest extends $pb.GeneratedMessage {
   factory DeleteRequest({
-    Media? media,
+    $fixnum.Int64? requestId,
   }) {
     final $result = create();
-    if (media != null) {
-      $result.media = media;
+    if (requestId != null) {
+      $result.requestId = requestId;
     }
     return $result;
   }
@@ -247,7 +247,7 @@ class DeleteRequest extends $pb.GeneratedMessage {
   factory DeleteRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'media_requests.v1'), createEmptyInstance: create)
-    ..aOM<Media>(1, _omitFieldNames ? '' : 'media', subBuilder: Media.create)
+    ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU6, protoName: 'requestId', defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
 
@@ -273,15 +273,13 @@ class DeleteRequest extends $pb.GeneratedMessage {
   static DeleteRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  Media get media => $_getN(0);
+  $fixnum.Int64 get requestId => $_getI64(0);
   @$pb.TagNumber(1)
-  set media(Media v) { setField(1, v); }
+  set requestId($fixnum.Int64 v) { $_setInt64(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasMedia() => $_has(0);
+  $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearMedia() => clearField(1);
-  @$pb.TagNumber(1)
-  Media ensureMedia() => $_ensure(0);
+  void clearRequestId() => clearField(1);
 }
 
 class DeleteResponse extends $pb.GeneratedMessage {
@@ -702,6 +700,7 @@ class Media extends $pb.GeneratedMessage {
     $core.int? timeRunning,
     $core.String? torrentFileLocation,
     $core.String? fileLink,
+    $core.String? createdAt,
   }) {
     final $result = create();
     if (iD != null) {
@@ -740,6 +739,9 @@ class Media extends $pb.GeneratedMessage {
     if (fileLink != null) {
       $result.fileLink = fileLink;
     }
+    if (createdAt != null) {
+      $result.createdAt = createdAt;
+    }
     return $result;
   }
   Media._() : super();
@@ -759,6 +761,7 @@ class Media extends $pb.GeneratedMessage {
     ..a<$core.int>(10, _omitFieldNames ? '' : 'timeRunning', $pb.PbFieldType.OU3)
     ..aOS(11, _omitFieldNames ? '' : 'torrentFileLocation')
     ..aOS(12, _omitFieldNames ? '' : 'fileLink')
+    ..aOS(13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')
     ..hasRequiredFields = false
   ;
 
@@ -890,6 +893,15 @@ class Media extends $pb.GeneratedMessage {
   $core.bool hasFileLink() => $_has(11);
   @$pb.TagNumber(12)
   void clearFileLink() => clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.String get createdAt => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set createdAt($core.String v) { $_setString(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasCreatedAt() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearCreatedAt() => clearField(13);
 }
 
 

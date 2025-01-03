@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:brie/models.dart';
+import 'package:brie/clients/history_api.dart';
+import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:brie/utils.dart';
@@ -85,7 +86,7 @@ class HistoryView extends ConsumerWidget {
     super.key,
   });
 
-  final List<Book> requestHistory;
+  final List<Media> requestHistory;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -127,7 +128,7 @@ class HistoryView extends ConsumerWidget {
                             makeText(
                                 'Download location: ${settings?.completeFolder}/${request.category}'),
                             makeText(
-                                'Added: ${timeago.format(request.createdAt ?? DateTime(1900))}'),
+                                'Added: ${timeago.format(DateTime.parse(request.createdAt))}'),
                             TextButton(
                               onPressed: () async {
                                 final url = Uri.parse(mamUrl);
@@ -145,10 +146,9 @@ class HistoryView extends ConsumerWidget {
                             IconButton(
                               onPressed: () async {
                                 try {
-                                  // todo
-                                  // await ref
-                                  //     .watch(historyApiProvider)
-                                  //     .retryBookRequest(request.id.toString());
+                                  await ref
+                                      .watch(historyApiProvider)
+                                      .retryBookRequest(request.iD);
                                 } catch (e) {
                                   if (!context.mounted) return;
                                   showErrorDialog(
@@ -165,10 +165,9 @@ class HistoryView extends ConsumerWidget {
                             IconButton(
                               onPressed: () async {
                                 try {
-                                  // todo
-                                  // await ref
-                                  //     .watch(historyApiProvider)
-                                  //     .deleteBookRequest(request.id.toString());
+                                  await ref
+                                      .watch(historyApiProvider)
+                                      .deleteBookRequest(request.iD);
                                   ref.invalidate(requestHistoryProvider);
                                 } catch (e) {
                                   if (!context.mounted) return;

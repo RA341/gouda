@@ -22,8 +22,8 @@ message SearchResponse {
 }
 
 message ListRequest {
-   uint64 limit = 1;
-   uint64 offset = 2;
+  uint64 limit = 1;
+  uint64 offset = 2;
 }
 message ListResponse {
   uint64 totalRecords = 2;
@@ -31,7 +31,7 @@ message ListResponse {
 }
 
 message DeleteRequest {
-  Media media = 1;
+  uint64 requestId = 1;
 }
 message DeleteResponse {}
 
@@ -44,7 +44,7 @@ message ExistsRequest {
   uint64 mamId = 1;
 }
 message ExistsResponse {
-   Media media = 1;
+  Media media = 1;
 }
 
 message RetryRequest {
@@ -61,7 +61,7 @@ message AddMediaResponse {}
 
 
 message Media {
-   uint64 ID = 1;
+  uint64 ID = 1;
   string author = 2;
   string book = 3;
   string series = 4;
@@ -69,8 +69,9 @@ message Media {
   string category = 6;
   uint64 mam_book_id = 7;
   string file_link = 12;
-   string status = 8;
-   string torrent_id = 9;
-   uint32 time_running = 10;
-   string torrent_file_location = 11;
+  string status = 8;
+  string torrent_id = 9;
+  uint32 time_running = 10;
+  string torrent_file_location = 11;
+  string createdAt = 13;
 }

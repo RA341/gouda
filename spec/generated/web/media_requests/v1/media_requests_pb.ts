@@ -171,9 +171,9 @@ export class ListResponse extends Message<ListResponse> {
  */
 export class DeleteRequest extends Message<DeleteRequest> {
   /**
-   * @generated from field: media_requests.v1.Media media = 1;
+   * @generated from field: uint64 requestId = 1;
    */
-  media?: Media;
+  requestId = protoInt64.zero;
 
   constructor(data?: PartialMessage<DeleteRequest>) {
     super();
@@ -183,7 +183,7 @@ export class DeleteRequest extends Message<DeleteRequest> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "media_requests.v1.DeleteRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "media", kind: "message", T: Media },
+    { no: 1, name: "requestId", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeleteRequest {
@@ -582,6 +582,11 @@ export class Media extends Message<Media> {
    */
   torrentFileLocation = "";
 
+  /**
+   * @generated from field: string createdAt = 13;
+   */
+  createdAt = "";
+
   constructor(data?: PartialMessage<Media>) {
     super();
     proto3.util.initPartial(data, this);
@@ -602,6 +607,7 @@ export class Media extends Message<Media> {
     { no: 9, name: "torrent_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 10, name: "time_running", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 11, name: "torrent_file_location", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "createdAt", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Media {

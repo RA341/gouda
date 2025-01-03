@@ -39,25 +39,6 @@ final authInterceptorProvider = Provider<AuthInterceptor>((ref) {
   return AuthInterceptor(token);
 });
 
-// (ClientChannel?, GrpcWebClientChannel?) setupClientChannel(String basePath) {
-//   final split = basePath.split(':');
-//
-//   if (kIsWeb) {
-//     final webChannel = GrpcWebClientChannel.xhr(Uri.parse(basePath));
-//     return (null, webChannel);
-//   }
-//
-//   final channel = ClientChannel(
-//     split[0],
-//     port: int.parse(split[1]),
-//     options: const ChannelOptions(
-//       credentials: ChannelCredentials.insecure(),
-//     ),
-//   );
-//
-//   return (channel, null);
-// }
-
 class AuthInterceptor implements ClientInterceptor {
   final String authToken;
 

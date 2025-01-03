@@ -1,5 +1,5 @@
+import 'package:brie/clients/category_api.dart';
 import 'package:brie/gen/category/v1/category.pb.dart';
-import 'package:brie/grpc/category_api.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/material.dart';

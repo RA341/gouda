@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"os"
+	"time"
 )
 
 type MediaRequestService struct {
@@ -85,12 +86,12 @@ func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v
 
 func (mrSrv *MediaRequestService) Delete(_ context.Context, req *connect.Request[v1.DeleteRequest]) (*connect.Response[v1.DeleteResponse], error) {
 	var torrent models.RequestTorrent
-	result := mrSrv.api.Database.First(&torrent, req.Msg.Media.ID)
+	result := mrSrv.api.Database.First(&torrent, req.Msg.RequestId)
 	if result.Error != nil {
 		return nil, fmt.Errorf("error getting item %v", result.Error.Error())
 	}
 
-	resp := mrSrv.api.Database.Unscoped().Delete(&models.RequestTorrent{}, req.Msg.Media.ID)
+	resp := mrSrv.api.Database.Unscoped().Delete(&models.RequestTorrent{}, req.Msg.RequestId)
 	if resp.Error != nil {
 		return nil, fmt.Errorf("error deleting request %v", resp.Error.Error())
 	}
@@ -246,7 +247,9 @@ func convertToMedia(torrent *models.RequestTorrent) *v1.Media {
 		TorrentId:           torrent.TorrentId,
 		TimeRunning:         uint32(torrent.TimeRunning),
 		TorrentFileLocation: torrent.TorrentFileLocation,
+		CreatedAt:           torrent.CreatedAt.Format(time.RFC3339),
 	}
+
 }
 
 func convertToTorrentRequest(media *v1.Media) *models.RequestTorrent {
