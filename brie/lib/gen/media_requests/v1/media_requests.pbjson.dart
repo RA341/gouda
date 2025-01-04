@@ -17,14 +17,13 @@ import 'dart:typed_data' as $typed_data;
 const SearchRequest$json = {
   '1': 'SearchRequest',
   '2': [
-    {'1': 'mediaQuery', '3': 1, '4': 1, '5': 11, '6': '.media_requests.v1.Media', '10': 'mediaQuery'},
+    {'1': 'mediaQuery', '3': 1, '4': 1, '5': 9, '10': 'mediaQuery'},
   ],
 };
 
 /// Descriptor for `SearchRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List searchRequestDescriptor = $convert.base64Decode(
-    'Cg1TZWFyY2hSZXF1ZXN0EjgKCm1lZGlhUXVlcnkYASABKAsyGC5tZWRpYV9yZXF1ZXN0cy52MS'
-    '5NZWRpYVIKbWVkaWFRdWVyeQ==');
+    'Cg1TZWFyY2hSZXF1ZXN0Eh4KCm1lZGlhUXVlcnkYASABKAlSCm1lZGlhUXVlcnk=');
 
 @$core.Deprecated('Use searchResponseDescriptor instead')
 const SearchResponse$json = {

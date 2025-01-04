@@ -11,14 +11,59 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
-class HistoryPage extends ConsumerStatefulWidget {
+class HistoryPage extends HookConsumerWidget {
   const HistoryPage({super.key});
 
   @override
-  ConsumerState createState() => _HistoryPageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final search = useTextEditingController();
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: SearchBar(
+            controller: search,
+            hintText: 'Search media',
+            onSubmitted: (value) async {
+              ref.read(searchProvider.notifier).state = value;
+              ref.read(requestHistoryProvider.notifier).fetchData();
+            },
+            trailing: [
+              IconButton(
+                onPressed: () {
+                  ref.read(searchProvider.notifier).state = search.text;
+                  ref.read(requestHistoryProvider.notifier).fetchData();
+                },
+                icon: Icon(Icons.search),
+              ),
+              ref.watch(searchProvider).isNotEmpty
+                  ? IconButton(
+                      onPressed: () {
+                        search.clear();
+                        ref.invalidate(searchProvider);
+                        ref.read(requestHistoryProvider.notifier).fetchData();
+                      },
+                      icon: Icon(Icons.clear),
+                    )
+                  : SizedBox(),
+            ],
+          ),
+        ),
+        Expanded(child: ResultViewPage()),
+      ],
+    );
+  }
 }
 
-class _HistoryPageState extends ConsumerState<HistoryPage> {
+class ResultViewPage extends ConsumerStatefulWidget {
+  const ResultViewPage({super.key});
+
+  @override
+  ConsumerState createState() => _ResultViewPageState();
+}
+
+class _ResultViewPageState extends ConsumerState<ResultViewPage> {
   Timer? timer;
 
   @override
@@ -80,7 +125,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
   }
 }
 
-class HistoryView extends ConsumerWidget {
+class HistoryView extends HookConsumerWidget {
   const HistoryView({
     required this.requestHistory,
     super.key,
@@ -190,7 +235,7 @@ class HistoryView extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: 20),
-              PaginationActions()
+              if (ref.watch(searchProvider).isEmpty) PaginationActions()
             ],
           );
   }

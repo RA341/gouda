@@ -39,6 +39,10 @@ class HistoryApi {
     );
   }
 
+  Future<List<Media>> searchMedia(String query) async {
+    return (await apiClient.search(SearchRequest(mediaQuery: query))).results;
+  }
+
   Future<void> deleteBookRequest(Int64 reqId) async {
     await apiClient.delete(DeleteRequest(requestId: reqId));
   }

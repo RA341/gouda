@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -28,19 +29,7 @@ func (mrSrv *MediaRequestService) Search(_ context.Context, req *connect.Request
 		Offset(0).
 		Limit(10)
 
-	dbQuery = buildSearchQuery(models.RequestTorrent{
-		FileLink:            query.FileLink,
-		Author:              query.Author,
-		Book:                query.Book,
-		Series:              query.Series,
-		SeriesNumber:        uint(query.SeriesNumber),
-		Category:            query.Category,
-		MAMBookID:           query.MamBookId,
-		Status:              query.Status,
-		TorrentId:           query.TorrentId,
-		TimeRunning:         uint(query.TimeRunning),
-		TorrentFileLocation: query.TorrentFileLocation,
-	}, dbQuery)
+	dbQuery = buildSearchQuery(query, dbQuery)
 
 	var torrents []*models.RequestTorrent
 	res := dbQuery.Find(&torrents)
@@ -181,33 +170,20 @@ func (mrSrv *MediaRequestService) AddMedia(_ context.Context, req *connect.Reque
 	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
 
-func buildSearchQuery(search models.RequestTorrent, query *gorm.DB) *gorm.DB {
+func buildSearchQuery(search string, query *gorm.DB) *gorm.DB {
 	// String fields use LIKE for partial matches
-	if search.Author != "" {
-		query = query.Where("LOWER(author) LIKE LOWER(?)", "%"+search.Author+"%")
-	}
-	if search.Book != "" {
-		query = query.Where("LOWER(book) LIKE LOWER(?)", "%"+search.Book+"%")
-	}
-	if search.Series != "" {
-		query = query.Where("LOWER(series) LIKE LOWER(?)", "%"+search.Series+"%")
-	}
-	if search.Category != "" {
-		query = query.Where("LOWER(category) LIKE LOWER(?)", "%"+search.Category+"%")
-	}
-	if search.Status != "" {
-		query = query.Where("LOWER(status) LIKE LOWER(?)", "%"+search.Status+"%")
-	}
-	if search.TorrentId != "" {
-		query = query.Where("LOWER(torrent_id) LIKE LOWER(?)", "%"+search.TorrentId+"%")
-	}
+	query = query.Where("LOWER(author) LIKE LOWER(?)", "%"+search+"%").
+		Or("LOWER(book) LIKE LOWER(?)", "%"+search+"%").
+		Or("LOWER(series) LIKE LOWER(?)", "%"+search+"%").
+		Or("LOWER(category) LIKE LOWER(?)", "%"+search+"%").
+		Or("LOWER(status) LIKE LOWER(?)", "%"+search+"%").
+		Or("LOWER(torrent_id) LIKE LOWER(?)", "%"+search+"%")
 
 	// Numeric fields use exact matches
-	if search.SeriesNumber != 0 {
-		query = query.Where("series_number = ?", search.SeriesNumber)
-	}
-	if search.MAMBookID != 0 {
-		query = query.Where("mam_book_id = ?", search.MAMBookID)
+	if _, err := strconv.ParseInt(search, 10, 64); err == nil {
+		query = query.
+			Or("series_number = ?", search).
+			Or("mam_book_id = ?", search)
 	}
 
 	return query
@@ -247,7 +223,7 @@ func convertToMedia(torrent *models.RequestTorrent) *v1.Media {
 		TorrentId:           torrent.TorrentId,
 		TimeRunning:         uint32(torrent.TimeRunning),
 		TorrentFileLocation: torrent.TorrentFileLocation,
-		CreatedAt:           torrent.CreatedAt.Format(time.RFC3339),
+		CreatedAt:           torrent.UpdatedAt.Format(time.RFC3339),
 	}
 
 }

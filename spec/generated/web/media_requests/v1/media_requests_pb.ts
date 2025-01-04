@@ -11,9 +11,9 @@ import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
  */
 export class SearchRequest extends Message<SearchRequest> {
   /**
-   * @generated from field: media_requests.v1.Media mediaQuery = 1;
+   * @generated from field: string mediaQuery = 1;
    */
-  mediaQuery?: Media;
+  mediaQuery = "";
 
   constructor(data?: PartialMessage<SearchRequest>) {
     super();
@@ -23,7 +23,7 @@ export class SearchRequest extends Message<SearchRequest> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "media_requests.v1.SearchRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "mediaQuery", kind: "message", T: Media },
+    { no: 1, name: "mediaQuery", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SearchRequest {

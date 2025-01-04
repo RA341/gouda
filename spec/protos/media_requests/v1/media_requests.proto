@@ -15,7 +15,7 @@ service MediaRequestService {
 }
 
 message SearchRequest {
-  Media mediaQuery = 1;
+  string mediaQuery = 1;
 }
 message SearchResponse {
   repeated Media results = 1;

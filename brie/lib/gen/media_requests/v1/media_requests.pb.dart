@@ -16,7 +16,7 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 class SearchRequest extends $pb.GeneratedMessage {
   factory SearchRequest({
-    Media? mediaQuery,
+    $core.String? mediaQuery,
   }) {
     final $result = create();
     if (mediaQuery != null) {
@@ -29,7 +29,7 @@ class SearchRequest extends $pb.GeneratedMessage {
   factory SearchRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SearchRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'media_requests.v1'), createEmptyInstance: create)
-    ..aOM<Media>(1, _omitFieldNames ? '' : 'mediaQuery', protoName: 'mediaQuery', subBuilder: Media.create)
+    ..aOS(1, _omitFieldNames ? '' : 'mediaQuery', protoName: 'mediaQuery')
     ..hasRequiredFields = false
   ;
 
@@ -55,15 +55,13 @@ class SearchRequest extends $pb.GeneratedMessage {
   static SearchRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  Media get mediaQuery => $_getN(0);
+  $core.String get mediaQuery => $_getSZ(0);
   @$pb.TagNumber(1)
-  set mediaQuery(Media v) { setField(1, v); }
+  set mediaQuery($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasMediaQuery() => $_has(0);
   @$pb.TagNumber(1)
   void clearMediaQuery() => clearField(1);
-  @$pb.TagNumber(1)
-  Media ensureMediaQuery() => $_ensure(0);
 }
 
 class SearchResponse extends $pb.GeneratedMessage {
