@@ -1,0 +1,41 @@
+name: Release extension
+
+on:
+  push:
+    branches: [ "release" ]
+
+jobs:
+  zip-extension:
+    needs:
+      - tag-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: 'Get tag'
+      id: tagName
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
+    - name: update extension version
+      working-directory: parmesan
+      run: npx dot-json@1 "source/manifest.json" version "${{ steps.tagName.outputs.tag }}"
+
+    - name: package ext
+      working-directory: parmesan
+      run: |
+        zip -r parmesan_${{ steps.tagName.outputs.tag }}.zip ./source
+
+    - name: Upload Release Asset
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          parmesan_${{ steps.tagName.outputs.tag }}.zip
+        tag_name: ${{ steps.tagName.outputs.tag }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

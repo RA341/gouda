@@ -6,7 +6,7 @@ Think of it like a minimal alternative to [readarr](https://github.com/Readarr/R
 
 Most of the features offered by readarr are overkill for me, I just want to download my media without monitoring the entire authors' collection.
 
-So I made this, key difference is that gouda is designed to be used from within myanonamouse site, without leaving it. Hence, it is intended to work with the [extension](https://github.com/ra341/parmesan).
+So I made this, key difference is that gouda is designed to be used from within myanonamouse site, without leaving it. Hence, it is intended to work with the [extension](parmesan).
 
 Normal usage would look like, 
 
