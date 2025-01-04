@@ -24,7 +24,7 @@ func (mrSrv *MediaRequestService) Search(_ context.Context, req *connect.Request
 	log.Debug().Any("query", query).Msg("search request")
 
 	dbQuery := mrSrv.api.Database.
-		Order("created_at desc").
+		Order("updated_at desc").
 		Offset(0).
 		Limit(10)
 
@@ -63,7 +63,7 @@ func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v
 	var torrents []*models.RequestTorrent
 
 	resp := mrSrv.api.Database.
-		Order("created_at desc").
+		Order("updated_at desc").
 		Offset(int(offset)).
 		Limit(int(limit)).
 		Find(&torrents)
