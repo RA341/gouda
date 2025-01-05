@@ -7,7 +7,6 @@ import (
 	v1 "github.com/RA341/gouda/generated/category/v1"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
-	"gorm.io/gorm"
 )
 
 type CategoryService struct {
@@ -23,10 +22,7 @@ func (catSrv *CategoryService) ListCategories(_ context.Context, _ *connect.Requ
 	var result []*v1.Category
 
 	for _, cat := range category {
-		result = append(result, &v1.Category{
-			ID:       uint64(cat.ID),
-			Category: cat.Category,
-		})
+		result = append(result, cat.ToProto())
 	}
 
 	res := connect.NewResponse(&v1.ListCategoriesResponse{Categories: result})
@@ -43,10 +39,10 @@ func (catSrv *CategoryService) AddCategories(_ context.Context, req *connect.Req
 }
 
 func (catSrv *CategoryService) DeleteCategories(_ context.Context, req *connect.Request[v1.DelCategoriesRequest]) (*connect.Response[v1.DelCategoriesResponse], error) {
-	err := service.DeleteCategory(catSrv.api.Database, &models.Categories{
-		Model:    gorm.Model{ID: uint(req.Msg.GetCategory().ID)},
-		Category: req.Msg.GetCategory().Category,
-	})
+	var cat models.Categories
+	cat.FromProto(req.Msg.Category)
+
+	err := service.DeleteCategory(catSrv.api.Database, &cat)
 	if err != nil {
 		return nil, fmt.Errorf("error deleting category: %v", err.Error())
 	}

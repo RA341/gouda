@@ -13,7 +13,6 @@ import (
 	"gorm.io/gorm"
 	"os"
 	"strconv"
-	"time"
 )
 
 type MediaRequestService struct {
@@ -95,8 +94,10 @@ func (mrSrv *MediaRequestService) Delete(_ context.Context, req *connect.Request
 
 func (mrSrv *MediaRequestService) Edit(_ context.Context, req *connect.Request[v1.EditRequest]) (*connect.Response[v1.EditResponse], error) {
 	media := req.Msg.Media
+	mediaRequest := models.RequestTorrent{}
+	mediaRequest.FromProto(media)
 
-	result := mrSrv.api.Database.Save(convertToTorrentRequest(media))
+	result := mrSrv.api.Database.Save(mediaRequest)
 	if result.Error != nil {
 		return nil, fmt.Errorf("error editing torrent %v", result.Error.Error())
 	}
@@ -113,7 +114,7 @@ func (mrSrv *MediaRequestService) Exists(_ context.Context, req *connect.Request
 		return nil, fmt.Errorf("error retrieving torrent %v", resp.Error.Error())
 	}
 
-	return connect.NewResponse(&v1.ExistsResponse{Media: convertToMedia(&torrent)}), nil
+	return connect.NewResponse(&v1.ExistsResponse{Media: torrent.ToProto()}), nil
 }
 
 func (mrSrv *MediaRequestService) Retry(_ context.Context, req *connect.Request[v1.RetryRequest]) (*connect.Response[v1.RetryResponse], error) {
@@ -131,7 +132,7 @@ func (mrSrv *MediaRequestService) Retry(_ context.Context, req *connect.Request[
 	}
 
 	return connect.NewResponse(&v1.RetryResponse{
-		Media: convertToMedia(&torrRequest),
+		Media: torrRequest.ToProto(),
 	}), nil
 }
 
@@ -203,44 +204,8 @@ func convertToMedias(requests []*models.RequestTorrent) []*v1.Media {
 	var medias []*v1.Media
 
 	for _, torrent := range requests {
-		medias = append(medias, convertToMedia(torrent))
+		medias = append(medias, torrent.ToProto())
 	}
 
 	return medias
-}
-
-func convertToMedia(torrent *models.RequestTorrent) *v1.Media {
-	return &v1.Media{
-		ID:                  uint64(torrent.ID),
-		Author:              torrent.Author,
-		Book:                torrent.Book,
-		Series:              torrent.Series,
-		SeriesNumber:        uint32(torrent.SeriesNumber),
-		Category:            torrent.Category,
-		MamBookId:           torrent.MAMBookID,
-		FileLink:            torrent.FileLink,
-		Status:              torrent.Status,
-		TorrentId:           torrent.TorrentId,
-		TimeRunning:         uint32(torrent.TimeRunning),
-		TorrentFileLocation: torrent.TorrentFileLocation,
-		CreatedAt:           torrent.UpdatedAt.Format(time.RFC3339),
-	}
-
-}
-
-func convertToTorrentRequest(media *v1.Media) *models.RequestTorrent {
-	return &models.RequestTorrent{
-		Model:               gorm.Model{ID: uint(media.ID)},
-		FileLink:            media.FileLink,
-		Author:              media.Author,
-		Book:                media.Book,
-		Series:              media.Series,
-		SeriesNumber:        uint(media.SeriesNumber),
-		Category:            media.Category,
-		MAMBookID:           media.MamBookId,
-		Status:              media.Status,
-		TorrentId:           media.TorrentId,
-		TimeRunning:         uint(media.TimeRunning),
-		TorrentFileLocation: media.TorrentFileLocation,
-	}
 }
