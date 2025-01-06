@@ -1,7 +1,10 @@
 {
 	"private": true,
 	"scripts": {
-		"build": "parcel build",
+		"build": "npm run clean-build && parcel build && npm run clean-ts",
+		"build:loc": "npm run build && 7z a ./dist/parmesan_local.zip ./dist/*",
+		"clean-ts": "rimraf dist/content_script dist/gen dist/popup dist/shared",
+		"clean-build": "npm run clean && npm run buildts",
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p 'lint:* -- --fix'",
 		"lint:css": "stylelint source/**/*.css",

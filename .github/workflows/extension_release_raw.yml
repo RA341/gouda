@@ -26,6 +26,11 @@ jobs:
       working-directory: parmesan
       run: npx dot-json@1 "source/manifest.json" version "${{ steps.tagName.outputs.tag }}"
 
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - run: npm i
+
     - name: package ext
       working-directory: parmesan
       run: |
