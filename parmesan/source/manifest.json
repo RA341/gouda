@@ -1,9 +1,9 @@
 {
 	"$schema": "https://json.schemastore.org/chrome-manifest",
-	"name": "Parmesan a companion for the gouda API",
+	"name": "Parmesan",
 	"version": "0.1.0",
-	"description": "mam",
-	"homepage_url": "https://github.com/ra341/parmesan",
+	"description": "Parmesan a companion for the gouda API",
+	"homepage_url": "https://github.com/ra341/gouda",
 	"manifest_version": 3,
 	"minimum_chrome_version": "121",
 	"browser_specific_settings": {
@@ -19,7 +19,7 @@
 		"storage"
 	],
 	"host_permissions": [
-		"*://*.myanonamouse.net/*"
+		"https://*.myanonamouse.net/t/*"
 	],
 	"action": {
 		"default_popup": "popup/popup.html",

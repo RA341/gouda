@@ -8,7 +8,7 @@ export {
 function updateButtonState(
 	button: HTMLAnchorElement,
 	state: ButtonState,
-	duration: number = 1000
+	duration: number = 2000
 ): void {
 	// Store the previous state
 	const previousState: ButtonState = {

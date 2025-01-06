@@ -10,6 +10,7 @@
 		"clean": "rimraf dist/*",
 		"watch": "npm run buildts && parcel watch --no-hmr",
 		"run:brave": "web-ext run -t chromium --chromium-binary=\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\"",
+		"run:fire": "web-ext run -t firefox-desktop --firefox-binary=\"C:\\Program Files\\Ablaze Floorp\\floorp.exe\"",
 		"buildts": "tsc",
 		"watchts": "tsc -w",
 		"build:chrome": "tsc",

@@ -1,6 +1,6 @@
 # Parmesan
 
-This is an extension for the [Gouda api](https://github.com/RA341/gouda), designed for myanonmouse users.
+This is an extension for the [Gouda api](..), designed for the myanonmouse website.
 
 ## Installing
 

@@ -103,7 +103,7 @@ const initializePopup = () => {
 export const showPopup = (
 	message: string,
 	type: 'success' | 'error' | 'info' = 'info',
-	duration = 3000
+	duration = 2000
 ) => {
 	initializePopup();
 
