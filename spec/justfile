@@ -6,6 +6,7 @@ gen:
     docker run --rm -v "{{justfile_directory()}}:/workspace" gouda-proto:latest
     just go
     just dart
+    just web
 
 go:
     clear
@@ -20,6 +21,13 @@ dart:
     rm -r ../brie/lib/gen/*
     cp -r generated/dart/* ../brie/lib/gen/
     rm -r generated/dart
+
+web:
+    clear
+    echo 'moving web files'
+    rm -r ../parmesan/source/gen/*
+    cp -r generated/web/* ../parmesan/source/gen/
+    rm -r generated/web
 
 
 # drop into a shell and interact with the image

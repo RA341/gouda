@@ -5,7 +5,6 @@ managed:
   enabled: true
 
 plugins:
-  # Go
   - local: protoc-gen-go
     out: generated/go
     opt: paths=source_relative
@@ -16,7 +15,5 @@ plugins:
 
   - local: protoc-gen-es
     out: generated/web
-    # Also generate any imported dependencies
     include_imports: true
-    # Add more plugin options here
     opt: target=ts

@@ -7,8 +7,13 @@
 		"lint:css": "stylelint source/**/*.css",
 		"lint:js": "xo",
 		"test": "run-p lint:* build",
-		"watch": "parcel watch --no-hmr",
-		"run:brave": "web-ext run -t chromium --chromium-binary=\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\"     "
+		"clean": "rimraf dist/*",
+		"watch": "npm run buildts && parcel watch --no-hmr",
+		"run:brave": "web-ext run -t chromium --chromium-binary=\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\"",
+		"buildts": "tsc",
+		"watchts": "tsc -w",
+		"build:chrome": "tsc",
+		"build:firefox": "tsc"
 	},
 	"browserslist": [
 		"last 1 Chrome version",
@@ -30,17 +35,24 @@
 		"rules": {}
 	},
 	"dependencies": {
+		"@bufbuild/protobuf": "^2.2.3",
+		"@connectrpc/connect": "^2.0.0",
+		"@connectrpc/connect-web": "^2.0.0",
 		"webext-base-css": "^2.0.1",
 		"webext-options-sync": "^4.2.3"
 	},
 	"devDependencies": {
 		"@parcel/config-webextension": "^2.13.0",
 		"@parcel/resolver-default": "^2.13.0",
+		"@types/chrome": "^0.0.289",
+		"@types/firefox-webext-browser": "^120.0.4",
 		"npm-run-all2": "^7.0.1",
 		"parcel": "^2.13.0",
+		"process": "^0.11.10",
 		"stylelint": "^16.6.1",
 		"stylelint-config-prettier": "^9.0.5",
 		"stylelint-config-xo": "^1.0.2",
+		"typescript": "^5.7.2",
 		"xo": "^0.59.3"
 	},
 	"@parcel/resolver-default": {
@@ -49,11 +61,11 @@
 	"targets": {
 		"default": {
 			"source": "source/manifest.json",
-			"distDir": "./distribution"
+			"distDir": "./dist"
 		}
 	},
 	"webExt": {
-		"sourceDir": "distribution",
+		"sourceDir": "dist",
 		"run": {
 			"startUrl": [
 				"https://www.myanonamouse.net/t/1099147"
