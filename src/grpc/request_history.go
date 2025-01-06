@@ -146,7 +146,7 @@ func (mrSrv *MediaRequestService) AddMedia(_ context.Context, req *connect.Reque
 			Type:     viper.GetString("torrent_client.name"),
 		})
 		if err != nil {
-			return nil, fmt.Errorf("unable to connect to download client %v", err.Error())
+			return nil, fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
 		}
 		mrSrv.api.DownloadClient = client
 	}
@@ -154,7 +154,7 @@ func (mrSrv *MediaRequestService) AddMedia(_ context.Context, req *connect.Reque
 	var torrent models.RequestTorrent
 	err := service.SaveTorrentReq(mrSrv.api.Database, &torrent)
 	if err != nil {
-		return nil, fmt.Errorf("unable to save torrent to DB %v", err.Error())
+		return nil, fmt.Errorf("unable to save torrent to DB\n\n%v", err.Error())
 	}
 
 	err = service.AddTorrent((*models.Env)(mrSrv.api), &torrent, true)
