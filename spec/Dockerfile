@@ -46,16 +46,13 @@ RUN apt-get update && apt-get install -y dart
 RUN dart pub global activate protoc_plugin
 
 # Install Node.js dependencies globally
+# @bufbuild/buf depends on
+# @bufbuild/protobuf
 RUN . $NVM_DIR/nvm.sh && \
     npm install -g \
     @bufbuild/buf \
-    @connectrpc/connect@"^v1.0.0"  \
-    @connectrpc/connect-web@"^v1.0.0" \
-    @bufbuild/protoc-gen-connect-web \
-    @bufbuild/protoc-gen-es@"^1.0.0"  \
-    @bufbuild/protobuf@"^1.0.0"  \
-    @connectrpc/protoc-gen-connect-es@"^1.0.0"  \
-    @connectrpc/connect@"^1.0.0"
+    @bufbuild/protobuf \
+    @bufbuild/protoc-gen-es \
 
 # Install Go tools
 RUN go install github.com/bufbuild/buf/cmd/buf@latest
