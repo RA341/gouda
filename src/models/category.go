@@ -20,7 +20,7 @@ func (c Categories) ToProto() *v1.Category {
 
 func (c Categories) FromProto(proto *v1.Category) *Categories {
 	return &Categories{
-		Model:    gorm.Model{ID: c.ID},
-		Category: c.Category,
+		Model:    gorm.Model{ID: uint(proto.ID)},
+		Category: proto.Category,
 	}
 }

@@ -13,6 +13,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -31,40 +32,25 @@ func SaveTorrentReq(db *gorm.DB, request *models.RequestTorrent) error {
 	return nil
 }
 
-func AddTorrent(env *models.Env, request *models.RequestTorrent, downloadFile bool) error {
-	torrentDir := viper.GetString("folder.torrents")
-
-	file := request.TorrentFileLocation
-	if downloadFile {
-		log.Info().Msgf("Torrent file will be downloaded %s", file)
-		tmp, err := DownloadTorrentFile(request.FileLink, torrentDir)
-		if err != nil {
-			return err
-		}
-		file = tmp
-	} else {
-		log.Info().Msgf("Not downloading torrent file, checking existing torrent file location %s", file)
-		_, err := os.Stat(file)
-		if os.IsNotExist(err) {
-			return fmt.Errorf("file %s does not exist", file)
-		}
-		if err != nil {
-			log.Error().Err(err).Msgf("Unable to stat")
-			return err
-		}
-
-		log.Debug().Msgf("Using torrent file from %s", file)
+func AddTorrent(env *models.Env, request *models.RequestTorrent, torrentFilePath string) error {
+	downloadsDir, err := filepath.Abs(viper.GetString("folder.downloads"))
+	if err != nil {
+		log.Error().Err(err).Str("Path", viper.GetString("folder.downloads")).Msgf("Unable to determine absolute path")
+		return fmt.Errorf("unable to determine absolute path of downloads folder %s", viper.GetString("folder.downloads"))
 	}
 
-	downloadsDir := viper.GetString("folder.downloads")
-	torrentId, err := env.DownloadClient.DownloadTorrent(file, downloadsDir)
+	torrentId, err := env.DownloadClient.DownloadTorrent(torrentFilePath, downloadsDir, request.Category)
+	log.Debug().Msgf("Sent to client %s", torrentId)
 	if err != nil {
 		return err
 	}
 
 	request.TorrentId = torrentId
 	request.Status = "downloading"
-	request.TorrentFileLocation = file
+	request.TorrentFileLocation = torrentFilePath
+	// reset time-running
+	request.TimeRunning = 0
+
 	res := env.Database.Save(&request)
 	if res.Error != nil {
 		return res.Error
@@ -76,6 +62,33 @@ func AddTorrent(env *models.Env, request *models.RequestTorrent, downloadFile bo
 	})
 
 	return nil
+}
+
+func GetTorrentFileLocation(request *models.RequestTorrent, downloadFile bool) (string, error) {
+	torrentDir := viper.GetString("folder.torrents")
+
+	file := request.TorrentFileLocation
+	if downloadFile {
+		log.Info().Msgf("Torrent file will be downloaded %s", file)
+		tmp, err := DownloadTorrentFile(request.FileLink, torrentDir)
+		if err != nil {
+			return "", err
+		}
+		file = tmp
+	} else {
+		log.Info().Msgf("Not downloading torrent file, checking existing torrent file location %s", file)
+		_, err := os.Stat(file)
+		if os.IsNotExist(err) {
+			return "", fmt.Errorf("file %s does not exist", file)
+		}
+		if err != nil {
+			log.Error().Err(err).Msgf("Unable to stat")
+			return "", err
+		}
+
+		log.Debug().Msgf("Using torrent file from %s", file)
+	}
+	return file, nil
 }
 
 func MonitorDownloads(env *models.Env) {
@@ -104,11 +117,14 @@ func MonitorDownloads(env *models.Env) {
 			continue
 		}
 
+		log.Debug().Any("Torrent list", statuses).Msg("retrieved torrent status")
+
 		for _, torrentStatus := range statuses {
 			var requestInfo models.RequestTorrent
 
-			resp := env.Database.Model(models.RequestTorrent{}).
+			resp := env.Database.
 				Where("torrent_id = ?", torrentStatus.ID).
+				Where("status = ?", "downloading").
 				First(&requestInfo)
 
 			if resp.Error != nil {
@@ -231,6 +247,10 @@ func fetchDownloadingTorrentsIds(db *gorm.DB) ([]string, error) {
 }
 
 func recursiveChown(path string, uid, gid int) error {
+	if runtime.GOOS == "windows" {
+		log.Warn().Msgf("Chowning is not supported on windows, no action will be taken")
+		return nil
+	}
 	// Walk the directory tree
 	return filepath.Walk(path, func(name string, info os.FileInfo, err error) error {
 		if err != nil {

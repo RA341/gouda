@@ -39,10 +39,9 @@ func (catSrv *CategoryService) AddCategories(_ context.Context, req *connect.Req
 }
 
 func (catSrv *CategoryService) DeleteCategories(_ context.Context, req *connect.Request[v1.DelCategoriesRequest]) (*connect.Response[v1.DelCategoriesResponse], error) {
-	var cat models.Categories
-	cat.FromProto(req.Msg.Category)
+	cat := (&models.Categories{}).FromProto(req.Msg.GetCategory())
 
-	err := service.DeleteCategory(catSrv.api.Database, &cat)
+	err := service.DeleteCategory(catSrv.api.Database, cat)
 	if err != nil {
 		return nil, fmt.Errorf("error deleting category: %v", err.Error())
 	}

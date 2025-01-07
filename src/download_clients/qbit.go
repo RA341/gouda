@@ -45,8 +45,8 @@ func InitQbit(qbitUrl, protocol, user, pass string) (models.DownloadClient, erro
 	return client, nil
 }
 
-func (qbitClient *QbitClient) DownloadTorrent(torrent string, downloadPath string) (string, error) {
-	torrentResult, err := qbitClient.AddTorrent(torrent, downloadPath, "")
+func (qbitClient *QbitClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
+	torrentResult, err := qbitClient.AddTorrent(torrent, downloadPath, category)
 	if err != nil {
 		return "", err
 	}
@@ -172,7 +172,7 @@ func (qbitClient *QbitClient) AddTorrent(torrentFilePath, downloadPath string, c
 
 	// Return the hash of the most recently added torrent
 	if len(torrents) > 0 {
-		return torrents[len(torrents)-1].Hash, nil
+		return torrents[0].Hash, nil
 	}
 
 	return "", fmt.Errorf("torrent was added but hash not found")
