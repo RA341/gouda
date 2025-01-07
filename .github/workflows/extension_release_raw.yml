@@ -29,14 +29,12 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: 22
-    - run: npm i
-
-    - name: package ext
-      working-directory: parmesan
-      run: |
-        zip -r parmesan_${{ steps.tagName.outputs.tag }}.zip ./source
+    - run: |
+        npm run build
+        zip -r parmesan_${{ steps.tagName.outputs.tag }}.zip ./dist
 
     - name: Upload Release Asset
+      working-directory: parmesan
       uses: softprops/action-gh-release@v2
       with:
         files: |

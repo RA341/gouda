@@ -30,7 +30,7 @@ func main() {
 		Caller().
 		Logger()
 
-	err := InitConfig()
+	err := service.InitConfig()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to get config")
 	}
@@ -49,7 +49,7 @@ func main() {
 		Caller().
 		Logger()
 
-	if os.Getenv("DEBUG") == "true" {
+	if service.GetCachedDebugEnv() == "true" {
 		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
 	}
 

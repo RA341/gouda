@@ -7,25 +7,10 @@ import (
 	"fmt"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
-	"os"
-	"sync"
 )
-
-// cache os.getenv('debug') value for perf
-var (
-	cachedEnvVar string
-	envVarOnce   sync.Once
-)
-
-func getCachedEnv() string {
-	envVarOnce.Do(func() {
-		cachedEnvVar = os.Getenv("DEBUG")
-	})
-	return cachedEnvVar
-}
 
 func VerifyToken(token string) (bool, error) {
-	if getCachedEnv() == "true" {
+	if GetCachedDebugEnv() == "true" {
 		return true, nil
 	}
 

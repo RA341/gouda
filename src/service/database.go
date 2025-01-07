@@ -6,7 +6,6 @@ import (
 	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"os"
 )
 
 func InitDB(dbPath string) (*gorm.DB, error) {
@@ -16,7 +15,7 @@ func InitDB(dbPath string) (*gorm.DB, error) {
 	config := &gorm.Config{
 		PrepareStmt: true,
 	}
-	if os.Getenv("DEBUG") == "true" {
+	if GetCachedDebugEnv() == "true" {
 		config = &gorm.Config{
 			Logger:      logger.Default.LogMode(logger.Info),
 			PrepareStmt: true,

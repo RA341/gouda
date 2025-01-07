@@ -1,9 +1,8 @@
-package main
+package service
 
 import (
 	"errors"
 	"fmt"
-	"github.com/RA341/gouda/service"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
@@ -11,13 +10,13 @@ import (
 	"strconv"
 )
 
-const filePerm = 0o775
-
 func InitConfig() error {
 	err := godotenv.Load()
 	if err != nil {
 		log.Warn().Err(err).Msgf("could not load .env file, if you do not have \".env\" file you can ignore this warning")
 	}
+
+	viper.AutomaticEnv()
 
 	baseDir := "./appdata"
 	if os.Getenv("IS_DOCKER") != "" {
@@ -26,7 +25,7 @@ func InitConfig() error {
 
 	configDir := "config"
 	configDir = fmt.Sprintf("%s/%s", baseDir, configDir)
-	err = os.MkdirAll(configDir, filePerm)
+	err = os.MkdirAll(configDir, DefaultFilePerm)
 	if err != nil {
 		return err
 	}
@@ -48,7 +47,7 @@ func InitConfig() error {
 	viper.SetDefault("db_path", fmt.Sprintf("%s/gouda_database.db", configDir))
 
 	// set apikey
-	key, err := service.GenerateToken(32)
+	key, err := GenerateToken(32)
 	if err != nil {
 		log.Fatal().Msgf("Failed to create api key")
 	}
@@ -78,7 +77,7 @@ func InitConfig() error {
 		downloadDir = fmt.Sprintf("%s/%s", baseDir, "downloads")
 	}
 	viper.SetDefault("folder.downloads", downloadDir)
-	err = os.MkdirAll(downloadDir, filePerm)
+	err = os.MkdirAll(downloadDir, DefaultFilePerm)
 	if err != nil {
 		return err
 	}
@@ -88,7 +87,7 @@ func InitConfig() error {
 		defaultDir = fmt.Sprintf("%s/%s", baseDir, "complete")
 	}
 	viper.SetDefault("folder.defaults", defaultDir)
-	err = os.MkdirAll(defaultDir, filePerm)
+	err = os.MkdirAll(defaultDir, DefaultFilePerm)
 	if err != nil {
 		return err
 	}
@@ -98,7 +97,7 @@ func InitConfig() error {
 		torrentDir = fmt.Sprintf("%s/%s", baseDir, "torrents")
 	}
 	viper.SetDefault("folder.torrents", torrentDir)
-	err = os.MkdirAll(torrentDir, filePerm)
+	err = os.MkdirAll(torrentDir, DefaultFilePerm)
 	if err != nil {
 		return err
 	}

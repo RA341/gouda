@@ -277,7 +277,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 	}
 
 	// Create target directory if it doesn't exist
-	err = os.MkdirAll(targetDir, 0o775)
+	err = os.MkdirAll(targetDir, DefaultFilePerm)
 	if err != nil {
 		return fmt.Errorf("failed to create target directory: %w", err)
 	}
@@ -322,7 +322,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 
 		// If it's a directory, create it in target with proper ownership
 		if d.IsDir() {
-			if err := os.MkdirAll(targetPath, 0o775); err != nil {
+			if err := os.MkdirAll(targetPath, DefaultFilePerm); err != nil {
 				return fmt.Errorf("failed to create directory %s: %w", targetPath, err)
 			}
 
