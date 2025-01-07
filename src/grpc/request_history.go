@@ -46,7 +46,9 @@ func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v
 	limit := req.Msg.Limit
 	offset := req.Msg.Offset
 
-	log.Debug().Int("limit", int(limit)).Int("offset", int(offset)).Msg("history setup endpoints")
+	if os.Getenv("DEBUG") == "true" {
+		log.Debug().Int("limit", int(limit)).Int("offset", int(offset)).Msg("history setup endpoints")
+	}
 
 	var torrents []*models.RequestTorrent
 
@@ -79,7 +81,7 @@ func (mrSrv *MediaRequestService) Delete(_ context.Context, req *connect.Request
 		return nil, fmt.Errorf("error getting item %v", result.Error.Error())
 	}
 
-	resp := mrSrv.api.Database.Unscoped().Delete(&models.RequestTorrent{}, req.Msg.RequestId)
+	resp := mrSrv.api.Database.Unscoped().Delete(&torrent, torrent.ID)
 	if resp.Error != nil {
 		return nil, fmt.Errorf("error deleting request %v", resp.Error.Error())
 	}
@@ -126,7 +128,12 @@ func (mrSrv *MediaRequestService) Retry(_ context.Context, req *connect.Request[
 		return nil, fmt.Errorf("error retrieving torrent %v", resp.Error.Error())
 	}
 
-	err := service.AddTorrent((*models.Env)(mrSrv.api), &torrRequest, false)
+	file, err := service.GetTorrentFileLocation(&torrRequest, false)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get torrent file location\n\n%v", err.Error())
+	}
+
+	err = service.AddTorrent((*models.Env)(mrSrv.api), &torrRequest, file)
 	if err != nil {
 		return nil, fmt.Errorf("error retrying torrent %v", err.Error())
 	}
@@ -145,21 +152,30 @@ func (mrSrv *MediaRequestService) AddMedia(_ context.Context, req *connect.Reque
 			Host:     viper.GetString("torrent_client.host"),
 			Type:     viper.GetString("torrent_client.name"),
 		})
+		log.Error().Err(err).Msg("torrent client is uninitialized")
 		if err != nil {
 			return nil, fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
 		}
 		mrSrv.api.DownloadClient = client
 	}
 
-	var torrent models.RequestTorrent
-	err := service.SaveTorrentReq(mrSrv.api.Database, &torrent)
+	mediaRequest := (&models.RequestTorrent{}).FromProto(req.Msg.GetMedia())
+	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
+
+	err := service.SaveTorrentReq(mrSrv.api.Database, mediaRequest)
 	if err != nil {
+		log.Error().Err(err).Msg("unable to save torrent")
 		return nil, fmt.Errorf("unable to save torrent to DB\n\n%v", err.Error())
 	}
 
-	err = service.AddTorrent((*models.Env)(mrSrv.api), &torrent, true)
+	file, err := service.GetTorrentFileLocation(mediaRequest, true)
 	if err != nil {
-		torrent.Status = fmt.Sprintf("failed %s", err.Error())
+		return nil, fmt.Errorf("unable to get torrent file location\n\n%v", err.Error())
+	}
+
+	err = service.AddTorrent((*models.Env)(mrSrv.api), mediaRequest, file)
+	if err != nil {
+		mediaRequest.Status = fmt.Sprintf("failed %s", err.Error())
 		res := mrSrv.api.Database.Save(&req)
 		if res.Error != nil {
 			log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")

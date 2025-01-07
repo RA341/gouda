@@ -37,7 +37,7 @@ func InitTransmission(transmissionUrl, protocol, user, pass string) (models.Down
 	}, nil
 }
 
-func (tm *TransmissionClient) DownloadTorrent(torrent string, downloadPath string) (string, error) {
+func (tm *TransmissionClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
 	torrentResult, err := tm.Client.TorrentAddFileDownloadDir(context.Background(), torrent, downloadPath)
 	if err != nil {
 		return "", err
