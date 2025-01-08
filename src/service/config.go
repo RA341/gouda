@@ -40,6 +40,11 @@ func InitConfig() {
 		}
 	}
 
+	err = viper.ReadInConfig()
+	if err != nil {
+		log.Fatal().Err(err).Msg("could not read config file")
+	}
+
 	log.Info().Msg("watching config file")
 	viper.WatchConfig()
 

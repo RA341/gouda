@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:protobuf/protobuf.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -157,10 +156,8 @@ class SettingsView extends HookConsumerWidget {
               child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      await ref
-                          .watch(settingsApiProvider)
-                          .update(settings.rebuild(
-                            (settings) => settings
+                      await ref.watch(settingsApiProvider).update(
+                            Settings()
                               ..apiKey = apiKey.text
                               ..serverPort = serverPort.text
                               ..downloadCheckTimeout =
@@ -177,7 +174,7 @@ class SettingsView extends HookConsumerWidget {
                               ..torrentPassword = torrentPassword.text
                               ..torrentProtocol = torrentProtocol.text
                               ..torrentUser = torrentUser.text,
-                          ));
+                          );
 
                       ref.invalidate(settingsProvider);
                     } catch (e) {
