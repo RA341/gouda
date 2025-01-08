@@ -44,14 +44,6 @@ const (
 	CategoryServiceDeleteCategoriesProcedure = "/category.v1.CategoryService/DeleteCategories"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	categoryServiceServiceDescriptor                = v1.File_category_v1_category_proto.Services().ByName("CategoryService")
-	categoryServiceListCategoriesMethodDescriptor   = categoryServiceServiceDescriptor.Methods().ByName("ListCategories")
-	categoryServiceAddCategoriesMethodDescriptor    = categoryServiceServiceDescriptor.Methods().ByName("AddCategories")
-	categoryServiceDeleteCategoriesMethodDescriptor = categoryServiceServiceDescriptor.Methods().ByName("DeleteCategories")
-)
-
 // CategoryServiceClient is a client for the category.v1.CategoryService service.
 type CategoryServiceClient interface {
 	ListCategories(context.Context, *connect.Request[v1.ListCategoriesRequest]) (*connect.Response[v1.ListCategoriesResponse], error)
@@ -68,23 +60,24 @@ type CategoryServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewCategoryServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) CategoryServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	categoryServiceMethods := v1.File_category_v1_category_proto.Services().ByName("CategoryService").Methods()
 	return &categoryServiceClient{
 		listCategories: connect.NewClient[v1.ListCategoriesRequest, v1.ListCategoriesResponse](
 			httpClient,
 			baseURL+CategoryServiceListCategoriesProcedure,
-			connect.WithSchema(categoryServiceListCategoriesMethodDescriptor),
+			connect.WithSchema(categoryServiceMethods.ByName("ListCategories")),
 			connect.WithClientOptions(opts...),
 		),
 		addCategories: connect.NewClient[v1.AddCategoriesRequest, v1.AddCategoriesResponse](
 			httpClient,
 			baseURL+CategoryServiceAddCategoriesProcedure,
-			connect.WithSchema(categoryServiceAddCategoriesMethodDescriptor),
+			connect.WithSchema(categoryServiceMethods.ByName("AddCategories")),
 			connect.WithClientOptions(opts...),
 		),
 		deleteCategories: connect.NewClient[v1.DelCategoriesRequest, v1.DelCategoriesResponse](
 			httpClient,
 			baseURL+CategoryServiceDeleteCategoriesProcedure,
-			connect.WithSchema(categoryServiceDeleteCategoriesMethodDescriptor),
+			connect.WithSchema(categoryServiceMethods.ByName("DeleteCategories")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -125,22 +118,23 @@ type CategoryServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewCategoryServiceHandler(svc CategoryServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	categoryServiceMethods := v1.File_category_v1_category_proto.Services().ByName("CategoryService").Methods()
 	categoryServiceListCategoriesHandler := connect.NewUnaryHandler(
 		CategoryServiceListCategoriesProcedure,
 		svc.ListCategories,
-		connect.WithSchema(categoryServiceListCategoriesMethodDescriptor),
+		connect.WithSchema(categoryServiceMethods.ByName("ListCategories")),
 		connect.WithHandlerOptions(opts...),
 	)
 	categoryServiceAddCategoriesHandler := connect.NewUnaryHandler(
 		CategoryServiceAddCategoriesProcedure,
 		svc.AddCategories,
-		connect.WithSchema(categoryServiceAddCategoriesMethodDescriptor),
+		connect.WithSchema(categoryServiceMethods.ByName("AddCategories")),
 		connect.WithHandlerOptions(opts...),
 	)
 	categoryServiceDeleteCategoriesHandler := connect.NewUnaryHandler(
 		CategoryServiceDeleteCategoriesProcedure,
 		svc.DeleteCategories,
-		connect.WithSchema(categoryServiceDeleteCategoriesMethodDescriptor),
+		connect.WithSchema(categoryServiceMethods.ByName("DeleteCategories")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/category.v1.CategoryService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

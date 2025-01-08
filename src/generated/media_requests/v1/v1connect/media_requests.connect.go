@@ -56,18 +56,6 @@ const (
 	MediaRequestServiceAddMediaProcedure = "/media_requests.v1.MediaRequestService/AddMedia"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	mediaRequestServiceServiceDescriptor        = v1.File_media_requests_v1_media_requests_proto.Services().ByName("MediaRequestService")
-	mediaRequestServiceSearchMethodDescriptor   = mediaRequestServiceServiceDescriptor.Methods().ByName("Search")
-	mediaRequestServiceListMethodDescriptor     = mediaRequestServiceServiceDescriptor.Methods().ByName("List")
-	mediaRequestServiceDeleteMethodDescriptor   = mediaRequestServiceServiceDescriptor.Methods().ByName("Delete")
-	mediaRequestServiceEditMethodDescriptor     = mediaRequestServiceServiceDescriptor.Methods().ByName("Edit")
-	mediaRequestServiceExistsMethodDescriptor   = mediaRequestServiceServiceDescriptor.Methods().ByName("Exists")
-	mediaRequestServiceRetryMethodDescriptor    = mediaRequestServiceServiceDescriptor.Methods().ByName("Retry")
-	mediaRequestServiceAddMediaMethodDescriptor = mediaRequestServiceServiceDescriptor.Methods().ByName("AddMedia")
-)
-
 // MediaRequestServiceClient is a client for the media_requests.v1.MediaRequestService service.
 type MediaRequestServiceClient interface {
 	Search(context.Context, *connect.Request[v1.SearchRequest]) (*connect.Response[v1.SearchResponse], error)
@@ -88,47 +76,48 @@ type MediaRequestServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewMediaRequestServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) MediaRequestServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	mediaRequestServiceMethods := v1.File_media_requests_v1_media_requests_proto.Services().ByName("MediaRequestService").Methods()
 	return &mediaRequestServiceClient{
 		search: connect.NewClient[v1.SearchRequest, v1.SearchResponse](
 			httpClient,
 			baseURL+MediaRequestServiceSearchProcedure,
-			connect.WithSchema(mediaRequestServiceSearchMethodDescriptor),
+			connect.WithSchema(mediaRequestServiceMethods.ByName("Search")),
 			connect.WithClientOptions(opts...),
 		),
 		list: connect.NewClient[v1.ListRequest, v1.ListResponse](
 			httpClient,
 			baseURL+MediaRequestServiceListProcedure,
-			connect.WithSchema(mediaRequestServiceListMethodDescriptor),
+			connect.WithSchema(mediaRequestServiceMethods.ByName("List")),
 			connect.WithClientOptions(opts...),
 		),
 		delete: connect.NewClient[v1.DeleteRequest, v1.DeleteResponse](
 			httpClient,
 			baseURL+MediaRequestServiceDeleteProcedure,
-			connect.WithSchema(mediaRequestServiceDeleteMethodDescriptor),
+			connect.WithSchema(mediaRequestServiceMethods.ByName("Delete")),
 			connect.WithClientOptions(opts...),
 		),
 		edit: connect.NewClient[v1.EditRequest, v1.EditResponse](
 			httpClient,
 			baseURL+MediaRequestServiceEditProcedure,
-			connect.WithSchema(mediaRequestServiceEditMethodDescriptor),
+			connect.WithSchema(mediaRequestServiceMethods.ByName("Edit")),
 			connect.WithClientOptions(opts...),
 		),
 		exists: connect.NewClient[v1.ExistsRequest, v1.ExistsResponse](
 			httpClient,
 			baseURL+MediaRequestServiceExistsProcedure,
-			connect.WithSchema(mediaRequestServiceExistsMethodDescriptor),
+			connect.WithSchema(mediaRequestServiceMethods.ByName("Exists")),
 			connect.WithClientOptions(opts...),
 		),
 		retry: connect.NewClient[v1.RetryRequest, v1.RetryResponse](
 			httpClient,
 			baseURL+MediaRequestServiceRetryProcedure,
-			connect.WithSchema(mediaRequestServiceRetryMethodDescriptor),
+			connect.WithSchema(mediaRequestServiceMethods.ByName("Retry")),
 			connect.WithClientOptions(opts...),
 		),
 		addMedia: connect.NewClient[v1.AddMediaRequest, v1.AddMediaResponse](
 			httpClient,
 			baseURL+MediaRequestServiceAddMediaProcedure,
-			connect.WithSchema(mediaRequestServiceAddMediaMethodDescriptor),
+			connect.WithSchema(mediaRequestServiceMethods.ByName("AddMedia")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -198,46 +187,47 @@ type MediaRequestServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewMediaRequestServiceHandler(svc MediaRequestServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	mediaRequestServiceMethods := v1.File_media_requests_v1_media_requests_proto.Services().ByName("MediaRequestService").Methods()
 	mediaRequestServiceSearchHandler := connect.NewUnaryHandler(
 		MediaRequestServiceSearchProcedure,
 		svc.Search,
-		connect.WithSchema(mediaRequestServiceSearchMethodDescriptor),
+		connect.WithSchema(mediaRequestServiceMethods.ByName("Search")),
 		connect.WithHandlerOptions(opts...),
 	)
 	mediaRequestServiceListHandler := connect.NewUnaryHandler(
 		MediaRequestServiceListProcedure,
 		svc.List,
-		connect.WithSchema(mediaRequestServiceListMethodDescriptor),
+		connect.WithSchema(mediaRequestServiceMethods.ByName("List")),
 		connect.WithHandlerOptions(opts...),
 	)
 	mediaRequestServiceDeleteHandler := connect.NewUnaryHandler(
 		MediaRequestServiceDeleteProcedure,
 		svc.Delete,
-		connect.WithSchema(mediaRequestServiceDeleteMethodDescriptor),
+		connect.WithSchema(mediaRequestServiceMethods.ByName("Delete")),
 		connect.WithHandlerOptions(opts...),
 	)
 	mediaRequestServiceEditHandler := connect.NewUnaryHandler(
 		MediaRequestServiceEditProcedure,
 		svc.Edit,
-		connect.WithSchema(mediaRequestServiceEditMethodDescriptor),
+		connect.WithSchema(mediaRequestServiceMethods.ByName("Edit")),
 		connect.WithHandlerOptions(opts...),
 	)
 	mediaRequestServiceExistsHandler := connect.NewUnaryHandler(
 		MediaRequestServiceExistsProcedure,
 		svc.Exists,
-		connect.WithSchema(mediaRequestServiceExistsMethodDescriptor),
+		connect.WithSchema(mediaRequestServiceMethods.ByName("Exists")),
 		connect.WithHandlerOptions(opts...),
 	)
 	mediaRequestServiceRetryHandler := connect.NewUnaryHandler(
 		MediaRequestServiceRetryProcedure,
 		svc.Retry,
-		connect.WithSchema(mediaRequestServiceRetryMethodDescriptor),
+		connect.WithSchema(mediaRequestServiceMethods.ByName("Retry")),
 		connect.WithHandlerOptions(opts...),
 	)
 	mediaRequestServiceAddMediaHandler := connect.NewUnaryHandler(
 		MediaRequestServiceAddMediaProcedure,
 		svc.AddMedia,
-		connect.WithSchema(mediaRequestServiceAddMediaMethodDescriptor),
+		connect.WithSchema(mediaRequestServiceMethods.ByName("AddMedia")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/media_requests.v1.MediaRequestService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

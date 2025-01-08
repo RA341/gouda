@@ -40,13 +40,6 @@ const (
 	AuthServiceTestProcedure = "/auth.v1.AuthService/Test"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	authServiceServiceDescriptor            = v1.File_auth_v1_auth_proto.Services().ByName("AuthService")
-	authServiceAuthenticateMethodDescriptor = authServiceServiceDescriptor.Methods().ByName("Authenticate")
-	authServiceTestMethodDescriptor         = authServiceServiceDescriptor.Methods().ByName("Test")
-)
-
 // AuthServiceClient is a client for the auth.v1.AuthService service.
 type AuthServiceClient interface {
 	Authenticate(context.Context, *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error)
@@ -62,17 +55,18 @@ type AuthServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	authServiceMethods := v1.File_auth_v1_auth_proto.Services().ByName("AuthService").Methods()
 	return &authServiceClient{
 		authenticate: connect.NewClient[v1.AuthRequest, v1.AuthResponse](
 			httpClient,
 			baseURL+AuthServiceAuthenticateProcedure,
-			connect.WithSchema(authServiceAuthenticateMethodDescriptor),
+			connect.WithSchema(authServiceMethods.ByName("Authenticate")),
 			connect.WithClientOptions(opts...),
 		),
 		test: connect.NewClient[v1.AuthResponse, v1.TestResponse](
 			httpClient,
 			baseURL+AuthServiceTestProcedure,
-			connect.WithSchema(authServiceTestMethodDescriptor),
+			connect.WithSchema(authServiceMethods.ByName("Test")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -106,16 +100,17 @@ type AuthServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	authServiceMethods := v1.File_auth_v1_auth_proto.Services().ByName("AuthService").Methods()
 	authServiceAuthenticateHandler := connect.NewUnaryHandler(
 		AuthServiceAuthenticateProcedure,
 		svc.Authenticate,
-		connect.WithSchema(authServiceAuthenticateMethodDescriptor),
+		connect.WithSchema(authServiceMethods.ByName("Authenticate")),
 		connect.WithHandlerOptions(opts...),
 	)
 	authServiceTestHandler := connect.NewUnaryHandler(
 		AuthServiceTestProcedure,
 		svc.Test,
-		connect.WithSchema(authServiceTestMethodDescriptor),
+		connect.WithSchema(authServiceMethods.ByName("Test")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/auth.v1.AuthService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -41,13 +41,6 @@ const (
 	SettingsServiceListSettingsProcedure = "/settings.v1.SettingsService/ListSettings"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	settingsServiceServiceDescriptor              = v1.File_settings_v1_settings_proto.Services().ByName("SettingsService")
-	settingsServiceUpdateSettingsMethodDescriptor = settingsServiceServiceDescriptor.Methods().ByName("UpdateSettings")
-	settingsServiceListSettingsMethodDescriptor   = settingsServiceServiceDescriptor.Methods().ByName("ListSettings")
-)
-
 // SettingsServiceClient is a client for the settings.v1.SettingsService service.
 type SettingsServiceClient interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
@@ -63,17 +56,18 @@ type SettingsServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) SettingsServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	settingsServiceMethods := v1.File_settings_v1_settings_proto.Services().ByName("SettingsService").Methods()
 	return &settingsServiceClient{
 		updateSettings: connect.NewClient[v1.Settings, v1.UpdateSettingsResponse](
 			httpClient,
 			baseURL+SettingsServiceUpdateSettingsProcedure,
-			connect.WithSchema(settingsServiceUpdateSettingsMethodDescriptor),
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateSettings")),
 			connect.WithClientOptions(opts...),
 		),
 		listSettings: connect.NewClient[v1.ListSettingsResponse, v1.Settings](
 			httpClient,
 			baseURL+SettingsServiceListSettingsProcedure,
-			connect.WithSchema(settingsServiceListSettingsMethodDescriptor),
+			connect.WithSchema(settingsServiceMethods.ByName("ListSettings")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -107,16 +101,17 @@ type SettingsServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	settingsServiceMethods := v1.File_settings_v1_settings_proto.Services().ByName("SettingsService").Methods()
 	settingsServiceUpdateSettingsHandler := connect.NewUnaryHandler(
 		SettingsServiceUpdateSettingsProcedure,
 		svc.UpdateSettings,
-		connect.WithSchema(settingsServiceUpdateSettingsMethodDescriptor),
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateSettings")),
 		connect.WithHandlerOptions(opts...),
 	)
 	settingsServiceListSettingsHandler := connect.NewUnaryHandler(
 		SettingsServiceListSettingsProcedure,
 		svc.ListSettings,
-		connect.WithSchema(settingsServiceListSettingsMethodDescriptor),
+		connect.WithSchema(settingsServiceMethods.ByName("ListSettings")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/settings.v1.SettingsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
