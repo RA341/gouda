@@ -12,10 +12,6 @@ import (
 	"net/http"
 )
 
-type ServiceDefinition struct {
-	CreateHandler func() (path string, handler http.Handler)
-}
-
 func SetupGRPCEndpoints(env *Env) *http.ServeMux {
 	// grpc server setup
 	mux := http.NewServeMux()
@@ -50,21 +46,21 @@ func SetupGRPCEndpoints(env *Env) *http.ServeMux {
 
 func NewAuthInterceptor() connect.UnaryInterceptorFunc {
 	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
-		return connect.UnaryFunc(func(
+		return func(
 			ctx context.Context,
 			req connect.AnyRequest,
 		) (connect.AnyResponse, error) {
 			clientToken := req.Header().Get(tokenHeader)
 			result, err := service.VerifyToken(clientToken)
+
 			if err != nil || !result {
 				return nil, connect.NewError(
 					connect.CodeUnauthenticated,
 					fmt.Errorf("invalid token %v", err),
 				)
 			}
-
 			return next(ctx, req)
-		})
+		}
 	}
-	return connect.UnaryInterceptorFunc(interceptor)
+	return interceptor
 }
