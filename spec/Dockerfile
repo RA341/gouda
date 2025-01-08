@@ -14,17 +14,19 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Go 1.22
-RUN curl -OL https://go.dev/dl/go1.23.4.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz && \
-    rm go1.23.4.linux-amd64.tar.gz
+# Install Go
+ENV GO_VERSION=1.23.4
+
+RUN curl -OL https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go$GO_VERSION.linux-amd64.tar.gz && \
+    rm go$GO_VERSION.linux-amd64.tar.gz
 ENV PATH=$PATH:/usr/local/go/bin
 ENV GOPATH=/go
 ENV PATH=$PATH:$GOPATH/bin
 
 # Install NVM and Node.js
-ENV NVM_DIR /root/.nvm
-ENV NODE_VERSION 20.11.1
+ENV NVM_DIR=/root/.nvm
+ENV NODE_VERSION=22.12.0
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && \
     . $NVM_DIR/nvm.sh && \
@@ -33,8 +35,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | b
     nvm use default
 
 # Add node and npm to path so the commands are available
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Install Dart SDK
 RUN apt-get update && apt-get install -y apt-transport-https
@@ -50,9 +52,7 @@ RUN dart pub global activate protoc_plugin
 # @bufbuild/protobuf
 RUN . $NVM_DIR/nvm.sh && \
     npm install -g \
-    @bufbuild/buf \
-    @bufbuild/protobuf \
-    @bufbuild/protoc-gen-es \
+    @bufbuild/protoc-gen-es
 
 # Install Go tools
 RUN go install github.com/bufbuild/buf/cmd/buf@latest

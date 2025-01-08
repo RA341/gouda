@@ -1,9 +1,13 @@
 set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 
-# generate and copy out go files and remove go generated dir
-gen:
+# generate files no moves
+geno:
     just build
     docker run --rm -v "{{justfile_directory()}}:/workspace" gouda-proto:latest
+
+# generate and copy out go files and remove go generated dir
+gen:
+    just geno
     just go
     just dart
     just web
