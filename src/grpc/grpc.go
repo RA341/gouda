@@ -12,36 +12,38 @@ import (
 	"net/http"
 )
 
+type ServiceDefinition struct {
+	CreateHandler func() (path string, handler http.Handler)
+}
+
 func SetupGRPCEndpoints(env *Env) *http.ServeMux {
-
-	// setup service structs
-	authSrv := &AuthService{}
-	categorySrv := &CategoryService{
-		api: env,
-	}
-	settingsSrv := &SettingsService{
-		api: env,
-	}
-	mediaHistory := &MediaRequestService{
-		api: env,
-	}
-
 	// grpc server setup
 	mux := http.NewServeMux()
 	authInterceptor := connect.WithInterceptors(NewAuthInterceptor())
 
-	// auth
-	authPath, authHandler := auth.NewAuthServiceHandler(authSrv)
-	mux.Handle(authPath, authHandler)
-	// category
-	catPath, catHandler := category.NewCategoryServiceHandler(categorySrv, authInterceptor)
-	mux.Handle(catPath, catHandler)
-	// settings
-	settingsPath, settingsHandler := settings.NewSettingsServiceHandler(settingsSrv, authInterceptor)
-	mux.Handle(settingsPath, settingsHandler)
-	// media history
-	mediaHistoryPath, mediaHistoryHandler := media.NewMediaRequestServiceHandler(mediaHistory, authInterceptor)
-	mux.Handle(mediaHistoryPath, mediaHistoryHandler)
+	services := []func() (string, http.Handler){
+		// auth
+		func() (string, http.Handler) {
+			return auth.NewAuthServiceHandler(&AuthService{})
+		},
+		// category
+		func() (string, http.Handler) {
+			return category.NewCategoryServiceHandler(&CategoryService{api: env}, authInterceptor)
+		},
+		// settings
+		func() (string, http.Handler) {
+			return settings.NewSettingsServiceHandler(&SettingsService{api: env}, authInterceptor)
+		},
+		// media requests
+		func() (string, http.Handler) {
+			return media.NewMediaRequestServiceHandler(&MediaRequestService{api: env}, authInterceptor)
+		},
+	}
+
+	for _, svc := range services {
+		path, handler := svc()
+		mux.Handle(path, handler)
+	}
 
 	return mux
 }

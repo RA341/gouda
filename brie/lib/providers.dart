@@ -16,6 +16,14 @@ final checkTokenProvider = FutureProvider<bool>((ref) async {
 
 final pageIndexListProvider = StateProvider<int>((ref) {
   ref.watch(checkTokenProvider);
+
+  final settings = ref.watch(settingsProvider);
+  final firstTimeSetup = settings.valueOrNull?.torrentHost.isEmpty;
+  if (firstTimeSetup ?? true) {
+    print('First time setup detected: moving to settings page');
+    return 2;
+  }
+
   return 0;
 });
 

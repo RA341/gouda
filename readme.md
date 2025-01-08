@@ -81,7 +81,7 @@ Note: docker requires specific folder structure or else hardlinks will not work 
 | `GOUDA_UID`          | User ID for file permissions      | `1000`               |
 | `GOUDA_GID`          | Group ID for file permissions     | `1000`               |
 | `GOUDA_DOWNLOAD_DIR` | Directory for temporary downloads | `/appdata/downloads` |
-| `GOUDA_DEFAULT_DIR`  | Directory for completed downloads | `/appdata/complete`  |
+| `GOUDA_COMPLETE_DIR`  | Directory for completed downloads | `/appdata/complete`  |
 | `GOUDA_TORRENT_DIR`  | Directory for torrent files       | `/appdata/torrents`  |
 
 #### Storage Setup Guide

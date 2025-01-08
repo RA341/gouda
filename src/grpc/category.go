@@ -9,6 +9,8 @@ import (
 	"github.com/RA341/gouda/service"
 )
 
+type Env models.Env
+
 type CategoryService struct {
 	api *Env
 }

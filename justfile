@@ -35,7 +35,6 @@ ui:
     flutter build web
 
 loc:
-    just ui
     docker compose down
     docker compose --profile local up --build --force-recreate
 

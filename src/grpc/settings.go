@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/RA341/gouda/download_clients"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
-	models "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -18,16 +17,10 @@ type SettingsService struct {
 func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
-		User:     settings.TorrentUser,
-		Password: settings.TorrentPassword,
-		Protocol: settings.TorrentProtocol,
-		Host:     settings.TorrentHost,
-		Type:     settings.TorrentName,
-	})
+	client, err := download_clients.InitializeTorrentClient()
 	if err != nil {
-		log.Fatal().Err(err).Msg("Unable to save torrent client")
-		return nil, fmt.Errorf("unable to save torrent client: %v", err)
+		log.Error().Err(err).Msg("Unable to connect torrent client")
+		return nil, fmt.Errorf("unable to connect torrent client: %v", err)
 	}
 
 	setSrv.api.DownloadClient = client
@@ -57,6 +50,8 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 	if err != nil {
 		return nil, fmt.Errorf("unable to save settings %v", err.Error())
 	}
+
+	log.Debug().Msg("settings saved")
 
 	return connect.NewResponse(&v1.UpdateSettingsResponse{}), nil
 }

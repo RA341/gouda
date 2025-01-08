@@ -9,7 +9,6 @@ import (
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"os"
 	"strconv"
@@ -38,8 +37,10 @@ func (mrSrv *MediaRequestService) Search(_ context.Context, req *connect.Request
 	}
 
 	medias := convertToMedias(torrents)
-	results := connect.NewResponse(&v1.SearchResponse{Results: medias})
-	return results, nil
+
+	log.Debug().Any("query", query).Msg("Searching media request")
+
+	return connect.NewResponse(&v1.SearchResponse{Results: medias}), nil
 }
 
 func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v1.ListRequest]) (*connect.Response[v1.ListResponse], error) {
@@ -47,7 +48,7 @@ func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v
 	offset := req.Msg.Offset
 
 	if service.GetCachedDebugEnv() == "true" {
-		log.Debug().Int("limit", int(limit)).Int("offset", int(offset)).Msg("history setup endpoints")
+		log.Debug().Int("limit", int(limit)).Int("offset", int(offset)).Msg("history query limits")
 	}
 
 	var torrents []*models.RequestTorrent
@@ -91,18 +92,21 @@ func (mrSrv *MediaRequestService) Delete(_ context.Context, req *connect.Request
 		return nil, fmt.Errorf("error deleting torrent file %v", resp.Error.Error())
 	}
 
+	log.Debug().Any("media", torrent).Msg("Deleted media request")
+
 	return connect.NewResponse(&v1.DeleteResponse{}), nil
 }
 
 func (mrSrv *MediaRequestService) Edit(_ context.Context, req *connect.Request[v1.EditRequest]) (*connect.Response[v1.EditResponse], error) {
 	media := req.Msg.Media
-	mediaRequest := models.RequestTorrent{}
-	mediaRequest.FromProto(media)
+	mediaRequest := (&models.RequestTorrent{}).FromProto(media)
 
 	result := mrSrv.api.Database.Save(mediaRequest)
 	if result.Error != nil {
 		return nil, fmt.Errorf("error editing torrent %v", result.Error.Error())
 	}
+
+	log.Debug().Any("media", mediaRequest).Msg("Editing media request")
 
 	return connect.NewResponse(&v1.EditResponse{}), nil
 }
@@ -115,6 +119,8 @@ func (mrSrv *MediaRequestService) Exists(_ context.Context, req *connect.Request
 	if resp.Error != nil {
 		return nil, fmt.Errorf("error retrieving torrent %v", resp.Error.Error())
 	}
+
+	log.Debug().Msgf("Media Exists %d", mamID)
 
 	return connect.NewResponse(&v1.ExistsResponse{Media: torrent.ToProto()}), nil
 }
@@ -138,6 +144,8 @@ func (mrSrv *MediaRequestService) Retry(_ context.Context, req *connect.Request[
 		return nil, fmt.Errorf("error retrying torrent %v", err.Error())
 	}
 
+	log.Debug().Any("Media", torrRequest).Msg("Retrying message")
+
 	return connect.NewResponse(&v1.RetryResponse{
 		Media: torrRequest.ToProto(),
 	}), nil
@@ -145,13 +153,7 @@ func (mrSrv *MediaRequestService) Retry(_ context.Context, req *connect.Request[
 
 func (mrSrv *MediaRequestService) AddMedia(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
 	if mrSrv.api.DownloadClient == nil {
-		client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
-			User:     viper.GetString("torrent_client.user"),
-			Password: viper.GetString("torrent_client.password"),
-			Protocol: viper.GetString("torrent_client.protocol"),
-			Host:     viper.GetString("torrent_client.host"),
-			Type:     viper.GetString("torrent_client.name"),
-		})
+		client, err := download_clients.InitializeTorrentClient()
 		log.Error().Err(err).Msg("torrent client is uninitialized")
 		if err != nil {
 			return nil, fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
@@ -183,6 +185,8 @@ func (mrSrv *MediaRequestService) AddMedia(_ context.Context, req *connect.Reque
 
 		return nil, fmt.Errorf("error adding torrent to DB %v", err.Error())
 	}
+
+	log.Debug().Any("Media", mediaRequest).Msg("Adding media")
 
 	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
