@@ -53,13 +53,14 @@ jobs:
         working-directory: parmesan
         run: npx dot-json@1 "source/manifest.json" version "${{ steps.tagName.outputs.tag }}"
 
+      - name: Pack extension
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-        working-directory: parmesan
+          node-version: 20
       - run: |
           npm run build
           zip -r parmesan_${{ steps.tagName.outputs.tag }}.zip ./dist
+        working-directory: parmesan
 
       - name: Upload Extension Asset
         working-directory: parmesan
