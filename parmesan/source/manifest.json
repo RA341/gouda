@@ -27,6 +27,11 @@
 			"128": "icon.png"
 		}
 	},
+	"background": {
+		"scripts": ["../dist/background/background.js"],
+		"service_worker": "../dist/background/background.js",
+		"type": "module"
+	},
 	"content_scripts": [
 		{
 			"matches": [

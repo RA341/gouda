@@ -1,68 +1,31 @@
-import {Transport} from "@connectrpc/connect";
 import {browserAPI} from "../shared/browser";
-import {getMetadata} from "./metadata";
-import {createCategoryClient, createGRPCTransport, createMediaRequestClient} from "../shared/grpc_client";
-import {ListCategoriesRequest} from "../gen/category/v1/category_pb";
 import {buttonStates, updateButtonState} from "../shared/ui";
-import {AddMediaRequest} from "../gen/media_requests/v1/media_requests_pb";
 import {showPopup} from "./content_popup";
+import {getCategories, isSetupComplete, sendMediaInfo} from "./message_sender";
 
 console.log('💈 Content script loaded for', browserAPI.runtime.getManifest().name);
 
-async function sendInfo(transport: Transport) {
-	const mediaClient = createMediaRequestClient(transport)
-	const mediaRequest = getMetadata();
-
-	await mediaClient.addMedia(<AddMediaRequest>{media: mediaRequest})
-	return {
-		bookName: mediaRequest.book,
-		author: mediaRequest.author,
-		series: mediaRequest.series,
-		seriesNumber: mediaRequest.seriesNumber,
-		category: mediaRequest.category,
-	};
-}
-
-async function createDropDown(transport: Transport) {
-	const categoryClient = createCategoryClient(transport)
-
+function createDropDown(categories: string[]) {
 	// Create dropdown
 	const dropdown = document.createElement('select');
 	dropdown.id = 'gouda_cat'
 	dropdown.style.padding = '8px';
 	dropdown.style.borderRadius = '4px';
+	categories.forEach(item => {
+		const option = document.createElement('option');
+		option.value = item;
+		option.textContent = item;
+		dropdown.appendChild(option);
+	});
 
-	try {
-		const categories = (await categoryClient.listCategories(<ListCategoriesRequest>{})).categories
-		categories.forEach(item => {
-			const option = document.createElement('option');
-			option.value = item.category;
-			option.textContent = item.category;
-			dropdown.appendChild(option);
-		});
-
-		if (categories[0]) {
-			dropdown.value = categories[0].category;
-		}
-
-		return dropdown;
-	} catch (e) {
-		console.error(e);
-		console.error('Error loading options:', String(e));
-		// Add error option
-		const errorOption = document.createElement('option');
-		errorOption.textContent = 'Error loading options';
-		dropdown.appendChild(errorOption);
-		return dropdown;
+	if (categories[0]) {
+		dropdown.value = categories[0];
 	}
+
+	return dropdown;
 }
 
 async function init() {
-	const settings = await browserAPI.storage.sync.get(['gouda_baseurl', 'gouda_apikey']);
-	console.log(settings);
-
-	const transport = createGRPCTransport(settings.gouda_baseurl, settings.gouda_apikey);
-
 	const downloadDiv = document.createElement('div');
 	downloadDiv.id = 'download';
 	downloadDiv.className = 'torDetInnerCon';
@@ -73,7 +36,6 @@ async function init() {
 
 	const innerBottom = document.createElement('div');
 	innerBottom.className = 'torDetInnerBottom';
-
 	// Create a container for button and dropdown
 	const controlsContainer = document.createElement('div');
 	controlsContainer.style.display = 'flex';
@@ -89,27 +51,43 @@ async function init() {
 	goudaButton.style.backgroundColor = 'grey';  // Only the button is green
 	goudaButton.style.color = 'white';  // White text for contra
 
-	if (settings.gouda_baseurl && settings.gouda_apikey) {
-		goudaButton.textContent = 'Send to gouda';
-		goudaButton.style.backgroundColor = 'green';  // Only the button is green
-		goudaButton.style.color = 'white';  // White text for contra
-		goudaButton.onclick = async (ev) => {
-			try {
-				ev.preventDefault();
-				const media = await sendInfo(transport);
-				updateButtonState(goudaButton, buttonStates.success);
-				showPopup(`Sent to gouda\n\n${JSON.stringify(media)}`, 'success')
-			} catch (error) {
-				console.log(error)
-				updateButtonState(goudaButton, buttonStates.failure);
-				showPopup(`Failed to send to gouda, check your apikey and url in settings\n\n\n${error}`, 'error')
-			}
-		};
+	const isSetup = await isSetupComplete();
+	if (isSetup) {
+		console.log('Setup is complete')
+		const categories = await getCategories();
+		console.log(`Categories loaded: ${categories}`)
 
-		const dropdown = await createDropDown(transport);
-		controlsContainer.appendChild(dropdown);
+		if (categories.err !== '') {
+			console.error('Error getting categories:', categories.err);
+			goudaButton.textContent = 'Unable to find categories';
+		} else {
+			console.log('Everything is setup setting up button')
+			goudaButton.textContent = 'Send to gouda';
+			goudaButton.style.backgroundColor = 'green';  // Only the button is green
+			goudaButton.style.color = 'white';  // White text for contra
+			goudaButton.onclick = async (ev) => {
+				try {
+					ev.preventDefault();
+					const response = await sendMediaInfo();
+					if (response.error === "") {
+						updateButtonState(goudaButton, buttonStates.success);
+						showPopup(`Sent to gouda\n\n${JSON.stringify(response)}`, 'success')
+					} else {
+						updateButtonState(goudaButton, buttonStates.failure);
+						showPopup(`Failed to send to gouda, ${response.error}`, 'error')
+					}
+				} catch (error: any) {
+					console.log(error)
+					updateButtonState(goudaButton, buttonStates.failure);
+					showPopup(`Failed to send to gouda, ${error.message}`, 'error')
+				}
+			};
+
+			const dropdown = createDropDown(categories.cat);
+			controlsContainer.appendChild(dropdown);
+		}
 	} else {
-		console.log('Could not find base url or apikey');
+		console.error('Setup is incomplete fill out baseurl and apikey')
 	}
 
 	// Add elements to the container
@@ -130,7 +108,7 @@ async function init() {
 	}
 }
 
-init().then(r => {
+init().then(_ => {
 	console.log('Extension initialized...');
 }).catch(e => {
 	console.error('Unable to start extension')

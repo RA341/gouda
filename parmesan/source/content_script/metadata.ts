@@ -1,6 +1,6 @@
 // get metadata for the release
 
-import {Media} from "../gen/media_requests/v1/media_requests_pb";
+import {BookMetadata} from "../shared/mesages";
 
 function getMetadata() {
 	const author = getAuthorText()!
@@ -13,19 +13,15 @@ function getMetadata() {
 	console.log('Metadata retrieved:')
 	console.log(`Category: ${cat} - Author: ${author} - Book: ${bookName} - Series name: ${seriesName} - Series number: ${seriesNumber}`);
 
-	const media = <Media>{
+	return <BookMetadata>{
 		author: author,
-		book: bookName,
+		bookName: bookName,
 		fileLink: link,
 		mamBookId: book_url,
 		category: cat,
-	}
-
-	if (seriesName != null && seriesNumber != null) {
-		media.series = seriesName
-		media.seriesNumber = seriesNumber
-	}
-	return media;
+		seriesNumber: seriesNumber,
+		series: seriesName,
+	};
 }
 
 function getAuthorText() {
@@ -55,13 +51,12 @@ function getDownloadLink(): string | null {
 	return null;
 }
 
-function getBookUrlId(): bigint | null {
+function getBookUrlId(): string {
 	const id = window.location.href.split('/').pop()
 	if (!id) {
-		console.error('No book id found');
-		return null
+		throw new Error('No book id found');
 	}
-	return BigInt(id);
+	return id;
 }
 
 function getCategory(): string {
