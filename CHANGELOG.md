@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/RA341/gouda/compare/v1.5.1...v1.5.2) (2025-01-09)
+
+
+### Bug Fixes
+
+* return value ([ca657a9](https://github.com/RA341/gouda/commit/ca657a9544df31fdf6f5028cb028b9803d69151e))
+
 ## [1.5.1](https://github.com/RA341/gouda/compare/v1.5.0...v1.5.1) (2025-01-09)
 
 
