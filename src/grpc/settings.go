@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/RA341/gouda/download_clients"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
+	types "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -17,7 +18,13 @@ type SettingsService struct {
 func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	client, err := download_clients.InitializeTorrentClient()
+	client, err := download_clients.CheckTorrentClient(types.TorrentClient{
+		User:     settings.TorrentUser,
+		Password: settings.TorrentPassword,
+		Protocol: settings.TorrentProtocol,
+		Host:     settings.TorrentHost,
+		Type:     settings.TorrentName,
+	})
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to connect torrent client")
 		return nil, fmt.Errorf("unable to connect torrent client: %v", err)

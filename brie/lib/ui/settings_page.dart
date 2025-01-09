@@ -65,161 +65,115 @@ class SettingsView extends HookConsumerWidget {
     final torrentUser = useTextEditingController(text: settings.torrentUser);
 
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 150),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('General', style: headerStyle),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Divider(thickness: 4),
-            ),
-            SizedBox(
-              // width: maxSettingsWidth,
-              child: ListTile(
-                title: Container(
-                  decoration: ShapeDecoration(
-                    shape: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      apiKey.text,
-                      style: TextStyle(overflow: TextOverflow.clip),
-                    ),
-                  ),
-                ),
-                trailing: IconButton(
-                  onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: apiKey.text));
-
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Apikey copied'),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.copy, color: Colors.white),
-                ),
-              ),
-            ),
-            createUpdateButtons('Server Port', serverPort),
-            createUpdateButtons(
-              'Download Check timeout (In minutes)',
-              downloadCheckTimeout,
-            ),
-            Text('Torrent Client', style: headerStyle),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Divider(thickness: 4),
-            ),
-            createDropDown(
-              supportedClients,
-              clientType,
-              "Torrent Client Type",
-            ),
-            createDropDown(
-              supportedProtocols,
-              torrentProtocol,
-              "Torrent Client Protocol",
-            ),
-            createUpdateButtons('Torrent Host', torrentHost),
-            createUpdateButtons('Torrent Username', torrentUser),
-            createUpdateButtons('Torrent Password', torrentPassword),
-            Text('User Settings', style: headerStyle),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Divider(thickness: 4),
-            ),
-            createUpdateButtons('Username', username),
-            createUpdateButtons('Password', password),
-            createUpdateButtons('Linux UID', userID),
-            createUpdateButtons('Linux GID', groupID),
-            Text('Folder Settings', style: headerStyle),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Divider(thickness: 4),
-            ),
-            createUpdateButtons('Complete Folder', completeFolder),
-            createUpdateButtons('Download Folder', downloadFolder),
-            createUpdateButtons('Torrents folder', torrentsFolder),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30),
-              child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await ref.watch(settingsApiProvider).update(
-                            Settings()
-                              ..apiKey = apiKey.text
-                              ..serverPort = serverPort.text
-                              ..downloadCheckTimeout =
-                                  Int64.parseInt(downloadCheckTimeout.text)
-                              ..completeFolder = completeFolder.text
-                              ..downloadFolder = downloadFolder.text
-                              ..torrentsFolder = torrentsFolder.text
-                              ..username = username.text
-                              ..password = password.text
-                              ..userUid = Int64.parseInt(userID.text)
-                              ..groupUid = Int64.parseInt(groupID.text)
-                              ..torrentHost = torrentHost.text
-                              ..torrentName = clientType.text
-                              ..torrentPassword = torrentPassword.text
-                              ..torrentProtocol = torrentProtocol.text
-                              ..torrentUser = torrentUser.text,
-                          );
-
-                      ref.invalidate(settingsProvider);
-                    } catch (e) {
-                      if (!context.mounted) return;
-                      showErrorDialog(
-                        context,
-                        'Error saving settings',
-                        '',
-                        e.toString(),
-                      );
-                    }
-                  },
-                  child: Text('Update Settings')),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget createDropDown(
-    List<String> options,
-    TextEditingController controller,
-    String label,
-  ) {
-    final selectedIndex = options.indexOf(controller.text);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
+      child: Column(
+        spacing: 5,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(label),
-          SizedBox(width: 20),
-          DropdownMenu<String>(
-            initialSelection: options[selectedIndex == -1 ? 0 : selectedIndex],
-            onSelected: (String? value) =>
-                controller.text = value ?? options.first,
-            dropdownMenuEntries:
-                options.map<DropdownMenuEntry<String>>((String value) {
-              return DropdownMenuEntry<String>(
-                value: value,
-                label: value,
-              );
-            }).toList(),
+          Text('Settings', style: headerStyle),
+          boxDivider,
+          Text('General', style: headerStyle),
+          lineDivider,
+          SizedBox(
+            width: 700,
+            child: ApiCopyField(apiKey: apiKey),
           ),
+          boxDivider,
+          createUpdateButtons2('Server Port', serverPort),
+          createUpdateButtons2(
+            'Download Check timeout (In minutes)',
+            downloadCheckTimeout,
+          ),
+          Text('Torrent Client', style: headerStyle),
+          lineDivider,
+          Row(
+            spacing: 10,
+            children: [
+              createDropDown2(
+                supportedClients,
+                clientType,
+                "Torrent Client Type",
+              ),
+              createDropDown2(
+                supportedProtocols,
+                torrentProtocol,
+                "Torrent Client Protocol",
+              ),
+              Expanded(
+                child: createUpdateButtons2('Torrent Host', torrentHost,
+                    hintText: 'localhost:8080 or qbit.eg.com'),
+              ),
+            ],
+          ),
+          boxDivider,
+          createUpdateButtons2(
+            'Torrent Username',
+            torrentUser,
+            autofillHints: [AutofillHints.username],
+          ),
+          boxDivider,
+          createUpdateButtons2(
+            'Torrent Password',
+            torrentPassword,
+            autofillHints: [AutofillHints.password],
+          ),
+          boxDivider,
+          Text('User Settings', style: headerStyle),
+          boxDivider,
+          createUpdateButtons('Username', username),
+          boxDivider,
+          createUpdateButtons('Password', password),
+          boxDivider,
+          createUpdateButtons('Linux UID', userID),
+          boxDivider,
+          createUpdateButtons('Linux GID', groupID),
+          boxDivider,
+          Text('Folder Settings', style: headerStyle),
+          lineDivider,
+          createUpdateButtons('Complete Folder', completeFolder),
+          boxDivider,
+          createUpdateButtons('Download Folder', downloadFolder),
+          boxDivider,
+          createUpdateButtons('Torrents folder', torrentsFolder),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await ref.watch(settingsApiProvider).update(
+                          Settings()
+                            ..apiKey = apiKey.text
+                            ..serverPort = serverPort.text
+                            ..downloadCheckTimeout =
+                                Int64.parseInt(downloadCheckTimeout.text)
+                            ..completeFolder = completeFolder.text
+                            ..downloadFolder = downloadFolder.text
+                            ..torrentsFolder = torrentsFolder.text
+                            ..username = username.text
+                            ..password = password.text
+                            ..userUid = Int64.parseInt(userID.text)
+                            ..groupUid = Int64.parseInt(groupID.text)
+                            ..torrentHost = torrentHost.text
+                            ..torrentName = clientType.text
+                            ..torrentPassword = torrentPassword.text
+                            ..torrentProtocol = torrentProtocol.text
+                            ..torrentUser = torrentUser.text,
+                        );
+
+                    ref.invalidate(settingsProvider);
+                    if (!context.mounted) return;
+                    showSnackBar(context, 'Updated settings');
+                  } catch (e) {
+                    if (!context.mounted) return;
+                    showErrorDialog(
+                      context,
+                      'Error saving settings',
+                      '',
+                      e.toString(),
+                    );
+                  }
+                },
+                child: Text('Update Settings')),
+          )
         ],
       ),
     );
@@ -230,19 +184,63 @@ class SettingsView extends HookConsumerWidget {
     TextEditingController controller, {
     void Function()? editingController,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: SizedBox(
-        // width: maxSettingsWidth,
-        child: TextField(
-          controller: controller,
-          onEditingComplete: editingController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: input,
-          ),
-        ),
+    return TextField(
+      controller: controller,
+      onEditingComplete: editingController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: input,
       ),
     );
   }
 }
+
+class ApiCopyField extends StatelessWidget {
+  const ApiCopyField({super.key, required this.apiKey});
+
+  final TextEditingController apiKey;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextField(
+          readOnly: true,
+          decoration: InputDecoration(
+            labelText: 'API key', // or
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+            ),
+          ),
+          controller: apiKey,
+        ),
+      ),
+      trailing: IconButton(
+        onPressed: () async {
+          await Clipboard.setData(ClipboardData(text: apiKey.text));
+
+          if (!context.mounted) return;
+          showSnackBar(context, 'copied API key');
+        },
+        icon: Icon(Icons.copy, color: Colors.white),
+      ),
+    );
+  }
+}
+
+void showSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: 3),
+    ),
+  );
+}
+
+const lineDivider = Padding(
+  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 100),
+  child: Divider(thickness: 5),
+);
+
+const boxDivider = SizedBox(height: 20);

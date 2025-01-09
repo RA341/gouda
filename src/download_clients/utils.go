@@ -20,6 +20,10 @@ func getTorrentClientInfo() models.TorrentClient {
 
 func InitializeTorrentClient() (models.DownloadClient, error) {
 	details := getTorrentClientInfo()
+	return CheckTorrentClient(details)
+}
+
+func CheckTorrentClient(details models.TorrentClient) (models.DownloadClient, error) {
 	if details.Type == "transmission" {
 		transmission, err := InitTransmission(details.Host, details.Protocol, details.User, details.Password)
 		if err != nil {

@@ -14,19 +14,8 @@ final checkTokenProvider = FutureProvider<bool>((ref) async {
   return authApi.testToken(token: token);
 });
 
-final pageIndexListProvider = StateProvider<int>((ref) {
-  ref.watch(checkTokenProvider);
-
-  final settings = ref.watch(settingsProvider).unwrapPrevious().valueOrNull;
-  final firstTimeSetup = settings?.torrentHost.isEmpty;
-  print('first time setup $firstTimeSetup');
-
-  if (firstTimeSetup ?? false) {
-    print('First time setup detected: moving to settings page');
-    return 2;
-  }
-
-  return 0;
+final pageIndexListProvider = NotifierProvider<PageNotifier, int>(() {
+  return PageNotifier();
 });
 
 final settingsProvider = FutureProvider<Settings>((ref) async {
@@ -48,6 +37,29 @@ final requestHistoryProvider =
 final searchProvider = StateProvider<String>((ref) {
   return '';
 });
+
+class PageNotifier extends Notifier<int> {
+  @override
+  int build() {
+    ref.watch(checkTokenProvider);
+
+    final settings = ref.watch(settingsProvider).unwrapPrevious().valueOrNull;
+    final firstTimeSetup = settings?.torrentHost.isEmpty;
+    print('first time setup $firstTimeSetup');
+
+    // if already on settings page and updated settings remain on settings page
+    if (stateOrNull == 2) {
+      return 2;
+    }
+
+    if (firstTimeSetup ?? false) {
+      print('First time setup detected: moving to settings page');
+      return 2;
+    }
+
+    return 0;
+  }
+}
 
 // The public methods on this class will be what allow the UI to modify the state.
 class RequestHistoryNotifier extends AsyncNotifier<List<Media>> {
