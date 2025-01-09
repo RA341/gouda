@@ -52,7 +52,7 @@ browserAPI.runtime.onMessage.addListener((request, _, sendResponse) => {
 						callback({error: res.error});
 						break;
 					}
-					callback(media);
+					callback('');
 					break;
 				}
 
