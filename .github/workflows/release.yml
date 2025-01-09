@@ -69,6 +69,7 @@ jobs:
       - name: Build and Package Extension
         working-directory: parmesan
         run: |
+          npm i
           npm run build
           zip -r parmesan_${{ needs.tag-release.outputs.new_tag }}.zip ./dist
 
