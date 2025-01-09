@@ -64,7 +64,10 @@ jobs:
 
       - name: Update Extension Version
         working-directory: parmesan
-        run: npx dot-json@1 "source/manifest.json" version "${{ needs.tag-release.outputs.new_tag }}"
+        run: |
+          VERSION="${{ needs.tag-release.outputs.new_tag }}"
+          STRIPPED_VERSION=${VERSION#v}
+          npx dot-json@1 "source/manifest.json" version "$STRIPPED_VERSION"
 
       - name: Build and Package Extension
         working-directory: parmesan
