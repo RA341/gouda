@@ -3,7 +3,7 @@
 	"scripts": {
 		"build": "npm run clean-build && parcel build && npm run clean-ts",
 		"build:loc": "npm run build && 7z a ./dist/parmesan_local.zip ./dist/*",
-		"clean-ts": "rimraf dist/content_script dist/gen dist/popup dist/shared dist/background",
+		"clean-ts": "npm rimraf dist/content_script dist/gen dist/popup dist/shared dist/background",
 		"clean-build": "npm run clean && npm run buildts",
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p 'lint:* -- --fix'",
@@ -57,7 +57,8 @@
 		"stylelint-config-prettier": "^9.0.5",
 		"stylelint-config-xo": "^1.0.2",
 		"typescript": "^5.7.2",
-		"xo": "^0.59.3"
+		"xo": "^0.59.3",
+		"rimraf": "^6.0.1"
 	},
 	"@parcel/resolver-default": {
 		"packageExports": true
