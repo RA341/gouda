@@ -13,7 +13,7 @@ services:
       - GOUDA_UID=1000
       - GOUDA_GID=1000
       - GOUDA_DOWNLOAD_DIR=/media/downloads
-      - GOUDA_DEFAULT_DIR=/media/complete
+      - GOUDA_COMPLETE_DIR=/media/complete
       - GOUDA_TORRENT_DIR=/media/downloads/torrents
     volumes:
       - D:\Dev\Go\mam\gouda\sample:/media

@@ -1,38 +1,113 @@
-import 'package:brie/api/auth_api.dart';
-import 'package:brie/api/category_api.dart';
-import 'package:brie/api/history_api.dart';
-import 'package:brie/api/settings_api.dart';
-import 'package:brie/config.dart';
-import 'package:flutter/foundation.dart';
+import 'package:brie/clients/auth_api.dart';
+import 'package:brie/clients/category_api.dart';
+import 'package:brie/clients/history_api.dart';
+import 'package:brie/clients/settings_api.dart';
+import 'package:brie/gen/category/v1/category.pb.dart';
+import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
+import 'package:brie/gen/settings/v1/settings.pb.dart';
+import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:universal_html/html.dart' as html;
-
-import 'models.dart';
-
-final basePathProvider = StateProvider<String>((ref) {
-  if (kIsWeb) {
-    return html.window.location.toString();
-  }
-  return '';
-});
 
 final checkTokenProvider = FutureProvider<bool>((ref) async {
-  final token = (prefs.get('apikey') ?? "").toString();
+  final token = ref.watch(apiTokenProvider);
+  final authApi = ref.watch(authApiProvider);
   return authApi.testToken(token: token);
 });
 
-final pageIndexListProvider = StateProvider<int>((ref) {
-  return 0;
+final pageIndexListProvider = NotifierProvider<PageNotifier, int>(() {
+  return PageNotifier();
 });
 
 final settingsProvider = FutureProvider<Settings>((ref) async {
+  final settingsApi = ref.watch(settingsApiProvider);
+
   return await settingsApi.list();
 });
 
-final categoryListProvider = FutureProvider<List<(String, int)>>((ref) async {
-  return await catApi.listCategory();
+final categoryListProvider = FutureProvider<List<Category>>((ref) async {
+  final catApi = ref.watch(catProvider);
+  return catApi.listCategory();
 });
 
-final requestHistoryProvider = FutureProvider<List<Book>>((ref) async {
-  return histApi.getTorrentHistory();
+final requestHistoryProvider =
+    AsyncNotifierProvider<RequestHistoryNotifier, List<Media>>(() {
+  return RequestHistoryNotifier();
 });
+
+final searchProvider = StateProvider<String>((ref) {
+  return '';
+});
+
+class PageNotifier extends Notifier<int> {
+  @override
+  int build() {
+    ref.watch(checkTokenProvider);
+
+    final settings = ref.watch(settingsProvider).unwrapPrevious().valueOrNull;
+    final firstTimeSetup = settings?.torrentHost.isEmpty;
+    print('first time setup $firstTimeSetup');
+
+    // if already on settings page and updated settings remain on settings page
+    if (stateOrNull == 2) {
+      return 2;
+    }
+
+    if (firstTimeSetup ?? false) {
+      print('First time setup detected: moving to settings page');
+      return 2;
+    }
+
+    return 0;
+  }
+}
+
+// The public methods on this class will be what allow the UI to modify the state.
+class RequestHistoryNotifier extends AsyncNotifier<List<Media>> {
+  var limit = 20;
+  var offset = 0;
+  var totalRecords = 0;
+
+  @override
+  Future<List<Media>> build() async {
+    final histApi = ref.watch(historyApiProvider);
+    final (records, count) = await histApi.getTorrentHistory(
+      offset: offset,
+      limit: limit,
+    );
+
+    totalRecords = count.toInt();
+    return records;
+  }
+
+  Future<void> paginateForward() async {
+    offset += 1;
+    await fetchData();
+  }
+
+  Future<void> paginateBack() async {
+    offset -= 1;
+    await fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final histApi = ref.watch(historyApiProvider);
+    final query = ref.watch(searchProvider);
+
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      if (query.isNotEmpty) {
+        return await histApi.searchMedia(query);
+      }
+
+      final (books, count) = await histApi.getTorrentHistory(
+        limit: limit,
+        offset: offset * limit,
+      );
+
+      totalRecords = count.toInt();
+      return books;
+    });
+  }
+
+  bool lastPage() => totalRecords ~/ limit == offset;
+}

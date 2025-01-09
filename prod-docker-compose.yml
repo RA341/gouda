@@ -1,10 +1,8 @@
-# This is a example docker compose file that can be used in your setup
+# This is an example docker compose file that can be used in your setup
 services:
   gouda:
     container_name: gouda
     image: ras334/gouda:latest
-    build:
-      context: .
     ports:
       - "9862:9862"
     environment:
@@ -13,7 +11,7 @@ services:
       - GOUDA_UID=1000
       - GOUDA_GID=1000
       - GOUDA_DOWNLOAD_DIR=/media/downloads
-      - GOUDA_DEFAULT_DIR=/media/complete
+      - GOUDA_COMPLETE_DIR=/media/complete
       - GOUDA_TORRENT_DIR=/media/downloads/torrents
     volumes:
       - /path/to/media:/media # make sure this matches your download client mount exactly
