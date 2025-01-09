@@ -10,7 +10,6 @@ WORKDIR /app/
 RUN flutter build web
 
 # Stage 2: Go build
-# use bookworm for gcc, required for cgo
 FROM golang:1.23-alpine AS go_builder
 
 WORKDIR /app

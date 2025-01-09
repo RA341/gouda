@@ -3,7 +3,6 @@ import 'package:brie/grpc/api.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -13,9 +12,9 @@ class LoginPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userName = useTextEditingController(
-        text: kDebugMode ? (dotenv.maybeGet('GOUDA_USERNAME') ?? 'admin') : '');
+        text: kDebugMode ? ('admin') : '');
     final pass = useTextEditingController(
-        text: kDebugMode ? (dotenv.maybeGet('GOUDA_PASS') ?? 'admin') : '');
+        text: kDebugMode ? ('admin') : '');
 
     return Center(
       child: Padding(
