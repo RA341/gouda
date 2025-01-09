@@ -1,6 +1,5 @@
 import 'package:brie/config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/grpc.dart';
 import 'package:universal_html/html.dart' as html;
@@ -17,7 +16,7 @@ final basePathProvider = Provider<String>((ref) {
 
   final finalPath = basePath ??
       (kDebugMode
-          ? (dotenv.maybeGet('PROD_URL') ?? 'http://localhost:9862')
+          ? ('http://localhost:9862')
           : html.window.location.toString());
 
   print('Base path is: $finalPath');

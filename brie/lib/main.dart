@@ -5,14 +5,11 @@ import 'package:brie/ui/category_page.dart';
 import 'package:brie/ui/components/sidebar.dart';
 import 'package:brie/ui/history_page.dart';
 import 'package:brie/ui/settings_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
-  if (kIsWeb) await dotenv.load();
   await PreferencesService.init();
 
   runApp(const ProviderScope(child: MyApp()));
