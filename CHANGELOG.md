@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/RA341/gouda/compare/v1.4.1...v1.5.0) (2025-01-09)
+
+
+### Features
+
+* added search and pagination ([539b11a](https://github.com/RA341/gouda/commit/539b11a5b04fa1f05a1112cc3b650299fa2a0ac9))
+
 ## [1.4.1](https://github.com/RA341/gouda/compare/v1.4.0...v1.4.1) (2024-12-24)
 
 
