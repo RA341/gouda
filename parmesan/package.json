@@ -3,7 +3,7 @@
 	"scripts": {
 		"build": "npm run clean-build && parcel build && npm run clean-ts",
 		"build:loc": "npm run build && 7z a ./dist/parmesan_local.zip ./dist/*",
-		"clean-ts": "npm rimraf dist/content_script dist/gen dist/popup dist/shared dist/background",
+		"clean-ts": "npx rimraf dist/content_script dist/gen dist/popup dist/shared dist/background",
 		"clean-build": "npm run clean && npm run buildts",
 		"lint": "run-p lint:*",
 		"lint-fix": "run-p 'lint:* -- --fix'",
