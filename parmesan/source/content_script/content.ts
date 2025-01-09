@@ -71,7 +71,7 @@ async function init() {
 					const response = await sendMediaInfo();
 					if (response.error === "") {
 						updateButtonState(goudaButton, buttonStates.success);
-						showPopup(`Sent to gouda\n\n${JSON.stringify(response)}`, 'success')
+						showPopup(`Sent to gouda`, 'success')
 					} else {
 						updateButtonState(goudaButton, buttonStates.failure);
 						showPopup(`Failed to send to gouda, ${response.error}`, 'error')
