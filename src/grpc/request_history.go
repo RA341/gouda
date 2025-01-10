@@ -47,7 +47,7 @@ func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v
 	limit := req.Msg.Limit
 	offset := req.Msg.Offset
 
-	if service.GetCachedDebugEnv() == "true" {
+	if service.IsDebugMode() {
 		log.Debug().Int("limit", int(limit)).Int("offset", int(offset)).Msg("history query limits")
 	}
 

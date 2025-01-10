@@ -12,7 +12,6 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"net/http"
-	"os"
 )
 
 func main() {
@@ -27,7 +26,7 @@ func main() {
 	// reinitialize logger with log file output, once a log directory has been set by viper
 	log.Logger = service.FileConsoleLogger()
 
-	if service.GetCachedDebugEnv() == "true" {
+	if service.IsDebugMode() {
 		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
 	}
 
@@ -52,7 +51,10 @@ func main() {
 
 	grpcRouter := grpc.SetupGRPCEndpoints(&apiContext)
 	// serve frontend dir
-	grpcRouter.Handle("/", getFrontendDir())
+	if service.IsDebugMode() || service.IsDocker() {
+		log.Info().Msgf("Setting up ui files")
+		grpcRouter.Handle("/", getFrontendDir())
+	}
 
 	baseUrl := fmt.Sprintf(":%s", viper.GetString("server.port"))
 	log.Info().Str("Listening on:", baseUrl).Msg("")
@@ -76,7 +78,7 @@ func main() {
 
 func getFrontendDir() http.Handler {
 	var frontendDir string
-	if os.Getenv("IS_DOCKER") == "true" {
+	if service.IsDocker() {
 		frontendDir = "./web"
 	} else {
 		frontendDir = "./brie/build/web"

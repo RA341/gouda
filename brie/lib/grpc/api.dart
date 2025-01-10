@@ -15,9 +15,9 @@ final basePathProvider = Provider<String>((ref) {
   final basePath = prefs.getString('basePath');
 
   final finalPath = basePath ??
-      (kDebugMode
-          ? ('http://localhost:9862')
-          : html.window.location.toString());
+      (kIsWeb
+          ? html.window.location.toString()
+          : 'http://localhost:9862');
 
   print('Base path is: $finalPath');
 
@@ -44,12 +44,10 @@ class AuthInterceptor implements ClientInterceptor {
   AuthInterceptor(this.authToken);
 
   @override
-  ResponseStream<R> interceptStreaming<Q, R>(
-    ClientMethod<Q, R> method,
-    Stream<Q> requests,
-    CallOptions options,
-    ClientStreamingInvoker<Q, R> invoker,
-  ) {
+  ResponseStream<R> interceptStreaming<Q, R>(ClientMethod<Q, R> method,
+      Stream<Q> requests,
+      CallOptions options,
+      ClientStreamingInvoker<Q, R> invoker,) {
     return invoker(method, requests, options);
   }
 

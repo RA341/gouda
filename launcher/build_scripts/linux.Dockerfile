@@ -37,7 +37,6 @@ RUN go mod tidy
 RUN go build -ldflags "-s -w" -o gouda
 
 # Stage 3: launcher build
-# use bookworm for gcc, required for cgo
 FROM golang:1.23-bookworm AS launcher_builder
 
 WORKDIR /app
@@ -45,6 +44,9 @@ WORKDIR /app
 COPY ./launcher .
 
 RUN go mod tidy
+
+RUN apt-get update && apt-get install -y \
+    gcc libgtk-3-dev libayatana-appindicator3-dev
 
 # Build optimized binary without debugging symbols
 RUN go build -ldflags "-s -w" -o gouda-launcher
@@ -60,5 +62,7 @@ COPY --from=api_builder /app/gouda ./api/
 COPY --from=flutter_builder /app/build/linux/x64/release/bundle/* ./frontend/
 
 COPY --from=launcher_builder /app/gouda-launcher ./
+
+COPY ./launcher/assets/* ./
 
 CMD ["/bin/sh", "-c", "cp -r /build/* /output/"]

@@ -9,7 +9,12 @@ win:
 [working-directory: 'build_output/windows']
 rwin:
     just cleanw
+    cp -r ../../assets/* .
     just win
+    just startw
+
+[working-directory: 'build_output/windows']
+startw:
     .\gouda-launcher.exe
 
 [working-directory: 'build_output/windows']

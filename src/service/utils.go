@@ -22,7 +22,15 @@ var (
 
 const DefaultFilePerm = 0o775
 
-func GetCachedDebugEnv() string {
+func IsDebugMode() bool {
+	return getCachedDebugEnv() == "true"
+}
+
+func IsDocker() bool {
+	return os.Getenv("IS_DOCKER") == "true"
+}
+
+func getCachedDebugEnv() string {
 	envVarOnce.Do(func() {
 		cachedEnvVar = os.Getenv("DEBUG")
 	})

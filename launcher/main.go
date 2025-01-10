@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/getlantern/systray"
 	"github.com/rs/zerolog/log"
 	"os"
 	"os/exec"
@@ -8,79 +10,121 @@ import (
 	"runtime"
 )
 
-// todo add logging rollover and limits via lumberjack
+var (
+	apiExecutable      = "gouda"
+	frontendExecutable = "brie"
+)
 
 func main() {
-	// Get the resources directory for macOS bundle
-	exePath, _ := os.Executable()
-	appDir := filepath.Dir(exePath)
+	getWorkingDir()
+	systray.Run(onReady, onExit)
+}
 
-	log.Info().Str("exePath", exePath).Str("appDir", appDir).Msg("paths")
+func onReady() {
+	systray.SetTitle("Gouda Launcher")
+	systray.SetTooltip("Gouda is Running")
+	systray.SetIcon(readIconToBytes(fmt.Sprintf("%s/%s", getWorkingDir(), "cheese.ico")))
 
-	apiExecutable := "gouda"
-	frontendExecutable := "brie"
+	// Server control menu items
+	_ = systray.AddMenuItem("Gouda", "")
+	systray.AddSeparator()
+	frontendOption := systray.AddMenuItem("Open Gouda", "Opens the gouda ui")
+	systray.AddSeparator()
+	mLogs := systray.AddMenuItem("Open Logs Directory", "Open the logs folder")
+	systray.AddSeparator()
+	mQuit := systray.AddMenuItem("Quit", "Quit the application")
+
+	// Launch the main application logic
+	go runMainApp()
+
+	// Handle menu actions
+	go func() {
+		for {
+			select {
+			case <-frontendOption.ClickedCh:
+				log.Info().Msg("Launching frontend")
+				launchFrontend()
+			case <-mLogs.ClickedCh:
+				log.Info().Msg("opening Logs")
+				openLogsDirectory()
+			case <-mQuit.ClickedCh:
+				// Kill both processes before quitting
+				killProcess([]string{frontendExecutable, apiExecutable})
+				systray.Quit()
+				os.Exit(0)
+			}
+		}
+	}()
+}
+
+func onExit() {
+	log.Info().Msg("Exiting launcher Goodbye!")
+}
+
+func runMainApp() {
+	// Get the working directory
+	appDir := getWorkingDir()
+
+	log.Logger = log.
+		With().
+		Caller().
+		Logger().
+		Output(getFileLogger(fmt.Sprintf("%s/%s", appDir, "launcher.log")))
+
+	log.Info().Str("appDir", appDir).Msg("Path info")
 
 	if runtime.GOOS == "windows" {
 		apiExecutable += ".exe"
 		frontendExecutable += ".exe"
 	}
 
-	fullApiPath := filepath.Join(appDir, "api", apiExecutable)
-	fullFrontendPath := filepath.Join(appDir, "frontend", frontendExecutable)
-	log.Info().Str("fullApiPath", fullApiPath).Str("full frontend path", fullFrontendPath).Msg("fullApiPath")
+	launchAPI()
+	launchFrontend()
+}
 
-	///////////////////////////////////////////////////////////////////////////////////////
-	// Start the API server with output redirected to the log file
-	// Create/open a log file
-	apiLogFile, err := os.OpenFile("api_server.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to open log file")
-	}
-	defer func(logFile *os.File) {
-		err := logFile.Close()
+func launchFrontend() {
+	fullFrontendPath := filepath.Join(getWorkingDir(), "frontend", frontendExecutable)
+	log.Info().Str("path", fullFrontendPath).Msg("frontend path")
+
+	if isProcessRunning(frontendExecutable) {
+		log.Info().Msgf("%s is already running", frontendExecutable)
+	} else {
+		log.Info().Msgf("%s is starting", frontendExecutable)
+
+		flutterLogFile := getFileLogger(fmt.Sprintf("%s/%s", getWorkingDir(), "flutter.log"))
+
+		// Flutter frontend
+		flutterApp := exec.Command(filepath.Join(fullFrontendPath))
+		flutterApp.Stdout = flutterLogFile
+		flutterApp.Stderr = flutterLogFile
+
+		err := flutterApp.Start()
 		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to close log file")
+			log.Error().Err(err).Msg("Unable to start frontend application")
 		}
-	}(apiLogFile)
+	}
+}
+
+func launchAPI() {
+	fullApiPath := filepath.Join(getWorkingDir(), "api", apiExecutable)
 
 	// Start the API server with output redirected to the log file
-	apiServer := exec.Command(fullApiPath)
-	apiServer.Stdout = apiLogFile
-	apiServer.Stderr = apiLogFile
-	applyOSSpecificAttr(apiServer)
-	err = apiServer.Start()
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to start api server")
-	}
+	if isProcessRunning(apiExecutable) {
+		log.Info().Msgf("%s is already running", apiExecutable)
+	} else {
+		log.Info().Msgf("%s is starting", apiExecutable)
+		// Create/open a log file
+		apiLogFile := getFileLogger(fmt.Sprintf("%s/%s", getWorkingDir(), "api_server.log"))
+		// Start the API server with output redirected to the log file
+		apiServer := exec.Command(fullApiPath)
+		apiServer.Stdout = apiLogFile
+		apiServer.Stderr = apiLogFile
 
-	///////////////////////////////////////////////////////////////////////////////////////
-	flutterLogFile, err := os.OpenFile("flutter.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to open log file")
-	}
-	defer func(logFile *os.File) {
-		err := logFile.Close()
+		// start exec in background
+		applyOSSpecificAttr(apiServer)
+		err := apiServer.Start()
 		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to close log file")
-		}
-	}(flutterLogFile)
-
-	// Flutter frontend
-	flutterApp := exec.Command(filepath.Join(fullFrontendPath))
-	flutterApp.Stdout = flutterLogFile
-	flutterApp.Stderr = flutterLogFile
-
-	err = flutterApp.Run()
-	if err != nil {
-		log.Error().Err(err).Msg("Unable to start frontend application")
-	}
-	///////////////////////////////////////////////////////////////////////////////////////
-
-	// Cleanup
-	if apiServer.Process != nil {
-		err := apiServer.Process.Kill()
-		if err != nil {
-			log.Fatal().Err(err).Msg("Unable to kill API server")
+			log.Fatal().Err(err).Msg("Failed to start api server")
 		}
 	}
 }

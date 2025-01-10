@@ -10,7 +10,7 @@ import (
 )
 
 func VerifyToken(token string) (bool, error) {
-	if GetCachedDebugEnv() == "true" {
+	if IsDocker() {
 		return true, nil
 	}
 

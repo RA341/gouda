@@ -21,3 +21,6 @@ Gouda/
 * Launch the Flutter frontend
 * Automatically terminate the API server when the Flutter app closes
 
+## Attributions
+
+<a href="https://www.flaticon.com/free-icons/gouda" title="gouda icons">Gouda icons created by Paul J. - Flaticon</a>
