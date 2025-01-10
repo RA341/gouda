@@ -8,7 +8,22 @@ import (
 	"github.com/spf13/viper"
 )
 
-func InitializeTorrentClient(details models.TorrentClient) (models.DownloadClient, error) {
+func getTorrentClientInfo() models.TorrentClient {
+	return models.TorrentClient{
+		User:     viper.GetString("torrent_client.user"),
+		Password: viper.GetString("torrent_client.password"),
+		Protocol: viper.GetString("torrent_client.protocol"),
+		Host:     viper.GetString("torrent_client.host"),
+		Type:     viper.GetString("torrent_client.name"),
+	}
+}
+
+func InitializeTorrentClient() (models.DownloadClient, error) {
+	details := getTorrentClientInfo()
+	return CheckTorrentClient(details)
+}
+
+func CheckTorrentClient(details models.TorrentClient) (models.DownloadClient, error) {
 	if details.Type == "transmission" {
 		transmission, err := InitTransmission(details.Host, details.Protocol, details.User, details.Password)
 		if err != nil {
@@ -33,18 +48,4 @@ func InitializeTorrentClient(details models.TorrentClient) (models.DownloadClien
 	} else {
 		return nil, fmt.Errorf("unsupported torrent client: %s", details.Type)
 	}
-}
-
-func WriteTorrentConfig(details models.TorrentClient) error {
-	viper.Set("torrent_client.name", details.Type)
-	viper.Set("torrent_client.host", details.Host)
-	viper.Set("torrent_client.protocol", details.Protocol)
-	viper.Set("torrent_client.user", details.User)
-	viper.Set("torrent_client.password", details.Password)
-	err := viper.WriteConfig()
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

@@ -3,7 +3,7 @@ package types
 // todo doc strings for all functions
 
 type DownloadClient interface {
-	DownloadTorrent(torrent string, downloadPath string) (string, error)
+	DownloadTorrent(torrent, downloadPath, category string) (string, error)
 
 	CheckTorrentStatus(torrentId []string) ([]TorrentStatus, error)
 

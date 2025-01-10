@@ -1,0 +1,46 @@
+{
+	"$schema": "https://json.schemastore.org/chrome-manifest",
+	"name": "Parmesan",
+	"version": "0.1.0",
+	"description": "Parmesan a companion for the gouda API",
+	"homepage_url": "https://github.com/ra341/gouda",
+	"manifest_version": 3,
+	"minimum_chrome_version": "121",
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "awesome-extension@notlmn.github.io",
+			"strict_min_version": "109.0"
+		}
+	},
+	"icons": {
+		"128": "icon.png"
+	},
+	"permissions": [
+		"storage"
+	],
+	"host_permissions": [
+		"https://*.myanonamouse.net/t/*"
+	],
+	"action": {
+		"default_popup": "popup/popup.html",
+		"default_icon": {
+			"128": "icon.png"
+		}
+	},
+	"background": {
+		"scripts": ["../dist/background/background.js"],
+		"service_worker": "../dist/background/background.js",
+		"type": "module"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"https://*.myanonamouse.net/t/*"
+			],
+			"js": [
+				"../dist/content_script/content.js"
+			],
+			"run_at": "document_end"
+		}
+	]
+}

@@ -6,8 +6,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateCategory(db *gorm.DB, input *models.Categories) error {
-	result := db.Create(input)
+func CreateCategory(db *gorm.DB, category string) error {
+	input := models.Categories{Category: category}
+	result := db.Create(&input)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -19,7 +20,7 @@ func CreateCategory(db *gorm.DB, input *models.Categories) error {
 func DeleteCategory(db *gorm.DB, input *models.Categories) error {
 	// perma delete, due to unique constraints
 	// normal db.Delete will soft delete stuff https://gorm.io/docs/delete.html
-	result := db.Unscoped().Delete(input)
+	result := db.Unscoped().Delete(input, input.ID)
 	if result.Error != nil {
 		return result.Error
 	}

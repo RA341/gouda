@@ -1,3 +1,5 @@
+import 'package:brie/config.dart';
+import 'package:brie/grpc/api.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,59 +19,70 @@ class Sidebar extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: buttonDivider),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Color(0xFF207722),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 25,
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xFF207722),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 25,
+                      ),
+                      child: Text('Gouda'),
+                    ),
                   ),
-                  child: Text('Gouda'),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: pageIndex == 0 ? activeButtonColor : null,
+                    ),
+                    child: Text('History'),
+                    onPressed: () async {
+                      ref.read(pageIndexListProvider.notifier).state = 0;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: pageIndex == 1 ? activeButtonColor : null,
+                    ),
+                    child: Text('Categories'),
+                    onPressed: () async {
+                      ref.read(pageIndexListProvider.notifier).state = 1;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: pageIndex == 2 ? activeButtonColor : null,
+                    ),
+                    child: Text('Settings'),
+                    onPressed: () async {
+                      ref.read(pageIndexListProvider.notifier).state = 2;
+                    },
+                  ),
+                ),
+              ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: buttonDivider),
+              padding: const EdgeInsets.symmetric(vertical: 50),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: pageIndex == 0 ? activeButtonColor : null,
-                ),
-                child: Text(
-                  'History',
-                ),
+                child: Text('Logout'),
                 onPressed: () async {
-                  ref.read(pageIndexListProvider.notifier).state = 0;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: buttonDivider),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: pageIndex == 1 ? activeButtonColor : null,
-                ),
-                child: Text(
-                  'Categories',
-                ),
-                onPressed: () async {
-                  ref.read(pageIndexListProvider.notifier).state = 1;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: buttonDivider),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: pageIndex == 2 ? activeButtonColor : null,
-                ),
-                child: Text('Settings'),
-                onPressed: () async {
-                  ref.read(pageIndexListProvider.notifier).state = 2;
+                  await prefs.setString('apikey', '');
+                  ref.invalidate(apiTokenProvider);
                 },
               ),
             ),

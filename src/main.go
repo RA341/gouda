@@ -1,92 +1,95 @@
 package main
 
 import (
+	connectcors "connectrpc.com/cors"
 	"fmt"
-	"github.com/RA341/gouda/api"
 	"github.com/RA341/gouda/download_clients"
-	models "github.com/RA341/gouda/models"
+	grpc "github.com/RA341/gouda/grpc"
 	"github.com/RA341/gouda/service"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog"
+	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 	"net/http"
 	"os"
 )
 
 func main() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+	log.Logger = service.ConsoleLogger()
 
-	err := InitConfig()
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Failed to get config")
+	service.InitConfig()
+
+	if viper.GetString("user.name") == "admin" || viper.GetString("user.password") == "admin" {
+		log.Warn().Msgf("Default username or password detected make sure to change this via the web ui")
 	}
 
-	if os.Getenv("DEBUG") == "true" {
+	// reinitialize logger with log file output, once a log directory has been set by viper
+	log.Logger = service.FileConsoleLogger()
+
+	if service.GetCachedDebugEnv() == "true" {
 		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
 	}
 
-	dbPath := viper.GetString("DB_PATH")
-	if dbPath == "" {
-		log.Fatal().Msgf("DB_PATH is empty")
-	}
-	db, err := service.InitDB(dbPath)
+	db, err := service.InitDB()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to start database")
 	}
 
-	apiEnv := api.Env{Database: db}
+	apiContext := grpc.Env{Database: db}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {
-		client, err := download_clients.InitializeTorrentClient(models.TorrentClient{
-			User:     viper.GetString("torrent_client.user"),
-			Password: viper.GetString("torrent_client.password"),
-			Protocol: viper.GetString("torrent_client.protocol"),
-			Host:     viper.GetString("torrent_client.host"),
-			Type:     viper.GetString("torrent_client.name"),
-		})
+		client, err := download_clients.InitializeTorrentClient()
 
 		if err == nil {
 			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.name"))
-			apiEnv.DownloadClient = client
+			apiContext.DownloadClient = client
 		} else {
 			log.Error().Err(err).Msgf("Failed to initialize torrent client")
 		}
 	}
 
-	// api setup
-	ginRouter := gin.Default()
+	grpcRouter := grpc.SetupGRPCEndpoints(&apiContext)
+	// serve frontend dir
+	grpcRouter.Handle("/", getFrontendDir())
 
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
-	corsConfig.AllowHeaders = append(corsConfig.AllowHeaders, "Authorization")
-	ginRouter.Use(cors.New(corsConfig))
+	baseUrl := fmt.Sprintf(":%s", viper.GetString("server.port"))
+	log.Info().Str("Listening on:", baseUrl).Msg("")
 
-	if os.Getenv("IS_DOCKER") == "true" {
-		ginRouter.Use(static.Serve("/", static.LocalFile("./web", false)))
-	} else {
-		log.Info().Msgf("Frontend is served from brie/build/web")
-		ginRouter.Use(static.Serve("/", static.LocalFile("./brie/build/web", false)))
-	}
-
-	ginRouter.HEAD("/", func(context *gin.Context) {
-		context.Status(http.StatusOK)
+	middleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: connectcors.AllowedMethods(),
+		AllowedHeaders: append(connectcors.AllowedHeaders(), "Authorization"),
+		ExposedHeaders: connectcors.ExposedHeaders(),
 	})
 
-	r := api.SetupAuthRouter(ginRouter)
-	apiGroup := r.Group("/api")
-	apiGroup.Use(api.AuthMiddleware())
-	apiGroup = apiEnv.SetupTorrentClientEndpoints(apiGroup)
-	apiGroup = apiEnv.SetupCategoryEndpoints(apiGroup)
-	apiGroup = apiEnv.SetupHistoryEndpoints(apiGroup)
-	_ = apiEnv.SetupSettingsEndpoints(apiGroup)
-
-	port := viper.GetString("server.port")
-	err = r.Run(fmt.Sprintf(":%s", port))
+	err = http.ListenAndServe(
+		baseUrl,
+		// Use h2c so we can serve HTTP/2 without TLS.
+		middleware.Handler(h2c.NewHandler(grpcRouter, &http2.Server{})),
+	)
 	if err != nil {
-		log.Error().Err(err).Msgf("Failed to start server")
+		log.Fatal().Err(err).Msgf("Failed to start server")
 	}
+}
+
+func getFrontendDir() http.Handler {
+	var frontendDir string
+	if os.Getenv("IS_DOCKER") == "true" {
+		frontendDir = "./web"
+	} else {
+		frontendDir = "./brie/build/web"
+		log.Info().Msgf("Frontend is served from %s", frontendDir)
+	}
+
+	exists, err := service.DirExists(frontendDir)
+	if err != nil {
+		log.Fatal().Err(err).Msgf("Unable to stat frontend directory %s", frontendDir)
+	}
+	if !exists {
+		log.Fatal().Msgf("Unable to find frontend directory %s", frontendDir)
+	}
+
+	return http.FileServer(http.Dir(frontendDir))
 }

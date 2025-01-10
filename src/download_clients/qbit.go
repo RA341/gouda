@@ -45,8 +45,8 @@ func InitQbit(qbitUrl, protocol, user, pass string) (models.DownloadClient, erro
 	return client, nil
 }
 
-func (qbitClient *QbitClient) DownloadTorrent(torrent string, downloadPath string) (string, error) {
-	torrentResult, err := qbitClient.AddTorrent(torrent, downloadPath, "")
+func (qbitClient *QbitClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
+	torrentResult, err := qbitClient.AddTorrent(torrent, downloadPath, category)
 	if err != nil {
 		return "", err
 	}
@@ -165,21 +165,23 @@ func (qbitClient *QbitClient) AddTorrent(torrentFilePath, downloadPath string, c
 	}
 
 	// Get the hash from torrent list
-	torrents, err := qbitClient.getTorrentList()
+	_, err = qbitClient.getTorrentList()
 	if err != nil {
 		return "", fmt.Errorf("failed to get torrent hash: %w", err)
 	}
 
+	// todo
 	// Return the hash of the most recently added torrent
-	if len(torrents) > 0 {
-		return torrents[len(torrents)-1].Hash, nil
-	}
+	//if len(torrents) > 0 {
+	//	return torrents[0].Hash, nil
+	//}
 
 	return "", fmt.Errorf("torrent was added but hash not found")
 }
 
 // Helper function to get torrent list
 func (qbitClient *QbitClient) getTorrentList() ([]TorrentInfo, error) {
+	// todo broken the list returned is unordered
 	var torrents []TorrentInfo
 	resp, err := resty.New().R().
 		SetCookie(qbitClient.cookie).

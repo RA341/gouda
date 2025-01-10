@@ -1,0 +1,46 @@
+import 'package:brie/config.dart';
+import 'package:brie/gen/auth/v1/auth.pbgrpc.dart';
+import 'package:brie/grpc/api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final authApiProvider = Provider<AuthApi>((ref) {
+  final channel = ref.watch(grpcChannelProvider);
+
+  final client = AuthServiceClient(channel);
+
+  return AuthApi(client);
+});
+
+class AuthApi {
+  final AuthServiceClient apiClient;
+
+  AuthApi(this.apiClient);
+
+  Future<void> login({
+    required String user,
+    required String pass,
+  }) async {
+    final token = await apiClient.authenticate(AuthRequest(
+      username: user,
+      password: pass,
+    ));
+    await prefs.setString('apikey', token.authToken);
+  }
+
+  Future<bool> testToken({required String token}) async {
+    if (token == '') {
+      return false;
+    }
+
+    try {
+      await apiClient.test(
+        AuthResponse(authToken: token),
+      );
+    } catch (e) {
+      print('Incorrect token, ${e.toString()}');
+      return false;
+    }
+
+    return true;
+  }
+}

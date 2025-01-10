@@ -1,61 +1,61 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: staging build
-
-on:
-  push:
-    branches: [ "main" ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.23.3'
-
-      - name: lint go
-        working-directory: src
-        run: |
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.62.2
-          golangci-lint run
-
-      - name: Set up Git
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Check for existing PR
-        id: check_pr
-        env:
-          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-        run: |
-          existing_prs=$(gh pr list --base release --head main --json number --jq length)
-          if [ "$existing_prs" -gt "0" ]; then
-            echo "Existing PR found, skipping creation"
-            echo "has_pr=true" >> $GITHUB_OUTPUT
-          else
-            echo "No existing PR found"
-            echo "has_pr=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Create branch and PR to release
-        if: steps.check_pr.outputs.has_pr == 'false'
-        env:
-          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-        run: |
-          gh pr create \
-            --base release \
-            --head main \
-            --title "[TODO] Automated merge from main" \
-            --body "Automated PR to sync changes from main to release branch. Add changes info here"
+#
+#name: staging build
+#
+#on:
+#  push:
+#    branches: [  ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write # to be able to publish a GitHub release
+#      issues: write # to be able to comment on released issues
+#      pull-requests: write # to be able to comment on released pull requests
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v4
+#        with:
+#          go-version: '1.23.3'
+#
+#      - name: lint go
+#        working-directory: src
+#        run: |
+#          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.62.2
+#          golangci-lint run
+#
+#      - name: Set up Git
+#        run: |
+#          git config --global user.name 'GitHub Actions'
+#          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+#
+#      - name: Check for existing PR
+#        id: check_pr
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+#        run: |
+#          existing_prs=$(gh pr list --base release --head main --json number --jq length)
+#          if [ "$existing_prs" -gt "0" ]; then
+#            echo "Existing PR found, skipping creation"
+#            echo "has_pr=true" >> $GITHUB_OUTPUT
+#          else
+#            echo "No existing PR found"
+#            echo "has_pr=false" >> $GITHUB_OUTPUT
+#          fi
+#
+#      - name: Create branch and PR to release
+#        if: steps.check_pr.outputs.has_pr == 'false'
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+#        run: |
+#          gh pr create \
+#            --base release \
+#            --head main \
+#            --title "[TODO] Automated merge from main" \
+#            --body "Automated PR to sync changes from main to release branch. Add changes info here"

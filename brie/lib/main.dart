@@ -1,4 +1,3 @@
-import 'package:brie/api/api.dart';
 import 'package:brie/config.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/auth_page.dart';
@@ -12,9 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   await PreferencesService.init();
-
-  final apikey = prefs.getString('apikey') ?? '';
-  apiInst.init(apiKey: apikey);
 
   runApp(const ProviderScope(child: MyApp()));
 }

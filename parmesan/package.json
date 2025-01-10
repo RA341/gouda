@@ -1,0 +1,80 @@
+{
+	"private": true,
+	"scripts": {
+		"build": "npm run clean-build && parcel build && npm run clean-ts",
+		"build:loc": "npm run build && 7z a ./dist/parmesan_local.zip ./dist/*",
+		"clean-ts": "npx rimraf dist/content_script dist/gen dist/popup dist/shared dist/background",
+		"clean-build": "npm run clean && npm run buildts",
+		"lint": "run-p lint:*",
+		"lint-fix": "run-p 'lint:* -- --fix'",
+		"lint:css": "stylelint source/**/*.css",
+		"lint:js": "xo",
+		"test": "run-p lint:* build",
+		"clean": "npx rimraf dist/*",
+		"watch": "npm run buildts && parcel watch --no-hmr",
+		"run:brave": "web-ext run -t chromium --chromium-binary=\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\"",
+		"run:fire": "web-ext run -t firefox-desktop --firefox-binary=\"C:\\Program Files\\Ablaze Floorp\\floorp.exe\"",
+		"buildts": "tsc",
+		"watchts": "tsc -w",
+		"build:chrome": "tsc",
+		"build:firefox": "tsc"
+	},
+	"browserslist": [
+		"last 1 Chrome version",
+		"last 1 Firefox version"
+	],
+	"xo": {
+		"envs": [
+			"browser",
+			"webextensions"
+		],
+		"rules": {
+			"unicorn/prefer-top-level-await": "off"
+		}
+	},
+	"stylelint": {
+		"extends": [
+			"stylelint-config-xo"
+		],
+		"rules": {}
+	},
+	"dependencies": {
+		"@bufbuild/protobuf": "^2.2.3",
+		"@connectrpc/connect": "^2.0.0",
+		"@connectrpc/connect-web": "^2.0.0",
+		"webext-base-css": "^2.0.1",
+		"webext-options-sync": "^4.2.3"
+	},
+	"devDependencies": {
+		"@parcel/config-webextension": "^2.13.0",
+		"@parcel/resolver-default": "^2.13.0",
+		"@types/chrome": "^0.0.289",
+		"@types/firefox-webext-browser": "^120.0.4",
+		"npm-run-all2": "^7.0.1",
+		"parcel": "^2.13.0",
+		"process": "^0.11.10",
+		"stylelint": "^16.6.1",
+		"stylelint-config-prettier": "^9.0.5",
+		"stylelint-config-xo": "^1.0.2",
+		"typescript": "^5.7.2",
+		"xo": "^0.59.3",
+		"rimraf": "^6.0.1"
+	},
+	"@parcel/resolver-default": {
+		"packageExports": true
+	},
+	"targets": {
+		"default": {
+			"source": "source/manifest.json",
+			"distDir": "./dist"
+		}
+	},
+	"webExt": {
+		"sourceDir": "dist",
+		"run": {
+			"startUrl": [
+				"https://www.myanonamouse.net/t/1099147"
+			]
+		}
+	}
+}
