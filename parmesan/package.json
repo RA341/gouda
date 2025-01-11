@@ -10,14 +10,12 @@
 		"lint:css": "stylelint source/**/*.css",
 		"lint:js": "xo",
 		"test": "run-p lint:* build",
-		"clean": "npx rimraf dist/*",
-		"watch": "npm run buildts && parcel watch --no-hmr",
+		"clean": "npx rimraf dist/",
+		"watch": "parcel watch --no-hmr",
 		"run:brave": "web-ext run -t chromium --chromium-binary=\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\"",
 		"run:fire": "web-ext run -t firefox-desktop --firefox-binary=\"C:\\Program Files\\Ablaze Floorp\\floorp.exe\"",
 		"buildts": "tsc",
-		"watchts": "tsc -w",
-		"build:chrome": "tsc",
-		"build:firefox": "tsc"
+		"watchts": "tsc -w"
 	},
 	"browserslist": [
 		"last 1 Chrome version",

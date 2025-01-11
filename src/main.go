@@ -67,10 +67,11 @@ func main() {
 	log.Info().Str("Listening on:", baseUrl).Msg("")
 
 	middleware := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: connectcors.AllowedMethods(),
-		AllowedHeaders: append(connectcors.AllowedHeaders(), "Authorization"),
-		ExposedHeaders: connectcors.ExposedHeaders(),
+		AllowedOrigins:      []string{"*"},
+		AllowPrivateNetwork: true,
+		AllowedMethods:      connectcors.AllowedMethods(),
+		AllowedHeaders:      append(connectcors.AllowedHeaders(), "Authorization"),
+		ExposedHeaders:      connectcors.ExposedHeaders(),
 	})
 
 	err = http.ListenAndServe(

@@ -4,33 +4,85 @@ This is an extension for the [Gouda api](https://github.com/RA341/gouda), design
 
 ## Installing
 
-Note: Currently, the extension is not published to the extension stores, and is only compatible with chromium based browsers.
+> [!IMPORTANT]
+Currently, the extension is not published to the extension stores and manual installation is required.
+
+> [!NOTE]
+> The scripts below are optional, all they do is download the latest extension release zip file,
+> and unzip them to make it easy to install/update the extension.
+>
+> If you feel uncomfortable running the scripts, you can follow instructions [here](#manual-install) to manually download the extension.
+
+### Script install
+
+* Open a terminal window
+* Run the commands below
+
+#### For windows
+
+Feel free to inspect the [script](../install_scripts/extension.install.ps1)
+
+```powershell
+iex (iwr 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install_scripts/extension.install.ps1').Content
+```
+
+#### For linux/macos
+
+Feel free to inspect the [script](../install_scripts/extension.install.sh)
+
+```bash
+curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install_scripts/extension.install.sh' | bash
+```
+
+### Manual install
 
 1. Download the zip from https://github.com/RA341/gouda/releases/latest
-2. Unzip the downloaded file, it will contain a single directory named source.
-3. Open your browser, in the extensions tab, on the top right side corner enable developer mode
-	* ![img.png](media/img.png)
-4. Next click on the load unpacked button and select the folder you unzipped.
-5. The extension should now be loaded, with the icon
-	* ![icon.png](source/icon.png)
-6. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
-7. You are now good to go!!
-8. Go to any book release on the site, and you should have this button near the download button.
- 	* ![img.png](media/img_2.png)
-	* Note the dropdown will show an error, if you have not created any categories. if you do not have categories set them up via the gouda webui.
+2. Unzip the downloaded file, it will contain a single directory named dist.
+
+### Chrome setup
+
+1. Open your browser, in the extensions tab, on the top right side corner enable developer mode
+    * ![img.png](media/img.png)
+2. Next click on the load unpacked button and select the folder you unzipped.
+3. The extension should now be loaded, with the icon
+    * ![icon.png](source/icon.png)
+
+### Firefox setup
+
+1. Download the zip from https://github.com/RA341/gouda/releases/latest
+2. Unlike chrome, firefox can load the zip file directly.
+3. Open firefox and go to the extensions page.
+4. Click the settings icon here, ![img.png](./media/firefox.png)
+5. Then click `install addon from file`
+   * ![img.png](firefox-popup.png)
+6. Select the zip file and install.
+
+> [!IMPORTANT]
+> This only applies to firefox users.
+>
+> If you are running gouda in a different machine but on the same network, you must use a https domain.
+>
+> What this means is if you are running gouda in another machine at IP: `http://192.168.1.43:9862`,
+> this address will not work, you must use a domain name: e.g. `https://gouda.example.com` (which points to `http://192.168.1.43:9862`)
 
 
-## Troubleshooting
+### Extension setup
+1. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
+2. You are now good to go!!
+3. Go to any book release on the site, and you should have this button near the download button.
+    * ![img.png](media/img_2.png)
+    * Note the dropdown will show an error, if you have not created any categories. if you do not have categories set them up via the gouda webui.
 
-If a send to gouda fails please disable your adblock as it may block localhost request or use a https domain name
+
+
 
 ## For Developers
 
 ### 🛠 Build locally
 
 1. Checkout the copied repository to your local machine eg. with `git clone https://github.com/RA341/parmesan`
-1. Run `npm install` to install all required dependencies
-1. Run `npm run build`
+2. Run `npm install` to install all required dependencies
+3. Run `npm run build`
 
 The build step will create the `distribution` folder, this folder will contain the generated extension.
 

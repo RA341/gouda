@@ -39,4 +39,5 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Successfully downloaded and extracted to $OUTPUT_PATH"
+ABSOLUTE_PATH=$(readlink -f "$OUTPUT_PATH")
+echo "Absolute path: $ABSOLUTE_PATH"
