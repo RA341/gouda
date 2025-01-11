@@ -74,7 +74,7 @@ jobs:
         run: |
           npm i
           npm run build
-          zip -r parmesan_${{ needs.tag-release.outputs.new_tag }}.zip ./dist
+          zip -r parmesan_extension.zip ./dist/*
 
       - name: Upload Extension Asset
         uses: softprops/action-gh-release@v2
