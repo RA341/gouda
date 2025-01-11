@@ -1,6 +1,7 @@
 import {browserAPI} from "../shared/browser";
 import {createAuthClient, createGRPCTransport} from "../shared/grpc_client";
 import {AuthResponse} from "../gen/auth/v1/auth_pb";
+import {showPopup} from "../content_script/content_popup";
 
 document.addEventListener('DOMContentLoaded', async () => {
 	console.log('Document loaded');
@@ -42,50 +43,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 				'gouda_apikey': apikey
 			});
 
-			showStatus('Settings saved!')
+			showPopup('Settings saved!', 'info')
 		} catch (error) {
 			console.log(error);
-			showStatus(String(error))
+			showPopup(String(error), 'error')
 		}
 	});
 });
-
-function showStatus(message: string, type = 'success', duration = 3000) {
-	// Remove any existing popups
-	const existingPopup = document.querySelector('.status-popup');
-	if (existingPopup) {
-		existingPopup.remove();
-	}
-
-	// Create popup elements
-	const popup = document.createElement('div');
-	popup.className = `status-popup ${type}`;
-
-	const messageSpan = document.createElement('span');
-	messageSpan.textContent = message;
-
-	const closeButton = document.createElement('button');
-	closeButton.className = 'close-button';
-	closeButton.innerHTML = '✕';
-	closeButton.onclick = () => {
-		popup.classList.add('fade-out');
-		setTimeout(() => popup.remove(), 300);
-	};
-
-	// Assemble popup
-	popup.appendChild(messageSpan);
-	popup.appendChild(closeButton);
-	document.body.appendChild(popup);
-
-	// Auto-remove after duration
-	if (duration) {
-		setTimeout(() => {
-			if (popup.parentElement) {
-				popup.classList.add('fade-out');
-				setTimeout(() => popup.remove(), 300);
-			}
-		}, duration);
-	}
-
-	return popup;
-}
