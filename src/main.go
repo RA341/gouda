@@ -2,6 +2,7 @@ package main
 
 import (
 	connectcors "connectrpc.com/cors"
+	"embed"
 	"fmt"
 	"github.com/RA341/gouda/download_clients"
 	grpc "github.com/RA341/gouda/grpc"
@@ -12,8 +13,12 @@ import (
 	"github.com/spf13/viper"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
+	"io/fs"
 	"net/http"
 )
+
+//go:embed web
+var frontendDir embed.FS
 
 func main() {
 	log.Logger = service.ConsoleLogger()
@@ -85,21 +90,9 @@ func main() {
 }
 
 func getFrontendDir() http.Handler {
-	var frontendDir string
-	if service.IsDocker() {
-		frontendDir = "./web"
-	} else {
-		frontendDir = "./brie/build/web"
-		log.Info().Msgf("Frontend is served from %s", frontendDir)
-	}
-
-	exists, err := service.DirExists(frontendDir)
+	subFS, err := fs.Sub(frontendDir, "web")
 	if err != nil {
-		log.Fatal().Err(err).Msgf("Unable to stat frontend directory %s", frontendDir)
+		log.Fatal().Err(err).Msgf("Failed to load frontend directory")
 	}
-	if !exists {
-		log.Fatal().Msgf("Unable to find frontend directory %s", frontendDir)
-	}
-
-	return http.FileServer(http.Dir(frontendDir))
+	return http.FileServer(http.FS(subFS))
 }
