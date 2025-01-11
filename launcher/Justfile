@@ -1,0 +1,36 @@
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+
+list:
+    just --list
+
+win:
+    ./build_scripts/build.windows.ps1
+
+[working-directory: 'build_output/windows']
+rwin:
+    just cleanw
+    cp -r ../../assets/* .
+    just win
+    just startw
+
+[working-directory: 'build_output/windows']
+startw:
+    .\gouda-launcher.exe
+
+[working-directory: 'build_output/windows']
+cleanw:
+    rm -r *
+
+lin:
+    docker build -f build_scripts/linux.Dockerfile -t launcher:builder ..
+    docker run --rm -v {{justfile_directory()}}/build_output/linux/:/output/ launcher:builder
+
+[working-directory: 'build_output/linux']
+rlin:
+    just cleanl
+    just lin
+    .\gouda-launcher
+
+[working-directory: 'build_output/linux']
+cleanl:
+    rm -r *
