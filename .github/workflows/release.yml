@@ -74,7 +74,7 @@ jobs:
         run: |
           npm i
           npm run build
-          cd dist && zip -r ../extension.zip *
+          zip -j ./parmesan_extension.zip ./dist/*
 
       - name: Upload Extension Asset
         uses: softprops/action-gh-release@v2
