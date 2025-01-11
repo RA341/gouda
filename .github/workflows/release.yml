@@ -70,11 +70,11 @@ jobs:
           npx dot-json@1 "source/manifest.json" version "$STRIPPED_VERSION"
 
       - name: Build and Package Extension
-        working-directory: parmesan/dist
+        working-directory: parmesan/
         run: |
           npm i
           npm run build
-          zip -r ../extension.zip *
+          cd dist && zip -r ../extension.zip *
 
       - name: Upload Extension Asset
         uses: softprops/action-gh-release@v2
