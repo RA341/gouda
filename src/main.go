@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/RA341/gouda/download_clients"
 	grpc "github.com/RA341/gouda/grpc"
+	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
@@ -44,6 +45,12 @@ func main() {
 		if err == nil {
 			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.name"))
 			apiContext.DownloadClient = client
+
+			log.Info().Msgf("starting intial download monitor")
+			go service.MonitorDownloads(&models.Env{
+				DownloadClient: apiContext.DownloadClient,
+				Database:       apiContext.Database,
+			})
 		} else {
 			log.Error().Err(err).Msgf("Failed to initialize torrent client")
 		}
