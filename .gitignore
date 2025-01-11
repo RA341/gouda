@@ -5,3 +5,4 @@ config.json
 appdata
 sample
 launcher/build_output
+/install_scripts/parmesan_extension/
