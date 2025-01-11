@@ -35,8 +35,8 @@ try {
     # Extract the zip file
     Write-Host "Extracting files..."
     Expand-Archive -Path $zipPath -DestinationPath $outputPath -Force
-
-    Write-Host "Successfully downloaded and extracted to $outputPath"
+    $absolutePath = Resolve-Path $outputPath
+    Write-Host "Successfully downloaded and extracted to $absolutePath"
 }
 catch {
     Write-Error "Error: $_"
