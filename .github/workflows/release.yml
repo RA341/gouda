@@ -113,3 +113,52 @@ jobs:
             org.opencontainers.image.description=This is the stable version for gouda app.
             org.opencontainers.image.source=https://github.com/RA341/gouda
             org.opencontainers.image.version=${{ needs.tag-release.outputs.new_tag }}
+
+  build-linux:
+    needs: tag-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # flutter build
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.1'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        working-directory: ./brie
+        run: flutter pub get
+
+      - name: Enable web
+        working-directory: ./brie
+        run: flutter config --enable-web
+
+      - name: Build web
+        working-directory: ./brie
+        run: flutter build web --release
+
+      # golang build
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23.3'
+
+      - name: Build linux
+        env: CGO_ENABLED=1
+        working-directory: src
+        run: |
+          cp -r ../brie/build/web/ ./web
+          go build -ldflags "-s -w" -o gouda_linux
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            src/gouda_linux
+          tag_name: ${{ steps.tagName.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
