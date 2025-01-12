@@ -57,7 +57,7 @@ Therefore, you will need
 1. Basic understanding of Docker and Docker compose.
 2. Use transmission as your download client (qbit is currently broken).
 3. Structure your files as mentioned [here](#basic-directory-structure)
-4. And a reverse proxy setup, since browsers block 'http' requests from https sites.
+4. (optional but recommended) A reverse proxy setup, since sometimes browsers block 'http' requests.
 
 ### Docker Compose
 
