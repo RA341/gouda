@@ -71,7 +71,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 1. if you've followed, the instructions above, the extension should now be loaded, with the icon
     * ![icon.png](source/icon.png)
 2. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
-3. You are now good to go!!
+3. That's all folks!!
 4. Go to any book release on the site, and you should have this button near the download button.
     * ![img.png](media/img_2.png)
 
