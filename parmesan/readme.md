@@ -54,7 +54,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 3. Open firefox and go to the extensions page.
 4. Click the settings icon here, ![img.png](./media/firefox.png)
 5. Then click `install addon from file`
-   * ![img.png](firefox-popup.png)
+   * ![img.png](./media/firefox-popup.png)
 6. Select the zip file and install.
 
 > [!IMPORTANT]
