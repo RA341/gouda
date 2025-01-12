@@ -86,7 +86,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 
 ### 🛠 Build locally
 
-1. Checkout the copied repository to your local machine eg. with `git clone https://github.com/RA341/parmesan`
+1. Checkout the copied repository to your local machine eg. with `git clone https://github.com/RA341/gouda`
 2. Run `npm install` to install all required dependencies
 3. Run `npm run build`
 
@@ -152,10 +152,4 @@ Thanks to the included [GitHub Action Workflows](.github/workflows), if you set 
 
 ## Credits
 
-TODO
-
 Extension icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0).
-
-## License
-
-TODO
