@@ -67,17 +67,10 @@ Note: docker requires specific folder structure or else hardlinks will not work 
 
 #### Environment Variables
 
-##### Required Variables
-
-| Variable         | Description                               | Default    |
+| Variable         | Description                             | Default    |
 |------------------|-------------------------------------------|------------|
-| `GOUDA_USERNAME` | Username for web interface authentication | *Required* |
-| `GOUDA_PASS`     | Password for web interface authentication | *Required* |
-
-##### Optional Variables but recommended to set
-
-| Variable             | Description                       | Default              |
-|----------------------|-----------------------------------|----------------------|
+| `GOUDA_USERNAME` | Username for web interface authentication | admin |
+| `GOUDA_PASS`     | Password for web interface authentication | admin |
 | `GOUDA_UID`          | User ID for file permissions      | `1000`               |
 | `GOUDA_GID`          | Group ID for file permissions     | `1000`               |
 | `GOUDA_DOWNLOAD_DIR` | Directory for temporary downloads | `/appdata/downloads` |
