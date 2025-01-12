@@ -72,11 +72,12 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 3. Go to any book release on the site, and you should have this button near the download button.
     * ![img.png](media/img_2.png)
 
-
-> [!INFO]
-> Note the dropdown will show an error, if you have not created any categories.
+> [!NOTE]  
+> The dropdown will show an error, if you have not created any categories.
 >
 >  if you do not have categories set them up via the gouda webui.
+
+
 
 
 
