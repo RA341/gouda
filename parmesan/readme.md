@@ -44,8 +44,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 1. Open your browser, in the extensions tab, on the top right side corner enable developer mode
     * ![img.png](media/img.png)
 2. Next click on the load unpacked button and select the folder you unzipped.
-3. The extension should now be loaded, with the icon
-    * ![icon.png](source/icon.png)
+3. Next, [setup the extension](#extension-setup) 
 
 ### Firefox setup
 
@@ -54,8 +53,9 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 3. Open firefox and go to the extensions page.
 4. Click the settings icon here, ![img.png](./media/firefox.png)
 5. Then click `install addon from file`
-   * ![img.png](firefox-popup.png)
+   * ![img.png](./media/firefox-popup.png)
 6. Select the zip file and install.
+7. Next, [setup the extension](#extension-setup) 
 
 > [!IMPORTANT]
 > This only applies to firefox users.
@@ -63,16 +63,22 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 > If you are running gouda in a different machine but on the same network, you must use a https domain.
 >
 > What this means is if you are running gouda in another machine at IP: `http://192.168.1.43:9862`,
+> 
 > this address will not work, you must use a domain name: e.g. `https://gouda.example.com` (which points to `http://192.168.1.43:9862`)
 
 
 ### Extension setup
-1. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
-2. You are now good to go!!
-3. Go to any book release on the site, and you should have this button near the download button.
+1. if you've followed, the instructions above, the extension should now be loaded, with the icon
+    * ![icon.png](source/icon.png)
+2. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
+3. That's all folks!!
+4. Go to any book release on the site, and you should have this button near the download button.
     * ![img.png](media/img_2.png)
-    * Note the dropdown will show an error, if you have not created any categories. if you do not have categories set them up via the gouda webui.
 
+> [!NOTE]  
+> The dropdown will show an error, if you have not created any categories.
+>
+>  if you do not have categories set them up via the gouda webui.
 
 
 
@@ -80,7 +86,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 
 ### 🛠 Build locally
 
-1. Checkout the copied repository to your local machine eg. with `git clone https://github.com/RA341/parmesan`
+1. Checkout the copied repository to your local machine eg. with `git clone https://github.com/RA341/gouda`
 2. Run `npm install` to install all required dependencies
 3. Run `npm run build`
 
@@ -146,10 +152,4 @@ Thanks to the included [GitHub Action Workflows](.github/workflows), if you set 
 
 ## Credits
 
-TODO
-
 Extension icon made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0).
-
-## License
-
-TODO
