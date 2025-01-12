@@ -44,8 +44,6 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 1. Open your browser, in the extensions tab, on the top right side corner enable developer mode
     * ![img.png](media/img.png)
 2. Next click on the load unpacked button and select the folder you unzipped.
-3. The extension should now be loaded, with the icon
-    * ![icon.png](source/icon.png)
 
 ### Firefox setup
 
@@ -56,6 +54,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 5. Then click `install addon from file`
    * ![img.png](./media/firefox-popup.png)
 6. Select the zip file and install.
+7. Next, [setup the extension](#extension-setup) 
 
 > [!IMPORTANT]
 > This only applies to firefox users.
@@ -67,18 +66,17 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 
 
 ### Extension setup
-1. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
-2. You are now good to go!!
-3. Go to any book release on the site, and you should have this button near the download button.
+1. if you've followed, the instructions above, the extension should now be loaded, with the icon
+    * ![icon.png](source/icon.png)
+2. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
+3. You are now good to go!!
+4. Go to any book release on the site, and you should have this button near the download button.
     * ![img.png](media/img_2.png)
 
 > [!NOTE]  
 > The dropdown will show an error, if you have not created any categories.
 >
 >  if you do not have categories set them up via the gouda webui.
-
-
-
 
 
 
