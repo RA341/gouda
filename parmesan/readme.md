@@ -44,6 +44,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 1. Open your browser, in the extensions tab, on the top right side corner enable developer mode
     * ![img.png](media/img.png)
 2. Next click on the load unpacked button and select the folder you unzipped.
+3. Next, [setup the extension](#extension-setup) 
 
 ### Firefox setup
 
@@ -62,6 +63,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 > If you are running gouda in a different machine but on the same network, you must use a https domain.
 >
 > What this means is if you are running gouda in another machine at IP: `http://192.168.1.43:9862`,
+> 
 > this address will not work, you must use a domain name: e.g. `https://gouda.example.com` (which points to `http://192.168.1.43:9862`)
 
 
