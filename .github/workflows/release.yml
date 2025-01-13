@@ -131,15 +131,10 @@ jobs:
 
       - name: Get dependencies
         working-directory: ./brie
-        run: flutter pub get
-
-      - name: Enable web
-        working-directory: ./brie
-        run: flutter config --enable-web
-
-      - name: Build web
-        working-directory: ./brie
-        run: flutter build web --release
+        run: |
+          flutter pub get
+          flutter config --enable-web
+          flutter build web --release
 
       # golang build
       - name: Set up Go
@@ -152,13 +147,71 @@ jobs:
         working-directory: src
         run: |
           cp -r ../brie/build/web/ ./web
-          go build -ldflags "-s -w" -o gouda_linux
+          go build -ldflags "-s -w" -o gouda_windows.exe
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            src/gouda_linux
+            src/gouda_windows.exe
           tag_name: ${{ steps.tagName.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#  build-windows:
+#    needs: tag-release
+#    runs-on: windows-latest
+#    defaults:
+#      run:
+#        shell: msys2 {0}
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      # GCC
+#      - name: Setup MSYS2
+#        uses: msys2/setup-msys2@v2
+#        with:
+#          msystem: MINGW64
+#          update: true
+#          install: >-
+#            mingw-w64-x86_64-gcc
+#            mingw-w64-x86_64-make
+#
+#      # flutter build
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: '3.27.1'
+#          channel: 'stable'
+#          cache: true
+#
+#      - name: Get dependencies
+#        working-directory: ./brie
+#        run: |
+#          flutter pub get
+#          flutter config --enable-web
+#          flutter build web --release
+#
+#      # golang build
+#      - name: Set up Go
+#        uses: actions/setup-go@v4
+#        with:
+#          go-version: '1.23.3'
+#
+#      - name: Build linux
+#        env: CGO_ENABLED=1
+#        working-directory: src
+#        run: |
+#          cp -r ../brie/build/web/ ./web
+#          go build -ldflags "-s -w" -o gouda_windows.exe
+#
+#      - name: Upload Release Asset
+#        uses: softprops/action-gh-release@v2
+#        with:
+#          files: |
+#            src/gouda_windows.exe
+#          tag_name: ${{ steps.tagName.outputs.tag }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
