@@ -1,10 +1,20 @@
-/bin/
-torrents
+bin
+.github
 .env
 config.json
 appdata
 sample
-launcher/build_output
+src/web
+spec
+launcher/
+install_scripts
+
+## extension
+
+parmesan/node_modules
+parmesan/distribution
+parmesan/.parcel-cache
+parmesan/dist
 
 
 ## frontend stuff
