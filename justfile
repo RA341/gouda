@@ -33,6 +33,8 @@ main:
 [working-directory: 'brie']
 ui:
     flutter build web
+    rm -r ../src/web
+    cp -r build/web/ ../src/web
 
 loc:
     docker compose down

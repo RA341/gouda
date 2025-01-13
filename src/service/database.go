@@ -21,7 +21,7 @@ func InitDB() (*gorm.DB, error) {
 	config := &gorm.Config{
 		PrepareStmt: true,
 	}
-	if IsDocker() {
+	if IsDebugMode() {
 		config = &gorm.Config{
 			Logger:      logger.Default.LogMode(logger.Info),
 			PrepareStmt: true,
