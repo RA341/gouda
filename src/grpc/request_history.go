@@ -15,7 +15,7 @@ import (
 )
 
 type MediaRequestService struct {
-	api *Env
+	api *env
 }
 
 func (mrSrv *MediaRequestService) Search(_ context.Context, req *connect.Request[v1.SearchRequest]) (*connect.Response[v1.SearchResponse], error) {
@@ -210,7 +210,7 @@ func buildSearchQuery(search string, query *gorm.DB) *gorm.DB {
 	return query
 }
 
-func (api *Env) countRecords() (int64, error) {
+func (api *env) countRecords() (int64, error) {
 	var count int64 = 0
 	resp := api.Database.Model(&models.RequestTorrent{}).Count(&count)
 	if resp.Error != nil {

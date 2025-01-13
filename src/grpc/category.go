@@ -9,10 +9,8 @@ import (
 	"github.com/RA341/gouda/service"
 )
 
-type Env models.Env
-
 type CategoryService struct {
-	api *Env
+	api *env
 }
 
 func (catSrv *CategoryService) ListCategories(_ context.Context, _ *connect.Request[v1.ListCategoriesRequest]) (*connect.Response[v1.ListCategoriesResponse], error) {

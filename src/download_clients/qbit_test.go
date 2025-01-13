@@ -1,14 +1,6 @@
 package download_clients
 
 //
-//import (
-//	"fmt"
-//	models "github.com/RA341/gouda/models"
-//	"github.com/rs/zerolog/log"
-//	"os"
-//	"testing"
-//)
-//
 //var qbitclient models.DownloadClient
 //
 //func TestQbitMain(t *testing.T) {

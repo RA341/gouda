@@ -42,23 +42,19 @@ func main() {
 		log.Fatal().Err(err).Msgf("Failed to start database")
 	}
 
-	apiContext := grpc.Env{Database: db}
+	apiContext := &models.Env{Database: db}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {
 		client, err := download_clients.InitializeTorrentClient()
-
-		if err == nil {
+		if err != nil {
+			log.Error().Err(err).Msgf("Failed to initialize torrent client")
+		} else {
 			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.name"))
 			apiContext.DownloadClient = client
 
 			log.Info().Msgf("starting intial download monitor")
-			go service.MonitorDownloads(&models.Env{
-				DownloadClient: apiContext.DownloadClient,
-				Database:       apiContext.Database,
-			})
-		} else {
-			log.Error().Err(err).Msgf("Failed to initialize torrent client")
+			go service.MonitorDownloads(apiContext)
 		}
 	}
 
@@ -80,8 +76,8 @@ func main() {
 	}
 }
 
-func startServer(apiContext grpc.Env) error {
-	grpcRouter := grpc.SetupGRPCEndpoints(&apiContext)
+func startServer(apiContext *models.Env) error {
+	grpcRouter := grpc.SetupGRPCEndpoints(apiContext)
 	// serve frontend dir
 	log.Info().Msgf("Setting up ui files")
 	grpcRouter.Handle("/", getFrontendDir())

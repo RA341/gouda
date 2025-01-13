@@ -12,13 +12,13 @@ import (
 )
 
 type SettingsService struct {
-	api *Env
+	api *env
 }
 
 func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	client, err := download_clients.CheckTorrentClient(types.TorrentClient{
+	client, err := download_clients.CheckTorrentClient(&types.TorrentClient{
 		User:     settings.TorrentUser,
 		Password: settings.TorrentPassword,
 		Protocol: settings.TorrentProtocol,
