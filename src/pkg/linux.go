@@ -1,7 +1,7 @@
 //go:build linux
 // +build linux
 
-package main
+package pkg
 
 import "os/exec"
 

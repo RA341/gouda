@@ -1,8 +1,11 @@
-package main
+package pkg
 
 import (
+	_ "embed"
 	"fmt"
+	"github.com/RA341/gouda/service"
 	"github.com/getlantern/systray"
+	"github.com/pkg/browser"
 	"github.com/rs/zerolog/log"
 	"os"
 	"os/exec"
@@ -15,20 +18,19 @@ var (
 	frontendExecutable = "brie"
 )
 
-func main() {
-	getWorkingDir()
-	systray.Run(onReady, onExit)
-}
+//go:embed assets/cheese.ico
+var systrayIcon []byte
 
-func onReady() {
+func OnReady() {
 	systray.SetTitle("Gouda Launcher")
 	systray.SetTooltip("Gouda is Running")
-	systray.SetIcon(readIconToBytes(fmt.Sprintf("%s/%s", getWorkingDir(), "cheese.ico")))
+	systray.SetIcon(systrayIcon)
 
 	// Server control menu items
 	_ = systray.AddMenuItem("Gouda", "")
 	systray.AddSeparator()
 	frontendOption := systray.AddMenuItem("Open Gouda", "Opens the gouda ui")
+	webUi := systray.AddMenuItem("Open Web UI", "Opens the webui")
 	systray.AddSeparator()
 	mLogs := systray.AddMenuItem("Open Logs Directory", "Open the logs folder")
 	systray.AddSeparator()
@@ -44,6 +46,11 @@ func onReady() {
 			case <-frontendOption.ClickedCh:
 				log.Info().Msg("Launching frontend")
 				launchFrontend()
+			case <-webUi.ClickedCh:
+				err := browser.OpenURL("http://localhost:9862")
+				if err != nil {
+					log.Error().Err(err).Msg("Failed to launch browser")
+				}
 			case <-mLogs.ClickedCh:
 				log.Info().Msg("opening Logs")
 				openLogsDirectory()
@@ -57,20 +64,13 @@ func onReady() {
 	}()
 }
 
-func onExit() {
-	log.Info().Msg("Exiting launcher Goodbye!")
+func OnExit() {
+	log.Info().Msg("Exiting gouda goodbye!")
 }
 
 func runMainApp() {
 	// Get the working directory
 	appDir := getWorkingDir()
-
-	log.Logger = log.
-		With().
-		Caller().
-		Logger().
-		Output(getFileLogger(fmt.Sprintf("%s/%s", appDir, "launcher.log")))
-
 	log.Info().Str("appDir", appDir).Msg("Path info")
 
 	if runtime.GOOS == "windows" {
@@ -78,7 +78,6 @@ func runMainApp() {
 		frontendExecutable += ".exe"
 	}
 
-	launchAPI()
 	launchFrontend()
 }
 
@@ -91,7 +90,7 @@ func launchFrontend() {
 	} else {
 		log.Info().Msgf("%s is starting", frontendExecutable)
 
-		flutterLogFile := getFileLogger(fmt.Sprintf("%s/%s", getWorkingDir(), "flutter.log"))
+		flutterLogFile := service.GetFileLogger(fmt.Sprintf("%s/flutter.log", service.GetConfigDir()))
 
 		// Flutter frontend
 		flutterApp := exec.Command(filepath.Join(fullFrontendPath))
@@ -101,30 +100,6 @@ func launchFrontend() {
 		err := flutterApp.Start()
 		if err != nil {
 			log.Error().Err(err).Msg("Unable to start frontend application")
-		}
-	}
-}
-
-func launchAPI() {
-	fullApiPath := filepath.Join(getWorkingDir(), "api", apiExecutable)
-
-	// Start the API server with output redirected to the log file
-	if isProcessRunning(apiExecutable) {
-		log.Info().Msgf("%s is already running", apiExecutable)
-	} else {
-		log.Info().Msgf("%s is starting", apiExecutable)
-		// Create/open a log file
-		apiLogFile := getFileLogger(fmt.Sprintf("%s/%s", getWorkingDir(), "api_server.log"))
-		// Start the API server with output redirected to the log file
-		apiServer := exec.Command(fullApiPath)
-		apiServer.Stdout = apiLogFile
-		apiServer.Stderr = apiLogFile
-
-		// start exec in background
-		applyOSSpecificAttr(apiServer)
-		err := apiServer.Start()
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to start api server")
 		}
 	}
 }

@@ -1,4 +1,3 @@
-# Stage 1: Flutter build
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
 # flutter build tools
@@ -20,8 +19,8 @@ RUN flutter create --platforms=linux .
 # Build Flutter web
 RUN flutter build linux --release
 
-# Stage 2: api build
-# use bookworm for gcc, required for cgo
+RUN flutter build web
+
 FROM golang:1.23-bookworm AS api_builder
 
 WORKDIR /app
@@ -31,38 +30,25 @@ COPY ./src .
 # for sqlite
 ENV CGO_ENABLED=1
 
-RUN go mod tidy
+COPY --from=flutter_builder /app/build/web/* ./web/
 
-# Build optimized binary without debugging symbols
-RUN go build -ldflags "-s -w" -o gouda
-
-# Stage 3: launcher build
-FROM golang:1.23-bookworm AS launcher_builder
-
-WORKDIR /app
-
-COPY ./launcher .
+RUN apt-get update && \
+    apt-get install gcc libgtk-3-dev libayatana-appindicator3-dev -y
 
 RUN go mod tidy
 
-RUN apt-get update && apt-get install -y \
-    gcc libgtk-3-dev libayatana-appindicator3-dev
-
 # Build optimized binary without debugging symbols
-RUN go build -ldflags "-s -w" -o gouda-launcher
-
+RUN go build -tags systray -ldflags "-X main.BinaryType=desktop" -o gouda-desktop
 
 # Stage 3: Final stage
 FROM debian:bookworm
 
 WORKDIR /build/
 
-COPY --from=api_builder /app/gouda ./api/
+COPY --from=api_builder /app/gouda-desktop ./gouda-desktop
 
 COPY --from=flutter_builder /app/build/linux/x64/release/bundle/* ./frontend/
 
-COPY --from=launcher_builder /app/gouda-launcher ./
-
-COPY ./launcher/assets/* ./
+RUN chown -R 770
 
 CMD ["/bin/sh", "-c", "cp -r /build/* /output/"]

@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -37,17 +38,24 @@ func getCachedDebugEnv() string {
 	return cachedEnvVar
 }
 
+// GetConfigDir logfile is set to the main gouda config path,
+// we get the base dir from that for desktop mode
+func GetConfigDir() string {
+	return filepath.Dir(viper.GetString("log_dir"))
+}
+
 func FileConsoleLogger() zerolog.Logger {
-	return baseLogger.Output(zerolog.MultiLevelWriter(getFileLogger(), consoleWriter))
+	logFile := viper.GetString("log_dir")
+	return baseLogger.Output(zerolog.MultiLevelWriter(GetFileLogger(logFile), consoleWriter))
 }
 
 func ConsoleLogger() zerolog.Logger {
 	return baseLogger.Output(consoleWriter)
 }
 
-func getFileLogger() *lumberjack.Logger {
+func GetFileLogger(logFile string) *lumberjack.Logger {
 	return &lumberjack.Logger{
-		Filename:   viper.GetString("log_dir"),
+		Filename:   logFile,
 		MaxSize:    10, // MB
 		MaxBackups: 5,  // number of backups
 		MaxAge:     30, // days

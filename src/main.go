@@ -7,6 +7,7 @@ import (
 	"github.com/RA341/gouda/download_clients"
 	grpc "github.com/RA341/gouda/grpc"
 	models "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/pkg"
 	"github.com/RA341/gouda/service"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
@@ -61,12 +62,29 @@ func main() {
 		}
 	}
 
+	if isDesktopMode() {
+		log.Info().Msgf("Running server on a go routine")
+		// server as routine
+		go func() {
+			if err := startServer(apiContext); err != nil {
+				log.Fatal().Err(err).Msgf("Failed to start server")
+			}
+		}()
+		// systray will run indefinitely
+		pkg.InitSystray()
+	} else {
+		log.Info().Msgf("Running server on the main thread")
+		if err := startServer(apiContext); err != nil {
+			log.Fatal().Err(err).Msgf("Failed to start server")
+		}
+	}
+}
+
+func startServer(apiContext grpc.Env) error {
 	grpcRouter := grpc.SetupGRPCEndpoints(&apiContext)
 	// serve frontend dir
-	if service.IsDebugMode() || service.IsDocker() {
-		log.Info().Msgf("Setting up ui files")
-		grpcRouter.Handle("/", getFrontendDir())
-	}
+	log.Info().Msgf("Setting up ui files")
+	grpcRouter.Handle("/", getFrontendDir())
 
 	baseUrl := fmt.Sprintf(":%s", viper.GetString("server.port"))
 	log.Info().Str("Listening on:", baseUrl).Msg("")
@@ -79,14 +97,11 @@ func main() {
 		ExposedHeaders:      connectcors.ExposedHeaders(),
 	})
 
-	err = http.ListenAndServe(
+	// Use h2c to serve HTTP/2 without TLS
+	return http.ListenAndServe(
 		baseUrl,
-		// Use h2c so we can serve HTTP/2 without TLS.
 		middleware.Handler(h2c.NewHandler(grpcRouter, &http2.Server{})),
 	)
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Failed to start server")
-	}
 }
 
 func getFrontendDir() http.Handler {

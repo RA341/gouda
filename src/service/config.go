@@ -61,19 +61,6 @@ func getConfigDir(baseDir string) string {
 	return configDir
 }
 
-// DirExists checks if a directory exists and is actually a directory
-func DirExists(path string) (bool, error) {
-	info, err := os.Stat(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return false, nil // Directory doesn't exist
-		}
-		return false, err // Other error occurred
-	}
-
-	return info.IsDir(), nil
-}
-
 func setupConfigOptions(configDir, baseDir string) error {
 	// misc application files
 	// set database path
