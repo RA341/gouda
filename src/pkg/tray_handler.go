@@ -14,7 +14,6 @@ import (
 )
 
 var (
-	apiExecutable      = "gouda"
 	frontendExecutable = "brie"
 )
 
@@ -56,7 +55,7 @@ func OnReady() {
 				openLogsDirectory()
 			case <-mQuit.ClickedCh:
 				// Kill both processes before quitting
-				killProcess([]string{frontendExecutable, apiExecutable})
+				killProcess([]string{frontendExecutable})
 				systray.Quit()
 				os.Exit(0)
 			}
@@ -74,7 +73,6 @@ func runMainApp() {
 	log.Info().Str("appDir", appDir).Msg("Path info")
 
 	if runtime.GOOS == "windows" {
-		apiExecutable += ".exe"
 		frontendExecutable += ".exe"
 	}
 
