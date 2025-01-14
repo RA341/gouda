@@ -36,7 +36,7 @@ func OnReady() {
 	mQuit := systray.AddMenuItem("Quit", "Quit the application")
 
 	// Launch the main application logic
-	go runMainApp()
+	runMainApp()
 
 	// Handle menu actions
 	go func() {
