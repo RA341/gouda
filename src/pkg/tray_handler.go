@@ -7,6 +7,7 @@ import (
 	"github.com/getlantern/systray"
 	"github.com/pkg/browser"
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -95,9 +96,20 @@ func launchFrontend() {
 		flutterApp.Stdout = flutterLogFile
 		flutterApp.Stderr = flutterLogFile
 
-		err := flutterApp.Start()
-		if err != nil {
-			log.Error().Err(err).Msg("Unable to start frontend application")
-		}
+		go func() {
+			err := flutterApp.Run()
+			if err != nil {
+				log.Error().Err(err).Msg("Unable frontend exited with error")
+			}
+			log.Info().Msg("Frontend exited normally")
+
+			// close main app if set by user
+			if viper.GetBool("exit_on_close") == true {
+				log.Info().Msg("exiting main gouda process since exit_on_close is set")
+				os.Exit(0)
+			}
+
+			log.Info().Msg("Exiting frontend process only")
+		}()
 	}
 }

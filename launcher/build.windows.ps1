@@ -16,13 +16,12 @@ try
     # 1. Build API server
     Write-Host "Building API server..." -ForegroundColor Green
     Set-Location "../src"
-    go build -tags systray -ldflags "-X main.BinaryType=desktop -H=windowsgui" -o "$apiDir\gouda-desktop.exe" .
+    go build -tags systray -ldflags "-X github.com/RA341/gouda/service.BinaryType=desktop -H=windowsgui" -o "$apiDir\gouda-desktop.exe" .
 
     # 2. Build Flutter app
     Write-Host "Building Flutter app..." -ForegroundColor Green
     Set-Location "../brie"
     flutter build windows --release
-    flutter build web
 
     $flutterBuild = "build\windows\x64\runner\Release"
     Copy-Item "$flutterBuild\*" "$frontendDir" -Force -Recurse

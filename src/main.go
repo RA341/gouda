@@ -16,6 +16,8 @@ import (
 	"golang.org/x/net/http2/h2c"
 	"io/fs"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 //go:embed web
@@ -23,6 +25,11 @@ var frontendDir embed.FS
 
 func main() {
 	log.Logger = service.ConsoleLogger()
+
+	log.Info().
+		Str("flavour", service.BinaryType).
+		Str("version", service.Version).
+		Msgf("Starting application %s", filepath.Base(os.Args[0]))
 
 	service.InitConfig()
 
@@ -58,7 +65,7 @@ func main() {
 		}
 	}
 
-	if isDesktopMode() {
+	if service.IsDesktopMode() {
 		log.Info().Msgf("Running server on a go routine")
 		// server as routine
 		go func() {

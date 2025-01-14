@@ -38,7 +38,7 @@ RUN apt-get update && \
 RUN go mod tidy
 
 # Build optimized binary without debugging symbols
-RUN go build -tags systray -ldflags "-X main.BinaryType=desktop" -o gouda-desktop
+RUN go build -tags systray -ldflags "-X github.com/RA341/gouda/service.BinaryType=desktop" -o gouda-desktop
 
 # Stage 3: Final stage
 FROM debian:bookworm

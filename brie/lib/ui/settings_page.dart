@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
@@ -63,6 +65,7 @@ class SettingsView extends HookConsumerWidget {
     final torrentProtocol =
         useTextEditingController(text: settings.torrentProtocol);
     final torrentUser = useTextEditingController(text: settings.torrentUser);
+    final exitOnClose = useState(settings.exitOnClose);
 
     return SingleChildScrollView(
       child: Column(
@@ -83,6 +86,17 @@ class SettingsView extends HookConsumerWidget {
             'Download Check timeout (In minutes)',
             downloadCheckTimeout,
           ),
+          if (Platform.isWindows || Platform.isMacOS || Platform.isLinux)
+            Row(
+              children: [
+                Text('Exit application on close'),
+                SizedBox(width: 20),
+                Switch(
+                  value: exitOnClose.value,
+                  onChanged: (value) => exitOnClose.value = value,
+                ),
+              ],
+            ),
           Text('Torrent Client', style: headerStyle),
           lineDivider,
           Row(
@@ -156,7 +170,8 @@ class SettingsView extends HookConsumerWidget {
                             ..torrentName = clientType.text
                             ..torrentPassword = torrentPassword.text
                             ..torrentProtocol = torrentProtocol.text
-                            ..torrentUser = torrentUser.text,
+                            ..torrentUser = torrentUser.text
+                            ..exitOnClose = exitOnClose.value,
                         );
 
                     ref.invalidate(settingsProvider);

@@ -7,6 +7,7 @@ import (
 	"github.com/RA341/gouda/download_clients"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	types "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/service"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -36,6 +37,10 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 	viper.Set("apikey", settings.ApiKey)
 	viper.Set("server.port", settings.ServerPort)
 	viper.Set("download.timeout", settings.DownloadCheckTimeout)
+	if service.IsDesktopMode() {
+		viper.Set("exit_on_close", settings.ExitOnClose)
+	}
+
 	// folder settings
 	viper.Set("folder.defaults", settings.CompleteFolder)
 	viper.Set("folder.downloads", settings.DownloadFolder)

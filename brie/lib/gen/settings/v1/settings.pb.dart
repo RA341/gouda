@@ -95,6 +95,7 @@ class Settings extends $pb.GeneratedMessage {
     $core.String? torrentPassword,
     $core.String? torrentProtocol,
     $core.String? torrentUser,
+    $core.bool? exitOnClose,
   }) {
     final $result = create();
     if (apiKey != null) {
@@ -142,6 +143,9 @@ class Settings extends $pb.GeneratedMessage {
     if (torrentUser != null) {
       $result.torrentUser = torrentUser;
     }
+    if (exitOnClose != null) {
+      $result.exitOnClose = exitOnClose;
+    }
     return $result;
   }
   Settings._() : super();
@@ -164,6 +168,7 @@ class Settings extends $pb.GeneratedMessage {
     ..aOS(13, _omitFieldNames ? '' : 'torrentPassword')
     ..aOS(14, _omitFieldNames ? '' : 'torrentProtocol')
     ..aOS(15, _omitFieldNames ? '' : 'torrentUser')
+    ..aOB(16, _omitFieldNames ? '' : 'exitOnClose')
     ..hasRequiredFields = false
   ;
 
@@ -326,6 +331,15 @@ class Settings extends $pb.GeneratedMessage {
   $core.bool hasTorrentUser() => $_has(14);
   @$pb.TagNumber(15)
   void clearTorrentUser() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.bool get exitOnClose => $_getBF(15);
+  @$pb.TagNumber(16)
+  set exitOnClose($core.bool v) { $_setBool(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasExitOnClose() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearExitOnClose() => clearField(16);
 }
 
 

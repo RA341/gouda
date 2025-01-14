@@ -78,6 +78,9 @@ func setupConfigOptions(configDir, baseDir string) error {
 	viper.SetDefault("apikey", key)
 	viper.SetDefault("server.port", "9862")
 	viper.SetDefault("download.timeout", 15)
+	if IsDesktopMode() {
+		viper.SetDefault("exit_on_close", false)
+	}
 
 	// user section
 	viper.SetDefault("user.name", getStringEnvOrDefault("GOUDA_USERNAME", "admin"))
