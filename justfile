@@ -47,3 +47,14 @@ gou:
 tor:
     docker compose down
     docker compose --profile tor up --force-recreate
+
+qbit:
+    docker compose down
+    docker compose --profile qbit up --force-recreate
+    docker compose down
+
+delug:
+    docker compose down
+    docker compose --profile delug up --force-recreate
+    docker compose down
+

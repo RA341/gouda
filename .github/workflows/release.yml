@@ -148,13 +148,13 @@ jobs:
         working-directory: src
         run: |
           cp -r ../brie/build/web/ ./web
-          go build -ldflags "-s -w" -o gouda_windows.exe
+          go build -ldflags "-s -w" -o gouda_linux
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            src/gouda_windows.exe
+            src/gouda_linux
           tag_name: ${{ steps.tagName.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -43,3 +43,36 @@ services:
       - tor
       - ""
       - main
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8722
+      - TORRENTING_PORT=6881
+    ports:
+      - "8722:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    restart: unless-stopped
+    profiles:
+      - qbit
+
+  deluge:
+    image: linuxserver/deluge:latest
+    container_name: deluge
+    ports:
+      - "8112:8112"
+      - "6881:6881"
+      - "6881:6881/udp"
+      - "58846:58846" #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    restart: unless-stopped
+    profiles:
+      - delug
