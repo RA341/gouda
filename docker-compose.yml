@@ -66,8 +66,8 @@ services:
     container_name: deluge
     ports:
       - "8112:8112"
-      - "6881:6881"
-      - "6881:6881/udp"
+      - "17693:17693"
+      - "17693:17693/udp"
       - "58846:58846" #optional
     environment:
       - PUID=1000
