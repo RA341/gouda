@@ -143,7 +143,7 @@ jobs:
       - name: setup just
       - uses: extractions/setup-just@v2
 
-      - name: Build linux
+      - name: Build script linux
         env:
           CGO_ENABLED: 1
         working-directory: build_script
@@ -217,7 +217,8 @@ jobs:
       - uses: extractions/setup-just@v2
 
       - name: Run build script
-        env: CGO_ENABLED=1
+        env:
+            CGO_ENABLED: 1
         working-directory: build_script
         run: just ci-windows ${{ needs.tag-release.outputs.new_tag }}
 
