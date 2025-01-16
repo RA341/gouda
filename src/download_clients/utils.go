@@ -7,6 +7,20 @@ import (
 	"github.com/spf13/viper"
 )
 
+var supportedClients = map[string]func(host, protocol, user, password string) (models.DownloadClient, error){
+	"transmission": NewTransmissionClient,
+	"qbit":         NewQbitClient,
+	"deluge":       NewDelugeClient,
+}
+
+func GetSupportedClients() []string {
+	var clientList []string
+	for key := range supportedClients {
+		clientList = append(clientList, key)
+	}
+	return clientList
+}
+
 func getTorrentClientInfo() *models.TorrentClient {
 	return &models.TorrentClient{
 		User:     viper.GetString("torrent_client.user"),
@@ -23,29 +37,17 @@ func InitializeTorrentClient() (models.DownloadClient, error) {
 }
 
 func CheckTorrentClient(details *models.TorrentClient) (models.DownloadClient, error) {
-	switch details.Type {
-	case "transmission":
-		transmission, err := InitTransmission(details.Host, details.Protocol, details.User, details.Password)
-		if err != nil {
-			return nil, err
-		}
 
-		_, _, err = transmission.Health()
-		if err != nil {
-			return nil, err
-		}
-
-		log.Debug().Msgf("Successfully connected to transmission")
-		return transmission, nil
-	case "qbit":
-		qbit, err := InitQbit(details.Host, details.Protocol, details.User, details.Password)
-		if err != nil {
-			return nil, err
-		}
-
-		log.Debug().Msgf("Successfully connected to qbit")
-		return qbit, nil
-	default:
+	initFn, exists := supportedClients[details.Type]
+	if !exists {
 		return nil, fmt.Errorf("unsupported torrent client: %s", details.Type)
 	}
+
+	client, err := initFn(details.Host, details.Protocol, details.User, details.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug().Msgf("Successfully connected to %s", details.Type)
+	return client, nil
 }

@@ -18,7 +18,7 @@ func TestQbitMain(t *testing.T) {
 	protocol := "http"
 	transmissionUrl := "localhost:8722"
 
-	qbitclient, err = InitQbit(transmissionUrl, protocol, user, pass)
+	qbitclient, err = NewQbitClient(transmissionUrl, protocol, user, pass)
 	if err != nil {
 		// Log error and exit if we can't initialize the client
 		os.Exit(1)

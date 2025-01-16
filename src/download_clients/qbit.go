@@ -32,7 +32,7 @@ type QbitClient struct {
 	cookie         *http.Cookie
 }
 
-func InitQbit(qbitUrl, protocol, user, pass string) (models.DownloadClient, error) {
+func NewQbitClient(qbitUrl, protocol, user, pass string) (models.DownloadClient, error) {
 	clientStr := fmt.Sprintf("%s://%s", protocol, qbitUrl)
 	client := &QbitClient{
 		BaseURL: clientStr,

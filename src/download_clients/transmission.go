@@ -14,7 +14,7 @@ type TransmissionClient struct {
 	Client *transmissionrpc.Client
 }
 
-func InitTransmission(transmissionUrl, protocol, user, pass string) (models.DownloadClient, error) {
+func NewTransmissionClient(transmissionUrl, protocol, user, pass string) (models.DownloadClient, error) {
 	clientStr := ""
 	if user != "" && pass != "" {
 		clientStr = fmt.Sprintf("%s://%s:%s@%s/transmission/rpc", protocol, user, pass, transmissionUrl)
@@ -32,9 +32,15 @@ func InitTransmission(transmissionUrl, protocol, user, pass string) (models.Down
 		panic(err)
 	}
 
-	return &TransmissionClient{
-		Client: tbt,
-	}, nil
+	client := &TransmissionClient{Client: tbt}
+
+	_, _, err = client.Health()
+	if err != nil {
+		log.Error().Err(err).Msg("Transmission client check failed")
+		return nil, fmt.Errorf("transmission client health check failed: %s", err)
+	}
+
+	return client, nil
 }
 
 func (tm *TransmissionClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
