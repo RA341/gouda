@@ -52,11 +52,11 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
       - WEBUI_PORT=8722
-      - TORRENTING_PORT=6881
+      - TORRENTING_PORT=17693
     ports:
-      - "8722:8080"
-      - "6881:6881"
-      - "6881:6881/udp"
+      - "8722:8722"
+      - "17693:17693"
+      - "17693:17693/udp"
     restart: unless-stopped
     profiles:
       - qbit
