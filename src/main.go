@@ -7,7 +7,6 @@ import (
 	"github.com/RA341/gouda/download_clients"
 	grpc "github.com/RA341/gouda/grpc"
 	models "github.com/RA341/gouda/models"
-	"github.com/RA341/gouda/pkg"
 	"github.com/RA341/gouda/service"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
@@ -74,7 +73,7 @@ func main() {
 			}
 		}()
 		// systray will run indefinitely
-		pkg.InitSystray()
+		InitSystray()
 	} else {
 		log.Info().Msgf("Running server on the main thread")
 		if err := startServer(apiContext); err != nil {

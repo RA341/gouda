@@ -1,6 +1,6 @@
 //go:build !systray
 
-package pkg
+package main
 
 import "github.com/rs/zerolog/log"
 
