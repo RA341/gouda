@@ -16,6 +16,13 @@ type SettingsService struct {
 	api *env
 }
 
+func (setSrv *SettingsService) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+	return connect.NewResponse(&v1.GetMetadataResponse{
+		Version:    service.Version,
+		BinaryType: service.BinaryType,
+	}), nil
+}
+
 func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 

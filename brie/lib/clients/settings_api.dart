@@ -29,4 +29,7 @@ class SettingsApi {
   Future<List<String>> listClients() async =>
       (await apiClient.listSupportedClients(ListSupportedClientsRequest()))
           .clients;
+
+  Future<GetMetadataResponse> getMetadata() =>
+      apiClient.getMetadata(GetMetadataRequest());
 }

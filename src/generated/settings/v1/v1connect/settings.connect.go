@@ -42,9 +42,9 @@ const (
 	// SettingsServiceListSupportedClientsProcedure is the fully-qualified name of the SettingsService's
 	// ListSupportedClients RPC.
 	SettingsServiceListSupportedClientsProcedure = "/settings.v1.SettingsService/ListSupportedClients"
-	// SettingsServiceGetProgramInfoProcedure is the fully-qualified name of the SettingsService's
-	// GetProgramInfo RPC.
-	SettingsServiceGetProgramInfoProcedure = "/settings.v1.SettingsService/GetProgramInfo"
+	// SettingsServiceGetMetadataProcedure is the fully-qualified name of the SettingsService's
+	// GetMetadata RPC.
+	SettingsServiceGetMetadataProcedure = "/settings.v1.SettingsService/GetMetadata"
 )
 
 // SettingsServiceClient is a client for the settings.v1.SettingsService service.
@@ -52,7 +52,7 @@ type SettingsServiceClient interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
-	GetProgramInfo(context.Context, *connect.Request[v1.GetProgramInfoRequest]) (*connect.Response[v1.GetProgramInfoResponse], error)
+	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 }
 
 // NewSettingsServiceClient constructs a client for the settings.v1.SettingsService service. By
@@ -84,10 +84,10 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
 			connect.WithClientOptions(opts...),
 		),
-		getProgramInfo: connect.NewClient[v1.GetProgramInfoRequest, v1.GetProgramInfoResponse](
+		getMetadata: connect.NewClient[v1.GetMetadataRequest, v1.GetMetadataResponse](
 			httpClient,
-			baseURL+SettingsServiceGetProgramInfoProcedure,
-			connect.WithSchema(settingsServiceMethods.ByName("GetProgramInfo")),
+			baseURL+SettingsServiceGetMetadataProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -98,7 +98,7 @@ type settingsServiceClient struct {
 	updateSettings       *connect.Client[v1.Settings, v1.UpdateSettingsResponse]
 	listSettings         *connect.Client[v1.ListSettingsResponse, v1.Settings]
 	listSupportedClients *connect.Client[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse]
-	getProgramInfo       *connect.Client[v1.GetProgramInfoRequest, v1.GetProgramInfoResponse]
+	getMetadata          *connect.Client[v1.GetMetadataRequest, v1.GetMetadataResponse]
 }
 
 // UpdateSettings calls settings.v1.SettingsService.UpdateSettings.
@@ -116,9 +116,9 @@ func (c *settingsServiceClient) ListSupportedClients(ctx context.Context, req *c
 	return c.listSupportedClients.CallUnary(ctx, req)
 }
 
-// GetProgramInfo calls settings.v1.SettingsService.GetProgramInfo.
-func (c *settingsServiceClient) GetProgramInfo(ctx context.Context, req *connect.Request[v1.GetProgramInfoRequest]) (*connect.Response[v1.GetProgramInfoResponse], error) {
-	return c.getProgramInfo.CallUnary(ctx, req)
+// GetMetadata calls settings.v1.SettingsService.GetMetadata.
+func (c *settingsServiceClient) GetMetadata(ctx context.Context, req *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+	return c.getMetadata.CallUnary(ctx, req)
 }
 
 // SettingsServiceHandler is an implementation of the settings.v1.SettingsService service.
@@ -126,7 +126,7 @@ type SettingsServiceHandler interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
-	GetProgramInfo(context.Context, *connect.Request[v1.GetProgramInfoRequest]) (*connect.Response[v1.GetProgramInfoResponse], error)
+	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 }
 
 // NewSettingsServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -154,10 +154,10 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
 		connect.WithHandlerOptions(opts...),
 	)
-	settingsServiceGetProgramInfoHandler := connect.NewUnaryHandler(
-		SettingsServiceGetProgramInfoProcedure,
-		svc.GetProgramInfo,
-		connect.WithSchema(settingsServiceMethods.ByName("GetProgramInfo")),
+	settingsServiceGetMetadataHandler := connect.NewUnaryHandler(
+		SettingsServiceGetMetadataProcedure,
+		svc.GetMetadata,
+		connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/settings.v1.SettingsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -168,8 +168,8 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 			settingsServiceListSettingsHandler.ServeHTTP(w, r)
 		case SettingsServiceListSupportedClientsProcedure:
 			settingsServiceListSupportedClientsHandler.ServeHTTP(w, r)
-		case SettingsServiceGetProgramInfoProcedure:
-			settingsServiceGetProgramInfoHandler.ServeHTTP(w, r)
+		case SettingsServiceGetMetadataProcedure:
+			settingsServiceGetMetadataHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -191,6 +191,6 @@ func (UnimplementedSettingsServiceHandler) ListSupportedClients(context.Context,
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListSupportedClients is not implemented"))
 }
 
-func (UnimplementedSettingsServiceHandler) GetProgramInfo(context.Context, *connect.Request[v1.GetProgramInfoRequest]) (*connect.Response[v1.GetProgramInfoResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.GetProgramInfo is not implemented"))
+func (UnimplementedSettingsServiceHandler) GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.GetMetadata is not implemented"))
 }

@@ -10,25 +10,25 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file settings/v1/settings.proto.
  */
 export const file_settings_v1_settings: GenFile = /*@__PURE__*/
-  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiFwoVR2V0UHJvZ3JhbUluZm9SZXF1ZXN0Ij0KFkdldFByb2dyYW1JbmZvUmVzcG9uc2USDwoHdmVyc2lvbhgBIAEoCRISCgpiaW5hcnlUeXBlGAIgASgJIh0KG0xpc3RTdXBwb3J0ZWRDbGllbnRzUmVxdWVzdCIvChxMaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlEg8KB2NsaWVudHMYASADKAkiGAoWVXBkYXRlU2V0dGluZ3NSZXNwb25zZSIWChRMaXN0U2V0dGluZ3NSZXNwb25zZSLxAgoIU2V0dGluZ3MSDwoHYXBpX2tleRgBIAEoCRITCgtzZXJ2ZXJfcG9ydBgCIAEoCRIeChZkb3dubG9hZF9jaGVja190aW1lb3V0GAMgASgEEhUKDWV4aXRfb25fY2xvc2UYECABKAgSFwoPY29tcGxldGVfZm9sZGVyGAQgASgJEhcKD2Rvd25sb2FkX2ZvbGRlchgFIAEoCRIXCg90b3JyZW50c19mb2xkZXIYBiABKAkSEAoIdXNlcm5hbWUYByABKAkSEAoIcGFzc3dvcmQYCCABKAkSEAoIdXNlcl91aWQYCSABKAQSEQoJZ3JvdXBfdWlkGAogASgEEhQKDHRvcnJlbnRfaG9zdBgLIAEoCRIUCgx0b3JyZW50X25hbWUYDCABKAkSGAoQdG9ycmVudF9wYXNzd29yZBgNIAEoCRIYChB0b3JyZW50X3Byb3RvY29sGA4gASgJEhQKDHRvcnJlbnRfdXNlchgPIAEoCTL5AgoPU2V0dGluZ3NTZXJ2aWNlEk4KDlVwZGF0ZVNldHRpbmdzEhUuc2V0dGluZ3MudjEuU2V0dGluZ3MaIy5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIgASSgoMTGlzdFNldHRpbmdzEiEuc2V0dGluZ3MudjEuTGlzdFNldHRpbmdzUmVzcG9uc2UaFS5zZXR0aW5ncy52MS5TZXR0aW5ncyIAEm0KFExpc3RTdXBwb3J0ZWRDbGllbnRzEiguc2V0dGluZ3MudjEuTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Gikuc2V0dGluZ3MudjEuTGlzdFN1cHBvcnRlZENsaWVudHNSZXNwb25zZSIAElsKDkdldFByb2dyYW1JbmZvEiIuc2V0dGluZ3MudjEuR2V0UHJvZ3JhbUluZm9SZXF1ZXN0GiMuc2V0dGluZ3MudjEuR2V0UHJvZ3JhbUluZm9SZXNwb25zZSIAQpsBCg9jb20uc2V0dGluZ3MudjFCDVNldHRpbmdzUHJvdG9QAVosZ2l0aHViLmNvbS9SQTM0MS9nb3VkYS9nZW5lcmF0ZWQvc2V0dGluZ3MvdjGiAgNTWFiqAgtTZXR0aW5ncy5WMcoCC1NldHRpbmdzXFYx4gIXU2V0dGluZ3NcVjFcR1BCTWV0YWRhdGHqAgxTZXR0aW5nczo6VjFiBnByb3RvMw");
+  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiFAoSR2V0TWV0YWRhdGFSZXF1ZXN0IjoKE0dldE1ldGFkYXRhUmVzcG9uc2USDwoHdmVyc2lvbhgBIAEoCRISCgpiaW5hcnlUeXBlGAIgASgJIh0KG0xpc3RTdXBwb3J0ZWRDbGllbnRzUmVxdWVzdCIvChxMaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlEg8KB2NsaWVudHMYASADKAkiGAoWVXBkYXRlU2V0dGluZ3NSZXNwb25zZSIWChRMaXN0U2V0dGluZ3NSZXNwb25zZSLxAgoIU2V0dGluZ3MSDwoHYXBpX2tleRgBIAEoCRITCgtzZXJ2ZXJfcG9ydBgCIAEoCRIeChZkb3dubG9hZF9jaGVja190aW1lb3V0GAMgASgEEhUKDWV4aXRfb25fY2xvc2UYECABKAgSFwoPY29tcGxldGVfZm9sZGVyGAQgASgJEhcKD2Rvd25sb2FkX2ZvbGRlchgFIAEoCRIXCg90b3JyZW50c19mb2xkZXIYBiABKAkSEAoIdXNlcm5hbWUYByABKAkSEAoIcGFzc3dvcmQYCCABKAkSEAoIdXNlcl91aWQYCSABKAQSEQoJZ3JvdXBfdWlkGAogASgEEhQKDHRvcnJlbnRfaG9zdBgLIAEoCRIUCgx0b3JyZW50X25hbWUYDCABKAkSGAoQdG9ycmVudF9wYXNzd29yZBgNIAEoCRIYChB0b3JyZW50X3Byb3RvY29sGA4gASgJEhQKDHRvcnJlbnRfdXNlchgPIAEoCTLwAgoPU2V0dGluZ3NTZXJ2aWNlEk4KDlVwZGF0ZVNldHRpbmdzEhUuc2V0dGluZ3MudjEuU2V0dGluZ3MaIy5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIgASSgoMTGlzdFNldHRpbmdzEiEuc2V0dGluZ3MudjEuTGlzdFNldHRpbmdzUmVzcG9uc2UaFS5zZXR0aW5ncy52MS5TZXR0aW5ncyIAEm0KFExpc3RTdXBwb3J0ZWRDbGllbnRzEiguc2V0dGluZ3MudjEuTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Gikuc2V0dGluZ3MudjEuTGlzdFN1cHBvcnRlZENsaWVudHNSZXNwb25zZSIAElIKC0dldE1ldGFkYXRhEh8uc2V0dGluZ3MudjEuR2V0TWV0YWRhdGFSZXF1ZXN0GiAuc2V0dGluZ3MudjEuR2V0TWV0YWRhdGFSZXNwb25zZSIAQpsBCg9jb20uc2V0dGluZ3MudjFCDVNldHRpbmdzUHJvdG9QAVosZ2l0aHViLmNvbS9SQTM0MS9nb3VkYS9nZW5lcmF0ZWQvc2V0dGluZ3MvdjGiAgNTWFiqAgtTZXR0aW5ncy5WMcoCC1NldHRpbmdzXFYx4gIXU2V0dGluZ3NcVjFcR1BCTWV0YWRhdGHqAgxTZXR0aW5nczo6VjFiBnByb3RvMw");
 
 /**
- * @generated from message settings.v1.GetProgramInfoRequest
+ * @generated from message settings.v1.GetMetadataRequest
  */
-export type GetProgramInfoRequest = Message<"settings.v1.GetProgramInfoRequest"> & {
+export type GetMetadataRequest = Message<"settings.v1.GetMetadataRequest"> & {
 };
 
 /**
- * Describes the message settings.v1.GetProgramInfoRequest.
- * Use `create(GetProgramInfoRequestSchema)` to create a new message.
+ * Describes the message settings.v1.GetMetadataRequest.
+ * Use `create(GetMetadataRequestSchema)` to create a new message.
  */
-export const GetProgramInfoRequestSchema: GenMessage<GetProgramInfoRequest> = /*@__PURE__*/
+export const GetMetadataRequestSchema: GenMessage<GetMetadataRequest> = /*@__PURE__*/
   messageDesc(file_settings_v1_settings, 0);
 
 /**
- * @generated from message settings.v1.GetProgramInfoResponse
+ * @generated from message settings.v1.GetMetadataResponse
  */
-export type GetProgramInfoResponse = Message<"settings.v1.GetProgramInfoResponse"> & {
+export type GetMetadataResponse = Message<"settings.v1.GetMetadataResponse"> & {
   /**
    * @generated from field: string version = 1;
    */
@@ -41,10 +41,10 @@ export type GetProgramInfoResponse = Message<"settings.v1.GetProgramInfoResponse
 };
 
 /**
- * Describes the message settings.v1.GetProgramInfoResponse.
- * Use `create(GetProgramInfoResponseSchema)` to create a new message.
+ * Describes the message settings.v1.GetMetadataResponse.
+ * Use `create(GetMetadataResponseSchema)` to create a new message.
  */
-export const GetProgramInfoResponseSchema: GenMessage<GetProgramInfoResponse> = /*@__PURE__*/
+export const GetMetadataResponseSchema: GenMessage<GetMetadataResponse> = /*@__PURE__*/
   messageDesc(file_settings_v1_settings, 1);
 
 /**
@@ -232,12 +232,12 @@ export const SettingsService: GenService<{
     output: typeof ListSupportedClientsResponseSchema;
   },
   /**
-   * @generated from rpc settings.v1.SettingsService.GetProgramInfo
+   * @generated from rpc settings.v1.SettingsService.GetMetadata
    */
-  getProgramInfo: {
+  getMetadata: {
     methodKind: "unary";
-    input: typeof GetProgramInfoRequestSchema;
-    output: typeof GetProgramInfoResponseSchema;
+    input: typeof GetMetadataRequestSchema;
+    output: typeof GetMetadataResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_settings_v1_settings, 0);

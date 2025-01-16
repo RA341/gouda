@@ -8,12 +8,12 @@ service SettingsService {
   rpc UpdateSettings(Settings) returns (UpdateSettingsResponse) {}
   rpc ListSettings(ListSettingsResponse) returns (Settings) {}
   rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
-  rpc GetProgramInfo(GetProgramInfoRequest) returns (GetProgramInfoResponse) {}
+  rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
 }
 
-message GetProgramInfoRequest {}
+message GetMetadataRequest {}
 
-message GetProgramInfoResponse {
+message GetMetadataResponse {
   string version = 1;
   string binaryType = 2;
 }

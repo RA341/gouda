@@ -67,7 +67,9 @@ class SettingsView extends HookConsumerWidget {
     final torrentUser = useTextEditingController(text: settings.torrentUser);
     final exitOnClose = useState(settings.exitOnClose);
 
+    // some extra info
     final supportedClients = ref.watch(supportedClientsProvider).value;
+    final metadata = ref.watch(metadataProvider).value;
 
     return SingleChildScrollView(
       child: Column(
@@ -88,7 +90,7 @@ class SettingsView extends HookConsumerWidget {
             'Download Check timeout (In minutes)',
             downloadCheckTimeout,
           ),
-          if (Platform.isWindows || Platform.isMacOS || Platform.isLinux)
+          if (metadata?.binaryType == "desktop")
             Row(
               children: [
                 Text('Exit application on close'),
