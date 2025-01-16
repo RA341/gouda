@@ -149,12 +149,18 @@ class HistoryView extends HookConsumerWidget {
                     final mamUrl =
                         'https://www.myanonamouse.net/t/${request.mamBookId}';
 
+                    final seriesStr = (request.series.isEmpty ||
+                            request.seriesNumber == 0)
+                        ? 'from Series:${request.series} #${request.seriesNumber}'
+                        : '';
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: ListTile(
                         title: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text('${request.book} by ${request.author}'),
+                          child: Text(
+                              '${request.book} by ${request.author} $seriesStr'),
                         ),
                         subtitle: Row(
                           mainAxisSize: MainAxisSize.min,
