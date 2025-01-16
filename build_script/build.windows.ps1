@@ -8,7 +8,7 @@ Write-Output "Building with variant:$Variant and version:$Version"
 
 # install deps
 Write-Output "Installing 7zip"
-winget install 7zip
+winget install --id 7zip.7zip --silent --accept-package-agreements
 
 # Create directories
 $buildDir = ".\build_output\windows"
