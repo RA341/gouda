@@ -13,6 +13,29 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use getProgramInfoRequestDescriptor instead')
+const GetProgramInfoRequest$json = {
+  '1': 'GetProgramInfoRequest',
+};
+
+/// Descriptor for `GetProgramInfoRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getProgramInfoRequestDescriptor = $convert.base64Decode(
+    'ChVHZXRQcm9ncmFtSW5mb1JlcXVlc3Q=');
+
+@$core.Deprecated('Use getProgramInfoResponseDescriptor instead')
+const GetProgramInfoResponse$json = {
+  '1': 'GetProgramInfoResponse',
+  '2': [
+    {'1': 'version', '3': 1, '4': 1, '5': 9, '10': 'version'},
+    {'1': 'binaryType', '3': 2, '4': 1, '5': 9, '10': 'binaryType'},
+  ],
+};
+
+/// Descriptor for `GetProgramInfoResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getProgramInfoResponseDescriptor = $convert.base64Decode(
+    'ChZHZXRQcm9ncmFtSW5mb1Jlc3BvbnNlEhgKB3ZlcnNpb24YASABKAlSB3ZlcnNpb24SHgoKYm'
+    'luYXJ5VHlwZRgCIAEoCVIKYmluYXJ5VHlwZQ==');
+
 @$core.Deprecated('Use listSupportedClientsRequestDescriptor instead')
 const ListSupportedClientsRequest$json = {
   '1': 'ListSupportedClientsRequest',

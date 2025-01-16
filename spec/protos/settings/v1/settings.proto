@@ -8,6 +8,14 @@ service SettingsService {
   rpc UpdateSettings(Settings) returns (UpdateSettingsResponse) {}
   rpc ListSettings(ListSettingsResponse) returns (Settings) {}
   rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
+  rpc GetProgramInfo(GetProgramInfoRequest) returns (GetProgramInfoResponse) {}
+}
+
+message GetProgramInfoRequest {}
+
+message GetProgramInfoResponse {
+  string version = 1;
+  string binaryType = 2;
 }
 
 message ListSupportedClientsRequest {}

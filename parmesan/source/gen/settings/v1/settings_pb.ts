@@ -10,7 +10,42 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file settings/v1/settings.proto.
  */
 export const file_settings_v1_settings: GenFile = /*@__PURE__*/
-  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiHQobTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Ii8KHExpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2USDwoHY2xpZW50cxgBIAMoCSIYChZVcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIhYKFExpc3RTZXR0aW5nc1Jlc3BvbnNlIvECCghTZXR0aW5ncxIPCgdhcGlfa2V5GAEgASgJEhMKC3NlcnZlcl9wb3J0GAIgASgJEh4KFmRvd25sb2FkX2NoZWNrX3RpbWVvdXQYAyABKAQSFQoNZXhpdF9vbl9jbG9zZRgQIAEoCBIXCg9jb21wbGV0ZV9mb2xkZXIYBCABKAkSFwoPZG93bmxvYWRfZm9sZGVyGAUgASgJEhcKD3RvcnJlbnRzX2ZvbGRlchgGIAEoCRIQCgh1c2VybmFtZRgHIAEoCRIQCghwYXNzd29yZBgIIAEoCRIQCgh1c2VyX3VpZBgJIAEoBBIRCglncm91cF91aWQYCiABKAQSFAoMdG9ycmVudF9ob3N0GAsgASgJEhQKDHRvcnJlbnRfbmFtZRgMIAEoCRIYChB0b3JyZW50X3Bhc3N3b3JkGA0gASgJEhgKEHRvcnJlbnRfcHJvdG9jb2wYDiABKAkSFAoMdG9ycmVudF91c2VyGA8gASgJMpwCCg9TZXR0aW5nc1NlcnZpY2USTgoOVXBkYXRlU2V0dGluZ3MSFS5zZXR0aW5ncy52MS5TZXR0aW5ncxojLnNldHRpbmdzLnYxLlVwZGF0ZVNldHRpbmdzUmVzcG9uc2UiABJKCgxMaXN0U2V0dGluZ3MSIS5zZXR0aW5ncy52MS5MaXN0U2V0dGluZ3NSZXNwb25zZRoVLnNldHRpbmdzLnYxLlNldHRpbmdzIgASbQoUTGlzdFN1cHBvcnRlZENsaWVudHMSKC5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1JlcXVlc3QaKS5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlIgBCmwEKD2NvbS5zZXR0aW5ncy52MUINU2V0dGluZ3NQcm90b1ABWixnaXRodWIuY29tL1JBMzQxL2dvdWRhL2dlbmVyYXRlZC9zZXR0aW5ncy92MaICA1NYWKoCC1NldHRpbmdzLlYxygILU2V0dGluZ3NcVjHiAhdTZXR0aW5nc1xWMVxHUEJNZXRhZGF0YeoCDFNldHRpbmdzOjpWMWIGcHJvdG8z");
+  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiFwoVR2V0UHJvZ3JhbUluZm9SZXF1ZXN0Ij0KFkdldFByb2dyYW1JbmZvUmVzcG9uc2USDwoHdmVyc2lvbhgBIAEoCRISCgpiaW5hcnlUeXBlGAIgASgJIh0KG0xpc3RTdXBwb3J0ZWRDbGllbnRzUmVxdWVzdCIvChxMaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlEg8KB2NsaWVudHMYASADKAkiGAoWVXBkYXRlU2V0dGluZ3NSZXNwb25zZSIWChRMaXN0U2V0dGluZ3NSZXNwb25zZSLxAgoIU2V0dGluZ3MSDwoHYXBpX2tleRgBIAEoCRITCgtzZXJ2ZXJfcG9ydBgCIAEoCRIeChZkb3dubG9hZF9jaGVja190aW1lb3V0GAMgASgEEhUKDWV4aXRfb25fY2xvc2UYECABKAgSFwoPY29tcGxldGVfZm9sZGVyGAQgASgJEhcKD2Rvd25sb2FkX2ZvbGRlchgFIAEoCRIXCg90b3JyZW50c19mb2xkZXIYBiABKAkSEAoIdXNlcm5hbWUYByABKAkSEAoIcGFzc3dvcmQYCCABKAkSEAoIdXNlcl91aWQYCSABKAQSEQoJZ3JvdXBfdWlkGAogASgEEhQKDHRvcnJlbnRfaG9zdBgLIAEoCRIUCgx0b3JyZW50X25hbWUYDCABKAkSGAoQdG9ycmVudF9wYXNzd29yZBgNIAEoCRIYChB0b3JyZW50X3Byb3RvY29sGA4gASgJEhQKDHRvcnJlbnRfdXNlchgPIAEoCTL5AgoPU2V0dGluZ3NTZXJ2aWNlEk4KDlVwZGF0ZVNldHRpbmdzEhUuc2V0dGluZ3MudjEuU2V0dGluZ3MaIy5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIgASSgoMTGlzdFNldHRpbmdzEiEuc2V0dGluZ3MudjEuTGlzdFNldHRpbmdzUmVzcG9uc2UaFS5zZXR0aW5ncy52MS5TZXR0aW5ncyIAEm0KFExpc3RTdXBwb3J0ZWRDbGllbnRzEiguc2V0dGluZ3MudjEuTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Gikuc2V0dGluZ3MudjEuTGlzdFN1cHBvcnRlZENsaWVudHNSZXNwb25zZSIAElsKDkdldFByb2dyYW1JbmZvEiIuc2V0dGluZ3MudjEuR2V0UHJvZ3JhbUluZm9SZXF1ZXN0GiMuc2V0dGluZ3MudjEuR2V0UHJvZ3JhbUluZm9SZXNwb25zZSIAQpsBCg9jb20uc2V0dGluZ3MudjFCDVNldHRpbmdzUHJvdG9QAVosZ2l0aHViLmNvbS9SQTM0MS9nb3VkYS9nZW5lcmF0ZWQvc2V0dGluZ3MvdjGiAgNTWFiqAgtTZXR0aW5ncy5WMcoCC1NldHRpbmdzXFYx4gIXU2V0dGluZ3NcVjFcR1BCTWV0YWRhdGHqAgxTZXR0aW5nczo6VjFiBnByb3RvMw");
+
+/**
+ * @generated from message settings.v1.GetProgramInfoRequest
+ */
+export type GetProgramInfoRequest = Message<"settings.v1.GetProgramInfoRequest"> & {
+};
+
+/**
+ * Describes the message settings.v1.GetProgramInfoRequest.
+ * Use `create(GetProgramInfoRequestSchema)` to create a new message.
+ */
+export const GetProgramInfoRequestSchema: GenMessage<GetProgramInfoRequest> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 0);
+
+/**
+ * @generated from message settings.v1.GetProgramInfoResponse
+ */
+export type GetProgramInfoResponse = Message<"settings.v1.GetProgramInfoResponse"> & {
+  /**
+   * @generated from field: string version = 1;
+   */
+  version: string;
+
+  /**
+   * @generated from field: string binaryType = 2;
+   */
+  binaryType: string;
+};
+
+/**
+ * Describes the message settings.v1.GetProgramInfoResponse.
+ * Use `create(GetProgramInfoResponseSchema)` to create a new message.
+ */
+export const GetProgramInfoResponseSchema: GenMessage<GetProgramInfoResponse> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 1);
 
 /**
  * @generated from message settings.v1.ListSupportedClientsRequest
@@ -23,7 +58,7 @@ export type ListSupportedClientsRequest = Message<"settings.v1.ListSupportedClie
  * Use `create(ListSupportedClientsRequestSchema)` to create a new message.
  */
 export const ListSupportedClientsRequestSchema: GenMessage<ListSupportedClientsRequest> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 0);
+  messageDesc(file_settings_v1_settings, 2);
 
 /**
  * @generated from message settings.v1.ListSupportedClientsResponse
@@ -40,7 +75,7 @@ export type ListSupportedClientsResponse = Message<"settings.v1.ListSupportedCli
  * Use `create(ListSupportedClientsResponseSchema)` to create a new message.
  */
 export const ListSupportedClientsResponseSchema: GenMessage<ListSupportedClientsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 1);
+  messageDesc(file_settings_v1_settings, 3);
 
 /**
  * @generated from message settings.v1.UpdateSettingsResponse
@@ -53,7 +88,7 @@ export type UpdateSettingsResponse = Message<"settings.v1.UpdateSettingsResponse
  * Use `create(UpdateSettingsResponseSchema)` to create a new message.
  */
 export const UpdateSettingsResponseSchema: GenMessage<UpdateSettingsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 2);
+  messageDesc(file_settings_v1_settings, 4);
 
 /**
  * @generated from message settings.v1.ListSettingsResponse
@@ -66,7 +101,7 @@ export type ListSettingsResponse = Message<"settings.v1.ListSettingsResponse"> &
  * Use `create(ListSettingsResponseSchema)` to create a new message.
  */
 export const ListSettingsResponseSchema: GenMessage<ListSettingsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 3);
+  messageDesc(file_settings_v1_settings, 5);
 
 /**
  * @generated from message settings.v1.Settings
@@ -166,7 +201,7 @@ export type Settings = Message<"settings.v1.Settings"> & {
  * Use `create(SettingsSchema)` to create a new message.
  */
 export const SettingsSchema: GenMessage<Settings> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 4);
+  messageDesc(file_settings_v1_settings, 6);
 
 /**
  * @generated from service settings.v1.SettingsService
@@ -195,6 +230,14 @@ export const SettingsService: GenService<{
     methodKind: "unary";
     input: typeof ListSupportedClientsRequestSchema;
     output: typeof ListSupportedClientsResponseSchema;
+  },
+  /**
+   * @generated from rpc settings.v1.SettingsService.GetProgramInfo
+   */
+  getProgramInfo: {
+    methodKind: "unary";
+    input: typeof GetProgramInfoRequestSchema;
+    output: typeof GetProgramInfoResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_settings_v1_settings, 0);

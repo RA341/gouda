@@ -14,6 +14,102 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class GetProgramInfoRequest extends $pb.GeneratedMessage {
+  factory GetProgramInfoRequest() => create();
+  GetProgramInfoRequest._() : super();
+  factory GetProgramInfoRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetProgramInfoRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetProgramInfoRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetProgramInfoRequest clone() => GetProgramInfoRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetProgramInfoRequest copyWith(void Function(GetProgramInfoRequest) updates) => super.copyWith((message) => updates(message as GetProgramInfoRequest)) as GetProgramInfoRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetProgramInfoRequest create() => GetProgramInfoRequest._();
+  GetProgramInfoRequest createEmptyInstance() => create();
+  static $pb.PbList<GetProgramInfoRequest> createRepeated() => $pb.PbList<GetProgramInfoRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetProgramInfoRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetProgramInfoRequest>(create);
+  static GetProgramInfoRequest? _defaultInstance;
+}
+
+class GetProgramInfoResponse extends $pb.GeneratedMessage {
+  factory GetProgramInfoResponse({
+    $core.String? version,
+    $core.String? binaryType,
+  }) {
+    final $result = create();
+    if (version != null) {
+      $result.version = version;
+    }
+    if (binaryType != null) {
+      $result.binaryType = binaryType;
+    }
+    return $result;
+  }
+  GetProgramInfoResponse._() : super();
+  factory GetProgramInfoResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetProgramInfoResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetProgramInfoResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'version')
+    ..aOS(2, _omitFieldNames ? '' : 'binaryType', protoName: 'binaryType')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetProgramInfoResponse clone() => GetProgramInfoResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetProgramInfoResponse copyWith(void Function(GetProgramInfoResponse) updates) => super.copyWith((message) => updates(message as GetProgramInfoResponse)) as GetProgramInfoResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetProgramInfoResponse create() => GetProgramInfoResponse._();
+  GetProgramInfoResponse createEmptyInstance() => create();
+  static $pb.PbList<GetProgramInfoResponse> createRepeated() => $pb.PbList<GetProgramInfoResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetProgramInfoResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetProgramInfoResponse>(create);
+  static GetProgramInfoResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get version => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set version($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearVersion() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get binaryType => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set binaryType($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasBinaryType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBinaryType() => clearField(2);
+}
+
 class ListSupportedClientsRequest extends $pb.GeneratedMessage {
   factory ListSupportedClientsRequest() => create();
   ListSupportedClientsRequest._() : super();
