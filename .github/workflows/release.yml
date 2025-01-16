@@ -121,6 +121,65 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # docker stuff
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v2
+        with:
+          version: 'latest'
+          capabilities: build
+
+      # just runner
+      - name: setup just
+      - uses: extractions/setup-just@v2
+
+      - name: Build linux
+        env:
+          CGO_ENABLED: 1
+        working-directory: build_script
+        run: just ci-linux ${{ needs.tag-release.outputs.new_tag }}
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build_script/build_output/linux/desktop/gouda-desktop-linux.zip
+            build_script/build_output/linux/server/gouda-server
+          tag_name: ${{ needs.tag-release.outputs.new_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows:
+    needs: tag-release
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # GCC
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-make
+
       # flutter build
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -129,90 +188,45 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Get dependencies
-        working-directory: ./brie
-        run: |
-          flutter pub get
-          flutter config --enable-web
-          flutter build web --release
-
       # golang build
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.23.3'
 
-      - name: Build linux
-        env:
-          CGO_ENABLED: 1
-        working-directory: src
-        run: |
-          cp -r ../brie/build/web/ ./web
-          go build -ldflags "-s -w" -o gouda_linux
+      # docker stuff
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v2
+        with:
+          version: 'latest'
+          capabilities: build
+
+      # just runner
+      - name: setup just
+      - uses: extractions/setup-just@v2
+
+      - name: Run build script
+        env: CGO_ENABLED=1
+        working-directory: build_script
+        run: just ci-windows ${{ needs.tag-release.outputs.new_tag }}
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            src/gouda_linux
-          tag_name: ${{ steps.tagName.outputs.tag }}
+            build_script/build_output/windows/desktop/gouda-desktop-windows.zip
+            build_script/build_output/windows/server/gouda-server.exe
+          tag_name: ${{ needs.tag-release.outputs.new_tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#  build-windows:
-#    needs: tag-release
-#    runs-on: windows-latest
-#    defaults:
-#      run:
-#        shell: msys2 {0}
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      # GCC
-#      - name: Setup MSYS2
-#        uses: msys2/setup-msys2@v2
-#        with:
-#          msystem: MINGW64
-#          update: true
-#          install: >-
-#            mingw-w64-x86_64-gcc
-#            mingw-w64-x86_64-make
-#
-#      # flutter build
-#      - name: Setup Flutter
-#        uses: subosito/flutter-action@v2
-#        with:
-#          flutter-version: '3.27.1'
-#          channel: 'stable'
-#          cache: true
-#
-#      - name: Get dependencies
-#        working-directory: ./brie
-#        run: |
-#          flutter pub get
-#          flutter config --enable-web
-#          flutter build web --release
-#
-#      # golang build
-#      - name: Set up Go
-#        uses: actions/setup-go@v4
-#        with:
-#          go-version: '1.23.3'
-#
-#      - name: Build linux
-#        env: CGO_ENABLED=1
-#        working-directory: src
-#        run: |
-#          cp -r ../brie/build/web/ ./web
-#          go build -ldflags "-s -w" -o gouda_windows.exe
-#
-#      - name: Upload Release Asset
-#        uses: softprops/action-gh-release@v2
-#        with:
-#          files: |
-#            src/gouda_windows.exe
-#          tag_name: ${{ steps.tagName.outputs.tag }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
