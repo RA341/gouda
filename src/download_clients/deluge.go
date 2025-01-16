@@ -36,6 +36,22 @@ type DelugeClient struct {
 	id        int
 }
 
+func NewDelugeClient(delugeUrl, protocol, _, pass string) (models.DownloadClient, error) {
+	client := DelugeClient{
+		client:    resty.New().SetTimeout(time.Second * 5),
+		jsonURL:   fmt.Sprintf("%s://%s/json", protocol, delugeUrl),
+		uploadURL: fmt.Sprintf("%s://%s/upload", protocol, delugeUrl),
+		id:        1,
+	}
+
+	err := client.loginDeluge(pass)
+	if err != nil {
+		return nil, fmt.Errorf("unable to login: %v", err)
+	}
+
+	return client, nil
+}
+
 func (d DelugeClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
 	uploadedFilePath, err := d.uploadFile(torrent)
 	if err != nil {
@@ -105,17 +121,17 @@ func (d DelugeClient) CheckTorrentStatus(torrentId []string) ([]models.TorrentSt
 		"id": d.id,
 	}
 
+	var infoResp TorrentInfoResponse
 	resp, err := d.client.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(payload).
+		SetResult(&infoResp).
 		Post(d.jsonURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send get torrents request: %w", err)
 	}
-
-	var infoResp TorrentInfoResponse
-	if err := json.Unmarshal(resp.Body(), &infoResp); err != nil {
-		return nil, fmt.Errorf("failed to parse torrents info response: %w", err)
+	if resp.IsError() {
+		log.Error().Int("status_code", resp.StatusCode()).Msg("invalid code, torrent status error")
 	}
 
 	if infoResp.Error != nil {
@@ -153,32 +169,16 @@ func (d DelugeClient) Health() (string, string, error) {
 	}
 
 	// Send connection check request
-	_, err := d.client.R().
+	resp, err := d.client.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(payload).
 		Post(d.jsonURL)
 
-	if err != nil {
+	if err != nil || resp.IsError() {
 		return "", "", fmt.Errorf("failed to send connection check request: %w", err)
 	}
 
 	return "", "", nil
-}
-
-func NewDelugeClient(delugeUrl, protocol, user, pass string) (models.DownloadClient, error) {
-	client := DelugeClient{
-		client:    resty.New().SetTimeout(time.Second * 5),
-		jsonURL:   fmt.Sprintf("%s://%s/json", protocol, delugeUrl),
-		uploadURL: fmt.Sprintf("%s://%s/upload", protocol, delugeUrl),
-		id:        1,
-	}
-
-	err := client.loginDeluge(pass)
-	if err != nil {
-		return nil, fmt.Errorf("unable to login: %v", err)
-	}
-
-	return client, nil
 }
 
 func (d DelugeClient) loginDeluge(password string) error {
@@ -188,24 +188,18 @@ func (d DelugeClient) loginDeluge(password string) error {
 		"id":     d.id,
 	}
 
+	var loginResp LoginResponse
 	// Send login request
 	resp, err := d.client.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(payload).
+		SetResult(&loginResp).
 		Post(d.jsonURL)
 
 	if err != nil {
 		return fmt.Errorf("failed to send login request: %w", err)
 	}
-
-	// Parse response
-	var loginResp LoginResponse
-	if err := json.Unmarshal(resp.Body(), &loginResp); err != nil {
-		return fmt.Errorf("failed to parse login response: %w", err)
-	}
-
-	// Check if login was successful
-	if !loginResp.Result {
+	if !loginResp.Result || resp.IsError() {
 		return fmt.Errorf("login failed: %v", loginResp.Error)
 	}
 
@@ -218,18 +212,16 @@ func (d DelugeClient) uploadFile(torrentPath string) (string, error) {
 		Files   []string `json:"files"`
 	}
 
-	//url := d.uploadURL
-
-	resp, err := d.client.R().SetFile("file", torrentPath).Post(d.uploadURL)
+	var loginResp Response
+	resp, err := d.client.R().
+		SetFile("file", torrentPath).
+		SetResult(&loginResp).
+		Post(d.uploadURL)
 	if err != nil {
 		return "", fmt.Errorf("unable to upload torrent file")
 	}
 
-	var loginResp Response
-	if err := json.Unmarshal(resp.Body(), &loginResp); err != nil {
-		return "", fmt.Errorf("failed to parse login response: %w", err)
-	}
-	if !loginResp.Success {
+	if !loginResp.Success || resp.IsError() {
 		return "", fmt.Errorf("unable to upload file, api returned false")
 	}
 

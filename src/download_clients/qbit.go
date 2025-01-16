@@ -164,7 +164,7 @@ func (qbitClient *QbitClient) AddTorrent(torrentFilePath, downloadPath string, c
 		return "", fmt.Errorf("failed to call qbit api: %w", err)
 	}
 
-	if resp.StatusCode() != http.StatusOK {
+	if resp.IsError() {
 		return "", fmt.Errorf("failed to add torrent, status: %d", resp.StatusCode())
 	}
 
