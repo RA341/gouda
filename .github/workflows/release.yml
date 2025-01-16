@@ -172,10 +172,6 @@ jobs:
           flutter config --enable-windows-desktop
           flutter doctor
 
-      # Fetch dependencies
-      - name: Install dependencies
-        run: flutter pub get
-
       # golang build
       - name: Set up Go
         uses: actions/setup-go@v4
