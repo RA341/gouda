@@ -79,7 +79,7 @@ COPY --from=server_builder /app/gouda-server-linux ./gouda-server-linux
 
 COPY --from=desktop_builder /app/gouda-desktop ./gouda-desktop
 
-COPY --from=flutter_builder /app/build/linux/x64/release/bundle/* ./frontend/
+COPY --from=flutter_builder /app/build/linux/x64/release/bundle/ ./frontend/
 
 RUN apt-get update && \
     apt-get install zip -y
@@ -88,7 +88,7 @@ RUN apt-get update && \
 RUN chown -R 1000:1000 . \
     && chmod +x gouda-desktop \
     && chmod +x gouda-server-linux \
-    && zip -r ./gouda-desktop-linux.zip *
+    && zip -r ./gouda-desktop-linux.zip * --exclude "gouda-server-linux"
 
 # copy both files to their respective dirs
 CMD ["/bin/sh", "-c", "cp -r /build/gouda-server-linux /server/gouda-server-linux && cp -r /build/gouda-desktop-linux.zip /desktop/gouda-desktop-linux.zip"]

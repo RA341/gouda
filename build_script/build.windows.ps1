@@ -63,7 +63,7 @@ function CreateDesktopBuild {
     flutter build windows --release
     Copy-Item "build/web/*" $webSrc -Force -Recurse
     $flutterBuild = "build\windows\x64\runner\Release"
-    Copy-Item "$flutterBuild\*" "$desktopFrontendDir" -Force -Recurse
+    Copy-Item "$flutterBuild" "$desktopFrontendDir\" -Force -Recurse
 
     Pop-Location
 
