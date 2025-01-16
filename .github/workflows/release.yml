@@ -196,7 +196,7 @@ jobs:
         env:
           CGO_ENABLED: 1
         working-directory: build_script
-        run: just ci-windows ${{ needs.tag-release.outputs.new_tag }}
+        run: ./build.windows.ps1 all -Version "${{ needs.tag-release.outputs.new_tag }}"
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
