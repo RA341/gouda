@@ -93,3 +93,13 @@ func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Reques
 
 	return res, nil
 }
+
+func (setSrv *SettingsService) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+	clients := download_clients.GetSupportedClients()
+
+	res := connect.NewResponse(&v1.ListSupportedClientsResponse{
+		Clients: clients,
+	})
+
+	return res, nil
+}

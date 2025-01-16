@@ -20,8 +20,13 @@ final pageIndexListProvider = NotifierProvider<PageNotifier, int>(() {
 
 final settingsProvider = FutureProvider<Settings>((ref) async {
   final settingsApi = ref.watch(settingsApiProvider);
+  await ref.read(supportedClientsProvider.future);
 
   return await settingsApi.list();
+});
+
+final supportedClientsProvider = FutureProvider<List<String>>((ref) async {
+  return ref.watch(settingsApiProvider).listClients();
 });
 
 final categoryListProvider = FutureProvider<List<Category>>((ref) async {

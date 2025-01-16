@@ -25,4 +25,8 @@ class SettingsApi {
 
   Future<Settings> list() async =>
       await apiClient.listSettings(ListSettingsResponse());
+
+  Future<List<String>> listClients() async =>
+      (await apiClient.listSupportedClients(ListSupportedClientsRequest()))
+          .clients;
 }

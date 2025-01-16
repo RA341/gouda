@@ -67,6 +67,8 @@ class SettingsView extends HookConsumerWidget {
     final torrentUser = useTextEditingController(text: settings.torrentUser);
     final exitOnClose = useState(settings.exitOnClose);
 
+    final supportedClients = ref.watch(supportedClientsProvider).value;
+
     return SingleChildScrollView(
       child: Column(
         spacing: 5,
@@ -103,7 +105,7 @@ class SettingsView extends HookConsumerWidget {
             spacing: 10,
             children: [
               createDropDown2(
-                supportedClients,
+                supportedClients ?? [],
                 clientType,
                 "Torrent Client Type",
               ),
