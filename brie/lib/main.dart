@@ -18,7 +18,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,13 +72,11 @@ class MainView extends ConsumerWidget {
     ];
 
     final pageIndex = ref.watch(pageIndexListProvider);
-    // call the settings now so that later pages can use it without going to
-    // ref.watch(settingsProvider).value;
-
     return Row(
       children: [
         Sidebar(),
-        Expanded(child: routeList[pageIndex]),
+        Expanded(
+            child: routeList[pageIndex].animate().fadeIn(duration: 200.ms)),
       ],
     );
   }

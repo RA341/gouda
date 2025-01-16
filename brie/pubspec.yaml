@@ -32,6 +32,7 @@ dependencies:
   shared_preferences: ^2.3.5
   url_launcher:
   fixnum: ^1.1.1
+  logger: ^2.5.0
 
 dev_dependencies:
   custom_lint:

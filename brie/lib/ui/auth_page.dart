@@ -1,6 +1,7 @@
 import 'package:brie/clients/auth_api.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:brie/ui/components/utils.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,10 +12,9 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userName = useTextEditingController(
-        text: kDebugMode ? ('admin') : '');
-    final pass = useTextEditingController(
-        text: kDebugMode ? ('admin') : '');
+    final userName =
+        useTextEditingController(text: kDebugMode ? ('admin') : '');
+    final pass = useTextEditingController(text: kDebugMode ? ('admin') : '');
 
     return Center(
       child: Padding(
@@ -58,12 +58,12 @@ class LoginPage extends HookConsumerWidget {
                   try {
                     if (!context.mounted) return;
                     await ref.read(authApiProvider).login(
-                      user: userName.text,
-                      pass: pass.text,
-                    );
+                          user: userName.text,
+                          pass: pass.text,
+                        );
                     ref.invalidate(apiTokenProvider);
                   } catch (e) {
-                    print(e);
+                    logger.e("Unable to login", error: e);
                     if (!context.mounted) return;
                     showErrorDialog(
                       context,

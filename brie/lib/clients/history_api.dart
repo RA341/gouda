@@ -1,6 +1,6 @@
 import 'package:brie/gen/media_requests/v1/media_requests.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
-import 'package:fixnum/src/int64.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final historyApiProvider = Provider<HistoryApi>((ref) {
