@@ -8,5 +8,5 @@ import (
 )
 
 func InitSystray() {
-	systray.Run(pkg.OnReady, pkg.OnReady)
+	systray.Run(pkg.OnReady, pkg.OnExit)
 }

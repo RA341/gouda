@@ -69,13 +69,13 @@ RUN go mod tidy
 # Build gouda server variant
 RUN go build -ldflags "-s -w \
         -X github.com/RA341/gouda/service.Version=$BV" \
-        -o gouda-server
+        -o gouda-server-linux
 
 FROM ubuntu:latest AS gouda_desktop_builder
 
 WORKDIR /build/
 
-COPY --from=server_builder /app/gouda-server ./gouda-server
+COPY --from=server_builder /app/gouda-server-linux ./gouda-server-linux
 
 COPY --from=desktop_builder /app/gouda-desktop ./gouda-desktop
 
@@ -87,8 +87,8 @@ RUN apt-get update && \
 # Fix permissions
 RUN chown -R 1000:1000 . \
     && chmod +x gouda-desktop \
-    && chmod +x gouda-server \
+    && chmod +x gouda-server-linux \
     && zip -r ./gouda-desktop-linux.zip *
 
 # copy both files to their respective dirs
-CMD ["/bin/sh", "-c", "cp -r /build/gouda-server /server/gouda-server && cp -r /build/gouda-desktop-linux.zip /desktop/gouda-desktop-linux.zip"]
+CMD ["/bin/sh", "-c", "cp -r /build/gouda-server-linux /server/gouda-server-linux && cp -r /build/gouda-desktop-linux.zip /desktop/gouda-desktop-linux.zip"]
