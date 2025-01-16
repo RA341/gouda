@@ -91,6 +91,10 @@ func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Reques
 		TorrentUser:     viper.GetString("torrent_client.user"),
 	})
 
+	if service.IsDesktopMode() {
+		res.Msg.ExitOnClose = viper.GetBool("exit_on_close")
+	}
+
 	return res, nil
 }
 
