@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/RA341/gouda/compare/v1.5.2...v1.6.0) (2025-01-16)
+
+
+### Features
+
+* added series info ([229738b](https://github.com/RA341/gouda/commit/229738b64ae7603b197164de1a7d4491018ba348))
+* deluge support (beta) ([aa5096c](https://github.com/RA341/gouda/commit/aa5096ce2081b8a768bfcfcd23449730abb64a30))
+* embed frontend files in binary ([09f3665](https://github.com/RA341/gouda/commit/09f36653a8e5d58089b8c0e33efbbba3a21c6b25))
+
 ## [1.5.2](https://github.com/RA341/gouda/compare/v1.5.1...v1.5.2) (2025-01-09)
 
 
