@@ -12,6 +12,13 @@ This project is licensed under the GNU General Public License v3.0 (GPL-3.0). By
 1. The go api server - located at [/src](/src)
 2. The flutter/dart frontend - located at [/brie](/brie)
 
+### Building
+
+builds binary in desktop mode, enabling systray and flutter windows build
+```bash
+go build -ldflags "-X main.BinaryType=desktop" -o myapp
+```
+
 All contributions use
 
 ## Development Workflow

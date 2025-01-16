@@ -5,8 +5,12 @@ import (
 	models "github.com/RA341/gouda/models"
 	"github.com/go-resty/resty/v2"
 	"github.com/hekmon/transmissionrpc/v3"
+	"github.com/jackpal/bencode-go"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"net/url"
+	"os"
+	"slices"
 	"strings"
 )
 
@@ -160,32 +164,44 @@ func (qbitClient *QbitClient) AddTorrent(torrentFilePath, downloadPath string, c
 		return "", fmt.Errorf("failed to call qbit api: %w", err)
 	}
 
-	if resp.StatusCode() != http.StatusOK {
+	if resp.IsError() {
 		return "", fmt.Errorf("failed to add torrent, status: %d", resp.StatusCode())
 	}
 
+	torName, err := GetTorrentName(torrentFilePath)
+	if err != nil {
+		return "", err
+	}
+
 	// Get the hash from torrent list
-	_, err = qbitClient.getTorrentList()
+	torrents, err := qbitClient.getTorrentList()
 	if err != nil {
 		return "", fmt.Errorf("failed to get torrent hash: %w", err)
 	}
 
-	// todo
 	// Return the hash of the most recently added torrent
-	//if len(torrents) > 0 {
-	//	return torrents[0].Hash, nil
-	//}
+	torListLen := len(torrents)
+	if torListLen > 0 {
+		// invert loop because we get the latest added tor at the end
+		// incase of a retry and torrent already exists and
+		// if not at the end of the list, continue searching
+		for _, torrent := range slices.Backward(torrents) {
+			if torrent.Name == torName {
+				return torrent.Hash, nil
+			}
+		}
+	}
 
 	return "", fmt.Errorf("torrent was added but hash not found")
 }
 
 // Helper function to get torrent list
 func (qbitClient *QbitClient) getTorrentList() ([]TorrentInfo, error) {
-	// todo broken the list returned is unordered
 	var torrents []TorrentInfo
 	resp, err := resty.New().R().
 		SetCookie(qbitClient.cookie).
 		SetResult(&torrents).
+		SetQueryParams(map[string]string{"sort": "added_on"}).
 		Get(qbitClient.BaseURL + "/api/v2/torrents/info")
 
 	if err != nil {
@@ -231,4 +247,37 @@ func (qbitClient *QbitClient) CheckStatus(hashes []string) (*[]TorrentInfo, erro
 	}
 
 	return &torrents, nil
+}
+
+// GetTorrentName reads a .torrent file and returns its name
+func GetTorrentName(filepath string) (string, error) {
+	type TorrentFile struct {
+		Info struct {
+			Name        string `bencode:"name"`
+			Length      int    `bencode:"length"`
+			PieceLength int    `bencode:"piece length"`
+			Pieces      string `bencode:"pieces"`
+		} `bencode:"info"`
+		Announce string `bencode:"announce"`
+	}
+
+	// Open and read the torrent file
+	file, err := os.Open(filepath)
+	if err != nil {
+		return "", fmt.Errorf("error opening file: %v", err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Error().Err(err).Str("filepath", filepath).Msg("failed to close file")
+		}
+	}(file)
+
+	// Decode the torrent file
+	var torrent TorrentFile
+	if err = bencode.Unmarshal(file, &torrent); err != nil {
+		return "", fmt.Errorf("error decoding torrent: %v", err)
+	}
+
+	return torrent.Info.Name, nil
 }
