@@ -6,7 +6,7 @@ appdata
 sample
 src/web
 spec
-launcher/
+build_script/
 install_scripts
 
 ## extension
