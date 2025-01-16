@@ -7,6 +7,13 @@ option go_package = "github.com/RA341/gouda/generated/settings/v1";
 service SettingsService {
   rpc UpdateSettings(Settings) returns (UpdateSettingsResponse) {}
   rpc ListSettings(ListSettingsResponse) returns (Settings) {}
+  rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
+}
+
+message ListSupportedClientsRequest {}
+
+message ListSupportedClientsResponse {
+  repeated string clients = 1;
 }
 
 message UpdateSettingsResponse {}

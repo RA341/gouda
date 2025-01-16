@@ -39,12 +39,16 @@ const (
 	// SettingsServiceListSettingsProcedure is the fully-qualified name of the SettingsService's
 	// ListSettings RPC.
 	SettingsServiceListSettingsProcedure = "/settings.v1.SettingsService/ListSettings"
+	// SettingsServiceListSupportedClientsProcedure is the fully-qualified name of the SettingsService's
+	// ListSupportedClients RPC.
+	SettingsServiceListSupportedClientsProcedure = "/settings.v1.SettingsService/ListSupportedClients"
 )
 
 // SettingsServiceClient is a client for the settings.v1.SettingsService service.
 type SettingsServiceClient interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
+	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 }
 
 // NewSettingsServiceClient constructs a client for the settings.v1.SettingsService service. By
@@ -70,13 +74,20 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(settingsServiceMethods.ByName("ListSettings")),
 			connect.WithClientOptions(opts...),
 		),
+		listSupportedClients: connect.NewClient[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse](
+			httpClient,
+			baseURL+SettingsServiceListSupportedClientsProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // settingsServiceClient implements SettingsServiceClient.
 type settingsServiceClient struct {
-	updateSettings *connect.Client[v1.Settings, v1.UpdateSettingsResponse]
-	listSettings   *connect.Client[v1.ListSettingsResponse, v1.Settings]
+	updateSettings       *connect.Client[v1.Settings, v1.UpdateSettingsResponse]
+	listSettings         *connect.Client[v1.ListSettingsResponse, v1.Settings]
+	listSupportedClients *connect.Client[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse]
 }
 
 // UpdateSettings calls settings.v1.SettingsService.UpdateSettings.
@@ -89,10 +100,16 @@ func (c *settingsServiceClient) ListSettings(ctx context.Context, req *connect.R
 	return c.listSettings.CallUnary(ctx, req)
 }
 
+// ListSupportedClients calls settings.v1.SettingsService.ListSupportedClients.
+func (c *settingsServiceClient) ListSupportedClients(ctx context.Context, req *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+	return c.listSupportedClients.CallUnary(ctx, req)
+}
+
 // SettingsServiceHandler is an implementation of the settings.v1.SettingsService service.
 type SettingsServiceHandler interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
+	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 }
 
 // NewSettingsServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -114,12 +131,20 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(settingsServiceMethods.ByName("ListSettings")),
 		connect.WithHandlerOptions(opts...),
 	)
+	settingsServiceListSupportedClientsHandler := connect.NewUnaryHandler(
+		SettingsServiceListSupportedClientsProcedure,
+		svc.ListSupportedClients,
+		connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/settings.v1.SettingsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case SettingsServiceUpdateSettingsProcedure:
 			settingsServiceUpdateSettingsHandler.ServeHTTP(w, r)
 		case SettingsServiceListSettingsProcedure:
 			settingsServiceListSettingsHandler.ServeHTTP(w, r)
+		case SettingsServiceListSupportedClientsProcedure:
+			settingsServiceListSupportedClientsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -135,4 +160,8 @@ func (UnimplementedSettingsServiceHandler) UpdateSettings(context.Context, *conn
 
 func (UnimplementedSettingsServiceHandler) ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListSettings is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListSupportedClients is not implemented"))
 }

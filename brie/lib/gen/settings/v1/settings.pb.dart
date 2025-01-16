@@ -14,6 +14,82 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class ListSupportedClientsRequest extends $pb.GeneratedMessage {
+  factory ListSupportedClientsRequest() => create();
+  ListSupportedClientsRequest._() : super();
+  factory ListSupportedClientsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListSupportedClientsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSupportedClientsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsRequest clone() => ListSupportedClientsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsRequest copyWith(void Function(ListSupportedClientsRequest) updates) => super.copyWith((message) => updates(message as ListSupportedClientsRequest)) as ListSupportedClientsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsRequest create() => ListSupportedClientsRequest._();
+  ListSupportedClientsRequest createEmptyInstance() => create();
+  static $pb.PbList<ListSupportedClientsRequest> createRepeated() => $pb.PbList<ListSupportedClientsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsRequest>(create);
+  static ListSupportedClientsRequest? _defaultInstance;
+}
+
+class ListSupportedClientsResponse extends $pb.GeneratedMessage {
+  factory ListSupportedClientsResponse({
+    $core.Iterable<$core.String>? clients,
+  }) {
+    final $result = create();
+    if (clients != null) {
+      $result.clients.addAll(clients);
+    }
+    return $result;
+  }
+  ListSupportedClientsResponse._() : super();
+  factory ListSupportedClientsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListSupportedClientsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSupportedClientsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..pPS(1, _omitFieldNames ? '' : 'clients')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsResponse clone() => ListSupportedClientsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsResponse copyWith(void Function(ListSupportedClientsResponse) updates) => super.copyWith((message) => updates(message as ListSupportedClientsResponse)) as ListSupportedClientsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsResponse create() => ListSupportedClientsResponse._();
+  ListSupportedClientsResponse createEmptyInstance() => create();
+  static $pb.PbList<ListSupportedClientsResponse> createRepeated() => $pb.PbList<ListSupportedClientsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsResponse>(create);
+  static ListSupportedClientsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get clients => $_getList(0);
+}
+
 class UpdateSettingsResponse extends $pb.GeneratedMessage {
   factory UpdateSettingsResponse() => create();
   UpdateSettingsResponse._() : super();

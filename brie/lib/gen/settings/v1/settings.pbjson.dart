@@ -13,6 +13,28 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use listSupportedClientsRequestDescriptor instead')
+const ListSupportedClientsRequest$json = {
+  '1': 'ListSupportedClientsRequest',
+};
+
+/// Descriptor for `ListSupportedClientsRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listSupportedClientsRequestDescriptor = $convert.base64Decode(
+    'ChtMaXN0U3VwcG9ydGVkQ2xpZW50c1JlcXVlc3Q=');
+
+@$core.Deprecated('Use listSupportedClientsResponseDescriptor instead')
+const ListSupportedClientsResponse$json = {
+  '1': 'ListSupportedClientsResponse',
+  '2': [
+    {'1': 'clients', '3': 1, '4': 3, '5': 9, '10': 'clients'},
+  ],
+};
+
+/// Descriptor for `ListSupportedClientsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listSupportedClientsResponseDescriptor = $convert.base64Decode(
+    'ChxMaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlEhgKB2NsaWVudHMYASADKAlSB2NsaWVudH'
+    'M=');
+
 @$core.Deprecated('Use updateSettingsResponseDescriptor instead')
 const UpdateSettingsResponse$json = {
   '1': 'UpdateSettingsResponse',
