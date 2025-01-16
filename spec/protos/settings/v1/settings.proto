@@ -7,6 +7,21 @@ option go_package = "github.com/RA341/gouda/generated/settings/v1";
 service SettingsService {
   rpc UpdateSettings(Settings) returns (UpdateSettingsResponse) {}
   rpc ListSettings(ListSettingsResponse) returns (Settings) {}
+  rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
+  rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
+}
+
+message GetMetadataRequest {}
+
+message GetMetadataResponse {
+  string version = 1;
+  string binaryType = 2;
+}
+
+message ListSupportedClientsRequest {}
+
+message ListSupportedClientsResponse {
+  repeated string clients = 1;
 }
 
 message UpdateSettingsResponse {}
@@ -18,6 +33,7 @@ message Settings {
   string api_key = 1;
   string server_port = 2;
   uint64 download_check_timeout = 3;
+  bool exit_on_close = 16;
 
   // Folder settings
   string complete_folder = 4;

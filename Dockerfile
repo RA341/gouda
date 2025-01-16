@@ -21,9 +21,9 @@ ENV CGO_ENABLED=1
 
 RUN apk update && apk add --no-cache gcc musl-dev
 
-COPY --from=flutter_builder /app/build/web ./web
-
 RUN go mod tidy
+
+COPY --from=flutter_builder /app/build/web ./web
 
 # Build optimized binary without debugging symbols
 RUN go build -ldflags "-s -w" -o gouda

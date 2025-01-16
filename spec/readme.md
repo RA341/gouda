@@ -1,10 +1,24 @@
 # Stubs
 
+This folder contains all grpc stubs used in gouda
 
-### How to use for each package
+## Usage
 
-#### Python
+Make sure to install the [requirements](#requirements)
 
-Download all files in `protos/generated/python`
+To generate new stubs run:
 
-Install `pip install grpcio-tools`
+```
+just gen
+```
+
+this command will run the included dockerfile, run the code gen [script](gen-stubs.sh)
+
+And copy the stubs to their respective directories
+
+## Requirements
+
+The project requires 
+
+* Docker installed on your machine
+* [Just cli](https://github.com/casey/just)

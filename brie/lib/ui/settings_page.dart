@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
@@ -63,6 +65,11 @@ class SettingsView extends HookConsumerWidget {
     final torrentProtocol =
         useTextEditingController(text: settings.torrentProtocol);
     final torrentUser = useTextEditingController(text: settings.torrentUser);
+    final exitOnClose = useState(settings.exitOnClose);
+
+    // some extra info
+    final supportedClients = ref.watch(supportedClientsProvider).value;
+    final metadata = ref.watch(metadataProvider).value;
 
     return SingleChildScrollView(
       child: Column(
@@ -83,13 +90,24 @@ class SettingsView extends HookConsumerWidget {
             'Download Check timeout (In minutes)',
             downloadCheckTimeout,
           ),
+          if (metadata?.binaryType == "desktop")
+            Row(
+              children: [
+                Text('Exit application on close'),
+                SizedBox(width: 20),
+                Switch(
+                  value: exitOnClose.value,
+                  onChanged: (value) => exitOnClose.value = value,
+                ),
+              ],
+            ),
           Text('Torrent Client', style: headerStyle),
           lineDivider,
           Row(
             spacing: 10,
             children: [
               createDropDown2(
-                supportedClients,
+                supportedClients ?? [],
                 clientType,
                 "Torrent Client Type",
               ),
@@ -156,7 +174,8 @@ class SettingsView extends HookConsumerWidget {
                             ..torrentName = clientType.text
                             ..torrentPassword = torrentPassword.text
                             ..torrentProtocol = torrentProtocol.text
-                            ..torrentUser = torrentUser.text,
+                            ..torrentUser = torrentUser.text
+                            ..exitOnClose = exitOnClose.value,
                         );
 
                     ref.invalidate(settingsProvider);

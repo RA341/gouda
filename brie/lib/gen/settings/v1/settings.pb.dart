@@ -14,6 +14,178 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class GetMetadataRequest extends $pb.GeneratedMessage {
+  factory GetMetadataRequest() => create();
+  GetMetadataRequest._() : super();
+  factory GetMetadataRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetMetadataRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetMetadataRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetMetadataRequest clone() => GetMetadataRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetMetadataRequest copyWith(void Function(GetMetadataRequest) updates) => super.copyWith((message) => updates(message as GetMetadataRequest)) as GetMetadataRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetMetadataRequest create() => GetMetadataRequest._();
+  GetMetadataRequest createEmptyInstance() => create();
+  static $pb.PbList<GetMetadataRequest> createRepeated() => $pb.PbList<GetMetadataRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetMetadataRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetMetadataRequest>(create);
+  static GetMetadataRequest? _defaultInstance;
+}
+
+class GetMetadataResponse extends $pb.GeneratedMessage {
+  factory GetMetadataResponse({
+    $core.String? version,
+    $core.String? binaryType,
+  }) {
+    final $result = create();
+    if (version != null) {
+      $result.version = version;
+    }
+    if (binaryType != null) {
+      $result.binaryType = binaryType;
+    }
+    return $result;
+  }
+  GetMetadataResponse._() : super();
+  factory GetMetadataResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetMetadataResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetMetadataResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'version')
+    ..aOS(2, _omitFieldNames ? '' : 'binaryType', protoName: 'binaryType')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetMetadataResponse clone() => GetMetadataResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetMetadataResponse copyWith(void Function(GetMetadataResponse) updates) => super.copyWith((message) => updates(message as GetMetadataResponse)) as GetMetadataResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetMetadataResponse create() => GetMetadataResponse._();
+  GetMetadataResponse createEmptyInstance() => create();
+  static $pb.PbList<GetMetadataResponse> createRepeated() => $pb.PbList<GetMetadataResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetMetadataResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetMetadataResponse>(create);
+  static GetMetadataResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get version => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set version($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearVersion() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get binaryType => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set binaryType($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasBinaryType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearBinaryType() => clearField(2);
+}
+
+class ListSupportedClientsRequest extends $pb.GeneratedMessage {
+  factory ListSupportedClientsRequest() => create();
+  ListSupportedClientsRequest._() : super();
+  factory ListSupportedClientsRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListSupportedClientsRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSupportedClientsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsRequest clone() => ListSupportedClientsRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsRequest copyWith(void Function(ListSupportedClientsRequest) updates) => super.copyWith((message) => updates(message as ListSupportedClientsRequest)) as ListSupportedClientsRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsRequest create() => ListSupportedClientsRequest._();
+  ListSupportedClientsRequest createEmptyInstance() => create();
+  static $pb.PbList<ListSupportedClientsRequest> createRepeated() => $pb.PbList<ListSupportedClientsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsRequest>(create);
+  static ListSupportedClientsRequest? _defaultInstance;
+}
+
+class ListSupportedClientsResponse extends $pb.GeneratedMessage {
+  factory ListSupportedClientsResponse({
+    $core.Iterable<$core.String>? clients,
+  }) {
+    final $result = create();
+    if (clients != null) {
+      $result.clients.addAll(clients);
+    }
+    return $result;
+  }
+  ListSupportedClientsResponse._() : super();
+  factory ListSupportedClientsResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListSupportedClientsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSupportedClientsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+    ..pPS(1, _omitFieldNames ? '' : 'clients')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsResponse clone() => ListSupportedClientsResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListSupportedClientsResponse copyWith(void Function(ListSupportedClientsResponse) updates) => super.copyWith((message) => updates(message as ListSupportedClientsResponse)) as ListSupportedClientsResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsResponse create() => ListSupportedClientsResponse._();
+  ListSupportedClientsResponse createEmptyInstance() => create();
+  static $pb.PbList<ListSupportedClientsResponse> createRepeated() => $pb.PbList<ListSupportedClientsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ListSupportedClientsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsResponse>(create);
+  static ListSupportedClientsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get clients => $_getList(0);
+}
+
 class UpdateSettingsResponse extends $pb.GeneratedMessage {
   factory UpdateSettingsResponse() => create();
   UpdateSettingsResponse._() : super();
@@ -95,6 +267,7 @@ class Settings extends $pb.GeneratedMessage {
     $core.String? torrentPassword,
     $core.String? torrentProtocol,
     $core.String? torrentUser,
+    $core.bool? exitOnClose,
   }) {
     final $result = create();
     if (apiKey != null) {
@@ -142,6 +315,9 @@ class Settings extends $pb.GeneratedMessage {
     if (torrentUser != null) {
       $result.torrentUser = torrentUser;
     }
+    if (exitOnClose != null) {
+      $result.exitOnClose = exitOnClose;
+    }
     return $result;
   }
   Settings._() : super();
@@ -164,6 +340,7 @@ class Settings extends $pb.GeneratedMessage {
     ..aOS(13, _omitFieldNames ? '' : 'torrentPassword')
     ..aOS(14, _omitFieldNames ? '' : 'torrentProtocol')
     ..aOS(15, _omitFieldNames ? '' : 'torrentUser')
+    ..aOB(16, _omitFieldNames ? '' : 'exitOnClose')
     ..hasRequiredFields = false
   ;
 
@@ -326,6 +503,15 @@ class Settings extends $pb.GeneratedMessage {
   $core.bool hasTorrentUser() => $_has(14);
   @$pb.TagNumber(15)
   void clearTorrentUser() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.bool get exitOnClose => $_getBF(15);
+  @$pb.TagNumber(16)
+  set exitOnClose($core.bool v) { $_setBool(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasExitOnClose() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearExitOnClose() => clearField(16);
 }
 
 

@@ -61,19 +61,6 @@ func getConfigDir(baseDir string) string {
 	return configDir
 }
 
-// DirExists checks if a directory exists and is actually a directory
-func DirExists(path string) (bool, error) {
-	info, err := os.Stat(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return false, nil // Directory doesn't exist
-		}
-		return false, err // Other error occurred
-	}
-
-	return info.IsDir(), nil
-}
-
 func setupConfigOptions(configDir, baseDir string) error {
 	// misc application files
 	// set database path
@@ -91,6 +78,9 @@ func setupConfigOptions(configDir, baseDir string) error {
 	viper.SetDefault("apikey", key)
 	viper.SetDefault("server.port", "9862")
 	viper.SetDefault("download.timeout", 15)
+	if IsDesktopMode() {
+		viper.SetDefault("exit_on_close", false)
+	}
 
 	// user section
 	viper.SetDefault("user.name", getStringEnvOrDefault("GOUDA_USERNAME", "admin"))

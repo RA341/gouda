@@ -15,6 +15,8 @@ import (
 	"golang.org/x/net/http2/h2c"
 	"io/fs"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 //go:embed web
@@ -22,6 +24,11 @@ var frontendDir embed.FS
 
 func main() {
 	log.Logger = service.ConsoleLogger()
+
+	log.Info().
+		Str("flavour", service.BinaryType).
+		Str("version", service.Version).
+		Msgf("Starting application %s", filepath.Base(os.Args[0]))
 
 	service.InitConfig()
 
@@ -41,32 +48,45 @@ func main() {
 		log.Fatal().Err(err).Msgf("Failed to start database")
 	}
 
-	apiContext := grpc.Env{Database: db}
+	apiContext := &models.Env{Database: db}
 
 	// load torrent client if previously exists
 	if viper.GetString("torrent_client.name") != "" {
 		client, err := download_clients.InitializeTorrentClient()
-
-		if err == nil {
+		if err != nil {
+			log.Error().Err(err).Msgf("Failed to initialize torrent client")
+		} else {
 			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.name"))
 			apiContext.DownloadClient = client
 
 			log.Info().Msgf("starting intial download monitor")
-			go service.MonitorDownloads(&models.Env{
-				DownloadClient: apiContext.DownloadClient,
-				Database:       apiContext.Database,
-			})
-		} else {
-			log.Error().Err(err).Msgf("Failed to initialize torrent client")
+			go service.MonitorDownloads(apiContext)
 		}
 	}
 
-	grpcRouter := grpc.SetupGRPCEndpoints(&apiContext)
-	// serve frontend dir
-	if service.IsDebugMode() || service.IsDocker() {
-		log.Info().Msgf("Setting up ui files")
-		grpcRouter.Handle("/", getFrontendDir())
+	if service.IsDesktopMode() {
+		log.Info().Msgf("Running server on a go routine")
+		// server as routine
+		go func() {
+			if err := startServer(apiContext); err != nil {
+				log.Fatal().Err(err).Msgf("Failed to start server")
+			}
+		}()
+		// systray will run indefinitely
+		InitSystray()
+	} else {
+		log.Info().Msgf("Running server on the main thread")
+		if err := startServer(apiContext); err != nil {
+			log.Fatal().Err(err).Msgf("Failed to start server")
+		}
 	}
+}
+
+func startServer(apiContext *models.Env) error {
+	grpcRouter := grpc.SetupGRPCEndpoints(apiContext)
+	// serve frontend dir
+	log.Info().Msgf("Setting up ui files")
+	grpcRouter.Handle("/", getFrontendDir())
 
 	baseUrl := fmt.Sprintf(":%s", viper.GetString("server.port"))
 	log.Info().Str("Listening on:", baseUrl).Msg("")
@@ -79,14 +99,11 @@ func main() {
 		ExposedHeaders:      connectcors.ExposedHeaders(),
 	})
 
-	err = http.ListenAndServe(
+	// Use h2c to serve HTTP/2 without TLS
+	return http.ListenAndServe(
 		baseUrl,
-		// Use h2c so we can serve HTTP/2 without TLS.
 		middleware.Handler(h2c.NewHandler(grpcRouter, &http2.Server{})),
 	)
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Failed to start server")
-	}
 }
 
 func getFrontendDir() http.Handler {

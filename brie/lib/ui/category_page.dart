@@ -2,6 +2,7 @@ import 'package:brie/clients/category_api.dart';
 import 'package:brie/gen/category/v1/category.pb.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/components/utils.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:grpc/grpc.dart';
@@ -57,8 +58,10 @@ class CategoryPage extends HookConsumerWidget {
                             e.message.toString(),
                           );
                         } catch (e) {
-                          print(
-                              'An  error occurred while adding category ${e.toString()}');
+                          logger.e(
+                            'An  error occurred while adding category',
+                            error: e,
+                          );
                           if (!context.mounted) return;
                           showErrorDialog(
                             context,

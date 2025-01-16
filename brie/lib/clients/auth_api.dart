@@ -1,6 +1,7 @@
 import 'package:brie/config.dart';
 import 'package:brie/gen/auth/v1/auth.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authApiProvider = Provider<AuthApi>((ref) {
@@ -37,7 +38,7 @@ class AuthApi {
         AuthResponse(authToken: token),
       );
     } catch (e) {
-      print('Incorrect token, ${e.toString()}');
+      logger.e('Incorrect token', error: e);
       return false;
     }
 

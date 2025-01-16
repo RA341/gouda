@@ -29,6 +29,14 @@ class SettingsServiceClient extends $grpc.Client {
       '/settings.v1.SettingsService/ListSettings',
       ($3.ListSettingsResponse value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $3.Settings.fromBuffer(value));
+  static final _$listSupportedClients = $grpc.ClientMethod<$3.ListSupportedClientsRequest, $3.ListSupportedClientsResponse>(
+      '/settings.v1.SettingsService/ListSupportedClients',
+      ($3.ListSupportedClientsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.ListSupportedClientsResponse.fromBuffer(value));
+  static final _$getMetadata = $grpc.ClientMethod<$3.GetMetadataRequest, $3.GetMetadataResponse>(
+      '/settings.v1.SettingsService/GetMetadata',
+      ($3.GetMetadataRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.GetMetadataResponse.fromBuffer(value));
 
   SettingsServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +50,14 @@ class SettingsServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$3.Settings> listSettings($3.ListSettingsResponse request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$listSettings, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$3.ListSupportedClientsResponse> listSupportedClients($3.ListSupportedClientsRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$listSupportedClients, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$3.GetMetadataResponse> getMetadata($3.GetMetadataRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getMetadata, request, options: options);
   }
 }
 
@@ -64,6 +80,20 @@ abstract class SettingsServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $3.ListSettingsResponse.fromBuffer(value),
         ($3.Settings value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.ListSupportedClientsRequest, $3.ListSupportedClientsResponse>(
+        'ListSupportedClients',
+        listSupportedClients_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $3.ListSupportedClientsRequest.fromBuffer(value),
+        ($3.ListSupportedClientsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$3.GetMetadataRequest, $3.GetMetadataResponse>(
+        'GetMetadata',
+        getMetadata_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $3.GetMetadataRequest.fromBuffer(value),
+        ($3.GetMetadataResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$3.UpdateSettingsResponse> updateSettings_Pre($grpc.ServiceCall call, $async.Future<$3.Settings> request) async {
@@ -74,6 +104,16 @@ abstract class SettingsServiceBase extends $grpc.Service {
     return listSettings(call, await request);
   }
 
+  $async.Future<$3.ListSupportedClientsResponse> listSupportedClients_Pre($grpc.ServiceCall call, $async.Future<$3.ListSupportedClientsRequest> request) async {
+    return listSupportedClients(call, await request);
+  }
+
+  $async.Future<$3.GetMetadataResponse> getMetadata_Pre($grpc.ServiceCall call, $async.Future<$3.GetMetadataRequest> request) async {
+    return getMetadata(call, await request);
+  }
+
   $async.Future<$3.UpdateSettingsResponse> updateSettings($grpc.ServiceCall call, $3.Settings request);
   $async.Future<$3.Settings> listSettings($grpc.ServiceCall call, $3.ListSettingsResponse request);
+  $async.Future<$3.ListSupportedClientsResponse> listSupportedClients($grpc.ServiceCall call, $3.ListSupportedClientsRequest request);
+  $async.Future<$3.GetMetadataResponse> getMetadata($grpc.ServiceCall call, $3.GetMetadataRequest request);
 }

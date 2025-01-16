@@ -4,25 +4,30 @@ list:
     just --list
 
 win:
-    ./build_scripts/build.windows.ps1
+    ./build.windows.ps1
 
 [working-directory: 'build_output/windows']
 rwin:
     just cleanw
-    cp -r ../../assets/* .
     just win
     just startw
 
 [working-directory: 'build_output/windows']
 startw:
-    .\gouda-launcher.exe
+    .\gouda-desktop.exe
+
+stopw:
+    Stop-Process -Name gouda-desktop -Force -ErrorAction SilentlyContinue
 
 [working-directory: 'build_output/windows']
 cleanw:
     rm -r *
 
+ci-windows version:
+    .\build.windows.ps1 all -Version "{{version}}"
+
 lin:
-    docker build -f build_scripts/linux.Dockerfile -t launcher:builder ..
+    docker build -f linux.desktop.Dockerfile -t launcher:builder ..
     docker run --rm -v {{justfile_directory()}}/build_output/linux/:/output/ launcher:builder
 
 [working-directory: 'build_output/linux']
@@ -34,3 +39,8 @@ rlin:
 [working-directory: 'build_output/linux']
 cleanl:
     rm -r *
+
+# ci command
+ci-linux version:
+    docker build -f linux.build.Dockerfile --build-arg VERSION={{version}} -t build-linux:dev ..
+    docker run --rm -v {{justfile_directory()}}/build_output/linux/desktop/:/desktop/ -v {{justfile_directory()}}/build_output/linux/server/:/server/ build-linux:dev

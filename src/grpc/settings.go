@@ -7,18 +7,26 @@ import (
 	"github.com/RA341/gouda/download_clients"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	types "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/service"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
 type SettingsService struct {
-	api *Env
+	api *env
+}
+
+func (setSrv *SettingsService) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+	return connect.NewResponse(&v1.GetMetadataResponse{
+		Version:    service.Version,
+		BinaryType: service.BinaryType,
+	}), nil
 }
 
 func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	client, err := download_clients.CheckTorrentClient(types.TorrentClient{
+	client, err := download_clients.CheckTorrentClient(&types.TorrentClient{
 		User:     settings.TorrentUser,
 		Password: settings.TorrentPassword,
 		Protocol: settings.TorrentProtocol,
@@ -36,6 +44,10 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 	viper.Set("apikey", settings.ApiKey)
 	viper.Set("server.port", settings.ServerPort)
 	viper.Set("download.timeout", settings.DownloadCheckTimeout)
+	if service.IsDesktopMode() {
+		viper.Set("exit_on_close", settings.ExitOnClose)
+	}
+
 	// folder settings
 	viper.Set("folder.defaults", settings.CompleteFolder)
 	viper.Set("folder.downloads", settings.DownloadFolder)
@@ -84,6 +96,20 @@ func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Reques
 		TorrentPassword: viper.GetString("torrent_client.password"),
 		TorrentProtocol: viper.GetString("torrent_client.protocol"),
 		TorrentUser:     viper.GetString("torrent_client.user"),
+	})
+
+	if service.IsDesktopMode() {
+		res.Msg.ExitOnClose = viper.GetBool("exit_on_close")
+	}
+
+	return res, nil
+}
+
+func (setSrv *SettingsService) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+	clients := download_clients.GetSupportedClients()
+
+	res := connect.NewResponse(&v1.ListSupportedClientsResponse{
+		Clients: clients,
 	})
 
 	return res, nil

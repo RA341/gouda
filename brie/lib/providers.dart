@@ -6,12 +6,21 @@ import 'package:brie/gen/category/v1/category.pb.dart';
 import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/grpc/api.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final checkTokenProvider = FutureProvider<bool>((ref) async {
   final token = ref.watch(apiTokenProvider);
   final authApi = ref.watch(authApiProvider);
-  return authApi.testToken(token: token);
+
+  final status = await authApi.testToken(token: token);
+  if (status) {
+    // fetch settings if token is valid
+    await ref.watch(settingsProvider.future);
+  }
+
+  // fetch settings
+  return status;
 });
 
 final pageIndexListProvider = NotifierProvider<PageNotifier, int>(() {
@@ -20,8 +29,19 @@ final pageIndexListProvider = NotifierProvider<PageNotifier, int>(() {
 
 final settingsProvider = FutureProvider<Settings>((ref) async {
   final settingsApi = ref.watch(settingsApiProvider);
+  // initialize some extra info from the client
+  await ref.watch(supportedClientsProvider.future);
+  await ref.watch(metadataProvider.future);
 
   return await settingsApi.list();
+});
+
+final supportedClientsProvider = FutureProvider<List<String>>((ref) async {
+  return ref.watch(settingsApiProvider).listClients();
+});
+
+final metadataProvider = FutureProvider<GetMetadataResponse>((ref) async {
+  return ref.watch(settingsApiProvider).getMetadata();
 });
 
 final categoryListProvider = FutureProvider<List<Category>>((ref) async {
@@ -45,7 +65,7 @@ class PageNotifier extends Notifier<int> {
 
     final settings = ref.watch(settingsProvider).unwrapPrevious().valueOrNull;
     final firstTimeSetup = settings?.torrentHost.isEmpty;
-    print('first time setup $firstTimeSetup');
+    logger.i('first time setup $firstTimeSetup');
 
     // if already on settings page and updated settings remain on settings page
     if (stateOrNull == 2) {
@@ -53,12 +73,14 @@ class PageNotifier extends Notifier<int> {
     }
 
     if (firstTimeSetup ?? false) {
-      print('First time setup detected: moving to settings page');
+      logger.i('First time setup detected: moving to settings page');
       return 2;
     }
 
     return 0;
   }
+
+  void navigateToPage(int index) => state = index;
 }
 
 // The public methods on this class will be what allow the UI to modify the state.

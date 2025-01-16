@@ -149,12 +149,18 @@ class HistoryView extends HookConsumerWidget {
                     final mamUrl =
                         'https://www.myanonamouse.net/t/${request.mamBookId}';
 
+                    final seriesStr = (request.series.isEmpty ||
+                            request.seriesNumber == 0)
+                        ? 'from Series:${request.series} #${request.seriesNumber}'
+                        : '';
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: ListTile(
                         title: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text('${request.book} by ${request.author}'),
+                          child: Text(
+                              '${request.book} by ${request.author} $seriesStr'),
                         ),
                         subtitle: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -176,9 +182,13 @@ class HistoryView extends HookConsumerWidget {
                                 'Added: ${timeago.format(DateTime.parse(request.createdAt))}'),
                             TextButton(
                               onPressed: () async {
-                                final url = Uri.parse(mamUrl);
-                                if (!await launchUrl(url)) {
-                                  print('Could not launch $url');
+                                try {
+                                  final url = Uri.parse(mamUrl);
+                                  if (!await launchUrl(url)) {
+                                    logger.e('Could not launch $url');
+                                  }
+                                } catch (e) {
+                                  logger.e('Could not go launch url', error: e);
                                 }
                               },
                               child: Text(mamUrl),

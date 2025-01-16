@@ -19,7 +19,7 @@ package download_clients
 //	transmissionUrl := "192.168.50.123:9092"
 //	protocol := "http"
 //
-//	client, err = InitTransmission(transmissionUrl, protocol, user, pass)
+//	client, err = NewTransmissionClient(transmissionUrl, protocol, user, pass)
 //	if err != nil {
 //		// Log error and exit if we can't initialize the client
 //		os.Exit(1)
