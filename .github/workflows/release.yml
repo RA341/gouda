@@ -114,51 +114,6 @@ jobs:
             org.opencontainers.image.source=https://github.com/RA341/gouda
             org.opencontainers.image.version=${{ needs.tag-release.outputs.new_tag }}
 
-  build-linux:
-    needs: tag-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # docker stuff
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Set up Docker
-        uses: docker/setup-docker@v2
-        with:
-          version: 'latest'
-          capabilities: build
-
-      # just runner
-      - name: setup just
-      - uses: extractions/setup-just@v2
-
-      - name: Build script linux
-        env:
-          CGO_ENABLED: 1
-        working-directory: build_script
-        run: just ci-linux ${{ needs.tag-release.outputs.new_tag }}
-
-      - name: Upload Release Asset
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            build_script/build_output/linux/desktop/gouda-desktop-linux.zip
-            build_script/build_output/linux/server/gouda-server
-          tag_name: ${{ needs.tag-release.outputs.new_tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build-windows:
     needs: tag-release
     runs-on: windows-latest
