@@ -132,13 +132,7 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-
-      - name: Set up Docker
-        uses: docker/setup-docker@v2
-        with:
-          version: 'latest'
-          capabilities: build
-
+            
       # just runner
       - name: setup just
         uses: extractions/setup-just@v2
@@ -191,7 +185,10 @@ jobs:
       # just
       - name: setup just
         uses: extractions/setup-just@v2
-
+      
+      - name: Install winget
+        uses: Cyberboss/install-winget@v1
+      
       - name: Run build script
         env:
           CGO_ENABLED: 1
