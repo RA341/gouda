@@ -34,7 +34,7 @@ function CreateServerBuild {
         -ldflags "
             -X 'github.com/RA341/gouda/service.Version=$Version'
             -H=windowsgui" `
-        -o "$serverBuild\gouda-server.exe" .
+        -o "$serverBuild\gouda-server-windows.exe" .
 
     Pop-Location
 }
