@@ -16,7 +16,8 @@ it your needs.
 ## Setup
 
 1. Here is a minimal example for docker compose, but it is recommended to look at
-   the [docker-compose](https://github.com/RA341/gouda/blob/release/prod-docker-compose.yml), to get a proper
+   the [example docker-compose](https://github.com/RA341/gouda/blob/release/prod-docker-compose.yml) file, to get a
+   better
    understanding.
    ```yaml
     gouda:
@@ -44,15 +45,15 @@ it your needs.
 
 ## Environment Variables
 
-| Variable             | Description                               | Default              | Additional notes                                                                           |
-|----------------------|-------------------------------------------|----------------------|--------------------------------------------------------------------------------------------|
-| `GOUDA_USERNAME`     | Username for web interface authentication | admin                |                                                                                            |
-| `GOUDA_PASS`         | Password for web interface authentication | admin                |                                                                                            |
-| `GOUDA_UID`          | User ID for file permissions              | `1000`               | This is only required for linux or when using docker                                       |
-| `GOUDA_GID`          | Group ID for file permissions             | `1000`               | This is only required for linux or when using docker                                       |                                                     |
-| `GOUDA_DOWNLOAD_DIR` | Directory for temporary downloads         | `/appdata/downloads` | This is where your download client will download the file                                  |
-| `GOUDA_COMPLETE_DIR` | Directory for completed files             | `/appdata/complete`  | This is where the files will be hardlinked to, generally used by audiobookshelf or calibre |
-| `GOUDA_TORRENT_DIR`  | Directory for torrent files               | `/appdata/torrents`  | This is where gouda will store and download all the torrent files from mam here.           |
+| Variable             | Description                               | Default              | Additional notes                                                                 |
+|----------------------|-------------------------------------------|----------------------|----------------------------------------------------------------------------------|
+| `GOUDA_USERNAME`     | Username for web interface authentication | admin                |                                                                                  |
+| `GOUDA_PASS`         | Password for web interface authentication | admin                |                                                                                  |
+| `GOUDA_UID`          | User ID for file permissions              | `1000`               | This is only required for `linux/macos` or when using `docker`                   |
+| `GOUDA_GID`          | Group ID for file permissions             | `1000`               | This is only required for `linux/macos` or when using `docker`                   |                                                     |
+| `GOUDA_DOWNLOAD_DIR` | Directory for downloads                   | `/appdata/downloads` | This is where your download client will download the file                        |
+| `GOUDA_COMPLETE_DIR` | Directory for completed files             | `/appdata/complete`  | This is where the files will be hardlinked to, used by audiobookshelf or calibre |
+| `GOUDA_TORRENT_DIR`  | Directory for torrent files               | `/appdata/torrents`  | This is where gouda will store and download all the torrent files from mam here. |
 
 ## Storage Setup Guide
 
@@ -75,7 +76,7 @@ by [Trash Guides](https://trash-guides.info/File-and-Folder-Structure/).
    ```  
 
 3. **Docker Compose Example:**  
-   Here’s an example `docker-compose` configuration:
+   Then mount the entire folder in your `docker-compose` config:
    ```yaml
    services:
      gouda:
@@ -93,7 +94,7 @@ by [Trash Guides](https://trash-guides.info/File-and-Folder-Structure/).
 :::tip  
 **Using Multiple Hard Drives:**  
 If you have multiple hard drives, consider using [mergerfs](https://github.com/trapexit/mergerfs) to combine them into a
-single, unified storage pool. 
+single, unified storage pool.
 
 This simplifies disk management and ensures compatibility with hardlinking.  
 :::

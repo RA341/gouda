@@ -38,11 +38,11 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 
 ### Manual install
 
-1. Download the zip from https://github.com/RA341/gouda/releases/latest
+1. Download the zip named `parmesan_extension.zip` from https://github.com/RA341/gouda/releases/latest
 2. Place it in a directory, of your choosing
-3. Unzip if using chrome.
+3. (Optional) Unzip if using chrome.
 
-### Chrome setup
+## Chrome setup
 
 1. Open your browser, in the extensions tab, on the top right side corner enable `developer mode`
    > ![chrome_dev_mode](media/chrome_dev.png)
@@ -50,7 +50,7 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
     >![img.png](media/load_button.png)
 3. Next, [setup extension](#extension-setup)
 
-### Firefox setup
+##  Firefox setup
 
 :::note
 Unlike chrome, firefox can load the zip file directly.
@@ -73,9 +73,11 @@ If you are running gouda in a different machine but on the same network, you mus
 What this means is if you are running gouda in another machine at IP: `http://192.168.1.43:9862`,
 
 this address will not work, you must use a domain name: e.g. `https://gouda.example.com` (which points to `http://192.168.1.43:9862`)
+
+If you are using gouda locally i.e. it is running on your machine, then you can ignore the above note
 :::
 
-### Extension setup
+## Extension setup
 1. if you've followed, the instructions above, the extension should now be loaded, with the icon
 2. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
 3. That's all folks!!
