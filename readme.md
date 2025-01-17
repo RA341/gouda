@@ -176,7 +176,7 @@ Categories are configured via the webui, categories are required when downloadin
 2. Once running, access the web interface at `http://your-ip:9862` to:
     - configure the torrent client settings (only Transmission is supported at the moment)
         - Make sure to disable temporary folder (transmission)
-    - configure the [categories](#categories)
+    - configure the [categories](#categories).
     - Verify the
         - download path
         - complete path
