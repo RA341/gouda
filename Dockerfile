@@ -1,4 +1,4 @@
-# Stage 1: Flutter build
+# Flutter build
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
 RUN flutter config --enable-web --no-cli-animations && flutter doctor
@@ -9,12 +9,17 @@ WORKDIR /app/
 # Build Flutter web
 RUN flutter build web
 
-# Stage 2: Go build
+# Stage Go build
 FROM golang:1.23-alpine AS go_builder
 
 WORKDIR /app
 
 COPY ./src .
+
+# arg substitution
+# https://stackoverflow.com/questions/44438637/arg-substitution-in-run-command-not-working-for-dockerfile
+ARG VERSION
+ENV BV=${VERSION}
 
 # for sqlite
 ENV CGO_ENABLED=1
@@ -26,9 +31,11 @@ RUN go mod tidy
 COPY --from=flutter_builder /app/build/web ./web
 
 # Build optimized binary without debugging symbols
-RUN go build -ldflags "-s -w" -o gouda
+RUN go build  \
+    -ldflags "-s -w -X github.com/RA341/gouda/service.Version=$BV" \
+    -o gouda
 
-# Stage 3: Final stage
+# Stage: Final stage
 FROM alpine:latest
 
 WORKDIR /app/
