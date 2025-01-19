@@ -35,31 +35,55 @@ Hence, it is intended to work with the [extension](parmesan).
         * In either case, gouda will not do anything (only display an error), the original downloaded file will remain
           untouched (if it successfully downloaded)
 
-## Application Setup
+## Requirements
 
-1. Setup gouda [here](#installation-and-requirements)
-2. Once running, access the web interface at `http://your-ip:9862` to:
-    - configure the torrent client settings (only Transmission is supported at the moment)
-      - Make sure to disable temporary folder (transmission)
-    - configure the [categories](#categories)
-    - Verify the 
-      - download path 
-      - complete path 
-      - the linux UID,GID permissions (if using a linux based os or docker)
-3. Setup the [browser extension](parmesan)
+### Supported Torrent Clients
 
-## Installation and requirements
+Gouda provides integration with the following torrent clients:
 
-Currently, gouda is only packaged with docker, (standalone binaries are WIP).
+| Client       | Support | Issues |
+|--------------|---------|--------|
+| Transmission | ✅ Full  | None   |
+| Deluge       | ✅ Full  | None   |
+| qBittorrent  | ✅ Full  | None   |
 
-Therefore, you will need
+### Distribution
 
-1. Basic understanding of Docker and Docker compose.
-2. Use transmission as your download client (qbit is currently broken).
-3. Structure your files as mentioned [here](#basic-directory-structure)
-4. (optional but recommended) A reverse proxy setup, since sometimes browsers block 'http' requests.
+#### Docker Package
 
-### Docker Compose
+The application is available as a Docker container, [example compose](./prod-docker-compose.yml).
+
+* [Docker hub](https://hub.docker.com/repository/docker/ras334/gouda/general) 
+
+#### Standalone Binaries
+
+Binary packages are available for both Windows and Linux operating systems, with two distinct variants:
+
+##### Desktop Edition
+
+The Desktop Edition is designed for personal computer usage and includes:
+
+- Native UI implementation
+- Web-based user interface
+- System tray integration
+- Full functionality optimized for desktop environments
+
+##### Server Edition
+
+The Server Edition is designed for headless environments such as seedboxes and servers:
+
+- Lightweight binary without desktop dependencies
+- Web-based user interface only
+- No system tray implementation
+- Designed for remote access and management
+
+## Installation
+
+Follow the instructions below for your platform
+
+5. (optional but recommended) A reverse proxy setup, since sometimes browsers block 'http' requests.
+
+### Docker
 
 Look at the example docker compose here [docker-compose](prod-docker-compose.yml) and adapt it your needs.
 
@@ -67,15 +91,15 @@ Note: docker requires specific folder structure or else hardlinks will not work 
 
 #### Environment Variables
 
-| Variable         | Description                             | Default    |
-|------------------|-------------------------------------------|------------|
-| `GOUDA_USERNAME` | Username for web interface authentication | admin |
-| `GOUDA_PASS`     | Password for web interface authentication | admin |
-| `GOUDA_UID`          | User ID for file permissions      | `1000`               |
-| `GOUDA_GID`          | Group ID for file permissions     | `1000`               |
-| `GOUDA_DOWNLOAD_DIR` | Directory for temporary downloads | `/appdata/downloads` |
-| `GOUDA_COMPLETE_DIR`  | Directory for completed downloads | `/appdata/complete`  |
-| `GOUDA_TORRENT_DIR`  | Directory for torrent files       | `/appdata/torrents`  |
+| Variable             | Description                               | Default              |
+|----------------------|-------------------------------------------|----------------------|
+| `GOUDA_USERNAME`     | Username for web interface authentication | admin                |
+| `GOUDA_PASS`         | Password for web interface authentication | admin                |
+| `GOUDA_UID`          | User ID for file permissions              | `1000`               |
+| `GOUDA_GID`          | Group ID for file permissions             | `1000`               |
+| `GOUDA_DOWNLOAD_DIR` | Directory for temporary downloads         | `/appdata/downloads` |
+| `GOUDA_COMPLETE_DIR` | Directory for completed downloads         | `/appdata/complete`  |
+| `GOUDA_TORRENT_DIR`  | Directory for torrent files               | `/appdata/torrents`  |
 
 #### Storage Setup Guide
 
@@ -145,6 +169,19 @@ then gouda will do the following:
 ##### Configuration
 
 Categories are configured via the webui, categories are required when downloading any media.
+
+## Application Setup
+
+1. Setup gouda [here](#installation-and-requirements)
+2. Once running, access the web interface at `http://your-ip:9862` to:
+    - configure the torrent client settings (only Transmission is supported at the moment)
+        - Make sure to disable temporary folder (transmission)
+    - configure the [categories](#categories).
+    - Verify the
+        - download path
+        - complete path
+        - the linux UID,GID permissions (if using a linux based os or docker)
+3. Setup the [browser extension](parmesan)
 
 ## Help and suggestions
 

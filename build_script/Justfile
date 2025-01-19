@@ -44,3 +44,6 @@ cleanl:
 ci-linux version:
     docker build -f linux.build.Dockerfile --build-arg VERSION={{version}} -t build-linux:dev ..
     docker run --rm -v {{justfile_directory()}}/build_output/linux/desktop/:/desktop/ -v {{justfile_directory()}}/build_output/linux/server/:/server/ build-linux:dev
+
+lici:
+    just ci-linux dev
