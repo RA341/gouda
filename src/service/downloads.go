@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	models "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -98,7 +99,14 @@ func MonitorDownloads(env *models.Env) {
 	}()
 
 	torrentCheckTimeout := time.Minute * viper.GetDuration("download.timeout")
-	log.Debug().Msgf("Torrent Check timeout is set at %v", torrentCheckTimeout)
+	ignoreTimeout := viper.GetBool("download.ignore_timeout")
+	if ignoreTimeout {
+		log.Info().
+			Bool("ignore_timeout", ignoreTimeout).
+			Msgf("ignoring timeout, gouda will continue to monitor until it completes or errors")
+	} else {
+		log.Info().Msgf("Torrent Check timeout is set at %v", torrentCheckTimeout)
+	}
 
 	for {
 		activeTorrentIds, err := getActiveTorrentsLoop(env.Database)
@@ -149,7 +157,7 @@ func MonitorDownloads(env *models.Env) {
 
 			// timeout reached
 			torrentDuration := time.Duration(int(requestInfo.TimeRunning)) * time.Minute
-			if torrentDuration > torrentCheckTimeout {
+			if !ignoreTimeout && torrentDuration > torrentCheckTimeout {
 				requestInfo.Status = "Error: timeout for check reached"
 				env.Database.Save(requestInfo)
 
@@ -277,7 +285,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 	}
 
 	// Create target directory if it doesn't exist
-	err = os.MkdirAll(targetDir, DefaultFilePerm)
+	err = os.MkdirAll(targetDir, utils.DefaultFilePerm)
 	if err != nil {
 		return fmt.Errorf("failed to create target directory: %w", err)
 	}
@@ -322,7 +330,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 
 		// If it's a directory, create it in target with proper ownership
 		if d.IsDir() {
-			if err := os.MkdirAll(targetPath, DefaultFilePerm); err != nil {
+			if err := os.MkdirAll(targetPath, utils.DefaultFilePerm); err != nil {
 				return fmt.Errorf("failed to create directory %s: %w", targetPath, err)
 			}
 

@@ -7,7 +7,7 @@ import (
 	"github.com/RA341/gouda/download_clients"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	types "github.com/RA341/gouda/models"
-	"github.com/RA341/gouda/service"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -18,8 +18,8 @@ type SettingsService struct {
 
 func (setSrv *SettingsService) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return connect.NewResponse(&v1.GetMetadataResponse{
-		Version:    service.Version,
-		BinaryType: service.BinaryType,
+		Version:    utils.Version,
+		BinaryType: utils.BinaryType,
 	}), nil
 }
 
@@ -44,7 +44,9 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 	viper.Set("apikey", settings.ApiKey)
 	viper.Set("server.port", settings.ServerPort)
 	viper.Set("download.timeout", settings.DownloadCheckTimeout)
-	if service.IsDesktopMode() {
+	viper.Set("download.ignore_timeout", settings.IgnoreTimeout)
+
+	if utils.IsDesktopMode() {
 		viper.Set("exit_on_close", settings.ExitOnClose)
 	}
 
@@ -81,6 +83,7 @@ func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Reques
 		ApiKey:               viper.GetString("apikey"),
 		ServerPort:           viper.GetString("server.port"),
 		DownloadCheckTimeout: uint64(viper.GetInt("download.timeout")),
+		IgnoreTimeout:        viper.GetBool("download.ignore_timeout"),
 		// folder settings
 		CompleteFolder: viper.GetString("folder.defaults"),
 		DownloadFolder: viper.GetString("folder.downloads"),
@@ -98,7 +101,7 @@ func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Reques
 		TorrentUser:     viper.GetString("torrent_client.user"),
 	})
 
-	if service.IsDesktopMode() {
+	if utils.IsDesktopMode() {
 		res.Msg.ExitOnClose = viper.GetBool("exit_on_close")
 	}
 

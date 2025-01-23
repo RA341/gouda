@@ -268,6 +268,7 @@ class Settings extends $pb.GeneratedMessage {
     $core.String? torrentProtocol,
     $core.String? torrentUser,
     $core.bool? exitOnClose,
+    $core.bool? ignoreTimeout,
   }) {
     final $result = create();
     if (apiKey != null) {
@@ -318,6 +319,9 @@ class Settings extends $pb.GeneratedMessage {
     if (exitOnClose != null) {
       $result.exitOnClose = exitOnClose;
     }
+    if (ignoreTimeout != null) {
+      $result.ignoreTimeout = ignoreTimeout;
+    }
     return $result;
   }
   Settings._() : super();
@@ -341,6 +345,7 @@ class Settings extends $pb.GeneratedMessage {
     ..aOS(14, _omitFieldNames ? '' : 'torrentProtocol')
     ..aOS(15, _omitFieldNames ? '' : 'torrentUser')
     ..aOB(16, _omitFieldNames ? '' : 'exitOnClose')
+    ..aOB(17, _omitFieldNames ? '' : 'ignoreTimeout')
     ..hasRequiredFields = false
   ;
 
@@ -512,6 +517,15 @@ class Settings extends $pb.GeneratedMessage {
   $core.bool hasExitOnClose() => $_has(15);
   @$pb.TagNumber(16)
   void clearExitOnClose() => clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.bool get ignoreTimeout => $_getBF(16);
+  @$pb.TagNumber(17)
+  set ignoreTimeout($core.bool v) { $_setBool(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasIgnoreTimeout() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearIgnoreTimeout() => clearField(17);
 }
 
 

@@ -33,6 +33,7 @@ message Settings {
   string api_key = 1;
   string server_port = 2;
   uint64 download_check_timeout = 3;
+  bool ignore_timeout = 17;
   bool exit_on_close = 16;
 
   // Folder settings

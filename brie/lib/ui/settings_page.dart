@@ -66,6 +66,7 @@ class SettingsView extends HookConsumerWidget {
         useTextEditingController(text: settings.torrentProtocol);
     final torrentUser = useTextEditingController(text: settings.torrentUser);
     final exitOnClose = useState(settings.exitOnClose);
+    final ignoreTimeout = useState(settings.ignoreTimeout);
 
     // some extra info
     final supportedClients = ref.watch(supportedClientsProvider).value;
@@ -89,6 +90,12 @@ class SettingsView extends HookConsumerWidget {
           createUpdateButtons2(
             'Download Check timeout (In minutes)',
             downloadCheckTimeout,
+          ),
+          Text('Ignore timeout check'),
+          SizedBox(width: 20),
+          Switch(
+            value: ignoreTimeout.value,
+            onChanged: (value) => ignoreTimeout.value = value,
           ),
           if (metadata?.binaryType == "desktop")
             Row(
