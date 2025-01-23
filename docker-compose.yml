@@ -42,7 +42,6 @@ services:
       - gou
       - tor
       - ""
-      - main
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
