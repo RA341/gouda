@@ -208,8 +208,11 @@ jobs:
         env:
           CGO_ENABLED: 1
         working-directory: build_script
-        run: ./build.windows.ps1 all -Version "${{ needs.tag-release.outputs.new_tag }}"
-
+        run: |
+          Start-Job { ./build.windows.ps1 desktop -Version "${{ needs.tag-release.outputs.new_tag }}" }
+          Start-Job { ./build.windows.ps1 server -Version "${{ needs.tag-release.outputs.new_tag }}" }
+          Wait-Job -State Completed
+        
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
