@@ -8,6 +8,7 @@ import (
 	grpc "github.com/RA341/gouda/grpc"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
@@ -23,27 +24,27 @@ import (
 var frontendDir embed.FS
 
 func main() {
-	log.Logger = service.ConsoleLogger()
+	log.Logger = utils.ConsoleLogger()
 
 	log.Info().
-		Str("flavour", service.BinaryType).
-		Str("version", service.Version).
+		Str("flavour", utils.BinaryType).
+		Str("version", utils.Version).
 		Msgf("Starting application %s", filepath.Base(os.Args[0]))
 
-	service.InitConfig()
+	utils.InitConfig()
 
 	if viper.GetString("user.name") == "admin" || viper.GetString("user.password") == "admin" {
 		log.Warn().Msgf("Default username or password detected make sure to change this via the web ui")
 	}
 
 	// reinitialize logger with log file output, once a log directory has been set by viper
-	log.Logger = service.FileConsoleLogger()
+	log.Logger = utils.FileConsoleLogger()
 
-	if service.IsDebugMode() {
+	if utils.IsDebugMode() {
 		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
 	}
 
-	db, err := service.InitDB()
+	db, err := utils.InitDB()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to start database")
 	}
@@ -64,7 +65,7 @@ func main() {
 		}
 	}
 
-	if service.IsDesktopMode() {
+	if utils.IsDesktopMode() {
 		log.Info().Msgf("Running server on a go routine")
 		// server as routine
 		go func() {

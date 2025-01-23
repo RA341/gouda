@@ -1,4 +1,4 @@
-package service
+package utils
 
 import (
 	types "github.com/RA341/gouda/models"

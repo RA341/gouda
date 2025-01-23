@@ -1,6 +1,8 @@
-package service
+package utils
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"github.com/joho/godotenv"
@@ -78,6 +80,7 @@ func setupConfigOptions(configDir, baseDir string) error {
 	viper.SetDefault("apikey", key)
 	viper.SetDefault("server.port", "9862")
 	viper.SetDefault("download.timeout", 15)
+	viper.SetDefault("download.ignore_timeout", false)
 	if IsDesktopMode() {
 		viper.SetDefault("exit_on_close", false)
 	}
@@ -145,4 +148,13 @@ func getIntEnvOrDefault(key string, defaultVal int) int {
 	}
 
 	return atoi
+}
+
+func GenerateToken(len int) (string, error) {
+	b := make([]byte, len)
+	_, err := rand.Read(b)
+	if err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(b), nil
 }
