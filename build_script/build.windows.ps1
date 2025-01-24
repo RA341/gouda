@@ -1,5 +1,5 @@
 param(
-    [Parameter(Mandatory = $true, HelpMessage = "Please specify the build variant. Possible values are 'desktop', 'server', or 'all'.")]
+    [Parameter(Mandatory=$true, HelpMessage="Please specify the build variant. Possible values are 'desktop', 'server', or 'all'.")]
     [string]$Variant, # build variant, possible values: desktop, server, all
     [string]$Version = "dev"  # Optional parameter with a default value
 )
@@ -15,12 +15,7 @@ $buildDir = ".\build_output\windows"
 New-Item -ItemType Directory -Force -Path "$buildDir"
 $buildDir = (Resolve-Path "$buildDir").Path
 
-# consts
-$flutterBuild = "build\windows\x64\runner\Release"
-$desktopFrontendDir = "$desktopBuild\frontend"
-
-function CreateServerBuild
-{
+function CreateServerBuild {
     Push-Location
 
     $serverBuild = "$buildDir\server"
@@ -37,15 +32,26 @@ function CreateServerBuild
     # server build
     go build `
         -ldflags "
-            -X 'github.com/RA341/gouda/utils.Version=$Version'
+            -X 'github.com/RA341/gouda/service.Version=$Version'
             -H=windowsgui" `
         -o "$serverBuild\gouda-server-windows.exe" .
 
     Pop-Location
 }
 
-function createFlutterDesktop()
-{
+function CreateDesktopBuild {
+    Push-Location
+
+    $desktopBuild = "$buildDir\desktop"
+    $desktopFrontendDir = "$desktopBuild\frontend"
+
+    # setup dir if not exist
+    New-Item -ItemType Directory -Force -Path "$desktopBuild"
+    New-Item -ItemType Directory -Force -Path "$desktopFrontendDir"
+    # clean dirs
+    Remove-Item -Path "$desktopBuild" -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path "$desktopFrontendDir" -Recurse -Force -ErrorAction SilentlyContinue
+
     # Build desktop binary
     Write-Host "Building desktop variant..." -ForegroundColor Green
 
@@ -54,33 +60,19 @@ function createFlutterDesktop()
 
     Write-Host "Building flutter desktop..." -ForegroundColor Green
     Set-Location "../brie"
-    Remove-Item -Path "$desktopFrontendDir" -Recurse -Force -ErrorAction SilentlyContinue
     flutter build windows --release
     Copy-Item "build/web/*" $webSrc -Force -Recurse
+    $flutterBuild = "build\windows\x64\runner\Release"
+    Copy-Item "$flutterBuild" "$desktopFrontendDir\" -Force -Recurse
 
     Pop-Location
-}
-
-function CreateDesktopBuild
-{
-    Push-Location
-
-    $desktopBuild = "$buildDir\desktop"
-
-    # setup dir if not exist
-    New-Item -ItemType Directory -Force -Path "$desktopBuild"
-    New-Item -ItemType Directory -Force -Path "$desktopFrontendDir"
-    # clean dirs
-    Remove-Item -Path "$desktopBuild" -Recurse -Force -ErrorAction SilentlyContinue
-
-    Copy-Item "$flutterBuild" "$desktopFrontendDir\" -Force -Recurse
 
     Set-Location "../src"
     # Desktop build
     go build -tags "systray" `
         -ldflags "
             -X 'github.com/RA341/gouda/service.BinaryType=desktop'
-            -X 'github.com/RA341/gouda/utils.Version=$Version'
+            -X 'github.com/RA341/gouda/service.Version=$Version'
             -H=windowsgui" `
         -o "$desktopBuild\gouda-desktop.exe" .
 
@@ -96,9 +88,6 @@ function CreateDesktopBuild
     Pop-Location
 }
 
-
-function createFlutterWeb()
-{
     Push-Location
 
     # build flutter web and copy to gouda src
@@ -114,45 +103,18 @@ function createFlutterWeb()
     Copy-Item "build/web/*" $webSrc -Force -Recurse
 
     Pop-Location
+
+
+CreateFlutterWeb
+
+if ($Variant.Equals("desktop") -or $Variant.Equals("all")) {
+    CreateDesktopBuild
 }
 
-createFlutterWeb
-createFlutterDesktop
-
-# Start jobs
-$jobs = @()
-
-if ($Variant -eq "desktop" -or $Variant -eq "all")
-{
-    $jobs += Start-Job -ScriptBlock {
-        param ($BuildDir, $FlutterBuildDir, $Version)
-        . $using:BuildDir
-        . $using:FlutterBuildDir
-        . $using:Version
-        CreateDesktopBuild -BuildDir $BuildDir -FlutterBuildDir $FlutterBuildDir -Version $Version
-    } -ArgumentList $buildDir, $flutterBuild, $Version
-}
-
-if ($Variant -eq "server" -or $Variant -eq "all")
-{
-    $jobs += Start-Job -ScriptBlock {
-        param ($BuildDir, $Version)
-        . $using:BuildDir
-        . $using:Version
-        CreateServerBuild -BuildDir $BuildDir -Version $Version
-    } -ArgumentList $buildDir, $Version
-}
-
-# Wait for jobs and retrieve results
-if ($jobs.Count -gt 0)
-{
-    Write-Host "Waiting for all jobs to complete..." -ForegroundColor Green
-    Wait-Job -Job $jobs
-    foreach ($job in $jobs)
-    {
-        Receive-Job -Job $job
-        Remove-Job -Job $job
-    }
+if ($Variant.Equals("server") -or $Variant.Equals("all")) {
+    CreateServerBuild
+} else {
+    Write-Host "Invalid build variant: $Variant" -ForegroundColor Red
 }
 
 Write-Host "Build completed successfully!" -ForegroundColor Green

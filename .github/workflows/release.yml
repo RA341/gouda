@@ -150,7 +150,7 @@ jobs:
         env:
           CGO_ENABLED: 1
         working-directory: build_script
-        run: just ci-linux ${{ needs.tag-release.outputs.new_tag }}
+        run: just ci-lin ${{ needs.tag-release.outputs.new_tag }}
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
@@ -209,7 +209,7 @@ jobs:
           CGO_ENABLED: 1
         working-directory: build_script
         run: |
-          ./build.windows.ps1 all -Version "${{ needs.tag-release.outputs.new_tag }}"
+          just ci-win "${{ needs.tag-release.outputs.new_tag }}"
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
