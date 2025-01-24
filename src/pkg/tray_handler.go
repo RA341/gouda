@@ -3,11 +3,10 @@ package pkg
 import (
 	_ "embed"
 	"fmt"
-	"github.com/RA341/gouda/service"
+	"github.com/RA341/gouda/utils"
 	"github.com/getlantern/systray"
 	"github.com/pkg/browser"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -89,7 +88,7 @@ func launchFrontend() {
 	} else {
 		log.Info().Msgf("%s is starting", frontendExecutable)
 
-		flutterLogFile := service.GetFileLogger(fmt.Sprintf("%s/flutter.log", service.GetConfigDir()))
+		flutterLogFile := utils.GetFileLogger(fmt.Sprintf("%s/flutter.log", utils.GetConfigDir()))
 
 		// Flutter frontend
 		flutterApp := exec.Command(filepath.Join(fullFrontendPath))
@@ -104,7 +103,7 @@ func launchFrontend() {
 			log.Info().Msg("Frontend exited normally")
 
 			// close main app if set by user
-			if viper.GetBool("exit_on_close") == true {
+			if utils.ExitOnClose.GetBool() == true {
 				log.Info().Msg("exiting main gouda process since exit_on_close is set")
 				os.Exit(0)
 			}

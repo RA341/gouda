@@ -11,7 +11,6 @@ import (
 	"github.com/RA341/gouda/utils"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"io/fs"
@@ -33,7 +32,7 @@ func main() {
 
 	utils.InitConfig()
 
-	if viper.GetString("user.name") == "admin" || viper.GetString("user.password") == "admin" {
+	if utils.Username.GetStr() == "admin" || utils.Password.GetStr() == "admin" {
 		log.Warn().Msgf("Default username or password detected make sure to change this via the web ui")
 	}
 
@@ -52,12 +51,12 @@ func main() {
 	apiContext := &models.Env{Database: db}
 
 	// load torrent client if previously exists
-	if viper.GetString("torrent_client.name") != "" {
+	if utils.TorrentType.GetStr() != "" {
 		client, err := download_clients.InitializeTorrentClient()
 		if err != nil {
 			log.Error().Err(err).Msgf("Failed to initialize torrent client")
 		} else {
-			log.Info().Msgf("Loaded torrent client %s", viper.GetString("torrent_client.name"))
+			log.Info().Msgf("Loaded torrent client %s", utils.TorrentType.GetStr())
 			apiContext.DownloadClient = client
 
 			log.Info().Msgf("starting intial download monitor")
@@ -89,7 +88,7 @@ func startServer(apiContext *models.Env) error {
 	log.Info().Msgf("Setting up ui files")
 	grpcRouter.Handle("/", getFrontendDir())
 
-	baseUrl := fmt.Sprintf(":%s", viper.GetString("server.port"))
+	baseUrl := fmt.Sprintf(":%s", utils.ServerPort.GetStr())
 	log.Info().Str("Listening on:", baseUrl).Msg("")
 
 	middleware := cors.New(cors.Options{

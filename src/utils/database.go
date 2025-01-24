@@ -3,14 +3,13 @@ package utils
 import (
 	types "github.com/RA341/gouda/models"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
 func InitDB() (*gorm.DB, error) {
-	dbPath := viper.GetString("db_path")
+	dbPath := DbPath.GetStr()
 	if dbPath == "" {
 		log.Fatal().Msgf("db_path is empty")
 	}

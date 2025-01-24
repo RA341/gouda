@@ -3,8 +3,8 @@ package download_clients
 import (
 	"fmt"
 	models "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 )
 
 var supportedClients = map[string]func(host, protocol, user, password string) (models.DownloadClient, error){
@@ -23,11 +23,11 @@ func GetSupportedClients() []string {
 
 func getTorrentClientInfo() *models.TorrentClient {
 	return &models.TorrentClient{
-		User:     viper.GetString("torrent_client.user"),
-		Password: viper.GetString("torrent_client.password"),
-		Protocol: viper.GetString("torrent_client.protocol"),
-		Host:     viper.GetString("torrent_client.host"),
-		Type:     viper.GetString("torrent_client.name"),
+		User:     utils.TorrentUser.GetStr(),
+		Password: utils.TorrentPassword.GetStr(),
+		Protocol: utils.TorrentProtocol.GetStr(),
+		Host:     utils.TorrentHost.GetStr(),
+		Type:     utils.TorrentType.GetStr(),
 	}
 }
 

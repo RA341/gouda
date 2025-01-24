@@ -3,7 +3,6 @@ package utils
 import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
 	"path/filepath"
@@ -41,11 +40,11 @@ func getCachedDebugEnv() string {
 // GetConfigDir logfile is set to the main gouda config path,
 // we get the base dir from that for desktop mode
 func GetConfigDir() string {
-	return filepath.Dir(viper.GetString("log_dir"))
+	return filepath.Dir(LogDir.GetStr())
 }
 
 func FileConsoleLogger() zerolog.Logger {
-	logFile := viper.GetString("log_dir")
+	logFile := LogDir.GetStr()
 	return baseLogger.Output(zerolog.MultiLevelWriter(GetFileLogger(logFile), consoleWriter))
 }
 
