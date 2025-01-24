@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
@@ -182,7 +180,8 @@ class SettingsView extends HookConsumerWidget {
                             ..torrentPassword = torrentPassword.text
                             ..torrentProtocol = torrentProtocol.text
                             ..torrentUser = torrentUser.text
-                            ..exitOnClose = exitOnClose.value,
+                            ..exitOnClose = exitOnClose.value
+                            ..ignoreTimeout = ignoreTimeout.value,
                         );
 
                     ref.invalidate(settingsProvider);
