@@ -3,8 +3,8 @@ package service
 import (
 	"fmt"
 	models "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"io"
 	"io/fs"
@@ -33,10 +33,10 @@ func SaveTorrentReq(db *gorm.DB, request *models.RequestTorrent) error {
 }
 
 func AddTorrent(env *models.Env, request *models.RequestTorrent, torrentFilePath string) error {
-	downloadsDir, err := filepath.Abs(viper.GetString("folder.downloads"))
+	downloadsDir, err := filepath.Abs(utils.DownloadFolder.GetStr())
 	if err != nil {
-		log.Error().Err(err).Str("Path", viper.GetString("folder.downloads")).Msgf("Unable to determine absolute path")
-		return fmt.Errorf("unable to determine absolute path of downloads folder %s", viper.GetString("folder.downloads"))
+		log.Error().Err(err).Str("Path", utils.DownloadFolder.GetStr()).Msgf("Unable to determine absolute path")
+		return fmt.Errorf("unable to determine absolute path of downloads folder %s", utils.DownloadFolder.GetStr())
 	}
 
 	torrentId, err := env.DownloadClient.DownloadTorrent(torrentFilePath, downloadsDir, request.Category)
@@ -65,7 +65,7 @@ func AddTorrent(env *models.Env, request *models.RequestTorrent, torrentFilePath
 }
 
 func GetTorrentFileLocation(request *models.RequestTorrent, downloadFile bool) (string, error) {
-	torrentDir := viper.GetString("folder.torrents")
+	torrentDir := utils.TorrentsFolder.GetStr()
 
 	file := request.TorrentFileLocation
 	if downloadFile {
@@ -97,8 +97,15 @@ func MonitorDownloads(env *models.Env) {
 		once = sync.Once{}
 	}()
 
-	torrentCheckTimeout := time.Minute * viper.GetDuration("download.timeout")
-	log.Debug().Msgf("Torrent Check timeout is set at %v", torrentCheckTimeout)
+	torrentCheckTimeout := time.Minute * utils.DownloadCheckTimeout.GetDuration()
+	ignoreTimeout := utils.IgnoreTimeout.GetBool()
+	if ignoreTimeout {
+		log.Info().
+			Bool("ignore_timeout", ignoreTimeout).
+			Msgf("ignoring timeout, gouda will continue to monitor until it completes or errors")
+	} else {
+		log.Info().Msgf("Torrent Check timeout is set at %v", torrentCheckTimeout)
+	}
 
 	for {
 		activeTorrentIds, err := getActiveTorrentsLoop(env.Database)
@@ -149,7 +156,7 @@ func MonitorDownloads(env *models.Env) {
 
 			// timeout reached
 			torrentDuration := time.Duration(int(requestInfo.TimeRunning)) * time.Minute
-			if torrentDuration > torrentCheckTimeout {
+			if !ignoreTimeout && torrentDuration > torrentCheckTimeout {
 				requestInfo.Status = "Error: timeout for check reached"
 				env.Database.Save(requestInfo)
 
@@ -175,7 +182,7 @@ func MonitorDownloads(env *models.Env) {
 }
 
 func finalizeDownload(torrentRequest *models.RequestTorrent, torrentStatus *models.TorrentStatus) error {
-	destPath := viper.GetString("folder.defaults")
+	destPath := utils.CompleteFolder.GetStr()
 	catPath := fmt.Sprintf("%s/%s", destPath, torrentRequest.Category)
 	destPath = fmt.Sprintf("%s/%s/%s", catPath, torrentRequest.Author, torrentRequest.Book)
 
@@ -189,8 +196,8 @@ func finalizeDownload(torrentRequest *models.RequestTorrent, torrentStatus *mode
 		return err
 	}
 
-	sourceUID := viper.GetInt("user.uid")
-	sourceGID := viper.GetInt("user.gid")
+	sourceUID := utils.UserUid.GetInt()
+	sourceGID := utils.GroupUid.GetInt()
 	log.Info().Msgf("Changing file perm to %d:%d", sourceUID, sourceGID)
 	err = recursiveChown(catPath, sourceUID, sourceGID)
 	if err != nil {
@@ -277,7 +284,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 	}
 
 	// Create target directory if it doesn't exist
-	err = os.MkdirAll(targetDir, DefaultFilePerm)
+	err = os.MkdirAll(targetDir, utils.DefaultFilePerm)
 	if err != nil {
 		return fmt.Errorf("failed to create target directory: %w", err)
 	}
@@ -322,7 +329,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 
 		// If it's a directory, create it in target with proper ownership
 		if d.IsDir() {
-			if err := os.MkdirAll(targetPath, DefaultFilePerm); err != nil {
+			if err := os.MkdirAll(targetPath, utils.DefaultFilePerm); err != nil {
 				return fmt.Errorf("failed to create directory %s: %w", targetPath, err)
 			}
 

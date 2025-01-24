@@ -121,6 +121,8 @@ jobs:
             org.opencontainers.image.description=This is the stable version for gouda app.
             org.opencontainers.image.source=https://github.com/RA341/gouda
             org.opencontainers.image.version=${{ needs.tag-release.outputs.new_tag }}
+          build-args: |
+            VERSION=${{ needs.tag-release.outputs.new_tag }}
 
   build-linux:
     needs: tag-release
@@ -207,10 +209,8 @@ jobs:
           CGO_ENABLED: 1
         working-directory: build_script
         run: |
-          Start-Job { ./build.windows.ps1 desktop -Version "${{ needs.tag-release.outputs.new_tag }}" }
-          Start-Job { ./build.windows.ps1 server -Version "${{ needs.tag-release.outputs.new_tag }}" }
-          Wait-Job -State Completed
-        
+          ./build.windows.ps1 all -Version "${{ needs.tag-release.outputs.new_tag }}"
+
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:

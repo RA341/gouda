@@ -83,6 +83,7 @@ const Settings$json = {
     {'1': 'api_key', '3': 1, '4': 1, '5': 9, '10': 'apiKey'},
     {'1': 'server_port', '3': 2, '4': 1, '5': 9, '10': 'serverPort'},
     {'1': 'download_check_timeout', '3': 3, '4': 1, '5': 4, '10': 'downloadCheckTimeout'},
+    {'1': 'ignore_timeout', '3': 17, '4': 1, '5': 8, '10': 'ignoreTimeout'},
     {'1': 'exit_on_close', '3': 16, '4': 1, '5': 8, '10': 'exitOnClose'},
     {'1': 'complete_folder', '3': 4, '4': 1, '5': 9, '10': 'completeFolder'},
     {'1': 'download_folder', '3': 5, '4': 1, '5': 9, '10': 'downloadFolder'},
@@ -103,13 +104,14 @@ const Settings$json = {
 final $typed_data.Uint8List settingsDescriptor = $convert.base64Decode(
     'CghTZXR0aW5ncxIXCgdhcGlfa2V5GAEgASgJUgZhcGlLZXkSHwoLc2VydmVyX3BvcnQYAiABKA'
     'lSCnNlcnZlclBvcnQSNAoWZG93bmxvYWRfY2hlY2tfdGltZW91dBgDIAEoBFIUZG93bmxvYWRD'
-    'aGVja1RpbWVvdXQSIgoNZXhpdF9vbl9jbG9zZRgQIAEoCFILZXhpdE9uQ2xvc2USJwoPY29tcG'
-    'xldGVfZm9sZGVyGAQgASgJUg5jb21wbGV0ZUZvbGRlchInCg9kb3dubG9hZF9mb2xkZXIYBSAB'
-    'KAlSDmRvd25sb2FkRm9sZGVyEicKD3RvcnJlbnRzX2ZvbGRlchgGIAEoCVIOdG9ycmVudHNGb2'
-    'xkZXISGgoIdXNlcm5hbWUYByABKAlSCHVzZXJuYW1lEhoKCHBhc3N3b3JkGAggASgJUghwYXNz'
-    'd29yZBIZCgh1c2VyX3VpZBgJIAEoBFIHdXNlclVpZBIbCglncm91cF91aWQYCiABKARSCGdyb3'
-    'VwVWlkEiEKDHRvcnJlbnRfaG9zdBgLIAEoCVILdG9ycmVudEhvc3QSIQoMdG9ycmVudF9uYW1l'
-    'GAwgASgJUgt0b3JyZW50TmFtZRIpChB0b3JyZW50X3Bhc3N3b3JkGA0gASgJUg90b3JyZW50UG'
-    'Fzc3dvcmQSKQoQdG9ycmVudF9wcm90b2NvbBgOIAEoCVIPdG9ycmVudFByb3RvY29sEiEKDHRv'
-    'cnJlbnRfdXNlchgPIAEoCVILdG9ycmVudFVzZXI=');
+    'aGVja1RpbWVvdXQSJQoOaWdub3JlX3RpbWVvdXQYESABKAhSDWlnbm9yZVRpbWVvdXQSIgoNZX'
+    'hpdF9vbl9jbG9zZRgQIAEoCFILZXhpdE9uQ2xvc2USJwoPY29tcGxldGVfZm9sZGVyGAQgASgJ'
+    'Ug5jb21wbGV0ZUZvbGRlchInCg9kb3dubG9hZF9mb2xkZXIYBSABKAlSDmRvd25sb2FkRm9sZG'
+    'VyEicKD3RvcnJlbnRzX2ZvbGRlchgGIAEoCVIOdG9ycmVudHNGb2xkZXISGgoIdXNlcm5hbWUY'
+    'ByABKAlSCHVzZXJuYW1lEhoKCHBhc3N3b3JkGAggASgJUghwYXNzd29yZBIZCgh1c2VyX3VpZB'
+    'gJIAEoBFIHdXNlclVpZBIbCglncm91cF91aWQYCiABKARSCGdyb3VwVWlkEiEKDHRvcnJlbnRf'
+    'aG9zdBgLIAEoCVILdG9ycmVudEhvc3QSIQoMdG9ycmVudF9uYW1lGAwgASgJUgt0b3JyZW50Tm'
+    'FtZRIpChB0b3JyZW50X3Bhc3N3b3JkGA0gASgJUg90b3JyZW50UGFzc3dvcmQSKQoQdG9ycmVu'
+    'dF9wcm90b2NvbBgOIAEoCVIPdG9ycmVudFByb3RvY29sEiEKDHRvcnJlbnRfdXNlchgPIAEoCV'
+    'ILdG9ycmVudFVzZXI=');
 

@@ -1,4 +1,4 @@
-package service
+package utils
 
 // BinaryType can be of type server or desktop.
 // Desktop will enable systray, and native flutter build into its binary

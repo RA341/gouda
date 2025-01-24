@@ -1,25 +1,23 @@
 package service
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 )
 
 func VerifyToken(token string) (bool, error) {
-	if IsDocker() {
+	if utils.IsDocker() {
 		return true, nil
 	}
 
-	apiKey := viper.GetString("apikey")
+	apiKey := utils.ApiKey.GetStr()
 	if apiKey == token {
 		return true, nil
 	}
 
-	tok := viper.GetString("user.session")
+	tok := utils.UserSession.GetStr()
 	if tok == token {
 		return true, nil
 	}
@@ -28,27 +26,17 @@ func VerifyToken(token string) (bool, error) {
 	return false, nil
 }
 
-func GenerateToken(len int) (string, error) {
-	b := make([]byte, len)
-	_, err := rand.Read(b)
-	if err != nil {
-		return "", err
-	}
-	return hex.EncodeToString(b), nil
-}
-
 func CheckUserPass(user, pass string) (string, error) {
-	username := viper.GetString("user.name")
-	password := viper.GetString("user.password")
+	username := utils.Username.GetStr()
+	password := utils.Password.GetStr()
 
 	if username == user && password == pass {
-		tok, err := GenerateToken(32)
+		tok, err := utils.GenerateToken(32)
 		if err != nil {
 			return "", fmt.Errorf("failed to generate token %v", err)
 		}
 
-		viper.Set("user.session", tok)
-
+		utils.UserSession.Set(tok)
 		return tok, nil
 	}
 

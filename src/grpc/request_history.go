@@ -8,6 +8,7 @@ import (
 	v1 "github.com/RA341/gouda/generated/media_requests/v1"
 	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 	"os"
@@ -47,7 +48,7 @@ func (mrSrv *MediaRequestService) List(_ context.Context, req *connect.Request[v
 	limit := req.Msg.Limit
 	offset := req.Msg.Offset
 
-	if service.IsDebugMode() {
+	if utils.IsDebugMode() {
 		log.Debug().Int("limit", int(limit)).Int("offset", int(offset)).Msg("history query limits")
 	}
 

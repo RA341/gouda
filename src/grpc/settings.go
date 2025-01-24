@@ -7,7 +7,7 @@ import (
 	"github.com/RA341/gouda/download_clients"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	types "github.com/RA341/gouda/models"
-	"github.com/RA341/gouda/service"
+	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -18,8 +18,8 @@ type SettingsService struct {
 
 func (setSrv *SettingsService) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return connect.NewResponse(&v1.GetMetadataResponse{
-		Version:    service.Version,
-		BinaryType: service.BinaryType,
+		Version:    utils.Version,
+		BinaryType: utils.BinaryType,
 	}), nil
 }
 
@@ -40,30 +40,7 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 
 	setSrv.api.DownloadClient = client
 
-	// general
-	viper.Set("apikey", settings.ApiKey)
-	viper.Set("server.port", settings.ServerPort)
-	viper.Set("download.timeout", settings.DownloadCheckTimeout)
-	if service.IsDesktopMode() {
-		viper.Set("exit_on_close", settings.ExitOnClose)
-	}
-
-	// folder settings
-	viper.Set("folder.defaults", settings.CompleteFolder)
-	viper.Set("folder.downloads", settings.DownloadFolder)
-	viper.Set("folder.torrents", settings.TorrentsFolder)
-	// user settings
-	viper.Set("user.name", settings.Username)
-	viper.Set("user.password", settings.Password)
-	viper.Set("user.uid", settings.UserUid)
-	viper.Set("user.gid", settings.GroupUid)
-	// torrent client settings
-	viper.Set("torrent_client.host", settings.TorrentHost)
-	viper.Set("torrent_client.name", settings.TorrentName)
-	viper.Set("torrent_client.password", settings.TorrentPassword)
-	viper.Set("torrent_client.protocol", settings.TorrentProtocol)
-	viper.Set("torrent_client.user", settings.TorrentUser)
-
+	utils.SetSettings(settings)
 	// Save the configuration to file
 	err = viper.WriteConfig()
 	if err != nil {
@@ -78,28 +55,29 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error) {
 	res := connect.NewResponse(&v1.Settings{
 		// general
-		ApiKey:               viper.GetString("apikey"),
-		ServerPort:           viper.GetString("server.port"),
-		DownloadCheckTimeout: uint64(viper.GetInt("download.timeout")),
+		ApiKey:               utils.ApiKey.GetStr(),
+		ServerPort:           utils.ServerPort.GetStr(),
+		DownloadCheckTimeout: utils.DownloadCheckTimeout.GetUint64(),
+		IgnoreTimeout:        utils.IgnoreTimeout.GetBool(),
 		// folder settings
-		CompleteFolder: viper.GetString("folder.defaults"),
-		DownloadFolder: viper.GetString("folder.downloads"),
-		TorrentsFolder: viper.GetString("folder.torrents"),
+		CompleteFolder: utils.CompleteFolder.GetStr(),
+		DownloadFolder: utils.DownloadFolder.GetStr(),
+		TorrentsFolder: utils.TorrentsFolder.GetStr(),
 		// user auth
-		Username: viper.GetString("user.name"),
-		Password: viper.GetString("user.password"),
-		UserUid:  uint64(viper.GetInt("user.uid")),
-		GroupUid: uint64(viper.GetInt("user.gid")),
+		Username: utils.Username.GetStr(),
+		Password: utils.Password.GetStr(),
+		UserUid:  utils.UserUid.GetUint64(),
+		GroupUid: utils.GroupUid.GetUint64(),
 		// torrent stuff
-		TorrentHost:     viper.GetString("torrent_client.host"),
-		TorrentName:     viper.GetString("torrent_client.name"),
-		TorrentPassword: viper.GetString("torrent_client.password"),
-		TorrentProtocol: viper.GetString("torrent_client.protocol"),
-		TorrentUser:     viper.GetString("torrent_client.user"),
+		TorrentName:     utils.TorrentType.GetStr(),
+		TorrentHost:     utils.TorrentHost.GetStr(),
+		TorrentProtocol: utils.TorrentProtocol.GetStr(),
+		TorrentPassword: utils.TorrentPassword.GetStr(),
+		TorrentUser:     utils.TorrentUser.GetStr(),
 	})
 
-	if service.IsDesktopMode() {
-		res.Msg.ExitOnClose = viper.GetBool("exit_on_close")
+	if utils.IsDesktopMode() {
+		res.Msg.ExitOnClose = utils.ExitOnClose.GetBool()
 	}
 
 	return res, nil
