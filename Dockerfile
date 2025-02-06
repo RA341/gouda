@@ -1,8 +1,13 @@
 # Flutter build
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
-COPY ./brie /app
 WORKDIR /app/
+
+COPY ./brie/pubspec.* .
+
+RUN flutter pub get
+
+COPY ./brie .
 
 # Build Flutter web
 RUN flutter build web
@@ -14,16 +19,18 @@ FROM golang:1.23-alpine AS go_builder
 # https://stackoverflow.com/questions/44438637/arg-substitution-in-run-command-not-working-for-dockerfile
 ARG VERSION
 ENV BV=${VERSION}
+# for sqlite
+ENV CGO_ENABLED=1
 
 RUN apk update && apk add --no-cache gcc musl-dev
 
 WORKDIR /app
+
+COPY ./src/go.* .
+
+RUN go mod download
+
 COPY ./src .
-
-# for sqlite
-ENV CGO_ENABLED=1
-
-RUN go mod tidy
 
 COPY --from=flutter_builder /app/build/web ./web
 
