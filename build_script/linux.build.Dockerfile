@@ -8,14 +8,15 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
       libgtk-3-dev liblzma-dev \
       libstdc++-12-dev
 
-
-COPY ./brie /app
-WORKDIR /app/
-
 RUN flutter doctor && \
     flutter config --enable-linux-desktop && \
-    flutter config --enable-web && \
-    flutter pub get
+    flutter config --enable-web
+
+WORKDIR /app/
+
+COPY ../brie .
+
+RUN flutter pub get
 
 # Web builder
 FROM flutter_base AS f_web_builder
@@ -29,19 +30,20 @@ RUN flutter build linux --release
 
 # go base
 FROM golang:1.23-bookworm AS go_base
-
-WORKDIR /app
-COPY ./src .
-
-RUN go mod tidy
-
 # For sqlite
 ENV CGO_ENABLED=1
-
 # arg substitution
 # https://stackoverflow.com/questions/44438637/arg-substitution-in-run-command-not-working-for-dockerfile
 ARG VERSION
 ENV BV=${VERSION}
+
+WORKDIR /app
+
+COPY ./src/go.* .
+
+RUN go mod download
+
+COPY ./src .
 
 # desktop variant
 FROM go_base AS go_desktop_builder
