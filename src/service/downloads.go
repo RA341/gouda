@@ -112,12 +112,12 @@ func MonitorDownloads(env *models.Env) {
 		case <-time.After(1 * time.Minute):
 			activeTorrentIds, err := getActiveTorrentsLoop(env.Database)
 			if err != nil {
-				break
+				return
 			}
 
 			if len(activeTorrentIds) == 0 {
 				log.Info().Msgf("No active torrents found")
-				break
+				return
 			}
 
 			statuses, err := env.DownloadClient.CheckTorrentStatus(activeTorrentIds)
