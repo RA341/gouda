@@ -108,75 +108,76 @@ func MonitorDownloads(env *models.Env) {
 	}
 
 	for {
-		activeTorrentIds, err := getActiveTorrentsLoop(env.Database)
-		if err != nil {
-			break
-		}
+		select {
+		case <-time.After(1 * time.Minute):
+			activeTorrentIds, err := getActiveTorrentsLoop(env.Database)
+			if err != nil {
+				break
+			}
 
-		if len(activeTorrentIds) == 0 {
-			log.Info().Msgf("No active torrents found")
-			break
-		}
+			if len(activeTorrentIds) == 0 {
+				log.Info().Msgf("No active torrents found")
+				break
+			}
 
-		statuses, err := env.DownloadClient.CheckTorrentStatus(activeTorrentIds)
-		if err != nil {
-			log.Warn().Err(err).Msgf("Failed to check torrent status, retrying")
-			continue
-		}
-
-		log.Debug().Any("Torrent list", statuses).Msg("retrieved torrent status")
-
-		for _, torrentStatus := range statuses {
-			var requestInfo models.RequestTorrent
-
-			resp := env.Database.
-				Where("torrent_id = ?", torrentStatus.ID).
-				Where("status = ?", "downloading").
-				First(&requestInfo)
-
-			if resp.Error != nil {
-				log.Error().Err(resp.Error).Msgf("Unable to find torrent: %s info in request history", torrentStatus.Name)
+			statuses, err := env.DownloadClient.CheckTorrentStatus(activeTorrentIds)
+			if err != nil {
+				log.Warn().Err(err).Msgf("Failed to check torrent status, retrying")
 				continue
 			}
 
-			if torrentStatus.DownloadComplete {
-				err := finalizeDownload(&requestInfo, &torrentStatus)
-				if err != nil {
-					log.Error().Err(err).Msgf("Failed to finalize download for %s", torrentStatus.Name)
-					requestInfo.Status = err.Error()
+			log.Debug().Any("Torrent list", statuses).Msg("retrieved torrent status")
+
+			for _, torrentStatus := range statuses {
+				var requestInfo models.RequestTorrent
+
+				resp := env.Database.
+					Where("torrent_id = ?", torrentStatus.ID).
+					Where("status = ?", "downloading").
+					First(&requestInfo)
+
+				if resp.Error != nil {
+					log.Error().Err(resp.Error).Msgf("Unable to find torrent: %s info in request history", torrentStatus.Name)
+					continue
+				}
+
+				if torrentStatus.DownloadComplete {
+					err := finalizeDownload(&requestInfo, &torrentStatus)
+					if err != nil {
+						log.Error().Err(err).Msgf("Failed to finalize download for %s", torrentStatus.Name)
+						requestInfo.Status = err.Error()
+						env.Database.Save(requestInfo)
+						continue
+					}
+
+					// mark download as complete
+					requestInfo.Status = "complete"
 					env.Database.Save(requestInfo)
 					continue
 				}
 
-				// mark download as complete
-				requestInfo.Status = "complete"
+				// timeout reached
+				torrentDuration := time.Duration(int(requestInfo.TimeRunning)) * time.Minute
+				if !ignoreTimeout && torrentDuration > torrentCheckTimeout {
+					requestInfo.Status = "Error: timeout for check reached"
+					env.Database.Save(requestInfo)
+
+					log.Error().Msgf("Maximum timeout reached abandoning check for Id: %s,  Name:%s after %s, max timeout was set to %s.\nCheck your download client or increase timeout in settings",
+						torrentStatus.ID,
+						torrentStatus.Name,
+						torrentDuration.String(),
+						torrentCheckTimeout,
+					)
+					continue
+				}
+
+				// incomplete download, add to time and move on
+				requestInfo.TimeRunning += 1
 				env.Database.Save(requestInfo)
-				continue
+				log.Info().Msgf("Torrent check for %s with status:%s\nTime running:%s, checking again in a minute",
+					torrentStatus.Name, torrentStatus.Status, torrentDuration.String())
 			}
-
-			// timeout reached
-			torrentDuration := time.Duration(int(requestInfo.TimeRunning)) * time.Minute
-			if !ignoreTimeout && torrentDuration > torrentCheckTimeout {
-				requestInfo.Status = "Error: timeout for check reached"
-				env.Database.Save(requestInfo)
-
-				log.Error().Msgf("Maximum timeout reached abandoning check for Id: %s,  Name:%s after %s, max timeout was set to %s.\nCheck your download client or increase timeout in settings",
-					torrentStatus.ID,
-					torrentStatus.Name,
-					torrentDuration.String(),
-					torrentCheckTimeout,
-				)
-				continue
-			}
-
-			// incomplete download, add to time and move on
-			requestInfo.TimeRunning += 1
-			env.Database.Save(requestInfo)
-			log.Info().Msgf("Torrent check for %s with status:%s\nTime running:%s, checking again in a minute",
-				torrentStatus.Name, torrentStatus.Status, torrentDuration.String())
 		}
-
-		time.Sleep(1 * time.Minute)
 	}
 
 }
