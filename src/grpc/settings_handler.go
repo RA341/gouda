@@ -7,23 +7,24 @@ import (
 	"github.com/RA341/gouda/download_clients"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	types "github.com/RA341/gouda/models"
+	"github.com/RA341/gouda/service"
 	"github.com/RA341/gouda/utils"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
-type SettingsService struct {
-	api *env
+type SettingsHandler struct {
+	downloadSrv *service.DownloadService
 }
 
-func (setSrv *SettingsService) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+func (setSrv *SettingsHandler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return connect.NewResponse(&v1.GetMetadataResponse{
 		Version:    utils.Version,
 		BinaryType: utils.BinaryType,
 	}), nil
 }
 
-func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
+func (setSrv *SettingsHandler) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
 	client, err := download_clients.CheckTorrentClient(&types.TorrentClient{
@@ -38,7 +39,7 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 		return nil, fmt.Errorf("unable to connect torrent client: %v", err)
 	}
 
-	setSrv.api.DownloadClient = client
+	setSrv.downloadSrv.SetClient(client)
 
 	utils.SetSettings(settings)
 	// Save the configuration to file
@@ -52,7 +53,7 @@ func (setSrv *SettingsService) UpdateSettings(_ context.Context, req *connect.Re
 	return connect.NewResponse(&v1.UpdateSettingsResponse{}), nil
 }
 
-func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error) {
+func (setSrv *SettingsHandler) ListSettings(_ context.Context, _ *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error) {
 	res := connect.NewResponse(&v1.Settings{
 		// general
 		ApiKey:               utils.ApiKey.GetStr(),
@@ -83,7 +84,7 @@ func (setSrv *SettingsService) ListSettings(_ context.Context, _ *connect.Reques
 	return res, nil
 }
 
-func (setSrv *SettingsService) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+func (setSrv *SettingsHandler) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
 	clients := download_clients.GetSupportedClients()
 
 	res := connect.NewResponse(&v1.ListSupportedClientsResponse{

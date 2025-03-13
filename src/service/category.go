@@ -6,9 +6,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateCategory(db *gorm.DB, category string) error {
+type CategoryService struct {
+	db *gorm.DB
+}
+
+func NewCategoryService(db *gorm.DB) *CategoryService {
+	return &CategoryService{db: db}
+}
+
+func (srv *CategoryService) CreateCategory(category string) error {
 	input := models.Categories{Category: category}
-	result := db.Create(&input)
+	result := srv.db.Create(&input)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -17,10 +25,10 @@ func CreateCategory(db *gorm.DB, category string) error {
 	return nil
 }
 
-func DeleteCategory(db *gorm.DB, input *models.Categories) error {
+func (srv *CategoryService) DeleteCategory(input *models.Categories) error {
 	// perma delete, due to unique constraints
 	// normal db.Delete will soft delete stuff https://gorm.io/docs/delete.html
-	result := db.Unscoped().Delete(input, input.ID)
+	result := srv.db.Unscoped().Delete(input, input.ID)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -29,10 +37,10 @@ func DeleteCategory(db *gorm.DB, input *models.Categories) error {
 	return nil
 }
 
-func ListCategory(db *gorm.DB) ([]models.Categories, error) {
+func (srv *CategoryService) ListCategory() ([]models.Categories, error) {
 	var categories []models.Categories
 
-	res := db.Find(&categories)
+	res := srv.db.Find(&categories)
 	if res.Error != nil {
 		return []models.Categories{}, res.Error
 	}

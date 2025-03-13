@@ -9,12 +9,12 @@ import (
 	"github.com/RA341/gouda/service"
 )
 
-type CategoryService struct {
-	api *env
+type CategoryHandler struct {
+	srv *service.CategoryService
 }
 
-func (catSrv *CategoryService) ListCategories(_ context.Context, _ *connect.Request[v1.ListCategoriesRequest]) (*connect.Response[v1.ListCategoriesResponse], error) {
-	category, err := service.ListCategory(catSrv.api.Database)
+func (c *CategoryHandler) ListCategories(_ context.Context, _ *connect.Request[v1.ListCategoriesRequest]) (*connect.Response[v1.ListCategoriesResponse], error) {
+	category, err := c.srv.ListCategory()
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving category: %v", err.Error())
 	}
@@ -29,8 +29,8 @@ func (catSrv *CategoryService) ListCategories(_ context.Context, _ *connect.Requ
 	return res, nil
 }
 
-func (catSrv *CategoryService) AddCategories(_ context.Context, req *connect.Request[v1.AddCategoriesRequest]) (*connect.Response[v1.AddCategoriesResponse], error) {
-	err := service.CreateCategory(catSrv.api.Database, req.Msg.Category)
+func (c *CategoryHandler) AddCategories(_ context.Context, req *connect.Request[v1.AddCategoriesRequest]) (*connect.Response[v1.AddCategoriesResponse], error) {
+	err := c.srv.CreateCategory(req.Msg.Category)
 	if err != nil {
 		return nil, fmt.Errorf("error creating category: %v", err.Error())
 	}
@@ -38,10 +38,10 @@ func (catSrv *CategoryService) AddCategories(_ context.Context, req *connect.Req
 	return connect.NewResponse(&v1.AddCategoriesResponse{}), nil
 }
 
-func (catSrv *CategoryService) DeleteCategories(_ context.Context, req *connect.Request[v1.DelCategoriesRequest]) (*connect.Response[v1.DelCategoriesResponse], error) {
+func (c *CategoryHandler) DeleteCategories(_ context.Context, req *connect.Request[v1.DelCategoriesRequest]) (*connect.Response[v1.DelCategoriesResponse], error) {
 	cat := (&models.Categories{}).FromProto(req.Msg.GetCategory())
 
-	err := service.DeleteCategory(catSrv.api.Database, cat)
+	err := c.srv.DeleteCategory(cat)
 	if err != nil {
 		return nil, fmt.Errorf("error deleting category: %v", err.Error())
 	}

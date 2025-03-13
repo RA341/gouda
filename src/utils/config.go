@@ -22,9 +22,12 @@ func loadEnv() {
 
 func InitConfig() {
 	loadEnv()
-
 	baseDir := getBaseDir()
 	configDir := getConfigDir(baseDir)
+	defer func() {
+		// reinitialize logger with log file output, once a log directory has been set by viper
+		InitFileLogger()
+	}()
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("json")
@@ -50,6 +53,12 @@ func InitConfig() {
 	log.Info().Msg("watching config file")
 	viper.WatchConfig()
 
+	if IsDebugMode() {
+		log.Warn().Msgf("app is running in debug mode: AUTH IS IGNORED")
+	}
+	if Username.GetStr() == "admin" || Password.GetStr() == "admin" {
+		log.Warn().Msgf("Default username or password detected make sure to change this via the web ui")
+	}
 	// maybe create viper instance and return from this function
 	// future setup in case https://github.com/spf13/viper/issues/1855 is accepted
 }
