@@ -1,9 +1,12 @@
+---
+sidebar_position: 4
+---
 # Categories
 
 Categories are the media folder where the media will finally be stored.
 
 It is expected that the folder will be used by [audiobookshelf](https://www.audiobookshelf.org/) or whatever software
-you use to server your files.
+you use to serve your files.
 
 
 > For example:
