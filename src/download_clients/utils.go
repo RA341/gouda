@@ -37,7 +37,6 @@ func InitializeTorrentClient() (models.DownloadClient, error) {
 }
 
 func CheckTorrentClient(details *models.TorrentClient) (models.DownloadClient, error) {
-
 	initFn, exists := supportedClients[details.Type]
 	if !exists {
 		return nil, fmt.Errorf("unsupported torrent client: %s", details.Type)
