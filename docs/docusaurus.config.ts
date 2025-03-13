@@ -7,7 +7,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
     title: 'Gouda',
     tagline: 'Download autoamtion tool for Myanonmouse',
     url: 'https://RA341.github.io',
-    baseUrl: '/gouda/',
+    baseUrl: '/',
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
     favicon: 'img/favicon.ico',
