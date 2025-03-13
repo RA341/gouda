@@ -10,9 +10,9 @@ import (
 
 const tokenHeader = "Authorization"
 
-type AuthService struct{}
+type AuthHandler struct{}
 
-func (authSrc *AuthService) Authenticate(_ context.Context, req *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error) {
+func (authSrc *AuthHandler) Authenticate(_ context.Context, req *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error) {
 	username := req.Msg.GetUsername()
 	password := req.Msg.GetPassword()
 
@@ -25,7 +25,7 @@ func (authSrc *AuthService) Authenticate(_ context.Context, req *connect.Request
 	return res, nil
 }
 
-func (authSrc *AuthService) Test(_ context.Context, req *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error) {
+func (authSrc *AuthHandler) Test(_ context.Context, req *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error) {
 	clientToken := req.Msg.GetAuthToken()
 
 	status, err := service.VerifyToken(clientToken)

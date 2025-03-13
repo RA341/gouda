@@ -37,18 +37,27 @@ func getCachedDebugEnv() string {
 	return cachedEnvVar
 }
 
+// InitConsoleLogger configures zerolog logger with some custom settings
+func InitConsoleLogger() {
+	log.Logger = consoleLogger()
+}
+
+func InitFileLogger() {
+	log.Logger = fileConsoleLogger()
+}
+
 // GetConfigDir logfile is set to the main gouda config path,
 // we get the base dir from that for desktop mode
 func GetConfigDir() string {
 	return filepath.Dir(LogDir.GetStr())
 }
 
-func FileConsoleLogger() zerolog.Logger {
+func fileConsoleLogger() zerolog.Logger {
 	logFile := LogDir.GetStr()
 	return baseLogger.Output(zerolog.MultiLevelWriter(GetFileLogger(logFile), consoleWriter))
 }
 
-func ConsoleLogger() zerolog.Logger {
+func consoleLogger() zerolog.Logger {
 	return baseLogger.Output(consoleWriter)
 }
 

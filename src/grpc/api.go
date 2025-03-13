@@ -8,15 +8,13 @@ import (
 	category "github.com/RA341/gouda/generated/category/v1/v1connect"
 	media "github.com/RA341/gouda/generated/media_requests/v1/v1connect"
 	settings "github.com/RA341/gouda/generated/settings/v1/v1connect"
-	models "github.com/RA341/gouda/models"
 	"github.com/RA341/gouda/service"
 	"net/http"
 )
 
-type env models.Env
+func SetupGRPCEndpoints() *http.ServeMux {
+	cat, down, mediaReq := service.InitServices()
 
-func SetupGRPCEndpoints(modelEnv *models.Env) *http.ServeMux {
-	apiEnv := (*env)(modelEnv)
 	// grpc server setup
 	mux := http.NewServeMux()
 	authInterceptor := connect.WithInterceptors(NewAuthInterceptor())
@@ -24,19 +22,19 @@ func SetupGRPCEndpoints(modelEnv *models.Env) *http.ServeMux {
 	services := []func() (string, http.Handler){
 		// auth
 		func() (string, http.Handler) {
-			return auth.NewAuthServiceHandler(&AuthService{})
+			return auth.NewAuthServiceHandler(&AuthHandler{})
 		},
 		// category
 		func() (string, http.Handler) {
-			return category.NewCategoryServiceHandler(&CategoryService{api: apiEnv}, authInterceptor)
+			return category.NewCategoryServiceHandler(&CategoryHandler{srv: cat}, authInterceptor)
 		},
 		// settings
 		func() (string, http.Handler) {
-			return settings.NewSettingsServiceHandler(&SettingsService{api: apiEnv}, authInterceptor)
+			return settings.NewSettingsServiceHandler(&SettingsHandler{downloadSrv: down}, authInterceptor)
 		},
 		// media requests
 		func() (string, http.Handler) {
-			return media.NewMediaRequestServiceHandler(&MediaRequestService{api: apiEnv}, authInterceptor)
+			return media.NewMediaRequestServiceHandler(&MediaRequestHandler{mr: mediaReq}, authInterceptor)
 		},
 	}
 
