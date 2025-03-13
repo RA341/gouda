@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/RA341/gouda/compare/v1.6.0...v1.6.1) (2025-03-13)
+
+
+### Bug Fixes
+
+* refactored service and api handlers ([5f7ce01](https://github.com/RA341/gouda/commit/5f7ce019e93e530d05e63c2f07a5f6da05bcb4d2))
+
 # [1.6.0](https://github.com/RA341/gouda/compare/v1.5.2...v1.6.0) (2025-01-16)
 
 
