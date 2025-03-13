@@ -37,15 +37,15 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        working-dir: docs
+        working-directory: docs
         run: yarn install --frozen-lockfile
 
       - name: Build website
-        working-dir: docs
+        working-directory: docs
         run: yarn build
 
       - name: Upload Build Artifact
-        working-dir: docs
+        working-directory: docs
         uses: actions/upload-pages-artifact@v3
         with:
           path: build
