@@ -11,7 +11,7 @@ Hence, it is intended to work with the [extension](parmesan).
 
 ## Getting Started
 
-Refer the [docs](gouda.dumbapps.org)
+Refer the [docs](https://gouda.dumbapps.org)
 
 ## How it Works
 
