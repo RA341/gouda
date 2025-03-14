@@ -13,7 +13,7 @@ Before you begin contributing, please ensure you have the following tools instal
 
 ### Required Technologies
 
-* Go v1.23 and above
+* Go v1.24 and above
     - Powers the main application
     - [Installation Guide](https://go.dev/learn/)
 
