@@ -1,3 +1,6 @@
+---
+sidebar_position: 3
+---
 # Parmesan Extension
 
 This is an extension for the [Gouda api](https://github.com/RA341/gouda), designed for the myanonmouse website.
@@ -45,9 +48,9 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 ## Chrome setup
 
 1. Open your browser, in the extensions tab, on the top right side corner enable `developer mode`
-   > ![chrome_dev_mode](media/chrome_dev.png)
+   > ![chrome_dev_mode](../../static/chrome_dev.png)
 2. Next click on the `load unpacked` button and select the folder you unzipped.
-    >![img.png](media/load_button.png)
+    >![img.png](../../static/load_button.png)
 3. Next, [setup extension](#extension-setup)
 
 ##  Firefox setup
@@ -58,9 +61,9 @@ Unlike chrome, firefox can load the zip file directly.
 
 1. Open firefox and go to the extensions page.
 2. Click the settings icon here,
-    > ![firefox](media/firefox.png)
+    > ![firefox](../../static/firefox.png)
 3. Then click `install addon from file`
-   > ![firefox](media/firefox-popup.png)
+   > ![firefox](../../static/firefox-popup.png)
 4. Select the zip file, you downloaded and install.
 5. Next, [setup extension](#extension-setup)
 
@@ -82,7 +85,7 @@ If you are using gouda locally i.e. it is running on your machine, then you can 
 2. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
 3. That's all folks!!
 4. Go to any book release on the site, and you should have this button near the download button.
-    > ![download](media/download_button.png)
+    > ![download](../../static/download_button.png)
 
 :::note
 The dropdown will show an error, if you have not created any [categories](category.md).

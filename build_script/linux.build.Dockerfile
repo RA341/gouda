@@ -29,7 +29,7 @@ FROM flutter_base AS f_desktop_builder
 RUN flutter build linux --release
 
 # go base
-FROM golang:1.23-bookworm AS go_base
+FROM golang:1.24-bookworm AS go_base
 # For sqlite
 ENV CGO_ENABLED=1
 # arg substitution

@@ -1,6 +1,7 @@
 ---
 sidebar_position: 1
 slug: /
+title: About
 ---
 
 # Gouda
@@ -15,14 +16,14 @@ I tried readarr, but it was buggy for me, and I don't need to use its monitoring
 This makes it easier than readarr, as you can directly download the release without monitoring the
 entire authors' collection.
 
-Hence, it is intended to work with the [extension](guide/extension.md).
+Hence, it is intended to work with the [extension](extension.md).
 
 ## How it Works
 
-* When you download something from myanonmouse, You use the gouda button (from the [extension](guide/extension.md)) instead of the
+* When you download something from myanonmouse, You use the gouda button (from the [extension](extension.md)) instead of the
   download button.
 
-* The extension then sends the book, author, series info and the [category](guide/category.md), to gouda.
+* The extension then sends the book, author, series info and the [category](category.md), to gouda.
 
 * Gouda then downloads the torrent file, sends it to the download client.
 
