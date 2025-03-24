@@ -55,83 +55,80 @@ class SettingsContainer extends HookConsumerWidget {
       "User": UserGroup(settings: curSettings),
     };
 
-    return Flexible(
-      fit: FlexFit.loose,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(
-                width: 5,
-                color: Theme.of(context).dividerColor,
-              ),
-              borderRadius: BorderRadius.circular(20)),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                spacing: 10,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Application Settings",
-                      style: TextStyle(fontSize: 40),
-                    ),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+              width: 5,
+              color: Theme.of(context).dividerColor,
+            ),
+            borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 10,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Application Settings",
+                    style: TextStyle(fontSize: 40),
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                        'Configure your application settings. Changes will be applied after saving.'),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      'Configure your application settings. Changes will be applied after saving.'),
+                ),
+                SizedBox(height: 35),
+                SettingsTabs(
+                  tabs: tabs.keys
+                      .map((e) => Tab(
+                            text: e,
+                            icon: e == 'Torrent Client' &&
+                                    (curSettings.value.torrentHost.isEmpty ||
+                                        curSettings
+                                            .value.torrentName.isEmpty ||
+                                        curSettings
+                                            .value.torrentPassword.isEmpty)
+                                ? Icon(Icons.error, color: Colors.red)
+                                : null,
+                          ))
+                      .toList(),
+                ),
+                SizedBox(height: 20),
+                SettingsDisplay(
+                  settings: settingsObj,
+                  settingsGroup: tabs.values.toList(),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await ref
+                            .watch(settingsApiProvider)
+                            .update(curSettings.value);
+                        ref.invalidate(settingsProvider);
+                        if (!context.mounted) return;
+                        showSnackBar(context, 'Updated settings');
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        showErrorDialog(
+                          context,
+                          'Error saving settings',
+                          '',
+                          e.toString(),
+                        );
+                      }
+                    },
+                    child: Text('Update Settings'),
                   ),
-                  SizedBox(height: 35),
-                  SettingsTabs(
-                    tabs: tabs.keys
-                        .map((e) => Tab(
-                              text: e,
-                              icon: e == 'Torrent Client' &&
-                                      (curSettings.value.torrentHost.isEmpty ||
-                                          curSettings
-                                              .value.torrentName.isEmpty ||
-                                          curSettings
-                                              .value.torrentPassword.isEmpty)
-                                  ? Icon(Icons.error, color: Colors.red)
-                                  : null,
-                            ))
-                        .toList(),
-                  ),
-                  SizedBox(height: 20),
-                  SettingsDisplay(
-                    settings: settingsObj,
-                    settingsGroup: tabs.values.toList(),
-                  ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 30),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          await ref
-                              .watch(settingsApiProvider)
-                              .update(curSettings.value);
-                          ref.invalidate(settingsProvider);
-                          if (!context.mounted) return;
-                          showSnackBar(context, 'Updated settings');
-                        } catch (e) {
-                          if (!context.mounted) return;
-                          showErrorDialog(
-                            context,
-                            'Error saving settings',
-                            '',
-                            e.toString(),
-                          );
-                        }
-                      },
-                      child: Text('Update Settings'),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),
