@@ -15,12 +15,12 @@ dependencies:
   # state management
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
-  flutter_hooks: ^0.20.5
+  flutter_hooks: ^0.21.2
   hooks_riverpod: ^2.6.1
 
   # networking
   universal_html: ^2.2.4
-  http: ^1.2.2
+  http: ^1.3.0
   grpc: ^4.0.1
   protobuf: ^3.1.0
 
@@ -29,14 +29,14 @@ dependencies:
   timeago: ^3.7.0
 
   # misc
-  shared_preferences: ^2.3.5
+  shared_preferences: ^2.5.2
   url_launcher:
   fixnum: ^1.1.1
   logger: ^2.5.0
 
 dev_dependencies:
   custom_lint:
-  riverpod_lint: ^2.6.4
+  riverpod_lint: ^2.6.5
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
