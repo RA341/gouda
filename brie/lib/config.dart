@@ -2,8 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final prefs = PreferencesService.instance.preferences;
 
-final supportedProtocols = ['http', 'https'];
-final supportedClients = ['transmission', 'qbit'];
+const supportedProtocols = ['http', 'https'];
 
 class PreferencesService {
   static PreferencesService? _instance;

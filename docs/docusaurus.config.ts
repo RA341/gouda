@@ -20,12 +20,12 @@ import {themes as prismThemes} from 'prism-react-renderer';
             ({
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js'),
-                    editUrl: 'https://github.com/RA341/gouda/edit/main/website/',
+                    editUrl: 'https://github.com/RA341/gouda/edit/main/docs',
                 },
                 blog: {
                     showReadingTime: true,
                     editUrl:
-                        'https://github.com/RA341/gouda/edit/main/website/blog/',
+                        'https://github.com/RA341/gouda/edit/main/docs/blog/',
                 },
                 theme: {
                     customCss: require.resolve('./src/css/custom.css'),

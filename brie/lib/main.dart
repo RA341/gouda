@@ -63,20 +63,21 @@ class RootView extends ConsumerWidget {
 class MainView extends ConsumerWidget {
   const MainView({super.key});
 
+  static const routeList = [
+    HistoryPage(),
+    CategoryPage(),
+    SettingsPage(),
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const routeList = [
-      HistoryPage(),
-      CategoryPage(),
-      SettingsPage(),
-    ];
-
     final pageIndex = ref.watch(pageIndexListProvider);
     return Row(
       children: [
-        Sidebar(),
-        Expanded(
-            child: routeList[pageIndex].animate().fadeIn(duration: 200.ms)),
+        VerticalNavBar(),
+        Flexible(
+          child: routeList[pageIndex].animate().fadeIn(duration: 200.ms),
+        ),
       ],
     );
   }
