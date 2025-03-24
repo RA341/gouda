@@ -5,7 +5,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (module.exports = {
     title: 'Gouda',
-    tagline: 'Download autoamtion tool for Myanonmouse',
+    tagline: 'Download automation tool for Myanonmouse',
     url: 'https://RA341.github.io',
     baseUrl: '/',
     onBrokenLinks: 'throw',
