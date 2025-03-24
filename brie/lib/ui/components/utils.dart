@@ -71,17 +71,21 @@ void showErrorDialog(
   );
 }
 
-Widget createUpdateButtons2(
-  String input,
+Widget createUpdateButtons(
   TextEditingController controller, {
+  String input = '',
+  void Function(String)? onChanged,
   void Function()? editingController,
   String hintText = '',
   List<String> autofillHints = const [],
+  bool enabled = true,
 }) {
   return TextField(
+    enabled: enabled,
     autofillHints: autofillHints,
     controller: controller,
     onEditingComplete: editingController,
+    onChanged: onChanged,
     decoration: InputDecoration(
       border: OutlineInputBorder(),
       labelText: input,
@@ -90,22 +94,27 @@ Widget createUpdateButtons2(
   );
 }
 
-Widget createDropDown2(
+Widget createDropDown(
   List<String> options,
   TextEditingController controller,
-  String hintText,
-) {
+  String hintText, {
+  required String Function(String p0) onChanged,
+}) {
   final selectedIndex = options.indexOf(controller.text);
   if (controller.text.isEmpty) {
     controller.text = options.first;
   }
+  onChanged(controller.text);
 
   return DropdownMenu<String>(
     label: Text(hintText),
     requestFocusOnTap: false,
     // disable text editing
     initialSelection: options[selectedIndex == -1 ? 0 : selectedIndex],
-    onSelected: (String? value) => controller.text = value ?? options.first,
+    onSelected: (String? value) {
+      controller.text = value ?? options.first;
+      onChanged(controller.text);
+    },
     dropdownMenuEntries: options.map<DropdownMenuEntry<String>>((String value) {
       return DropdownMenuEntry<String>(
         value: value,

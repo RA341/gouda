@@ -1,103 +1,53 @@
-import 'package:brie/config.dart';
-import 'package:brie/grpc/api.dart';
 import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Sidebar extends ConsumerWidget {
-  const Sidebar({super.key});
+class VerticalNavBar extends ConsumerWidget {
+  const VerticalNavBar({super.key});
 
-  static const buttonDivider = 18.0;
-  static const activeButtonColor = Color(0xFF2B592B);
+  static const iconsSize = 30.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageIndex = ref.watch(pageIndexListProvider);
+    final labelType = NavigationRailLabelType.all;
 
-    return ColoredBox(
-      color: Theme.of(context).colorScheme.onSecondary,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xFF207722),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 25,
-                      ),
-                      child: Text('Gouda'),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          pageIndex == 0 ? activeButtonColor : null,
-                    ),
-                    child: Text('History'),
-                    onPressed: () async {
-                      ref
-                          .read(pageIndexListProvider.notifier)
-                          .navigateToPage(0);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          pageIndex == 1 ? activeButtonColor : null,
-                    ),
-                    child: Text('Categories'),
-                    onPressed: () async {
-                      ref
-                          .read(pageIndexListProvider.notifier)
-                          .navigateToPage(1);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: buttonDivider),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          pageIndex == 2 ? activeButtonColor : null,
-                    ),
-                    child: Text('Settings'),
-                    onPressed: () async {
-                      ref
-                          .read(pageIndexListProvider.notifier)
-                          .navigateToPage(2);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50),
-              child: ElevatedButton(
-                child: Text('Logout'),
-                onPressed: () async {
-                  await prefs.setString('apikey', '');
-                  ref.invalidate(apiTokenProvider);
-                },
-              ),
-            ),
-          ],
+    return NavigationRail(
+      selectedIndex: pageIndex,
+      groupAlignment: -0.955,
+      onDestinationSelected: (int index) =>
+          ref.read(pageIndexListProvider.notifier).navigateToPage(index),
+      labelType: labelType,
+      leading: GoudaHeader(),
+      destinations: [
+        NavigationRailDestination(
+          icon: Icon(Icons.home_outlined, size: iconsSize),
+          selectedIcon: Icon(Icons.home_filled, size: iconsSize),
+          label: Text('Home'),
         ),
-      ),
+        NavigationRailDestination(
+          icon: Icon(Icons.book_outlined, size: iconsSize),
+          selectedIcon: Icon(Icons.book, size: iconsSize),
+          label: Text('Categories'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.settings_outlined, size: iconsSize),
+          selectedIcon: Icon(Icons.settings, size: iconsSize),
+          label: Text('Settings'),
+        ),
+      ],
+    );
+  }
+}
+
+class GoudaHeader extends StatelessWidget {
+  const GoudaHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.gamepad_outlined,
+      size: 45,
     );
   }
 }
