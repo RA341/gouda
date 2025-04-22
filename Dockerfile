@@ -32,12 +32,13 @@ RUN go mod download
 
 COPY ./src .
 
-COPY --from=flutter_builder /app/build/web ./web
+COPY --from=flutter_builder /app/build/web ./cmd/web
 
 # Build optimized binary without debugging symbols
 RUN go build  \
-    -ldflags "-s -w -X github.com/RA341/gouda/utils.Version=$BV" \
-    -o gouda
+    -ldflags "-s -w -X github.com/RA341/gouda/pkg.Version=$BV" \
+    -o gouda \
+    ./cmd/server
 
 # Stage: Final stage
 FROM alpine:latest
