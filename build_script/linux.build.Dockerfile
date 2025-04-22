@@ -52,7 +52,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     gcc libgtk-3-dev libayatana-appindicator3-dev
 # Copy web build
-COPY --from=f_web_builder /app/build/web/* ./web/
+COPY --from=f_web_builder /app/build/web/* ./cmd/web/
 # Build gouda desktop variant
 RUN go build -ldflags "-s -w \
         -X github.com/RA341/gouda/pkg.Version=$BV \
@@ -62,7 +62,7 @@ RUN go build -ldflags "-s -w \
 
 FROM go_base AS go_server_builder
 # Copy web build
-COPY --from=f_web_builder /app/build/web/* ./web/
+COPY --from=f_web_builder /app/build/web/* ./cmd/web/
 # Build gouda server variant
 RUN go build -ldflags "-s -w \
         -X github.com/RA341/gouda/pkg.Version=$BV" \
