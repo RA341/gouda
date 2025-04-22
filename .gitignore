@@ -7,6 +7,6 @@ sample
 build_script/build_output
 /install_scripts/parmesan_extension/
 /install_scripts/parmesan_extension.zip
-src/web
+/**/web
 src/download_clients/test/downloads
 install_scripts/test

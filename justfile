@@ -35,8 +35,8 @@ dkc:
 [working-directory: 'brie']
 ui:
     flutter build web
-    rm -r ../src/web
-    cp -r build/web/ ../src/web
+    rm -r ../src/cmd/web
+    cp -r build/web/ ../src/cmd/web
 
 # a dev docker build only with gouda
 loc:

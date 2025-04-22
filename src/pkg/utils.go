@@ -1,50 +1,72 @@
 package pkg
 
 import (
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"gopkg.in/natefinch/lumberjack.v2"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"runtime"
 	"sync"
 )
 
+// cache os.getenv('debug') value for perf
 var (
-	once    sync.Once
-	execDir string
+	cachedEnvVar  string
+	envVarOnce    sync.Once
+	consoleWriter = zerolog.ConsoleWriter{
+		Out:        os.Stderr,
+		TimeFormat: "2006-01-02 15:04:05",
+	}
+	baseLogger = log.With().Caller().Logger()
 )
 
-func getWorkingDir() string {
-	once.Do(func() {
-		exePath, err := os.Executable()
-		if err != nil {
-			log.Fatal().Err(err).Msg("Failed to get executable directory")
-		}
+const DefaultFilePerm = 0o775
 
-		log.Info().Msgf("executable path: %s", exePath)
-
-		execDir = filepath.Dir(exePath)
-	})
-
-	return execDir
+func IsDebugMode() bool {
+	return getCachedDebugEnv() == "true"
 }
 
-func openLogsDirectory() {
-	exePath, _ := os.Executable()
-	appDir := filepath.Dir(exePath)
+func IsDocker() bool {
+	return os.Getenv("IS_DOCKER") == "true"
+}
 
-	var cmd *exec.Cmd
-	switch runtime.GOOS {
-	case "windows":
-		cmd = exec.Command("explorer", appDir)
-	case "darwin":
-		cmd = exec.Command("open", appDir)
-	default: // Linux and others
-		cmd = exec.Command("xdg-open", appDir)
-	}
+func getCachedDebugEnv() string {
+	envVarOnce.Do(func() {
+		cachedEnvVar = os.Getenv("DEBUG")
+	})
+	return cachedEnvVar
+}
 
-	err := cmd.Start()
-	if err != nil {
-		log.Error().Err(err).Msg("Failed to open logs directory")
+// InitConsoleLogger configures zerolog logger with some custom settings
+func InitConsoleLogger() {
+	log.Logger = consoleLogger()
+}
+
+func InitFileLogger() {
+	log.Logger = fileConsoleLogger()
+}
+
+// GetConfigDir logfile is set to the main gouda config path,
+// we get the base dir from that for desktop mode
+func GetConfigDir() string {
+	return filepath.Dir(LogDir.GetStr())
+}
+
+func fileConsoleLogger() zerolog.Logger {
+	logFile := LogDir.GetStr()
+	return baseLogger.Output(zerolog.MultiLevelWriter(GetFileLogger(logFile), consoleWriter))
+}
+
+func consoleLogger() zerolog.Logger {
+	return baseLogger.Output(consoleWriter)
+}
+
+func GetFileLogger(logFile string) *lumberjack.Logger {
+	return &lumberjack.Logger{
+		Filename:   logFile,
+		MaxSize:    10, // MB
+		MaxBackups: 5,  // number of backups
+		MaxAge:     30, // days
+		Compress:   true,
 	}
 }

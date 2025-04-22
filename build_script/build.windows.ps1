@@ -1,5 +1,5 @@
 param(
-    [Parameter(Mandatory=$true, HelpMessage="Please specify the build variant. Possible values are 'desktop', 'server', or 'all'.")]
+    [Parameter(Mandatory = $true, HelpMessage = "Please specify the build variant. Possible values are 'desktop', 'server', or 'all'.")]
     [string]$Variant, # build variant, possible values: desktop, server, all
     [string]$Version = "dev"  # Optional parameter with a default value
 )
@@ -15,7 +15,8 @@ $buildDir = ".\build_output\windows"
 New-Item -ItemType Directory -Force -Path "$buildDir"
 $buildDir = (Resolve-Path "$buildDir").Path
 
-function CreateServerBuild {
+function CreateServerBuild
+{
     Push-Location
 
     $serverBuild = "$buildDir\server"
@@ -32,14 +33,15 @@ function CreateServerBuild {
     # server build
     go build `
         -ldflags "
-            -X 'github.com/RA341/gouda/service.Version=$Version'
+            -X 'github.com/RA341/gouda/pkg.Version=$Version'
             -H=windowsgui" `
-        -o "$serverBuild\gouda-server-windows.exe" .
+        -o "$serverBuild\gouda-server-windows.exe" ./cmd/server
 
     Pop-Location
 }
 
-function CreateDesktopBuild {
+function CreateDesktopBuild
+{
     Push-Location
 
     $desktopBuild = "$buildDir\desktop"
@@ -71,10 +73,9 @@ function CreateDesktopBuild {
     # Desktop build
     go build -tags "systray" `
         -ldflags "
-            -X 'github.com/RA341/gouda/service.BinaryType=desktop'
-            -X 'github.com/RA341/gouda/service.Version=$Version'
+            -X 'github.com/RA341/gouda/pkg.Version=$Version'
             -H=windowsgui" `
-        -o "$desktopBuild\gouda-desktop.exe" .
+        -o "$desktopBuild\gouda-desktop.exe" ./cmd/desktop
 
     Set-Location $desktopBuild
 
@@ -88,32 +89,37 @@ function CreateDesktopBuild {
     Pop-Location
 }
 
-    Push-Location
 
-    # build flutter web and copy to gouda src
-    $webSrc = "../src/web"
-    Write-Host "Building Flutter for web..." -ForegroundColor Green
-    Set-Location "../brie"
-    flutter pub get
-    flutter build web --release
+Push-Location
 
-    New-Item -ItemType Directory -Force -Path $webSrc
-    # clean web dir before copying
-    Remove-Item -Path "$webSrc/*" -Recurse -Force -ErrorAction SilentlyContinue
-    Copy-Item "build/web/*" $webSrc -Force -Recurse
+# build flutter web and copy to gouda src
+$webSrc = "../src/cmd/web"
+Write-Host "Building Flutter for web..." -ForegroundColor Green
+Set-Location "../brie"
+flutter pub get
+flutter build web --release
 
-    Pop-Location
+New-Item -ItemType Directory -Force -Path $webSrc
+# clean web dir before copying
+Remove-Item -Path "$webSrc/*" -Recurse -Force -ErrorAction SilentlyContinue
+Copy-Item "build/web/*" $webSrc -Force -Recurse
+
+Pop-Location
 
 
-CreateFlutterWeb
 
-if ($Variant.Equals("desktop") -or $Variant.Equals("all")) {
+
+if ($Variant.Equals("desktop") -or $Variant.Equals("all"))
+{
     CreateDesktopBuild
 }
 
-if ($Variant.Equals("server") -or $Variant.Equals("all")) {
+if ($Variant.Equals("server") -or $Variant.Equals("all"))
+{
     CreateServerBuild
-} else {
+}
+else
+{
     Write-Host "Invalid build variant: $Variant" -ForegroundColor Red
 }
 
