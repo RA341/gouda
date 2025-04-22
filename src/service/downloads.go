@@ -133,7 +133,7 @@ func (d *DownloadService) MonitorDownloads() {
 		log.Info().Msgf("Torrent Check timeout is set at %v", torrentCheckTimeout)
 	}
 
-	ticker := time.NewTicker(2 * time.Second)
+	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 
 	for {
