@@ -54,18 +54,20 @@ RUN apt-get update && \
 # Copy web build
 COPY --from=f_web_builder /app/build/web/* ./web/
 # Build gouda desktop variant
-RUN go build -tags systray -ldflags "-s -w \
-        -X github.com/RA341/gouda/utils.Version=$BV \
-        -X github.com/RA341/gouda/service.BinaryType=desktop \
-        " -o gouda-desktop
+RUN go build -ldflags "-s -w \
+        -X github.com/RA341/gouda/pkg.Version=$BV \
+        " -o gouda-desktop \
+    ./cmd/desktop
+
 
 FROM go_base AS go_server_builder
 # Copy web build
 COPY --from=f_web_builder /app/build/web/* ./web/
 # Build gouda server variant
 RUN go build -ldflags "-s -w \
-        -X github.com/RA341/gouda/utils.Version=$BV" \
-        -o gouda-server-linux
+        -X github.com/RA341/gouda/pkg.Version=$BV" \
+        -o gouda-server-linux  \
+    ./cmd/server
 
 FROM ubuntu:latest AS final_builder
 
