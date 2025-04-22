@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/RA341/gouda/compare/v1.6.1...v1.6.2) (2025-04-22)
+
+
+### Bug Fixes
+
+* loop time to a 1 minute ([8c609ef](https://github.com/RA341/gouda/commit/8c609efc69ef06b1b09564469fd9315a12dfa2cd))
+
 ## [1.6.1](https://github.com/RA341/gouda/compare/v1.6.0...v1.6.1) (2025-03-13)
 
 
