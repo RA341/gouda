@@ -1,4 +1,4 @@
-package media_requests
+package downloads
 
 import (
 	"fmt"

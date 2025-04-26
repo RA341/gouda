@@ -6,17 +6,17 @@ import (
 	"fmt"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	"github.com/RA341/gouda/internal/download_clients"
-	media "github.com/RA341/gouda/internal/media_requests"
+	"github.com/RA341/gouda/internal/downloads"
 	"github.com/RA341/gouda/pkg"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
 type Handler struct {
-	downloadSrv *media.DownloadService
+	downloadSrv *downloads.DownloadService
 }
 
-func NewSettingsHandler(downloadService *media.DownloadService) *Handler {
+func NewSettingsHandler(downloadService *downloads.DownloadService) *Handler {
 	return &Handler{downloadSrv: downloadService}
 }
 
@@ -44,7 +44,7 @@ func (setSrv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1
 
 	setSrv.downloadSrv.SetClient(client)
 
-	pkg.SetSettings(settings)
+	setSettings(settings)
 	// Save the configuration to file
 	err = viper.WriteConfig()
 	if err != nil {

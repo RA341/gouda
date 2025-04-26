@@ -1,14 +1,17 @@
-package pkg
+package database
 
 import (
+	"github.com/RA341/gouda/internal/category"
+	"github.com/RA341/gouda/internal/downloads"
+	"github.com/RA341/gouda/pkg"
 	"github.com/rs/zerolog/log"
-	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-func InitDB() (*gorm.DB, error) {
-	dbPath := DbPath.GetStr()
+func connectDB() (*gorm.DB, error) {
+	dbPath := pkg.DbPath.GetStr()
 	if dbPath == "" {
 		log.Fatal().Msgf("db_path is empty")
 	}
@@ -19,7 +22,7 @@ func InitDB() (*gorm.DB, error) {
 	config := &gorm.Config{
 		PrepareStmt: true,
 	}
-	if IsDebugMode() {
+	if pkg.IsDebugMode() {
 		config = &gorm.Config{
 			Logger:      logger.Default.LogMode(logger.Info),
 			PrepareStmt: true,
@@ -30,6 +33,13 @@ func InitDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	err = db.AutoMigrate(&category.Categories{}, &downloads.Media{})
+	if err != nil {
+		log.Fatal().Err(err).Msgf("Failed migrate tables")
+	}
+
+	log.Info().Msgf("Migration complete")
 
 	_, err = db.DB()
 	if err != nil {

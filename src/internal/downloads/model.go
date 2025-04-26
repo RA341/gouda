@@ -1,4 +1,4 @@
-package media_requests
+package downloads
 
 import (
 	v1 "github.com/RA341/gouda/generated/media_requests/v1"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type RequestTorrent struct {
+type Media struct {
 	gorm.Model
 	FileLink            string `json:"file_link" gorm:"-"`
 	Author              string `json:"author"`
@@ -17,11 +17,10 @@ type RequestTorrent struct {
 	MAMBookID           uint64 `json:"mam_book_id" gorm:"uniqueIndex;check:mam_book_id > 0"`
 	Status              string `json:"status,omitempty"`
 	TorrentId           string `json:"torrent_id,omitempty"`
-	TimeRunning         uint   `json:"time_running,omitempty"`
 	TorrentFileLocation string `json:"torrent_file_loc,omitempty"`
 }
 
-func (r *RequestTorrent) ToProto() *v1.Media {
+func (r *Media) ToProto() *v1.Media {
 	return &v1.Media{
 		ID:                  uint64(r.ID),
 		Author:              r.Author,
@@ -33,25 +32,21 @@ func (r *RequestTorrent) ToProto() *v1.Media {
 		FileLink:            r.FileLink,
 		Status:              r.Status,
 		TorrentId:           r.TorrentId,
-		TimeRunning:         uint32(r.TimeRunning),
 		TorrentFileLocation: r.TorrentFileLocation,
-		CreatedAt:           r.UpdatedAt.Format(time.RFC3339),
+		CreatedAt:           r.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:           r.UpdatedAt.Format(time.RFC3339),
 	}
 }
 
-func (r *RequestTorrent) FromProto(proto *v1.Media) *RequestTorrent {
-	return &RequestTorrent{
-		Model:               gorm.Model{ID: r.ID},
-		FileLink:            proto.FileLink,
-		Author:              proto.Author,
-		Book:                proto.Book,
-		Series:              proto.Series,
-		SeriesNumber:        uint(proto.SeriesNumber),
-		Category:            proto.Category,
-		MAMBookID:           proto.MamBookId,
-		Status:              proto.Status,
-		TorrentId:           proto.TorrentId,
-		TimeRunning:         uint(proto.TimeRunning),
-		TorrentFileLocation: proto.TorrentFileLocation,
-	}
+func (r *Media) FromProto(proto *v1.Media) {
+	r.FileLink = proto.FileLink
+	r.Author = proto.Author
+	r.Book = proto.Book
+	r.Series = proto.Series
+	r.SeriesNumber = uint(proto.SeriesNumber)
+	r.Category = proto.Category
+	r.MAMBookID = proto.MamBookId
+	r.Status = proto.Status
+	r.TorrentId = proto.TorrentId
+	r.TorrentFileLocation = proto.TorrentFileLocation
 }

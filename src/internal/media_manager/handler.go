@@ -1,21 +1,22 @@
-package media_requests
+package media_manager
 
 import (
 	"connectrpc.com/connect"
 	"context"
 	v1 "github.com/RA341/gouda/generated/media_requests/v1"
+	"github.com/RA341/gouda/internal/downloads"
 	"github.com/rs/zerolog/log"
 )
 
-type MediaRequestHandler struct {
-	mr *MediaRequestService
+type MediaManagerHandler struct {
+	mr *MediaManagerService
 }
 
-func NewMediaRequestHandler(mr *MediaRequestService) *MediaRequestHandler {
-	return &MediaRequestHandler{mr}
+func NewMediaManagerHandler(mr *MediaManagerService) *MediaManagerHandler {
+	return &MediaManagerHandler{mr}
 }
 
-func (handler *MediaRequestHandler) Search(_ context.Context, req *connect.Request[v1.SearchRequest]) (*connect.Response[v1.SearchResponse], error) {
+func (handler *MediaManagerHandler) Search(_ context.Context, req *connect.Request[v1.SearchRequest]) (*connect.Response[v1.SearchResponse], error) {
 	query := req.Msg.MediaQuery
 	results, err := handler.mr.Search(query)
 	if err != nil {
@@ -26,7 +27,7 @@ func (handler *MediaRequestHandler) Search(_ context.Context, req *connect.Reque
 	return connect.NewResponse(&v1.SearchResponse{Results: medias}), nil
 }
 
-func (handler *MediaRequestHandler) List(_ context.Context, req *connect.Request[v1.ListRequest]) (*connect.Response[v1.ListResponse], error) {
+func (handler *MediaManagerHandler) List(_ context.Context, req *connect.Request[v1.ListRequest]) (*connect.Response[v1.ListResponse], error) {
 	limit := req.Msg.Limit
 	offset := req.Msg.Offset
 	totalCount, results, err := handler.mr.List(int(limit), int(offset))
@@ -40,7 +41,7 @@ func (handler *MediaRequestHandler) List(_ context.Context, req *connect.Request
 	}), nil
 }
 
-func (handler *MediaRequestHandler) Delete(_ context.Context, req *connect.Request[v1.DeleteRequest]) (*connect.Response[v1.DeleteResponse], error) {
+func (handler *MediaManagerHandler) Delete(_ context.Context, req *connect.Request[v1.DeleteRequest]) (*connect.Response[v1.DeleteResponse], error) {
 	err := handler.mr.Delete(uint(req.Msg.RequestId))
 	if err != nil {
 		return nil, err
@@ -48,10 +49,12 @@ func (handler *MediaRequestHandler) Delete(_ context.Context, req *connect.Reque
 	return connect.NewResponse(&v1.DeleteResponse{}), nil
 }
 
-func (handler *MediaRequestHandler) Edit(_ context.Context, req *connect.Request[v1.EditRequest]) (*connect.Response[v1.EditResponse], error) {
+func (handler *MediaManagerHandler) Edit(_ context.Context, req *connect.Request[v1.EditRequest]) (*connect.Response[v1.EditResponse], error) {
 	media := req.Msg.Media
-	mediaRequest := (&RequestTorrent{}).FromProto(media)
-	err := handler.mr.Edit(mediaRequest)
+	var mediaRequest downloads.Media
+	mediaRequest.FromProto(media)
+
+	err := handler.mr.Edit(&mediaRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +62,7 @@ func (handler *MediaRequestHandler) Edit(_ context.Context, req *connect.Request
 	return connect.NewResponse(&v1.EditResponse{}), nil
 }
 
-func (handler *MediaRequestHandler) Exists(_ context.Context, req *connect.Request[v1.ExistsRequest]) (*connect.Response[v1.ExistsResponse], error) {
+func (handler *MediaManagerHandler) Exists(_ context.Context, req *connect.Request[v1.ExistsRequest]) (*connect.Response[v1.ExistsResponse], error) {
 	mamID := req.Msg.MamId
 	exists, err := handler.mr.Exists(mamID)
 	if err != nil {
@@ -68,7 +71,7 @@ func (handler *MediaRequestHandler) Exists(_ context.Context, req *connect.Reque
 	return connect.NewResponse(&v1.ExistsResponse{Media: exists.ToProto()}), nil
 }
 
-func (handler *MediaRequestHandler) Retry(_ context.Context, req *connect.Request[v1.RetryRequest]) (*connect.Response[v1.RetryResponse], error) {
+func (handler *MediaManagerHandler) Retry(_ context.Context, req *connect.Request[v1.RetryRequest]) (*connect.Response[v1.RetryResponse], error) {
 	mediaId := req.Msg.ID
 	retry, err := handler.mr.Retry(mediaId)
 	if err != nil {
@@ -80,10 +83,12 @@ func (handler *MediaRequestHandler) Retry(_ context.Context, req *connect.Reques
 	}), nil
 }
 
-func (handler *MediaRequestHandler) AddMedia(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
-	mediaRequest := (&RequestTorrent{}).FromProto(req.Msg.GetMedia())
+func (handler *MediaManagerHandler) AddMedia(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
+	var mediaRequest downloads.Media
+	mediaRequest.FromProto(req.Msg.GetMedia())
 	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
-	err := handler.mr.AddMedia(mediaRequest)
+
+	err := handler.mr.AddMedia(&mediaRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +96,7 @@ func (handler *MediaRequestHandler) AddMedia(_ context.Context, req *connect.Req
 	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
 
-func convertToGRPCMedia(requests []*RequestTorrent) []*v1.Media {
+func convertToGRPCMedia(requests []*downloads.Media) []*v1.Media {
 	var medias []*v1.Media
 
 	for _, torrent := range requests {
