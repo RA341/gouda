@@ -2,10 +2,10 @@
 package main
 
 import (
-	"github.com/RA341/gouda/desktop"
+	"github.com/RA341/gouda/tray"
 	"github.com/getlantern/systray"
 )
 
 func InitSystray() {
-	systray.Run(desktop.OnReady, desktop.OnExit)
+	systray.Run(tray.OnReady, tray.OnExit)
 }
