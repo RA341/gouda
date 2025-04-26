@@ -22,8 +22,5 @@ func RunInDesktopMode() {
 }
 
 func IsDesktopMode() bool {
-	if Flavour == Desktop {
-		return true
-	}
-	return false
+	return Flavour == Desktop
 }

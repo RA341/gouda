@@ -75,9 +75,9 @@ func getConfigDir(baseDir string) string {
 func setupConfigOptions(configDir, baseDir string) error {
 	// misc application files
 	// set database path
-	viper.SetDefault(DbPathKey, fmt.Sprintf("%s/gouda_database.db", configDir))
+	viper.SetDefault(DbPath.s(), fmt.Sprintf("%s/gouda_database.db", configDir))
 	// create log directory
-	viper.SetDefault(LogDirKey, fmt.Sprintf("%s/logs/gouda.log", configDir))
+	viper.SetDefault(LogDir.s(), fmt.Sprintf("%s/logs/gouda.log", configDir))
 
 	// create apikey
 	key, err := GenerateToken(32)
@@ -86,38 +86,37 @@ func setupConfigOptions(configDir, baseDir string) error {
 	}
 
 	// Set general settings
-	viper.SetDefault(ApiKeyKey, key)
-	viper.SetDefault(ServerPortKey, "9862")
-	viper.SetDefault(DownloadCheckTimeoutKey, 15)
-	viper.SetDefault(IgnoreTimeoutKey, false)
+	viper.SetDefault(ApiKey.s(), key)
+	viper.SetDefault(ServerPort.s(), "9862")
+	viper.SetDefault(DownloadCheckTimeout.s(), 15)
+	viper.SetDefault(IgnoreTimeout.s(), false)
 	if IsDesktopMode() {
-		viper.SetDefault(ExitOnCloseKey, false)
+		viper.SetDefault(ExitOnClose.s(), false)
 	}
 
 	// user section
-	viper.SetDefault(UsernameKey, getStringEnvOrDefault("GOUDA_USERNAME", "admin"))
-	viper.SetDefault(PasswordKey, getStringEnvOrDefault("GOUDA_PASS", "admin"))
-	viper.SetDefault(UserUidKey, getIntEnvOrDefault("GOUDA_UID", 1000))
-	viper.SetDefault(GroupUidKey, getIntEnvOrDefault("GOUDA_UID", 1000))
+	viper.SetDefault(Username.s(), getStringEnvOrDefault("GOUDA_USERNAME", "admin"))
+	viper.SetDefault(Password.s(), getStringEnvOrDefault("GOUDA_PASS", "admin"))
+	viper.SetDefault(UserUid.s(), getIntEnvOrDefault("GOUDA_UID", 1000))
+	viper.SetDefault(GroupUid.s(), getIntEnvOrDefault("GOUDA_UID", 1000)) // Note: Using GOUDA_UID for both User and Group UID default
 
 	// directory setup
 	defaultDir := getStringEnvOrDefault("GOUDA_COMPLETE_DIR", fmt.Sprintf("%s/%s", baseDir, "complete"))
-	viper.SetDefault(CompleteFolderKey, defaultDir)
+	viper.SetDefault(CompleteFolder.s(), defaultDir)
 
 	downloadDir := getStringEnvOrDefault("GOUDA_DOWNLOAD_DIR", fmt.Sprintf("%s/%s", baseDir, "downloads"))
-	viper.SetDefault(DownloadFolderKey, downloadDir)
+	viper.SetDefault(DownloadFolder.s(), downloadDir)
 
 	torrentDir := getStringEnvOrDefault("GOUDA_TORRENT_DIR", fmt.Sprintf("%s/%s", baseDir, "torrents"))
-	viper.SetDefault(TorrentsFolderKey, torrentDir)
+	viper.SetDefault(TorrentsFolder.s(), torrentDir)
 
 	err = makeDirectories([]string{torrentDir, defaultDir, downloadDir})
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create directories: %w", err)
 	}
 
 	return nil
 }
-
 func makeDirectories(dirs []string) error {
 	for _, dir := range dirs {
 		err := os.MkdirAll(dir, DefaultFilePerm)
