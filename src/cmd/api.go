@@ -12,7 +12,7 @@ import (
 	settingsrpc "github.com/RA341/gouda/generated/settings/v1/v1connect"
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/RA341/gouda/internal/category"
-	media "github.com/RA341/gouda/internal/media_requests"
+	media "github.com/RA341/gouda/internal/media_manager"
 	"github.com/RA341/gouda/internal/settings"
 	"github.com/RA341/gouda/pkg"
 	"github.com/rs/cors"
@@ -95,7 +95,7 @@ func SetupGRPCEndpoints() *http.ServeMux {
 		},
 		// media requests
 		func() (string, http.Handler) {
-			return mediarpc.NewMediaRequestServiceHandler(media.NewMediaRequestHandler(mediaReq), authInterceptor)
+			return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(mediaReq), authInterceptor)
 		},
 	}
 

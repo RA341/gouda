@@ -2,30 +2,25 @@ package cmd
 
 import (
 	"github.com/RA341/gouda/internal/category"
+	"github.com/RA341/gouda/internal/database"
 	"github.com/RA341/gouda/internal/download_clients"
-	"github.com/RA341/gouda/internal/media_requests"
+	"github.com/RA341/gouda/internal/downloads"
+	manager "github.com/RA341/gouda/internal/media_manager"
 	"github.com/RA341/gouda/pkg"
 	"github.com/rs/zerolog/log"
-	"gorm.io/gorm"
 )
 
-func initServices() (*category.Service, *media_requests.DownloadService, *media_requests.MediaRequestService) {
-	db, err := pkg.InitDB()
+func initServices() (*category.Service, *downloads.DownloadService, *manager.MediaManagerService) {
+	db, err := database.NewDBService()
 	if err != nil {
-		log.Fatal().Err(err).Msgf("Failed to start database")
+		log.Fatal().Err(err).Msgf("Failed to connect to database")
 	}
-
-	err = migrate(db)
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Failed migrate tables")
-	}
-	log.Info().Msgf("Migration complete")
 
 	client := initDownloadClient()
 
 	catSrv := category.NewCategoryService(db)
-	downloadSrv := media_requests.NewDownloadService(db, client)
-	mediaReqSrv := media_requests.NewMediaRequestService(db, downloadSrv)
+	downloadSrv := downloads.NewDownloadService(db, client)
+	mediaReqSrv := manager.NewMediaManagerService(db, downloadSrv)
 
 	return catSrv, downloadSrv, mediaReqSrv
 }
@@ -41,14 +36,6 @@ func initDownloadClient() download_clients.DownloadClient {
 			log.Info().Msgf("Loaded torrent client %s", pkg.TorrentType.GetStr())
 			return client
 		}
-	}
-	return nil
-}
-
-func migrate(db *gorm.DB) error {
-	err := db.AutoMigrate(&category.Categories{}, &media_requests.RequestTorrent{})
-	if err != nil {
-		return err
 	}
 	return nil
 }
