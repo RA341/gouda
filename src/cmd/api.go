@@ -12,17 +12,15 @@ import (
 	settingsrpc "github.com/RA341/gouda/generated/settings/v1/v1connect"
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/RA341/gouda/internal/category"
+	"github.com/RA341/gouda/internal/config"
 	media "github.com/RA341/gouda/internal/media_manager"
 	"github.com/RA341/gouda/internal/settings"
-	"github.com/RA341/gouda/pkg"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"io/fs"
 	"net/http"
-	"os"
-	"path/filepath"
 )
 
 //go:embed web
@@ -30,7 +28,7 @@ var frontendDir embed.FS
 
 // StartServerWithAddr starts the grpc server using the base addr/port from config automatically
 func StartServerWithAddr() {
-	baseUrl := fmt.Sprintf(":%s", pkg.ServerPort.GetStr())
+	baseUrl := fmt.Sprintf(":%s", config.ServerPort.GetStr())
 	log.Info().Str("Listening on:", baseUrl).Msg("")
 
 	if err := StartServer(baseUrl); err != nil {
@@ -44,6 +42,7 @@ func StartServer(baseUrl string) error {
 	// serve frontend dir
 	log.Info().Msgf("Setting up ui files")
 	grpcRouter.Handle("/", getFrontendDir(frontendDir))
+	log.Info().Msgf("gouda initialized successfully")
 
 	middleware := cors.New(cors.Options{
 		AllowedOrigins:      []string{"*"},
@@ -53,12 +52,7 @@ func StartServer(baseUrl string) error {
 		ExposedHeaders:      connectcors.ExposedHeaders(),
 	})
 
-	log.Info(). // todo move this to a info method in pkg/info.go
-			Str("flavour", string(pkg.Flavour)).
-			Str("version", pkg.Version).
-			Str("binary_path", filepath.Base(os.Args[0])).
-			Msgf("gouda initialized successfully")
-
+	log.Info().Str("addr", baseUrl).Msg("starting server....")
 	// Use h2c to serve HTTP/2 without TLS
 	return http.ListenAndServe(
 		baseUrl,
