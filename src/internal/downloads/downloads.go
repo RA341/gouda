@@ -2,8 +2,8 @@ package downloads
 
 import (
 	"fmt"
+	"github.com/RA341/gouda/internal/config"
 	dc "github.com/RA341/gouda/internal/download_clients"
-	"github.com/RA341/gouda/pkg"
 	"github.com/rs/zerolog/log"
 	"os"
 	"path/filepath"
@@ -39,10 +39,10 @@ func (d *DownloadService) AddTorrent(request *Media, torrentFilePath string) err
 		d.SetClient(client)
 	}
 
-	downloadsDir, err := filepath.Abs(pkg.DownloadFolder.GetStr())
+	downloadsDir, err := filepath.Abs(config.DownloadFolder.GetStr())
 	if err != nil {
-		log.Error().Err(err).Str("Path", pkg.DownloadFolder.GetStr()).Msgf("Unable to determine absolute path")
-		return fmt.Errorf("unable to determine absolute path of downloads folder %s", pkg.DownloadFolder.GetStr())
+		log.Error().Err(err).Str("Path", config.DownloadFolder.GetStr()).Msgf("Unable to determine absolute path")
+		return fmt.Errorf("unable to determine absolute path of downloads folder %s", config.DownloadFolder.GetStr())
 	}
 
 	torrentId, err := d.client.DownloadTorrent(torrentFilePath, downloadsDir, request.Category)
@@ -118,8 +118,8 @@ func (d *DownloadService) monitorDownloads() {
 }
 
 func (d *DownloadService) setupTimeCheckFunc() func(req *Media) (time.Duration, bool) {
-	torrentCheckTimeout := time.Minute * pkg.DownloadCheckTimeout.GetDuration()
-	ignoreTimeout := pkg.IgnoreTimeout.GetBool()
+	torrentCheckTimeout := time.Minute * config.DownloadCheckTimeout.GetDuration()
+	ignoreTimeout := config.IgnoreTimeout.GetBool()
 	if ignoreTimeout {
 		log.Info().
 			Bool("ignore_timeout", ignoreTimeout).
@@ -187,7 +187,7 @@ func (d *DownloadService) checkStatus(torrentStatus dc.TorrentStatus, exceedsMax
 }
 
 func (d *DownloadService) GetTorrentFileLocation(request *Media, downloadFile bool) (string, error) {
-	torrentDir := pkg.TorrentsFolder.GetStr()
+	torrentDir := config.TorrentsFolder.GetStr()
 
 	file := request.TorrentFileLocation
 	if downloadFile {
@@ -214,7 +214,7 @@ func (d *DownloadService) GetTorrentFileLocation(request *Media, downloadFile bo
 }
 
 func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus *dc.TorrentStatus) error {
-	destPath := pkg.CompleteFolder.GetStr()
+	destPath := config.CompleteFolder.GetStr()
 	catPath := fmt.Sprintf("%s/%s", destPath, torrentRequest.Category)
 	destPath = fmt.Sprintf("%s/%s/%s", catPath, torrentRequest.Author, torrentRequest.Book)
 
@@ -228,8 +228,8 @@ func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus 
 		return err
 	}
 
-	sourceUID := pkg.UserUid.GetInt()
-	sourceGID := pkg.GroupUid.GetInt()
+	sourceUID := config.UserUid.GetInt()
+	sourceGID := config.GroupUid.GetInt()
 	log.Info().Msgf("Changing file perm to %d:%d", sourceUID, sourceGID)
 	err = RecursiveChown(catPath, sourceUID, sourceGID)
 	if err != nil {

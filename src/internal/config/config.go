@@ -1,18 +1,19 @@
-package pkg
+package config
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/RA341/gouda/internal/info"
+	"github.com/RA341/gouda/pkg"
+	"github.com/RA341/gouda/pkg/logger"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
-// loadEnv load .env file
 func loadEnv() {
 	err := godotenv.Load()
 	if err != nil {
@@ -26,7 +27,7 @@ func InitConfig() {
 	configDir := getConfigDir(baseDir)
 	defer func() {
 		// reinitialize logger with log file output, once a log directory has been set by viper
-		InitFileLogger()
+		logger.InitFileLogger(LogDir.GetStr())
 	}()
 
 	viper.SetConfigName("config")
@@ -80,7 +81,7 @@ func setupConfigOptions(configDir, baseDir string) error {
 	viper.SetDefault(LogDir.s(), fmt.Sprintf("%s/logs/gouda.log", configDir))
 
 	// create apikey
-	key, err := GenerateToken(32)
+	key, err := pkg.GenerateToken(32)
 	if err != nil {
 		log.Fatal().Msgf("Failed to create api key")
 	}
@@ -90,7 +91,7 @@ func setupConfigOptions(configDir, baseDir string) error {
 	viper.SetDefault(ServerPort.s(), "9862")
 	viper.SetDefault(DownloadCheckTimeout.s(), 15)
 	viper.SetDefault(IgnoreTimeout.s(), false)
-	if IsDesktopMode() {
+	if info.IsDesktopMode() {
 		viper.SetDefault(ExitOnClose.s(), false)
 	}
 
@@ -158,11 +159,8 @@ func getIntEnvOrDefault(key string, defaultVal int) int {
 	return atoi
 }
 
-func GenerateToken(len int) (string, error) {
-	b := make([]byte, len)
-	_, err := rand.Read(b)
-	if err != nil {
-		return "", err
-	}
-	return hex.EncodeToString(b), nil
+// GetConfigDir logfile is set to the main gouda config path,
+// we get the base dir from that for desktop mode
+func GetConfigDir() string {
+	return filepath.Dir(LogDir.GetStr())
 }

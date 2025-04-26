@@ -29,8 +29,6 @@ var frontendDir embed.FS
 // StartServerWithAddr starts the grpc server using the base addr/port from config automatically
 func StartServerWithAddr() {
 	baseUrl := fmt.Sprintf(":%s", config.ServerPort.GetStr())
-	log.Info().Str("Listening on:", baseUrl).Msg("")
-
 	if err := StartServer(baseUrl); err != nil {
 		log.Fatal().Err(err).Msgf("Failed to start server")
 	}
@@ -38,11 +36,11 @@ func StartServerWithAddr() {
 
 // StartServer starts the grpc server on baseUrl
 func StartServer(baseUrl string) error {
-	grpcRouter := SetupGRPCEndpoints()
-	// serve frontend dir
+	grpcRouter := setupGRPCEndpoints()
+
 	log.Info().Msgf("Setting up ui files")
 	grpcRouter.Handle("/", getFrontendDir(frontendDir))
-	log.Info().Msgf("gouda initialized successfully")
+	log.Info().Msgf("Gouda initialized successfully")
 
 	middleware := cors.New(cors.Options{
 		AllowedOrigins:      []string{"*"},
@@ -60,19 +58,11 @@ func StartServer(baseUrl string) error {
 	)
 }
 
-func getFrontendDir(dir embed.FS) http.Handler {
-	subFS, err := fs.Sub(dir, "web")
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Failed to load frontend directory")
-	}
-	return http.FileServer(http.FS(subFS))
-}
-
-func SetupGRPCEndpoints() *http.ServeMux {
+func setupGRPCEndpoints() *http.ServeMux {
 	cat, down, mediaReq := initServices()
 
 	mux := http.NewServeMux()
-	authInterceptor := connect.WithInterceptors(NewAuthInterceptor())
+	authInterceptor := connect.WithInterceptors(newAuthInterceptor())
 
 	services := []func() (string, http.Handler){
 		// auth
@@ -101,7 +91,7 @@ func SetupGRPCEndpoints() *http.ServeMux {
 	return mux
 }
 
-func NewAuthInterceptor() connect.UnaryInterceptorFunc {
+func newAuthInterceptor() connect.UnaryInterceptorFunc {
 	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
 		return func(
 			ctx context.Context,
@@ -120,4 +110,12 @@ func NewAuthInterceptor() connect.UnaryInterceptorFunc {
 		}
 	}
 	return interceptor
+}
+
+func getFrontendDir(dir embed.FS) http.Handler {
+	subFS, err := fs.Sub(dir, "web")
+	if err != nil {
+		log.Fatal().Err(err).Msgf("Failed to load frontend directory")
+	}
+	return http.FileServer(http.FS(subFS))
 }

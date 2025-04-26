@@ -2,8 +2,8 @@ package database
 
 import (
 	"github.com/RA341/gouda/internal/category"
+	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
-	"github.com/RA341/gouda/pkg"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -11,7 +11,7 @@ import (
 )
 
 func connectDB() (*gorm.DB, error) {
-	dbPath := pkg.DbPath.GetStr()
+	dbPath := config.DbPath.GetStr()
 	if dbPath == "" {
 		log.Fatal().Msgf("db_path is empty")
 	}
@@ -19,17 +19,17 @@ func connectDB() (*gorm.DB, error) {
 	// Configure SQLite to use WAL mode
 	connectionStr := sqlite.Open(dbPath + "?_journal_mode=WAL&_busy_timeout=5000")
 
-	config := &gorm.Config{
+	conf := &gorm.Config{
 		PrepareStmt: true,
 	}
-	if pkg.IsDebugMode() {
-		config = &gorm.Config{
+	if config.IsDebugMode() {
+		conf = &gorm.Config{
 			Logger:      logger.Default.LogMode(logger.Info),
 			PrepareStmt: true,
 		}
 	}
 
-	db, err := gorm.Open(connectionStr, config)
+	db, err := gorm.Open(connectionStr, conf)
 	if err != nil {
 		return nil, err
 	}

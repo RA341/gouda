@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func InitConfigAndLogger() {
+func Setup() {
 	logger.InitConsoleLogger()
 	config.InitConfig()
 }

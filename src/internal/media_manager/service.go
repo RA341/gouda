@@ -2,8 +2,8 @@ package media_manager
 
 import (
 	"fmt"
+	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
-	"github.com/RA341/gouda/pkg"
 	"github.com/rs/zerolog/log"
 	"os"
 )
@@ -31,7 +31,7 @@ func (srv *MediaManagerService) Search(query string) ([]*downloads.Media, error)
 }
 
 func (srv *MediaManagerService) List(limit, offset int) (int64, []*downloads.Media, error) {
-	if pkg.IsDebugMode() {
+	if config.IsDebugMode() {
 		log.Debug().Int("limit", limit).Int("offset", offset).Msg("history query limits")
 	}
 

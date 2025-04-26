@@ -2,7 +2,7 @@ package download_clients
 
 import (
 	"fmt"
-	"github.com/RA341/gouda/pkg"
+	"github.com/RA341/gouda/internal/config"
 	"github.com/rs/zerolog/log"
 )
 
@@ -22,11 +22,11 @@ func GetSupportedClients() []string {
 
 func getTorrentClientInfo() *TorrentClient {
 	return &TorrentClient{
-		User:     pkg.TorrentUser.GetStr(),
-		Password: pkg.TorrentPassword.GetStr(),
-		Protocol: pkg.TorrentProtocol.GetStr(),
-		Host:     pkg.TorrentHost.GetStr(),
-		Type:     pkg.TorrentType.GetStr(),
+		User:     config.TorrentUser.GetStr(),
+		Password: config.TorrentPassword.GetStr(),
+		Protocol: config.TorrentProtocol.GetStr(),
+		Host:     config.TorrentHost.GetStr(),
+		Type:     config.TorrentType.GetStr(),
 	}
 }
 

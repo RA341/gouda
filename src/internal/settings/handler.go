@@ -5,9 +5,10 @@ import (
 	"context"
 	"fmt"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
+	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/download_clients"
 	"github.com/RA341/gouda/internal/downloads"
-	"github.com/RA341/gouda/pkg"
+	"github.com/RA341/gouda/internal/info"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
@@ -22,8 +23,8 @@ func NewSettingsHandler(downloadService *downloads.DownloadService) *Handler {
 
 func (setSrv *Handler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return connect.NewResponse(&v1.GetMetadataResponse{
-		Version:    pkg.Version,
-		BinaryType: string(pkg.Flavour),
+		Version:    info.Version,
+		BinaryType: string(info.Flavour),
 	}), nil
 }
 
@@ -59,29 +60,29 @@ func (setSrv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1
 func (setSrv *Handler) ListSettings(_ context.Context, _ *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error) {
 	res := connect.NewResponse(&v1.Settings{
 		// general
-		ApiKey:               pkg.ApiKey.GetStr(),
-		ServerPort:           pkg.ServerPort.GetStr(),
-		DownloadCheckTimeout: pkg.DownloadCheckTimeout.GetUint64(),
-		IgnoreTimeout:        pkg.IgnoreTimeout.GetBool(),
+		ApiKey:               config.ApiKey.GetStr(),
+		ServerPort:           config.ServerPort.GetStr(),
+		DownloadCheckTimeout: config.DownloadCheckTimeout.GetUint64(),
+		IgnoreTimeout:        config.IgnoreTimeout.GetBool(),
 		// folder settings
-		CompleteFolder: pkg.CompleteFolder.GetStr(),
-		DownloadFolder: pkg.DownloadFolder.GetStr(),
-		TorrentsFolder: pkg.TorrentsFolder.GetStr(),
+		CompleteFolder: config.CompleteFolder.GetStr(),
+		DownloadFolder: config.DownloadFolder.GetStr(),
+		TorrentsFolder: config.TorrentsFolder.GetStr(),
 		// user auth
-		Username: pkg.Username.GetStr(),
-		Password: pkg.Password.GetStr(),
-		UserUid:  pkg.UserUid.GetUint64(),
-		GroupUid: pkg.GroupUid.GetUint64(),
+		Username: config.Username.GetStr(),
+		Password: config.Password.GetStr(),
+		UserUid:  config.UserUid.GetUint64(),
+		GroupUid: config.GroupUid.GetUint64(),
 		// torrent stuff
-		TorrentName:     pkg.TorrentType.GetStr(),
-		TorrentHost:     pkg.TorrentHost.GetStr(),
-		TorrentProtocol: pkg.TorrentProtocol.GetStr(),
-		TorrentPassword: pkg.TorrentPassword.GetStr(),
-		TorrentUser:     pkg.TorrentUser.GetStr(),
+		TorrentName:     config.TorrentType.GetStr(),
+		TorrentHost:     config.TorrentHost.GetStr(),
+		TorrentProtocol: config.TorrentProtocol.GetStr(),
+		TorrentPassword: config.TorrentPassword.GetStr(),
+		TorrentUser:     config.TorrentUser.GetStr(),
 	})
 
-	if pkg.IsDesktopMode() {
-		res.Msg.ExitOnClose = pkg.ExitOnClose.GetBool()
+	if info.IsDesktopMode() {
+		res.Msg.ExitOnClose = config.ExitOnClose.GetBool()
 	}
 
 	return res, nil
