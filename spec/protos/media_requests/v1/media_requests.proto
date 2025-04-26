@@ -71,7 +71,7 @@ message Media {
   string file_link = 12;
   string status = 8;
   string torrent_id = 9;
-  uint32 time_running = 10;
   string torrent_file_location = 11;
   string createdAt = 13;
+  string updatedAt = 14;
 }
