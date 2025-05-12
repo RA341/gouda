@@ -37,10 +37,7 @@ func StartServerWithAddr() {
 // StartServer starts the grpc server on baseUrl
 func StartServer(baseUrl string) error {
 	grpcRouter := setupGRPCEndpoints()
-
-	log.Info().Msgf("Setting up ui files")
 	grpcRouter.Handle("/", getFrontendDir(frontendDir))
-	log.Info().Msgf("Gouda initialized successfully")
 
 	middleware := cors.New(cors.Options{
 		AllowedOrigins:      []string{"*"},
@@ -50,6 +47,7 @@ func StartServer(baseUrl string) error {
 		ExposedHeaders:      connectcors.ExposedHeaders(),
 	})
 
+	log.Info().Msgf("Gouda initialized successfully")
 	log.Info().Str("addr", baseUrl).Msg("starting server....")
 	// Use h2c to serve HTTP/2 without TLS
 	return http.ListenAndServe(

@@ -8,14 +8,8 @@ import (
 )
 
 func main() {
-	info.RunInDesktopMode()
-	info.PrintInfo()
-	cmd.Setup()
+	cmd.Setup(info.Desktop)
 	go cmd.StartServerWithAddr() // server in background
-	InitSystray()
-}
-
-// InitSystray systray will run indefinitely
-func InitSystray() {
+	// systray will block
 	systray.Run(tray.OnReady, tray.OnExit)
 }

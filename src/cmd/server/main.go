@@ -6,8 +6,6 @@ import (
 )
 
 func main() {
-	info.RunInServerMode()
-	info.PrintInfo()
-	cmd.Setup()
+	cmd.Setup(info.Server)
 	cmd.StartServerWithAddr()
 }

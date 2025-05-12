@@ -6,13 +6,16 @@ import (
 	"github.com/RA341/gouda/internal/database"
 	"github.com/RA341/gouda/internal/download_clients"
 	"github.com/RA341/gouda/internal/downloads"
+	"github.com/RA341/gouda/internal/info"
 	manager "github.com/RA341/gouda/internal/media_manager"
 	"github.com/RA341/gouda/pkg/logger"
 	"github.com/rs/zerolog/log"
 )
 
-func Setup() {
+func Setup(mode info.BinaryType) {
 	logger.InitConsoleLogger()
+	info.SetMode(mode)
+	info.PrintInfo()
 	config.InitConfig()
 }
 
