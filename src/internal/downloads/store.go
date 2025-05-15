@@ -1,7 +1,13 @@
 package downloads
 
+//type Store interface {
+//	Save(media *Media) error
+//	GetMediaByTorrentId(torrentId string, media *Media) error
+//	GetDownloadingMediaTorrentIdList(results *[]string) error
+//}
+
 type Store interface {
 	Save(media *Media) error
-	GetDownloadingMediaById(id string, media *Media) error
-	GetAllDownloadingMediaIds(results []string) error
+	GetMediaByTorrentId(torrentId string) (*Media, error)
+	GetDownloadingMediaTorrentIdList() ([]string, error)
 }

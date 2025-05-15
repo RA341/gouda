@@ -6,18 +6,27 @@ import (
 	"time"
 )
 
+type MediaStatus string
+
+const (
+	Downloading = "downloading"
+	Complete    = "completed"
+	Error       = "error"
+)
+
 type Media struct {
 	gorm.Model
-	FileLink            string `json:"file_link" gorm:"-"`
-	Author              string `json:"author"`
-	Book                string `json:"book"`
-	Series              string `json:"series"`
-	SeriesNumber        uint   `json:"series_number"`
-	Category            string `json:"category"`
-	MAMBookID           uint64 `json:"mam_book_id" gorm:"uniqueIndex;check:mam_book_id > 0"`
-	Status              string `json:"status,omitempty"`
-	TorrentId           string `json:"torrent_id,omitempty"`
-	TorrentFileLocation string `json:"torrent_file_loc,omitempty"`
+	FileLink            string `gorm:"-"`
+	Author              string
+	Book                string
+	Series              string
+	SeriesNumber        uint
+	Category            string
+	MAMBookID           uint64 `gorm:"uniqueIndex;check:mam_book_id > 0"`
+	Status              MediaStatus
+	ErrorMessage        string
+	TorrentId           string
+	TorrentFileLocation string
 }
 
 func (r *Media) ToProto() *v1.Media {
@@ -30,7 +39,7 @@ func (r *Media) ToProto() *v1.Media {
 		Category:            r.Category,
 		MamBookId:           r.MAMBookID,
 		FileLink:            r.FileLink,
-		Status:              r.Status,
+		Status:              string(r.Status),
 		TorrentId:           r.TorrentId,
 		TorrentFileLocation: r.TorrentFileLocation,
 		CreatedAt:           r.CreatedAt.Format(time.RFC3339),
@@ -38,6 +47,9 @@ func (r *Media) ToProto() *v1.Media {
 	}
 }
 
+// FromProto loads media from v1.Media message
+//
+// Status cannot be modified
 func (r *Media) FromProto(proto *v1.Media) {
 	r.FileLink = proto.FileLink
 	r.Author = proto.Author
@@ -46,7 +58,6 @@ func (r *Media) FromProto(proto *v1.Media) {
 	r.SeriesNumber = uint(proto.SeriesNumber)
 	r.Category = proto.Category
 	r.MAMBookID = proto.MamBookId
-	r.Status = proto.Status
 	r.TorrentId = proto.TorrentId
 	r.TorrentFileLocation = proto.TorrentFileLocation
 }
