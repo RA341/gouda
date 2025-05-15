@@ -14,27 +14,30 @@ import (
 	"strconv"
 )
 
-func loadEnv() {
+func Load() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Warn().Err(err).Msgf("could not load .env file, if you do not have a \".env\" file you can safely ignore this warning")
 	}
-}
 
-func InitConfig() {
-	loadEnv()
 	baseDir := getBaseDir()
 	configDir := getConfigDir(baseDir)
+
 	defer func() {
+		level := "info" // default
+		val, ok := os.LookupEnv("GOUDA_LOG_LEVEL")
+		if ok {
+			level = val
+		}
 		// reinitialize logger with log file output, once a log directory has been set by viper
-		logger.InitFileLogger(LogDir.GetStr())
+		logger.FileConsoleLogger(LogDir.GetStr(), level)
 	}()
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("json")
 	viper.AddConfigPath(configDir)
 
-	err := setupConfigOptions(configDir, baseDir)
+	err = setupConfigOptions(configDir, baseDir)
 	if err != nil {
 		log.Fatal().Err(err).Msg("could not setup config options")
 	}
