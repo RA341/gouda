@@ -96,7 +96,7 @@ func (handler *MediaManagerHandler) AddMedia(_ context.Context, req *connect.Req
 	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
 
-func convertToGRPCMedia(requests []*downloads.Media) []*v1.Media {
+func convertToGRPCMedia(requests []downloads.Media) []*v1.Media {
 	var medias []*v1.Media
 
 	for _, torrent := range requests {

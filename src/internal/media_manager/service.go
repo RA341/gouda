@@ -17,26 +17,30 @@ func NewMediaManagerService(db Store, ds *downloads.DownloadService) *MediaManag
 	return &MediaManagerService{db: db, ds: ds}
 }
 
-func (srv *MediaManagerService) Search(query string) ([]*downloads.Media, error) {
-	log.Debug().Any("query", query).Msg("search request")
+func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
+	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
 
-	var torrents []*downloads.Media
-	err := srv.db.Search(query, torrents)
+	err := srv.ds.DownloadMedia(mediaRequest, true)
 	if err != nil {
-		return nil, err
+		mediaRequest.Status = downloads.Error
+		mediaRequest.ErrorMessage = err.Error()
+		err = srv.db.Edit(mediaRequest)
+		if err != nil {
+			log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
+			return err
+		}
 	}
 
-	log.Debug().Any("query", query).Msg("Searching media request")
-	return torrents, nil
+	log.Debug().Any("Media", mediaRequest).Msg("Adding media")
+	return nil
 }
 
-func (srv *MediaManagerService) List(limit, offset int) (int64, []*downloads.Media, error) {
+func (srv *MediaManagerService) List(limit, offset int) (int64, []downloads.Media, error) {
 	if config.IsDebugMode() {
 		log.Debug().Int("limit", limit).Int("offset", offset).Msg("history query limits")
 	}
 
-	var torrents []*downloads.Media
-	err := srv.db.ListMedia(offset, limit, torrents)
+	torrents, err := srv.db.ListMedia(offset, limit)
 	if err != nil {
 		return 0, nil, err
 	}
@@ -49,9 +53,20 @@ func (srv *MediaManagerService) List(limit, offset int) (int64, []*downloads.Med
 	return count, torrents, nil
 }
 
+func (srv *MediaManagerService) Search(query string) ([]downloads.Media, error) {
+	log.Debug().Any("query", query).Msg("search request")
+
+	results, err := srv.db.Search(query)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug().Any("query", query).Msg("Searching media request")
+	return results, nil
+}
+
 func (srv *MediaManagerService) Delete(requestId uint) error {
-	var media downloads.Media
-	err := srv.db.Get(requestId, &media)
+	media, err := srv.db.Get(requestId)
 	if err != nil {
 		return err
 	}
@@ -81,56 +96,27 @@ func (srv *MediaManagerService) Edit(mediaRequest *downloads.Media) error {
 }
 
 func (srv *MediaManagerService) Exists(mamID uint64) (*downloads.Media, error) {
-	var torrent downloads.Media
-	_, err := srv.db.Exists(mamID, &torrent)
+	torrent, _, err := srv.db.Exists(mamID)
 	if err != nil {
 		return nil, err
 	}
 
 	log.Debug().Msgf("Media Exists %d", mamID)
-	return &torrent, nil
+	return torrent, nil
 }
 
 func (srv *MediaManagerService) Retry(mediaId uint64) (*downloads.Media, error) {
-	var torrRequest downloads.Media
-	err := srv.db.Retry(mediaId, &torrRequest)
+	media, err := srv.db.Get(uint(mediaId))
 	if err != nil {
 		return nil, err
 	}
 
-	file, err := srv.ds.GetTorrentFileLocation(&torrRequest, false)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get torrent file location\n\n%v", err.Error())
-	}
-
-	err = srv.ds.AddTorrent(&torrRequest, file)
+	err = srv.ds.DownloadMedia(media, false)
 	if err != nil {
 		return nil, fmt.Errorf("error retrying torrent %v", err.Error())
 	}
 
-	log.Debug().Any("Media", torrRequest).Msg("Retrying message")
+	log.Debug().Any("Media", media).Msg("Retrying media")
 
-	return &torrRequest, nil
-}
-
-func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
-	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
-
-	file, err := srv.ds.GetTorrentFileLocation(mediaRequest, true)
-	if err != nil {
-		return err
-	}
-
-	err = srv.ds.AddTorrent(mediaRequest, file)
-	if err != nil {
-		mediaRequest.Status = fmt.Sprintf("failed %s", err.Error())
-		err = srv.db.Edit(mediaRequest)
-		if err != nil {
-			log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
-			return err
-		}
-	}
-
-	log.Debug().Any("Media", mediaRequest).Msg("Adding media")
-	return nil
+	return media, nil
 }
