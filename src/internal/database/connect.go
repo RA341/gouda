@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func connectDB() (*gorm.DB, error) {
+func connect() (*gorm.DB, error) {
 	dbPath := config.DbPath.GetStr()
 	if dbPath == "" {
 		log.Fatal().Msgf("db_path is empty")

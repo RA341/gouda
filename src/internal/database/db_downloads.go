@@ -18,28 +18,30 @@ func (d DownloadsDB) Save(media *downloads.Media) error {
 	return nil
 }
 
-func (d DownloadsDB) GetDownloadingMediaById(id string, media *downloads.Media) error {
+func (d DownloadsDB) GetMediaByTorrentId(torrentId string) (*downloads.Media, error) {
+	var media downloads.Media
 	resp := d.db.
-		Where("torrent_id = ?", id).
+		Where("torrent_id = ?", torrentId).
 		Where("status = ?", "downloading").
 		First(media)
 
 	if resp.Error != nil {
-		return resp.Error
+		return nil, resp.Error
 	}
 
-	return nil
+	return &media, nil
 }
 
-func (d DownloadsDB) GetAllDownloadingMediaIds(results []string) error {
+func (d DownloadsDB) GetDownloadingMediaTorrentIdList() ([]string, error) {
+	var results []string
 	result := d.db.
 		Model(&downloads.Media{}).
 		Where("status = ?", "downloading").
 		Pluck("torrent_id", &results)
 
 	if result.Error != nil {
-		return result.Error
+		return results, result.Error
 	}
 
-	return nil
+	return results, nil
 }

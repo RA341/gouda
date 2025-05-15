@@ -18,6 +18,8 @@ func (c *CategoryDB) Create(category *category.Categories) error {
 }
 
 func (c *CategoryDB) DeleteCategory(categoryId uint) error {
+	// perma delete, due to unique constraints
+	// normal db.Delete soft deletes https://gorm.io/docs/delete.html
 	result := c.db.Unscoped().Delete(category.Categories{}, categoryId)
 	if result.Error != nil {
 		return result.Error
@@ -25,10 +27,12 @@ func (c *CategoryDB) DeleteCategory(categoryId uint) error {
 	return nil
 }
 
-func (c *CategoryDB) ListCategories(results []category.Categories) error {
-	res := c.db.Find(results)
+func (c *CategoryDB) ListCategories() ([]category.Categories, error) {
+	var result []category.Categories
+	res := c.db.Find(&result)
 	if res.Error != nil {
-		return res.Error
+		return nil, res.Error
 	}
-	return nil
+
+	return result, nil
 }

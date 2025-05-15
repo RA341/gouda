@@ -7,7 +7,7 @@ type Service struct {
 }
 
 func NewDBService() (*Service, error) {
-	db, err := connectDB()
+	db, err := connect()
 	if err != nil {
 		return nil, err
 	}
