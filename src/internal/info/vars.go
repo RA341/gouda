@@ -1,7 +1,6 @@
 package info
 
 import (
-	"github.com/rs/zerolog/log"
 	"runtime"
 )
 
@@ -15,14 +14,9 @@ var (
 	GoVersion  = runtime.Version()
 )
 
-func RunInServerMode() {
-	Flavour = Server
-	log.Info().Msgf("running in server mode")
-}
-
-func RunInDesktopMode() {
-	Flavour = Desktop
-	log.Info().Msgf("running in desktop mode")
+func SetMode(mode BinaryType) {
+	Flavour = mode
+	//log.Info().Str("mode", string(Flavour)).Msgf("setting mode...")
 }
 
 func IsDesktopMode() bool {
