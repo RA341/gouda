@@ -1,4 +1,4 @@
-package download_clients
+package clients
 
 import (
 	"context"
@@ -33,7 +33,7 @@ func NewTransmissionClient(transmissionUrl, protocol, user, pass string) (Downlo
 
 	client := &TransmissionClient{Client: tbt}
 
-	_, _, err = client.Health()
+	_, _, err = client.Test()
 	if err != nil {
 		log.Error().Err(err).Msg("Transmission client check failed")
 		return nil, fmt.Errorf("transmission client health check failed: %s", err)
@@ -50,7 +50,7 @@ func (tm *TransmissionClient) DownloadTorrent(torrent, downloadPath, category st
 	return strconv.FormatInt(*torrentResult.ID, 10), nil
 }
 
-func (tm *TransmissionClient) Health() (string, string, error) {
+func (tm *TransmissionClient) Test() (string, string, error) {
 	ok, serverVersion, serverMinimumVersion, err := tm.Client.RPCVersion(context.Background())
 	if err != nil {
 		return "", "", err
@@ -65,7 +65,7 @@ func (tm *TransmissionClient) Health() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (tm *TransmissionClient) CheckTorrentStatus(torrentIds []string) ([]TorrentStatus, error) {
+func (tm *TransmissionClient) GetTorrentStatus(torrentIds []string) ([]TorrentStatus, error) {
 	var intIds []int64
 	for _, torrentId := range torrentIds {
 		finalId, err := strconv.Atoi(torrentId)
@@ -76,7 +76,7 @@ func (tm *TransmissionClient) CheckTorrentStatus(torrentIds []string) ([]Torrent
 		intIds = append(intIds, int64(finalId))
 	}
 
-	infos, err := tm.Client.TorrentGetAllFor(context.TODO(), intIds)
+	infos, err := tm.Client.TorrentGetAllFor(context.Background(), intIds)
 	if err != nil {
 		return []TorrentStatus{}, err
 	}

@@ -1,4 +1,4 @@
-package download_clients
+package clients
 
 import (
 	"encoding/json"
@@ -102,7 +102,7 @@ func (d DelugeClient) DownloadTorrent(torrent, downloadPath, category string) (s
 	return torrentId.(string), nil
 }
 
-func (d DelugeClient) CheckTorrentStatus(torrentId []string) ([]TorrentStatus, error) {
+func (d DelugeClient) GetTorrentStatus(torrentId []string) ([]TorrentStatus, error) {
 	payload := map[string]interface{}{
 		"method": "core.get_torrents_status",
 		"params": []interface{}{
@@ -159,7 +159,7 @@ func (d DelugeClient) CheckTorrentStatus(torrentId []string) ([]TorrentStatus, e
 	return result, nil
 }
 
-func (d DelugeClient) Health() (string, string, error) {
+func (d DelugeClient) Test() (string, string, error) {
 	// Prepare daemon.info request payload
 	payload := map[string]interface{}{
 		"method": "daemon.info",

@@ -1,4 +1,4 @@
-package download_clients
+package clients
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ func login() DownloadClient {
 		os.Exit(1)
 	}
 
-	_, _, err = client.Health()
+	_, _, err = client.Test()
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -42,7 +42,7 @@ func TestDownload(t *testing.T) {
 	}
 	log.Info().Msgf("torrent id: %s", torrentId)
 
-	status, err := client.CheckTorrentStatus([]string{torrentId})
+	status, err := client.GetTorrentStatus([]string{torrentId})
 	if err != nil {
 		log.Error().Err(err).Msg("can't check the torrent status")
 	}
@@ -53,7 +53,7 @@ func TestDownload(t *testing.T) {
 func TestStatus(t *testing.T) {
 	client := login()
 
-	status, err := client.CheckTorrentStatus([]string{""})
+	status, err := client.GetTorrentStatus([]string{""})
 	if err != nil {
 		log.Error().Err(err).Msg("can't check the torrent status")
 	}

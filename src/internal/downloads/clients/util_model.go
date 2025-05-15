@@ -1,13 +1,13 @@
-package download_clients
+package clients
 
 // todo doc strings for all functions
 
 type DownloadClient interface {
 	DownloadTorrent(torrent, downloadPath, category string) (string, error)
 
-	CheckTorrentStatus(torrentId []string) ([]TorrentStatus, error)
+	GetTorrentStatus(torrentId []string) ([]TorrentStatus, error)
 
-	Health() (string, string, error)
+	Test() (string, string, error)
 }
 
 type TorrentStatus struct {

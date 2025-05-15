@@ -1,9 +1,8 @@
-package download_clients
+package clients
 
 import (
 	"fmt"
 	"github.com/RA341/gouda/internal/config"
-	"github.com/rs/zerolog/log"
 )
 
 var supportedClients = map[string]func(host, protocol, user, password string) (DownloadClient, error){
@@ -46,6 +45,5 @@ func CheckTorrentClient(details *TorrentClient) (DownloadClient, error) {
 		return nil, err
 	}
 
-	log.Debug().Msgf("Successfully connected to %s", details.Type)
 	return client, nil
 }

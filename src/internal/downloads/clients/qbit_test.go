@@ -1,4 +1,4 @@
-package download_clients
+package clients
 
 import (
 	"fmt"
@@ -23,7 +23,7 @@ func TestQbitMain(t *testing.T) {
 		os.Exit(1)
 	}
 
-	_, _, err = qbitclient.Health()
+	_, _, err = qbitclient.Test()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -57,7 +57,7 @@ func TestQbitMain(t *testing.T) {
 		log.Error().Err(err).Msg("error downloading torrent")
 	}
 
-	status, err := qbitclient.CheckTorrentStatus([]string{torrent, torrent2, torrent3, torrent4})
+	status, err := qbitclient.GetTorrentStatus([]string{torrent, torrent2, torrent3, torrent4})
 	if err != nil {
 		log.Error().Err(err).Msg("error downloading torrent")
 	}

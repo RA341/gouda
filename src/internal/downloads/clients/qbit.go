@@ -1,4 +1,4 @@
-package download_clients
+package clients
 
 import (
 	"fmt"
@@ -57,7 +57,7 @@ func (qbitClient *QbitClient) DownloadTorrent(torrent, downloadPath, category st
 	return torrentResult, nil
 }
 
-func (qbitClient *QbitClient) Health() (string, string, error) {
+func (qbitClient *QbitClient) Test() (string, string, error) {
 	serverVersion, err := qbitClient.GetAPIVersion()
 	if err != nil {
 		return "", "", err
@@ -72,7 +72,7 @@ func (qbitClient *QbitClient) Health() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (qbitClient *QbitClient) CheckTorrentStatus(torrentIds []string) ([]TorrentStatus, error) {
+func (qbitClient *QbitClient) GetTorrentStatus(torrentIds []string) ([]TorrentStatus, error) {
 	infos, err := qbitClient.CheckStatus(torrentIds)
 	if err != nil {
 		return []TorrentStatus{}, err

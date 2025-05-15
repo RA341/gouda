@@ -1,4 +1,4 @@
-package download_clients
+package clients
 
 //
 //import (
@@ -42,9 +42,9 @@ package download_clients
 //
 //func TestHealth(t *testing.T) {
 //	t.Run("Test health", func(t *testing.T) {
-//		clientName, info, err := client.Health()
+//		clientName, info, err := client.Test()
 //		if err != nil {
-//			t.Errorf("Health check failed=%v", err)
+//			t.Errorf("Test check failed=%v", err)
 //		}
 //
 //		log.Debug().Msgf(clientName, info)
