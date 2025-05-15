@@ -123,6 +123,10 @@ jobs:
             org.opencontainers.image.version=${{ needs.tag-release.outputs.new_tag }}
           build-args: |
             VERSION=${{ needs.tag-release.outputs.new_tag }}
+            COMMIT_INFO=$(git rev-parse HEAD 2>/dev/null)
+            BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+            BRANCH=${(GITHUB_REF#refs/heads/):-unknown}
+            
 
   build-linux:
     needs: tag-release
