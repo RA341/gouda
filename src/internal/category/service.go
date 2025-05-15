@@ -23,8 +23,6 @@ func (srv *Service) CreateCategory(category string) error {
 }
 
 func (srv *Service) DeleteCategory(input *Categories) error {
-	// perma delete, due to unique constraints
-	// normal db.DeleteCategory will soft delete stuff https://gorm.io/docs/delete.html
 	if err := srv.db.DeleteCategory(input.ID); err != nil {
 		return err
 	}
@@ -34,9 +32,8 @@ func (srv *Service) DeleteCategory(input *Categories) error {
 }
 
 func (srv *Service) ListCategory() ([]Categories, error) {
-	var categories []Categories
-
-	if err := srv.db.ListCategories(categories); err != nil {
+	categories, err := srv.db.ListCategories()
+	if err != nil {
 		return nil, err
 	}
 
