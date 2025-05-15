@@ -1,4 +1,4 @@
-package settings
+package manager
 
 import (
 	"connectrpc.com/connect"
@@ -6,8 +6,8 @@ import (
 	"fmt"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	"github.com/RA341/gouda/internal/config"
-	"github.com/RA341/gouda/internal/download_clients"
 	"github.com/RA341/gouda/internal/downloads"
+	"github.com/RA341/gouda/internal/downloads/clients"
 	"github.com/RA341/gouda/internal/info"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
@@ -31,7 +31,7 @@ func (setSrv *Handler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetM
 func (setSrv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	client, err := download_clients.CheckTorrentClient(&download_clients.TorrentClient{
+	client, err := clients.CheckTorrentClient(&clients.TorrentClient{
 		User:     settings.TorrentUser,
 		Password: settings.TorrentPassword,
 		Protocol: settings.TorrentProtocol,
@@ -89,10 +89,10 @@ func (setSrv *Handler) ListSettings(_ context.Context, _ *connect.Request[v1.Lis
 }
 
 func (setSrv *Handler) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
-	clients := download_clients.GetSupportedClients()
+	supportedClients := clients.GetSupportedClients()
 
 	res := connect.NewResponse(&v1.ListSupportedClientsResponse{
-		Clients: clients,
+		Clients: supportedClients,
 	})
 
 	return res, nil

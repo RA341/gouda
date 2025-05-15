@@ -1,4 +1,4 @@
-package settings
+package manager
 
 import (
 	v1 "github.com/RA341/gouda/generated/settings/v1"
