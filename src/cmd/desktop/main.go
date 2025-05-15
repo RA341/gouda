@@ -9,7 +9,6 @@ import (
 
 func main() {
 	cmd.Setup(info.Desktop)
-	go cmd.StartServerWithAddr() // server in background
-	// systray will block
-	systray.Run(tray.OnReady, tray.OnExit)
+	go cmd.StartServerWithAddr()           // server in background
+	systray.Run(tray.OnReady, tray.OnExit) // systray will block
 }

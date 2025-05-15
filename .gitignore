@@ -10,3 +10,4 @@ build_script/build_output
 src/downloads/clients/test/downloads
 scripts_*/**/test
 /install_scripts/**/parmesan_extension.zip
+/src/internal/downloads/test/testTorrent

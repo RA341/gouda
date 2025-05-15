@@ -13,8 +13,8 @@ import (
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/RA341/gouda/internal/category"
 	"github.com/RA341/gouda/internal/config"
+	settings "github.com/RA341/gouda/internal/config/manager"
 	media "github.com/RA341/gouda/internal/media_manager"
-	"github.com/RA341/gouda/internal/settings"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/net/http2"
@@ -57,12 +57,11 @@ func StartServer(baseUrl string) error {
 }
 
 func setupGRPCEndpoints() *http.ServeMux {
-	cat, down, mediaReq := initServices()
+	cat, downloads, mediaManager := initServices()
 
 	mux := http.NewServeMux()
 	authInterceptor := connect.WithInterceptors(newAuthInterceptor())
-
-	services := []func() (string, http.Handler){
+	endpoints := []func() (string, http.Handler){
 		// auth
 		func() (string, http.Handler) {
 			return authrpc.NewAuthServiceHandler(auth.NewAuthHandler())
@@ -73,15 +72,15 @@ func setupGRPCEndpoints() *http.ServeMux {
 		},
 		// settings
 		func() (string, http.Handler) {
-			return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(down), authInterceptor)
+			return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(downloads), authInterceptor)
 		},
 		// media requests
 		func() (string, http.Handler) {
-			return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(mediaReq), authInterceptor)
+			return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(mediaManager), authInterceptor)
 		},
 	}
 
-	for _, svc := range services {
+	for _, svc := range endpoints {
 		path, handler := svc()
 		mux.Handle(path, handler)
 	}
@@ -90,11 +89,8 @@ func setupGRPCEndpoints() *http.ServeMux {
 }
 
 func newAuthInterceptor() connect.UnaryInterceptorFunc {
-	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
-		return func(
-			ctx context.Context,
-			req connect.AnyRequest,
-		) (connect.AnyResponse, error) {
+	return func(next connect.UnaryFunc) connect.UnaryFunc {
+		return func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
 			clientToken := req.Header().Get(auth.TokenHeader)
 			result, err := auth.VerifyToken(clientToken)
 
@@ -107,7 +103,6 @@ func newAuthInterceptor() connect.UnaryInterceptorFunc {
 			return next(ctx, req)
 		}
 	}
-	return interceptor
 }
 
 func getFrontendDir(dir embed.FS) http.Handler {
