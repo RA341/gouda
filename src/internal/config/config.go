@@ -31,6 +31,7 @@ func Load() {
 		}
 		// reinitialize logger with log file output, once a log directory has been set by viper
 		logger.FileConsoleLogger(LogDir.GetStr(), level)
+		log.Info().Str("log_level", level).Msg("setting log level, set GOUDA_LOG_LEVEL env to change")
 	}()
 
 	viper.SetConfigName("config")

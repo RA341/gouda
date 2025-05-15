@@ -39,14 +39,11 @@ func connect() (*gorm.DB, error) {
 		log.Fatal().Err(err).Msgf("Failed migrate tables")
 	}
 
-	log.Info().Msgf("Migration complete")
-
 	_, err = db.DB()
 	if err != nil {
 		return nil, err
 	}
 
-	log.Info().Msgf("Connected to database at: %s", dbPath)
-
+	log.Info().Str("connection", dbPath).Msg("Connected to database")
 	return db, nil
 }

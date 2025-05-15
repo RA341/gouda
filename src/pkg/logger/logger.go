@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+var showCaller = true
+
 func getConsoleWriter() zerolog.ConsoleWriter {
 	return zerolog.ConsoleWriter{
 		Out:        os.Stderr,
@@ -16,21 +18,20 @@ func getConsoleWriter() zerolog.ConsoleWriter {
 
 func getBaseLogger() zerolog.Logger {
 	env, ok := os.LookupEnv("GOUDA_LOG_SHOW_CALLER_FILE")
-	if !ok || env == "false" {
+	if !showCaller && (!ok || env == "false") {
 		return log.With().Logger().Output(getConsoleWriter())
 	}
 
 	return log.With().Caller().Logger().Output(getConsoleWriter())
 }
 
-func FileConsoleLogger(logDir, logLevel string) zerolog.Logger {
+func FileConsoleLogger(logDir, logLevel string) {
 	level, err := zerolog.ParseLevel(logLevel)
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to parse log level")
 	}
-	log.Info().Str("level", logLevel).Msg("log level is now set, this can be changed by using the GOUDA_LOG_LEVEL env")
 
-	return getBaseLogger().Output(
+	log.Logger = getBaseLogger().Output(
 		zerolog.MultiLevelWriter(
 			GetFileLogger(logDir),
 			getConsoleWriter(),
@@ -38,8 +39,8 @@ func FileConsoleLogger(logDir, logLevel string) zerolog.Logger {
 	).Level(level)
 }
 
-func ConsoleLogger() zerolog.Logger {
-	return getBaseLogger()
+func ConsoleLogger() {
+	log.Logger = getBaseLogger()
 }
 
 func GetFileLogger(logFile string) *lumberjack.Logger {
