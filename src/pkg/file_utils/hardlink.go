@@ -1,9 +1,7 @@
-package downloads
+package file_utils
 
 import (
 	"fmt"
-	"github.com/RA341/gouda/internal/config"
-	"github.com/rs/zerolog/log"
 	"io"
 	"io/fs"
 	"mime"
@@ -14,9 +12,13 @@ import (
 	"runtime"
 )
 
+var DefaultFilePerm = 0o775
+
+// RecursiveChown chowns the file/folder recursively at path
+//
+// Chowning is not supported on windows, no action will be taken if called on windows
 func RecursiveChown(path string, uid, gid int) error {
 	if runtime.GOOS == "windows" {
-		log.Warn().Msgf("Chowning is not supported on windows, no action will be taken")
 		return nil
 	}
 	// Walk the directory tree
@@ -45,7 +47,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 	}
 
 	// Create target directory if it doesn't exist
-	err = os.MkdirAll(targetDir, config.DefaultFilePerm)
+	err = os.MkdirAll(targetDir, os.FileMode(DefaultFilePerm))
 	if err != nil {
 		return fmt.Errorf("failed to create target directory: %w", err)
 	}
@@ -54,10 +56,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 	if !sourceStat.IsDir() {
 		// For single file, create the parent directory if needed
 		sourceFile := filepath.Base(sourceDir)
-		log.Debug().Msgf("Target path is: %s", sourceFile)
-
 		targetDir = fmt.Sprintf("%s/%s", targetDir, sourceFile)
-		log.Info().Err(err).Msgf("Source is a file, final dest path will be %s", targetDir)
 
 		// Create hard link for the file
 		if err := createHardLink(sourceDir, targetDir, sourceStat.Mode()); err != nil {
@@ -90,7 +89,7 @@ func HardLinkFolder(sourceDir, targetDir string) error {
 
 		// If it's a directory, create it in target with proper ownership
 		if d.IsDir() {
-			if err := os.MkdirAll(targetPath, config.DefaultFilePerm); err != nil {
+			if err := os.MkdirAll(targetPath, os.FileMode(DefaultFilePerm)); err != nil {
 				return fmt.Errorf("failed to create directory %s: %w", targetPath, err)
 			}
 
@@ -117,10 +116,7 @@ func DownloadTorrentFile(downloadLink, downloadPath string) (string, error) {
 	}
 
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Fatal().Err(err).Msgf("failed to close response body")
-		}
+		_ = Body.Close()
 	}(resp.Body)
 
 	// Get filename from Content-Disposition header
@@ -143,10 +139,7 @@ func DownloadTorrentFile(downloadLink, downloadPath string) (string, error) {
 		return "", fmt.Errorf("failed to create file: %v", err)
 	}
 	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Fatal().Err(err).Msgf("failed to close response body")
-		}
+		_ = file.Close()
 	}(file)
 
 	_, err = io.Copy(file, resp.Body)
@@ -154,7 +147,6 @@ func DownloadTorrentFile(downloadLink, downloadPath string) (string, error) {
 		return "", fmt.Errorf("failed to copy response body: %v", err)
 	}
 
-	log.Info().Msgf("Downloaded torrent file %s", filename)
 	return destPath, nil
 }
 

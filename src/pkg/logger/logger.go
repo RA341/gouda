@@ -7,29 +7,39 @@ import (
 	"os"
 )
 
-var (
-	consoleWriter = zerolog.ConsoleWriter{
+func getConsoleWriter() zerolog.ConsoleWriter {
+	return zerolog.ConsoleWriter{
 		Out:        os.Stderr,
 		TimeFormat: "2006-01-02 15:04:05",
 	}
-	baseLogger = log.With().Caller().Logger()
-)
-
-// InitConsoleLogger configures zerolog logger with some custom settings
-func InitConsoleLogger() {
-	log.Logger = consoleLogger()
 }
 
-func InitFileLogger(logDir string) {
-	log.Logger = fileConsoleLogger(logDir)
+func getBaseLogger() zerolog.Logger {
+	env, ok := os.LookupEnv("GOUDA_LOG_SHOW_CALLER_FILE")
+	if !ok || env == "false" {
+		return log.With().Logger().Output(getConsoleWriter())
+	}
+
+	return log.With().Caller().Logger().Output(getConsoleWriter())
 }
 
-func fileConsoleLogger(logDir string) zerolog.Logger {
-	return baseLogger.Output(zerolog.MultiLevelWriter(GetFileLogger(logDir), consoleWriter))
+func FileConsoleLogger(logDir, logLevel string) zerolog.Logger {
+	level, err := zerolog.ParseLevel(logLevel)
+	if err != nil {
+		log.Fatal().Err(err).Msg("unable to parse log level")
+	}
+	log.Info().Str("level", logLevel).Msg("log level is now set, this can be changed by using the GOUDA_LOG_LEVEL env")
+
+	return getBaseLogger().Output(
+		zerolog.MultiLevelWriter(
+			GetFileLogger(logDir),
+			getConsoleWriter(),
+		),
+	).Level(level)
 }
 
-func consoleLogger() zerolog.Logger {
-	return baseLogger.Output(consoleWriter)
+func ConsoleLogger() zerolog.Logger {
+	return getBaseLogger()
 }
 
 func GetFileLogger(logFile string) *lumberjack.Logger {
