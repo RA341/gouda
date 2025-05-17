@@ -23,7 +23,7 @@ func (d DownloadsDB) GetMediaByTorrentId(torrentId string) (*downloads.Media, er
 	resp := d.db.
 		Where("torrent_id = ?", torrentId).
 		Where("status = ?", "downloading").
-		First(media)
+		First(&media)
 
 	if resp.Error != nil {
 		return nil, resp.Error

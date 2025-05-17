@@ -28,7 +28,7 @@ func (m *MediaManagerDB) Search(query string) ([]downloads.Media, error) {
 		Limit(10)
 	dbQuery = buildSearchQuery(query, dbQuery)
 
-	res := dbQuery.Find(results)
+	res := dbQuery.Find(&results)
 	if res.Error != nil {
 		return nil, fmt.Errorf("unable to query database %v", dbQuery.Error.Error())
 	}
@@ -43,7 +43,7 @@ func (m *MediaManagerDB) ListMedia(offset int, limit int) ([]downloads.Media, er
 		Order("updated_at desc").
 		Offset(offset).
 		Limit(limit).
-		Find(results)
+		Find(&results)
 	if resp.Error != nil {
 		return nil, resp.Error
 	}
@@ -53,7 +53,7 @@ func (m *MediaManagerDB) ListMedia(offset int, limit int) ([]downloads.Media, er
 
 func (m *MediaManagerDB) Exists(mamId uint64) (*downloads.Media, bool, error) {
 	var media downloads.Media
-	resp := m.db.Where("mam_book_id = ?", mamId).First(media)
+	resp := m.db.Where("mam_book_id = ?", mamId).First(&media)
 	if resp.Error != nil {
 		return nil, false, resp.Error
 	}
