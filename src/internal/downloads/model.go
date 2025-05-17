@@ -29,6 +29,10 @@ type Media struct {
 	TorrentFileLocation string
 }
 
+func (r *Media) TableName() string {
+	return "request_torrents"
+}
+
 func (r *Media) ToProto() *v1.Media {
 	return &v1.Media{
 		ID:                  uint64(r.ID),
