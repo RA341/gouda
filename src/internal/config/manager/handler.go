@@ -31,7 +31,7 @@ func (setSrv *Handler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetM
 func (setSrv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	client, err := clients.CheckTorrentClient(&clients.TorrentClient{
+	client, err := clients.TestTorrentClient(&clients.TorrentClient{
 		User:     settings.TorrentUser,
 		Password: settings.TorrentPassword,
 		Protocol: settings.TorrentProtocol,
