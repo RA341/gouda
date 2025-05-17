@@ -7,8 +7,6 @@ import (
 	"os"
 )
 
-var showCaller = true
-
 func getConsoleWriter() zerolog.ConsoleWriter {
 	return zerolog.ConsoleWriter{
 		Out:        os.Stderr,
@@ -18,7 +16,7 @@ func getConsoleWriter() zerolog.ConsoleWriter {
 
 func getBaseLogger() zerolog.Logger {
 	env, ok := os.LookupEnv("GOUDA_LOG_SHOW_CALLER_FILE")
-	if !showCaller && (!ok || env == "false") {
+	if !ok || env == "false" {
 		return log.With().Logger().Output(getConsoleWriter())
 	}
 
