@@ -35,20 +35,20 @@ type DelugeClient struct {
 	id        int
 }
 
-func NewDelugeClient(delugeUrl, protocol, _, pass string) (DownloadClient, error) {
-	client := DelugeClient{
+func NewDelugeClient(client *TorrentClient) (DownloadClient, error) {
+	deluge := DelugeClient{
 		client:    resty.New().SetTimeout(time.Second * 5),
-		jsonURL:   fmt.Sprintf("%s://%s/json", protocol, delugeUrl),
-		uploadURL: fmt.Sprintf("%s://%s/upload", protocol, delugeUrl),
+		jsonURL:   fmt.Sprintf("%s://%s/json", client.Protocol, client.Host),
+		uploadURL: fmt.Sprintf("%s://%s/upload", client.Protocol, client.Host),
 		id:        1,
 	}
 
-	err := client.loginDeluge(pass)
+	err := deluge.loginDeluge(client.Password)
 	if err != nil {
 		return nil, fmt.Errorf("unable to login: %v", err)
 	}
 
-	return client, nil
+	return deluge, nil
 }
 
 func (d DelugeClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {

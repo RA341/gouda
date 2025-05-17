@@ -15,7 +15,9 @@ func login() DownloadClient {
 	transmissionUrl := "localhost:8112"
 	protocol := "http"
 
-	client, err := NewDelugeClient(transmissionUrl, protocol, user, pass)
+	client, err := NewDelugeClient(&TorrentClient{
+		Host: transmissionUrl, Protocol: protocol, User: user, Password: pass,
+	})
 	if err != nil {
 		log.Error().Err(err).Msg("can't initialize the client")
 		// Log error and exit if we can't initialize the client

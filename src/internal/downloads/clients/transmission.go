@@ -13,12 +13,12 @@ type TransmissionClient struct {
 	Client *transmissionrpc.Client
 }
 
-func NewTransmissionClient(transmissionUrl, protocol, user, pass string) (DownloadClient, error) {
+func NewTransmissionClient(client *TorrentClient) (DownloadClient, error) {
 	clientStr := ""
-	if user != "" && pass != "" {
-		clientStr = fmt.Sprintf("%s://%s:%s@%s/transmission/rpc", protocol, user, pass, transmissionUrl)
+	if client.User != "" && client.Password != "" {
+		clientStr = fmt.Sprintf("%s://%s:%s@%s/transmission/rpc", client.Protocol, client.User, client.Password, client.Host)
 	} else {
-		clientStr = fmt.Sprintf("%s://%s/transmission/rpc", protocol, transmissionUrl)
+		clientStr = fmt.Sprintf("%s://%s/transmission/rpc", client.Protocol, client.Host)
 	}
 
 	endpoint, err := url.Parse(clientStr)
@@ -31,15 +31,15 @@ func NewTransmissionClient(transmissionUrl, protocol, user, pass string) (Downlo
 		panic(err)
 	}
 
-	client := &TransmissionClient{Client: tbt}
+	transmission := &TransmissionClient{Client: tbt}
 
-	_, _, err = client.Test()
+	_, _, err = transmission.Test()
 	if err != nil {
 		log.Error().Err(err).Msg("Transmission client check failed")
 		return nil, fmt.Errorf("transmission client health check failed: %s", err)
 	}
 
-	return client, nil
+	return transmission, nil
 }
 
 func (tm *TransmissionClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {

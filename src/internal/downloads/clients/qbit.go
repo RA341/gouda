@@ -31,21 +31,21 @@ type QbitClient struct {
 	cookie         *http.Cookie
 }
 
-func NewQbitClient(qbitUrl, protocol, user, pass string) (DownloadClient, error) {
-	clientStr := fmt.Sprintf("%s://%s", protocol, qbitUrl)
-	client := &QbitClient{
+func NewQbitClient(client *TorrentClient) (DownloadClient, error) {
+	clientStr := fmt.Sprintf("%s://%s", client.Protocol, client.Host)
+	qbit := &QbitClient{
 		BaseURL: clientStr,
 		defaultHeaders: &map[string]string{
-			"Referer": fmt.Sprintf("%s://%s", protocol, qbitUrl),
+			"Referer": fmt.Sprintf("%s://%s", client.Protocol, client.Host),
 		},
 	}
 
-	err := client.Login(user, pass)
+	err := qbit.Login(client.User, client.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to login: %s", err)
 	}
 
-	return client, nil
+	return qbit, nil
 }
 
 func (qbitClient *QbitClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
