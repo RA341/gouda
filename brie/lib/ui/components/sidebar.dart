@@ -23,7 +23,7 @@ class VerticalNavBar extends ConsumerWidget {
             onDestinationSelected: (int index) =>
                 ref.read(pageIndexListProvider.notifier).navigateToPage(index),
             labelType: labelType,
-            leading: GoudaHeader(),
+            // leading: GoudaHeader(),
             destinations: [
               NavigationRailDestination(
                 icon: Icon(Icons.home_outlined, size: iconsSize),
