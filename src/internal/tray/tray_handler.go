@@ -21,7 +21,12 @@ var (
 //go:embed assets/cheese.ico
 var systrayIcon []byte
 
-func OnReady() {
+// Run calls systray.Run, and will block indefinitely until exit
+func Run() {
+	systray.Run(onReady, onExit)
+}
+
+func onReady() {
 	systray.SetTitle("Gouda Launcher")
 	systray.SetTooltip("Gouda is Running")
 	systray.SetIcon(systrayIcon)
@@ -64,7 +69,7 @@ func OnReady() {
 	}()
 }
 
-func OnExit() {
+func onExit() {
 	log.Info().Msg("Exiting gouda goodbye!")
 }
 
