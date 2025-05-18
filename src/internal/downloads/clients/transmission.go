@@ -42,8 +42,21 @@ func NewTransmissionClient(client *TorrentClient) (DownloadClient, error) {
 	return transmission, nil
 }
 
-func (tm *TransmissionClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
+// DownloadTorrentWithFile should not be use magnet links func: DownloadTorrentWithMagnet
+func (tm *TransmissionClient) DownloadTorrentWithFile(torrent, downloadPath, _ string) (string, error) {
 	torrentResult, err := tm.Client.TorrentAddFileDownloadDir(context.Background(), torrent, downloadPath)
+	if err != nil {
+		return "", err
+	}
+	return strconv.FormatInt(*torrentResult.ID, 10), nil
+}
+
+func (tm *TransmissionClient) DownloadTorrentWithMagnet(magnet, downloadPath, category string) (string, error) {
+	torrentResult, err := tm.Client.TorrentAdd(context.Background(), transmissionrpc.TorrentAddPayload{
+		Filename:    &magnet,
+		DownloadDir: &downloadPath,
+		Labels:      []string{category},
+	})
 	if err != nil {
 		return "", err
 	}
@@ -65,7 +78,7 @@ func (tm *TransmissionClient) Test() (string, string, error) {
 		serverVersion, transmissionrpc.RPCVersion), nil
 }
 
-func (tm *TransmissionClient) GetTorrentStatus(torrentIds []string) ([]TorrentStatus, error) {
+func (tm *TransmissionClient) GetTorrentStatus(torrentIds ...string) ([]TorrentStatus, error) {
 	var intIds []int64
 	for _, torrentId := range torrentIds {
 		finalId, err := strconv.Atoi(torrentId)
@@ -84,17 +97,19 @@ func (tm *TransmissionClient) GetTorrentStatus(torrentIds []string) ([]TorrentSt
 	var results []TorrentStatus
 
 	for _, info := range infos {
-		complete := false
+		status := Downloading
 		if info.Status.String() == "seeding" {
-			complete = true
+			status = Complete
+		} else if info.Status.String() == "error" {
+			status = Error
 		}
 
 		results = append(results, TorrentStatus{
-			ID:               strconv.FormatInt(*info.ID, 10),
-			Name:             *info.Name,
-			DownloadPath:     *info.DownloadDir,
-			DownloadComplete: complete,
-			Status:           info.Status.String(),
+			ID:           strconv.FormatInt(*info.ID, 10),
+			Name:         *info.Name,
+			DownloadPath: *info.DownloadDir,
+			ParsedStatus: status,
+			ClientStatus: info.Status.String(),
 		})
 	}
 
