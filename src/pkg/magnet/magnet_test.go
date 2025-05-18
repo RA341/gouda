@@ -2,6 +2,7 @@ package magnet
 
 import (
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -27,20 +28,33 @@ func TestTorrentFileToMagnet(t *testing.T) {
 	}
 }
 
+func TestAdd(t *testing.T) {
+	runTestTorrentFileToMagnet(t, testCase{
+		torrentFile: "./torrent_files/absolution.torrent",
+		magnet:      "",
+	})
+}
+
 func runTestTorrentFileToMagnet(t *testing.T, testcase testCase) {
-	magnet, err := TorrentFileToMagnet(testcase.torrentFile)
+	open, err := os.Open(testcase.torrentFile)
+	if err != nil {
+		t.Fatal("failed to open torrent file:", err)
+		return
+	}
+
+	magnet, err := TorrentFileToMagnet(open)
 	if err != nil {
 		t.Fatal(err)
 		return
 	}
 
-	actual, err := decodeMagnetURI(magnet)
+	actual, err := DecodeMagnetURL(magnet)
 	if err != nil {
 		t.Fatal(err)
 		return
 	}
 
-	expected, err := decodeMagnetURI(testcase.magnet)
+	expected, err := DecodeMagnetURL(testcase.magnet)
 	if err != nil {
 		t.Fatal(err)
 		return

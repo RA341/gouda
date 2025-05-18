@@ -6,8 +6,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/jackpal/bencode-go"
+	"io"
 	"net/url"
-	"os"
 	"strings"
 )
 
@@ -24,12 +24,7 @@ import (
 */
 
 // TorrentFileToMagnet converts a .torrent file to a magnet link string.
-func TorrentFileToMagnet(torrentFilePath string) (string, error) {
-	data, err := os.Open(torrentFilePath)
-	if err != nil {
-		return "", fmt.Errorf("failed to read torrent file '%s': %w", torrentFilePath, err)
-	}
-
+func TorrentFileToMagnet(data io.Reader) (string, error) {
 	tmp, err := bencode.Decode(data)
 	if err != nil {
 		return "", fmt.Errorf("failed to unmarshal torrent data: %w", err)
@@ -92,16 +87,16 @@ func TorrentFileToMagnet(torrentFilePath string) (string, error) {
 	return magnetLink.String(), nil
 }
 
-type urlComponents struct {
+type TorrentComponents struct {
 	InfoHash    string   // Hex-encoded info hash (from the first urn:btih: found)
 	DisplayName string   // dn (Display Name)
 	Trackers    []string // tr (Tracker URLs)
 	ExactTopics []string // All xt (Exact Topic) parameters
 }
 
-// decodeMagnetURI parses a magnet URI string and extracts its components.
-func decodeMagnetURI(magnetURI string) (urlComponents, error) {
-	var components = urlComponents{}
+// DecodeMagnetURL parses a magnet URI string and extracts its components.
+func DecodeMagnetURL(magnetURI string) (TorrentComponents, error) {
+	var components = TorrentComponents{}
 	parsedURL, err := url.Parse(magnetURI)
 	if err != nil {
 		return components, fmt.Errorf("failed to parse magnet URI: %w", err)
