@@ -31,13 +31,12 @@ func TestDownloadService(t *testing.T) {
 
 	srv := setupTestService()
 	var testCase = Media{
-		Author:              "test author",
-		Book:                "test book",
-		Series:              "test series",
-		SeriesNumber:        1,
-		Category:            "test",
-		MAMBookID:           123123,
-		TorrentFileLocation: torrentFile,
+		Author:       "test author",
+		Book:         "test book",
+		Series:       "test series",
+		SeriesNumber: 1,
+		Category:     "test",
+		MAMBookID:    123123,
 	}
 
 	err = srv.DownloadMedia(&testCase, false)
@@ -46,6 +45,17 @@ func TestDownloadService(t *testing.T) {
 		return
 	}
 
+}
+
+func TestDownloadTorrentFile(t *testing.T) {
+	link := "https://webtorrent.io/torrents/big-buck-bunny.torrent"
+	_, err := downloadAndConvertToMagnetLink(link)
+	if err != nil {
+		t.Fatal(err)
+		return
+	}
+
+	// todo verify magnet link
 }
 
 func setupTestService() *DownloadService {
@@ -61,7 +71,7 @@ type TestDownloadClient struct {
 	torrentList pkg.Map[string, tor]
 }
 
-func (t *TestDownloadClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
+func (t *TestDownloadClient) DownloadTorrentWithFile(torrent, downloadPath, category string) (string, error) {
 	hasher := fnv.New32a()
 	_, err := hasher.Write([]byte(torrent))
 	if err != nil {
@@ -96,11 +106,11 @@ func (t *TestDownloadClient) GetTorrentStatus(torrentId []string) ([]clients.Tor
 		}
 
 		torrents = append(torrents, clients.TorrentStatus{
-			ID:               torrent,
-			Name:             value.torrent,
-			DownloadPath:     value.downloadPath,
-			DownloadComplete: value.complete,
-			Status:           "no status test client",
+			ID:           torrent,
+			Name:         value.torrent,
+			DownloadPath: value.downloadPath,
+			ParsedStatus: value.complete,
+			ClientStatus: "no status test client",
 		})
 	}
 
