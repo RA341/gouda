@@ -12,3 +12,4 @@ scripts_*/**/test
 /install_scripts/**/parmesan_extension.zip
 /src/internal/downloads/test/testTorrent
 /src/internal/downloads/clients/utils-docker-compose.yml
+/**/.idea
