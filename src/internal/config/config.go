@@ -15,13 +15,9 @@ import (
 )
 
 func Load() {
-	err := godotenv.Load()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Warn().Err(err).Msgf("could not load .env file, if you do not have a \".env\" file you can safely ignore this warning")
 	}
-
-	baseDir := getBaseDir()
-	configDir := getConfigDir(baseDir)
 
 	defer func() {
 		level := "info" // default
@@ -33,6 +29,12 @@ func Load() {
 		logger.FileConsoleLogger(LogDir.GetStr(), level)
 		log.Info().Str("log_level", level).Msg("setting log level, set GOUDA_LOG_LEVEL env to change")
 	}()
+
+	baseDir, err := getBaseDir()
+	if err != nil {
+		log.Fatal().Err(err).Msgf("could not get base dir")
+	}
+	configDir := getConfigDir(baseDir)
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("json")
@@ -132,12 +134,12 @@ func makeDirectories(dirs []string) error {
 	return nil
 }
 
-func getBaseDir() string {
+func getBaseDir() (string, error) {
 	baseDir := "./appdata"
 	if os.Getenv("IS_DOCKER") != "" {
 		baseDir = "/appdata"
 	}
-	return baseDir
+	return filepath.Abs(baseDir)
 }
 
 func getStringEnvOrDefault(key, defaultVal string) string {
