@@ -16,17 +16,17 @@ const (
 
 type Media struct {
 	gorm.Model
-	FileLink            string `gorm:"-"`
-	Author              string
-	Book                string
-	Series              string
-	SeriesNumber        uint
-	Category            string
-	MAMBookID           uint64 `gorm:"uniqueIndex;check:mam_book_id > 0"`
-	Status              MediaStatus
-	ErrorMessage        string
-	TorrentId           string
-	TorrentFileLocation string
+	FileLink          string `gorm:"-"`
+	Author            string
+	Book              string
+	Series            string
+	SeriesNumber      uint
+	Category          string
+	MAMBookID         uint64 `gorm:"uniqueIndex;check:mam_book_id > 0"`
+	Status            MediaStatus
+	ErrorMessage      string
+	TorrentId         string
+	TorrentMagentLink string
 }
 
 func (r *Media) TableName() string {
@@ -45,7 +45,7 @@ func (r *Media) ToProto() *v1.Media {
 		FileLink:            r.FileLink,
 		Status:              string(r.Status),
 		TorrentId:           r.TorrentId,
-		TorrentFileLocation: r.TorrentFileLocation,
+		TorrentFileLocation: r.TorrentMagentLink,
 		CreatedAt:           r.CreatedAt.Format(time.RFC3339),
 		UpdatedAt:           r.UpdatedAt.Format(time.RFC3339),
 	}
@@ -63,5 +63,5 @@ func (r *Media) FromProto(proto *v1.Media) {
 	r.Category = proto.Category
 	r.MAMBookID = proto.MamBookId
 	r.TorrentId = proto.TorrentId
-	r.TorrentFileLocation = proto.TorrentFileLocation
+	r.TorrentMagentLink = proto.TorrentFileLocation
 }
