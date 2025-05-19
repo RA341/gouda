@@ -36,7 +36,7 @@ type DelugeClient struct {
 }
 
 func NewDelugeClient(client *TorrentClient) (DownloadClient, error) {
-	deluge := DelugeClient{
+	deluge := &DelugeClient{
 		client:    resty.New().SetTimeout(time.Second * 5),
 		jsonURL:   fmt.Sprintf("%s://%s/json", client.Protocol, client.Host),
 		uploadURL: fmt.Sprintf("%s://%s/upload", client.Protocol, client.Host),
@@ -51,11 +51,11 @@ func NewDelugeClient(client *TorrentClient) (DownloadClient, error) {
 	return deluge, nil
 }
 
-func (d DelugeClient) DownloadTorrentWithMagnet(magnet, downloadPath, category string) (string, error) {
+func (d *DelugeClient) DownloadTorrentWithMagnet(magnet, downloadPath, category string) (string, error) {
 	return d.addTorrent(magnet, downloadPath, category)
 }
 
-func (d DelugeClient) DownloadTorrentWithFile(torrent, downloadPath, category string) (string, error) {
+func (d *DelugeClient) DownloadTorrentWithFile(torrent, downloadPath, category string) (string, error) {
 	uploadedFilePath, err := d.uploadFile(torrent)
 	if err != nil {
 		log.Error().Err(err).Msg("upload file error")
@@ -66,7 +66,7 @@ func (d DelugeClient) DownloadTorrentWithFile(torrent, downloadPath, category st
 }
 
 // filepath can be url or a previously uploaded torrent file
-func (d DelugeClient) addTorrent(filePath string, downloadPath string, category string) (string, error) {
+func (d *DelugeClient) addTorrent(filePath string, downloadPath string, category string) (string, error) {
 	// Prepare the add torrent request
 	payload := map[string]interface{}{
 		"method": "web.add_torrents",
@@ -111,7 +111,7 @@ func (d DelugeClient) addTorrent(filePath string, downloadPath string, category 
 	return torrentId.(string), nil
 }
 
-func (d DelugeClient) GetTorrentStatus(torrentId ...string) ([]TorrentStatus, error) {
+func (d *DelugeClient) GetTorrentStatus(torrentId ...string) ([]TorrentStatus, error) {
 	payload := map[string]interface{}{
 		"method": "core.get_torrents_status",
 		"params": []interface{}{
@@ -170,7 +170,7 @@ func (d DelugeClient) GetTorrentStatus(torrentId ...string) ([]TorrentStatus, er
 	return result, nil
 }
 
-func (d DelugeClient) Test() (string, string, error) {
+func (d *DelugeClient) Test() (string, string, error) {
 	// Prepare daemon.info request payload
 	payload := map[string]interface{}{
 		"method": "daemon.info",
@@ -191,7 +191,7 @@ func (d DelugeClient) Test() (string, string, error) {
 	return "", "", nil
 }
 
-func (d DelugeClient) loginDeluge(password string) error {
+func (d *DelugeClient) loginDeluge(password string) error {
 	payload := map[string]interface{}{
 		"method": "auth.login",
 		"params": []string{password},
@@ -213,22 +213,28 @@ func (d DelugeClient) loginDeluge(password string) error {
 		return fmt.Errorf("login failed: %v", loginResp.Error)
 	}
 
+	d.userId = loginResp.ID
+
 	return nil
 }
 
-func (d DelugeClient) uploadFile(torrentPath string) (string, error) {
+func (d *DelugeClient) uploadFile(torrentPath string) (string, error) {
 	type Response struct {
 		Success bool     `json:"success"`
 		Files   []string `json:"files"`
 	}
 
-	var loginResp Response
 	resp, err := d.client.R().
 		SetFile("file", torrentPath).
-		SetResult(&loginResp).
 		Post(d.uploadURL)
 	if err != nil {
 		return "", fmt.Errorf("unable to upload torrent file")
+	}
+
+	var loginResp Response
+	err = json.Unmarshal(resp.Bytes(), &loginResp)
+	if err != nil {
+		return "", err
 	}
 
 	if !loginResp.Success || resp.IsError() {

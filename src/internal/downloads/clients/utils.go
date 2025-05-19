@@ -10,7 +10,7 @@ type ClientInit func(info *TorrentClient) (DownloadClient, error)
 var supportedClients = map[string]ClientInit{
 	"transmission": NewTransmissionClient,
 	"qbit":         NewQbitClient,
-	"deluge":       NewDelugeClient,
+	//"deluge":       NewDelugeClient, // todo deluge is broken
 }
 
 func GetSupportedClients() []string {

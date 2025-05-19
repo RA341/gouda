@@ -28,7 +28,7 @@ func TestDelugeClient(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	delugeUrl := extractExposedPort(t, container, delugeNATPort)
-	delugeUrl = "localhost:" + delugeWebuiPort
+	//delugeUrl = "localhost:" + delugeWebuiPort
 	t.Log("delugeUrl: ", delugeUrl)
 
 	client, err := NewDelugeClient(&TorrentClient{
