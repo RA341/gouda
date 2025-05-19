@@ -18,9 +18,9 @@ var (
 )
 
 const (
-	user = "admin"
+	qbitTestUser = "admin"
 	// password is set in qbit_test_config.conf which is expected to be copied to the container
-	pass = "admin123"
+	qbitTestPass = "admin123"
 )
 
 func TestQbitClient(t *testing.T) {
@@ -37,7 +37,7 @@ func TestQbitClient(t *testing.T) {
 	t.Log("qbit url: ", "http://"+qbitUrl)
 
 	qbit, err := NewQbitClient(&TorrentClient{
-		Host: qbitUrl, Protocol: protocol, User: user, Password: pass,
+		Host: qbitUrl, Protocol: protocol, User: qbitTestUser, Password: qbitTestPass,
 	})
 	assert.NoError(t, err)
 
