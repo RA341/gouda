@@ -3,8 +3,8 @@ package clients
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog/log"
+	"resty.dev/v3"
 	"strings"
 	"time"
 )
@@ -32,7 +32,7 @@ type DelugeClient struct {
 	client    *resty.Client
 	jsonURL   string
 	uploadURL string
-	id        int
+	userId    int
 }
 
 func NewDelugeClient(client *TorrentClient) (DownloadClient, error) {
@@ -40,7 +40,7 @@ func NewDelugeClient(client *TorrentClient) (DownloadClient, error) {
 		client:    resty.New().SetTimeout(time.Second * 5),
 		jsonURL:   fmt.Sprintf("%s://%s/json", client.Protocol, client.Host),
 		uploadURL: fmt.Sprintf("%s://%s/upload", client.Protocol, client.Host),
-		id:        1,
+		userId:    1,
 	}
 
 	err := deluge.loginDeluge(client.Password)
@@ -51,20 +51,29 @@ func NewDelugeClient(client *TorrentClient) (DownloadClient, error) {
 	return deluge, nil
 }
 
-func (d DelugeClient) DownloadTorrent(torrent, downloadPath, category string) (string, error) {
+func (d DelugeClient) DownloadTorrentWithMagnet(magnet, downloadPath, category string) (string, error) {
+	return d.addTorrent(magnet, downloadPath, category)
+}
+
+func (d DelugeClient) DownloadTorrentWithFile(torrent, downloadPath, category string) (string, error) {
 	uploadedFilePath, err := d.uploadFile(torrent)
 	if err != nil {
 		log.Error().Err(err).Msg("upload file error")
 		return "", err
 	}
 
+	return d.addTorrent(uploadedFilePath, downloadPath, category)
+}
+
+// filepath can be url or a previously uploaded torrent file
+func (d DelugeClient) addTorrent(filePath string, downloadPath string, category string) (string, error) {
 	// Prepare the add torrent request
 	payload := map[string]interface{}{
 		"method": "web.add_torrents",
 		"params": []interface{}{
 			[]map[string]interface{}{
 				{
-					"path": uploadedFilePath,
+					"path": filePath,
 					"options": map[string]interface{}{ // Additional options
 						"download_location": downloadPath,
 						"category":          category,
@@ -72,7 +81,7 @@ func (d DelugeClient) DownloadTorrent(torrent, downloadPath, category string) (s
 				},
 			},
 		},
-		"id": d.id,
+		"id": d.userId,
 	}
 
 	resp, err := d.client.R().
@@ -86,7 +95,7 @@ func (d DelugeClient) DownloadTorrent(torrent, downloadPath, category string) (s
 	}
 
 	var addResp AddTorrentResponse
-	if err := json.Unmarshal(resp.Body(), &addResp); err != nil {
+	if err := json.Unmarshal(resp.Bytes(), &addResp); err != nil {
 		return "", fmt.Errorf("failed to parse add torrent response: %w", err)
 	}
 
@@ -102,7 +111,7 @@ func (d DelugeClient) DownloadTorrent(torrent, downloadPath, category string) (s
 	return torrentId.(string), nil
 }
 
-func (d DelugeClient) GetTorrentStatus(torrentId []string) ([]TorrentStatus, error) {
+func (d DelugeClient) GetTorrentStatus(torrentId ...string) ([]TorrentStatus, error) {
 	payload := map[string]interface{}{
 		"method": "core.get_torrents_status",
 		"params": []interface{}{
@@ -117,7 +126,7 @@ func (d DelugeClient) GetTorrentStatus(torrentId []string) ([]TorrentStatus, err
 				"save_path",
 			},
 		},
-		"id": d.id,
+		"id": d.userId,
 	}
 
 	var infoResp TorrentInfoResponse
@@ -140,19 +149,21 @@ func (d DelugeClient) GetTorrentStatus(torrentId []string) ([]TorrentStatus, err
 	var result []TorrentStatus
 	for key, value := range infoResp.Result {
 		info := value.(map[string]interface{})
-		complete := false
-
 		state := strings.ToLower(info["state"].(string))
+
+		status := Downloading
 		if state == "seeding" || state == "complete" {
-			complete = true
+			status = Complete
+		} else if state == "error" {
+			status = Error
 		}
 
 		result = append(result, TorrentStatus{
-			Name:             info["name"].(string),
-			DownloadPath:     info["save_path"].(string),
-			DownloadComplete: complete,
-			Status:           state,
-			ID:               key,
+			ID:           key,
+			Name:         info["name"].(string),
+			DownloadPath: info["save_path"].(string),
+			ClientStatus: state,
+			ParsedStatus: status,
 		})
 	}
 
@@ -164,7 +175,7 @@ func (d DelugeClient) Test() (string, string, error) {
 	payload := map[string]interface{}{
 		"method": "daemon.info",
 		"params": []interface{}{},
-		"id":     d.id,
+		"id":     d.userId,
 	}
 
 	// Send connection check request
@@ -184,7 +195,7 @@ func (d DelugeClient) loginDeluge(password string) error {
 	payload := map[string]interface{}{
 		"method": "auth.login",
 		"params": []string{password},
-		"id":     d.id,
+		"id":     d.userId,
 	}
 
 	var loginResp LoginResponse

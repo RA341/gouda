@@ -1,64 +1,75 @@
 package clients
 
 import (
+	"context"
 	"fmt"
-	"github.com/rs/zerolog/log"
-	"os"
+	"github.com/stretchr/testify/assert"
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 	"testing"
 )
 
-func login() DownloadClient {
-	var err error
+const (
+	delugeTestUser     = "admin"
+	delugeTestPassword = "deluge"
+)
 
-	user := "admin"
-	pass := "deluge"
-	transmissionUrl := "localhost:8112"
-	protocol := "http"
+var (
+	delugeWebuiPort = "8112"
+	delugeNATPort   = fmt.Sprintf("%s/tcp", delugeWebuiPort)
+)
+
+func TestDelugeClient(t *testing.T) {
+	ctx := context.Background()
+	req := delugeClient()
+	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+		ContainerRequest: req,
+		Started:          true,
+	})
+	assert.NoError(t, err)
+	delugeUrl := extractExposedPort(t, container, delugeNATPort)
+	delugeUrl = "localhost:" + delugeWebuiPort
+	t.Log("delugeUrl: ", delugeUrl)
 
 	client, err := NewDelugeClient(&TorrentClient{
-		Host: transmissionUrl, Protocol: protocol, User: user, Password: pass,
+		Host:     delugeUrl,
+		Protocol: protocol,
+		User:     delugeTestUser,
+		Password: delugeTestPassword,
 	})
-	if err != nil {
-		log.Error().Err(err).Msg("can't initialize the client")
-		// Log error and exit if we can't initialize the client
-		os.Exit(1)
-	}
+	assert.NoError(t, err)
 
-	_, _, err = client.Test()
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
+	//torrentID, err := client.DownloadTorrentWithMagnet(testMagnetLink, "/downloads", "test")
+	//assert.NoError(t, err)
 
-	return client
+	torrentID, err := client.DownloadTorrentWithFile("./test_torrents/big-buck-bunny.torrent", "/downloads", "test")
+	assert.NoError(t, err)
+
+	status, err := client.GetTorrentStatus(torrentID)
+	assert.NoError(t, err)
+
+	for _, st := range status {
+		t.Log(st)
+	}
 }
 
-func TestDownload(t *testing.T) {
-	client := login()
-
-	torrentId, err := client.DownloadTorrent("test/big-buck-bunny.torrent", "src/download_clients/test/downloads", "")
-	if err != nil {
-		log.Error().Err(err).Msg("can't download the torrent")
-		t.Fail()
-		return
+func delugeClient() testcontainers.ContainerRequest {
+	return testcontainers.ContainerRequest{
+		Image: "linuxserver/deluge:latest",
+		ExposedPorts: []string{
+			delugeNATPort,
+			"17693/tcp",
+			"17693/udp",
+			"58846/tcp",
+		},
+		//WaitingFor: wait.ForHTTP("/").
+		//	WithPort(nat.Port(delugeNATPort)).
+		//	WithStatusCodeMatcher(func(status int) bool {
+		//		time.Sleep(5 * time.Second)
+		//
+		//		return status == 200
+		//	}).
+		//	WithStartupTimeout(3 * time.Minute),
+		WaitingFor: wait.ForLog("[ls.io-init] done."),
 	}
-	log.Info().Msgf("torrent id: %s", torrentId)
-
-	status, err := client.GetTorrentStatus([]string{torrentId})
-	if err != nil {
-		log.Error().Err(err).Msg("can't check the torrent status")
-	}
-
-	log.Info().Msgf("torrent status: %v", status)
-}
-
-func TestStatus(t *testing.T) {
-	client := login()
-
-	status, err := client.GetTorrentStatus([]string{""})
-	if err != nil {
-		log.Error().Err(err).Msg("can't check the torrent status")
-	}
-
-	log.Info().Msgf("torrent status: %v", status)
 }
