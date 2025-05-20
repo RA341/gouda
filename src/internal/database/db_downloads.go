@@ -32,12 +32,12 @@ func (d DownloadsDB) GetMediaByTorrentId(torrentId string) (*downloads.Media, er
 	return &media, nil
 }
 
-func (d DownloadsDB) GetDownloadingMediaTorrentIdList() ([]string, error) {
-	var results []string
+func (d DownloadsDB) GetDownloadingMedia() ([]downloads.Media, error) {
+	var results []downloads.Media
 	result := d.db.
 		Model(&downloads.Media{}).
 		Where("status = ?", "downloading").
-		Pluck("torrent_id", &results)
+		Find(&results)
 
 	if result.Error != nil {
 		return results, result.Error

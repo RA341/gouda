@@ -33,6 +33,19 @@ func (r *Media) TableName() string {
 	return "request_torrents"
 }
 
+func (r *Media) MarkError(msg error) {
+	r.Status = Error
+	r.ErrorMessage = msg.Error()
+}
+
+func (r *Media) MarkComplete() {
+	r.Status = Complete
+}
+
+func (r *Media) MarkDownloading() {
+	r.Status = Downloading
+}
+
 func (r *Media) ToProto() *v1.Media {
 	return &v1.Media{
 		ID:                  uint64(r.ID),

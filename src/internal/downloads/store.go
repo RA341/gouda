@@ -9,5 +9,5 @@ package downloads
 type Store interface {
 	Save(media *Media) error
 	GetMediaByTorrentId(torrentId string) (*Media, error)
-	GetDownloadingMediaTorrentIdList() ([]string, error)
+	GetDownloadingMedia() ([]Media, error)
 }

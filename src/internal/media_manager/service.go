@@ -5,7 +5,6 @@ import (
 	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
 	"github.com/rs/zerolog/log"
-	"os"
 )
 
 type MediaManagerService struct {
@@ -20,7 +19,7 @@ func NewMediaManagerService(db Store, ds *downloads.DownloadService) *MediaManag
 func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
 	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
 
-	err := srv.ds.DownloadMedia(mediaRequest, true)
+	err := srv.ds.DownloadMedia(mediaRequest)
 	if err != nil {
 		mediaRequest.Status = downloads.Error
 		mediaRequest.ErrorMessage = err.Error()
@@ -76,11 +75,6 @@ func (srv *MediaManagerService) Delete(requestId uint) error {
 		return err
 	}
 
-	err = os.Remove(media.TorrentFileLocation)
-	if err != nil {
-		return err
-	}
-
 	log.Debug().Any("media", media).Msg("Deleted media request")
 	return nil
 }
@@ -111,7 +105,7 @@ func (srv *MediaManagerService) Retry(mediaId uint64) (*downloads.Media, error) 
 		return nil, err
 	}
 
-	err = srv.ds.DownloadMedia(media, false)
+	err = srv.ds.DownloadMedia(media)
 	if err != nil {
 		return nil, fmt.Errorf("error retrying torrent %v", err.Error())
 	}
