@@ -84,14 +84,14 @@ func (tm *TransmissionClient) GetTorrentStatus(torrentIds ...string) ([]TorrentS
 		finalId, err := strconv.Atoi(torrentId)
 		if err != nil {
 			log.Error().Err(err).Msgf("Unable to convert torrent id: %s to int64", torrentId)
-			return []TorrentStatus{}, err
+			return nil, err
 		}
 		intIds = append(intIds, int64(finalId))
 	}
 
 	infos, err := tm.Client.TorrentGetAllFor(context.Background(), intIds)
 	if err != nil {
-		return []TorrentStatus{}, err
+		return nil, err
 	}
 
 	var results []TorrentStatus

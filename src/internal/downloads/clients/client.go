@@ -1,6 +1,8 @@
 package clients
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type DownloadClient interface {
 	DownloadTorrentWithFile(torrent, downloadPath, category string) (string, error)

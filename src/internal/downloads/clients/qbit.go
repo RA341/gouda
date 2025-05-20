@@ -116,11 +116,10 @@ func (qb *QbitClient) DownloadTorrentWithFile(torrent, downloadPath, category st
 func (qb *QbitClient) GetTorrentStatus(torrentIds ...string) ([]TorrentStatus, error) {
 	torrents, err := qb.getTorrentListByHashes(torrentIds...)
 	if err != nil {
-		return []TorrentStatus{}, err
+		return nil, err
 	}
 
 	var result []TorrentStatus
-
 	for _, torrent := range torrents {
 		status := Downloading
 		if torrent.State == "uploading" || torrent.State == "stalledUP" || torrent.State == "forcedUP" {
