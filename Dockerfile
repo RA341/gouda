@@ -59,6 +59,7 @@ RUN SOURCE_HASH=$(find . -type f -name "*.go" -print0 | sort -z | xargs -0 cat |
 FROM alpine:latest
 
 ENV IS_DOCKER=true
+ENV GOUDA_LOG_LEVEL=info
 
 WORKDIR /app/
 
