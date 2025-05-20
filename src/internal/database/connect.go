@@ -44,6 +44,6 @@ func connect() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	log.Info().Str("connection", dbPath).Msg("Connected to database")
+	log.Info().Str("path", dbPath).Msg("Connected to database")
 	return db, nil
 }
