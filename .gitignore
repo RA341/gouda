@@ -13,3 +13,4 @@ scripts_*/**/test
 /src/internal/downloads/test/testTorrent
 /src/internal/downloads/clients/utils-docker-compose.yml
 /**/.idea
+/**/gouda-*
