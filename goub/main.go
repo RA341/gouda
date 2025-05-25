@@ -13,19 +13,15 @@ var (
 	red   = color.New(color.FgRed)
 	green = color.New(color.FgGreen)
 
-	greenF   = green.SprintfFunc()
-	redF     = red.SprintfFunc()
-	boldRedF = red.Add(color.Bold).SprintfFunc()
+	printGreen = green.PrintlnFunc()
+	greenF     = green.SprintfFunc()
+	redF       = red.SprintfFunc()
+	boldRedF   = red.Add(color.Bold).SprintfFunc()
 
 	cyan = color.New(color.FgHiCyan).SprintfFunc()
 )
 
 func main() {
-	err := resolveRootDir()
-	if err != nil {
-		cmdError(err)
-	}
-
 	var rootCmd = &cobra.Command{
 		Use:   "goub",
 		Short: "Build tool for gouda",
@@ -53,23 +49,15 @@ func generalBuildCommands() *cobra.Command {
 			if _, ok := variants[variant]; !ok {
 				cmdError(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
 			}
-			fmt.Println(greenF("Building: %s", variant))
-			if variant == "all" {
-				//cmd1, _ := goBuildCmd(withDefault(), withVariant("server"))
-				//cmd2, _ := goBuildCmd(withDefault(), withVariant("desktop"))
 
-				//fmt.Println(cyan("Command:\n%s", strings.Join(cmd1, "\n")))
-				//fmt.Println()
-				//fmt.Println(cyan("Command:\n%s", strings.Join(cmd2, "\n")))
-				fmt.Println(greenF("Building all packages"))
-				return
-			}
+			printGreen("Building:", variant)
+			printGreen("Output path:", outputPath)
 
-			err := build(variant, outputPath, withDefault(), withVariant(variant))
+			err := build(variant, outputPath)
 			cmdError(err)
 		},
 	}
-	outputPath = *buildGouda.Flags().StringP("out", "o", ".", "where to output the final build")
+	buildGouda.Flags().StringVarP(&outputPath, "out", "o", ".", "where to output the final build (default working directory)")
 
 	return buildGouda
 }
@@ -87,21 +75,17 @@ func goBuildCommands() *cobra.Command {
 				cmdError(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
 			}
 
-			fmt.Println(greenF("Building variant: %s", variant))
+			printGreen("Building variant", variant)
 			if variant == "all" {
-				//cmd1, _ := goBuildCmd(withDefault(), withVariant("server"))
-				//cmd2, _ := goBuildCmd(withDefault(), withVariant("desktop"))
-				//
-				//fmt.Println(cyan("Command:\n%s", strings.Join(cmd1, "\n")))
-				//fmt.Println()
-				//fmt.Println(cyan("Command:\n%s", strings.Join(cmd2, "\n")))
-				return
+				cmdError(fmt.Errorf(redF("Unsupported variant:", variant)))
 			}
 
-			_, err := runGoBuild(withDefault(), withVariant(variant))
+			binary, err := runGoBuild(withVariant(variant))
 			if err != nil {
 				cmdError(err)
 			}
+
+			printGreen("Built Gouda:", binary)
 		},
 	}
 
@@ -113,7 +97,7 @@ func goBuildCommands() *cobra.Command {
 			if err != nil {
 				cmdError(err)
 			}
-			fmt.Println(greenF("Hash: %s\nFiles: %d", hash, files))
+			printGreen("Hash:", hash, "\nFiles", files)
 		},
 	}
 
@@ -130,7 +114,7 @@ func goBuildCommands() *cobra.Command {
 func flutterBuildCommands() *cobra.Command {
 	allowedVariants := "[" + strings.Join(maps.Keys(flutterVariants), "|") + "]"
 
-	build := &cobra.Command{
+	generalBuild := &cobra.Command{
 		Use:   fmt.Sprintf("build %s", allowedVariants),
 		Short: "flutter build commands",
 		Args:  cobra.ExactArgs(1),
@@ -162,7 +146,7 @@ func flutterBuildCommands() *cobra.Command {
 		Short: "commands for the flutter builds",
 	}
 
-	mainCommand.AddCommand(build)
+	mainCommand.AddCommand(generalBuild)
 	mainCommand.AddCommand(clean)
 	return mainCommand
 }

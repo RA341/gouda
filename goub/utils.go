@@ -3,6 +3,7 @@ package main
 import (
 	"archive/zip"
 	"fmt"
+	"github.com/fatih/color"
 	"io"
 	"io/fs"
 	"log"
@@ -155,8 +156,8 @@ func zipDir(sourceDir, targetZipFile string) error {
 func executeCommand(buildCmd []string, workingDir string) error {
 	//fmt.Println("Executing:", strings.Join(buildCmd, "\n"))
 	runBuild := exec.Command(buildCmd[0], buildCmd[1:]...)
-	runBuild.Stdout = os.Stdout
-	runBuild.Stderr = os.Stderr
+	//runBuild.Stdout = os.Stdout
+	//runBuild.Stderr = os.Stderr
 	runBuild.Dir = workingDir
 	return runBuild.Run()
 }
@@ -172,9 +173,13 @@ func cmdError(err error) {
 	}
 }
 
+var (
+	printYellow = color.New(color.FgYellow, color.Bold).PrintlnFunc()
+)
+
 func warn(err error) {
 	if err != nil {
-		slog.Warn(err.Error())
+		printYellow("warning", err.Error())
 	}
 }
 

@@ -1,11 +1,15 @@
 package main
 
 import (
-	"log/slog"
+	"github.com/fatih/color"
 	"path/filepath"
 )
 
 const flutterRoot = "brie"
+
+var (
+	printBlue = color.New(color.FgBlue).PrintlnFunc()
+)
 
 var (
 	buildRoot = flutterRoot + "/build"
@@ -20,6 +24,7 @@ var (
 
 // assumes working dir as gouda root
 func runFlutterBuild(variant string) (string, error) {
+	printBlue("Starting flutter build", variant)
 	cmd := buildFlutterCmd(variant)
 	if err := executeCommand(cmd, flutterRoot); err != nil {
 		return "", err
@@ -31,7 +36,7 @@ func runFlutterBuild(variant string) (string, error) {
 		return "", err
 	}
 
-	slog.Info("final dest", "dest", result)
+	printBlue("Flutter build complete", "destination", result)
 
 	return result, nil
 }

@@ -3,8 +3,9 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
-	"golang.org/x/exp/slog"
+	"github.com/fatih/color"
 	"io"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -36,7 +37,7 @@ type BuildOpt func(*GoBuildConfig)
 const goRoot = "src"
 
 func runGoBuild(opt ...BuildOpt) (string, error) {
-	cmd, binaryPath := goBuildCmd(opt...)
+	cmd, binaryPath := generateGoBuildCmd(opt...)
 	if err := executeCommand(cmd, goRoot); err != nil {
 		return "", err
 	}
@@ -49,13 +50,17 @@ func runGoBuild(opt ...BuildOpt) (string, error) {
 	return abs, nil
 }
 
-func goBuildCmd(opt ...BuildOpt) ([]string, string) {
+var (
+	printCyan = color.New(color.FgCyan).PrintlnFunc()
+)
+
+func generateGoBuildCmd(opt ...BuildOpt) ([]string, string) {
 	var config GoBuildConfig
+	withDefault()(&config) // start with default struct
 	for _, o := range opt {
 		o(&config)
 	}
-
-	slog.Info("Building go with", "buildOpts", config)
+	printCyan("Building go with", slog.AnyValue(config).String())
 
 	buildCmd := []string{"go", "build"}
 	if config.verbose {
@@ -81,6 +86,7 @@ func goBuildCmd(opt ...BuildOpt) ([]string, string) {
 	}
 
 	if config.variant == "desktop" && getOSName() == "windows" {
+		printCyan("removing terminal from windows build")
 		// remove terminal launch on windows builds
 		ldflags = append(ldflags, "-H=windowsgui")
 	}
@@ -107,13 +113,6 @@ func withDefault() BuildOpt {
 func withGitMetadata() {
 
 }
-
-//func withHash() BuildOpt {
-//	hash, files, err := calculateGoSourceHash(goRoot)
-//	if err != nil {
-//		ret
-//	}
-//}
 
 func withVariant(variant string) BuildOpt {
 	return func(config *GoBuildConfig) {
