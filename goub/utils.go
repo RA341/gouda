@@ -14,6 +14,10 @@ import (
 	"strings"
 )
 
+var (
+	printYellow = color.New(color.FgYellow, color.Bold).PrintlnFunc()
+)
+
 // resolves the main gouda directory from any working directory inside the project
 // e.g: if in gouda/docs, calling this command will resolve to gouda/
 // if outside some_dir/ error
@@ -153,29 +157,35 @@ func zipDir(sourceDir, targetZipFile string) error {
 	return nil
 }
 
-func executeCommand(buildCmd []string, workingDir string) error {
-	//fmt.Println("Executing:", strings.Join(buildCmd, "\n"))
-	runBuild := exec.Command(buildCmd[0], buildCmd[1:]...)
-	//runBuild.Stdout = os.Stdout
-	//runBuild.Stderr = os.Stderr
-	runBuild.Dir = workingDir
-	return runBuild.Run()
+func executeCommand(buildCmd []string, workingDir string, outputWriters ...io.Writer) error {
+	var stdOutWriter io.Writer = nil
+	var stdErrWriter io.Writer = nil
+
+	if len(outputWriters) > 2 {
+		warn(fmt.Errorf("more than 2  output writers specified, will only use first 2"))
+	}
+	if len(outputWriters) >= 1 {
+		stdOutWriter = outputWriters[0]
+	}
+	if len(outputWriters) >= 2 {
+		stdErrWriter = outputWriters[1]
+	}
+
+	runCmd := exec.Command(buildCmd[0], buildCmd[1:]...)
+	runCmd.Stdout = stdOutWriter
+	runCmd.Stderr = stdErrWriter
+	if workingDir != "" {
+		runCmd.Dir = workingDir
+	}
+
+	return runCmd.Run()
 }
 
-func backToParent() {
-	if err := os.Chdir(".."); err != nil {
-		cmdError(fmt.Errorf("unable to move back to root: %v", err))
-	}
-}
-func cmdError(err error) {
+func must(err error) {
 	if err != nil {
 		log.Fatal(boldRedF("%s", err.Error()))
 	}
 }
-
-var (
-	printYellow = color.New(color.FgYellow, color.Bold).PrintlnFunc()
-)
 
 func warn(err error) {
 	if err != nil {

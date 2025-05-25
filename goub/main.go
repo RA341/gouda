@@ -1,11 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/fatih/color"
+	"github.com/goccy/go-yaml"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/maps"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -47,14 +50,14 @@ func generalBuildCommands() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			variant := args[0]
 			if _, ok := variants[variant]; !ok {
-				cmdError(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
+				must(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
 			}
 
 			printGreen("Building:", variant)
 			printGreen("Output path:", outputPath)
 
 			err := build(variant, outputPath)
-			cmdError(err)
+			must(err)
 		},
 	}
 	buildGouda.Flags().StringVarP(&outputPath, "out", "o", ".", "where to output the final build (default working directory)")
@@ -65,29 +68,55 @@ func generalBuildCommands() *cobra.Command {
 func goBuildCommands() *cobra.Command {
 	allowedVariants := "[" + strings.Join(maps.Keys(variants), "|") + "]"
 
+	var outputPath string
+	var commit string
+	var tag string
+	var branch string
+
 	goBuild := &cobra.Command{
 		Use:   fmt.Sprintf("build %s", allowedVariants),
 		Short: "go build commands that will run",
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
+			path, err := GetCurrentModulePath()
+			must(err)
+
+			if path != "github.com/RA341/gouda" {
+				must(fmt.Errorf(
+					"gouda go module not found in current dir\nis there a go.mod with %s as its module name ?",
+					goudaModuleName,
+				))
+				return
+			}
+
 			variant := args[0]
 			if _, ok := variants[variant]; !ok {
-				cmdError(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
+				must(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
 			}
 
 			printGreen("Building variant", variant)
 			if variant == "all" {
-				cmdError(fmt.Errorf(redF("Unsupported variant:", variant)))
+				must(fmt.Errorf(redF("Unsupported variant:", variant)))
 			}
-
-			binary, err := runGoBuild(withVariant(variant))
+			if outputPath != "" {
+				must(os.Mkdir(outputPath, os.ModePerm))
+			}
+			err = buildAndCopyGoBinary(
+				outputPath,
+				withVariant(variant),
+				withSourceHash("."),
+				withGitMetadata(GitInfo{Commit: commit, Branch: branch, Tag: tag}),
+				withWorkingDir("."),
+			)
 			if err != nil {
-				cmdError(err)
+				must(err)
 			}
-
-			printGreen("Built Gouda:", binary)
 		},
 	}
+	goBuild.Flags().StringVarP(&outputPath, "out", "o", "", "where to output the final build (default working directory)")
+	goBuild.Flags().StringVarP(&commit, "commit", "c", "unknown", "commit to use for the go build")
+	goBuild.Flags().StringVarP(&tag, "tag", "t", "unknown", "tag to use for the go build")
+	goBuild.Flags().StringVarP(&branch, "branch", "b", "unknown", "branch to for the go build")
 
 	goHash := &cobra.Command{
 		Use:   "hash",
@@ -95,9 +124,20 @@ func goBuildCommands() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			hash, files, err := calculateGoSourceHash(goRoot)
 			if err != nil {
-				cmdError(err)
+				must(err)
 			}
 			printGreen("Hash:", hash, "\nFiles", files)
+		},
+	}
+
+	goGit := &cobra.Command{
+		Use:   "git",
+		Short: "retrieve git metadata from repo",
+		Run: func(cmd *cobra.Command, args []string) {
+			_, err := getGitInfo()
+			if err != nil {
+				must(err)
+			}
 		},
 	}
 
@@ -108,6 +148,7 @@ func goBuildCommands() *cobra.Command {
 
 	mainCommand.AddCommand(goBuild)
 	mainCommand.AddCommand(goHash)
+	mainCommand.AddCommand(goGit)
 	return mainCommand
 }
 
@@ -121,12 +162,31 @@ func flutterBuildCommands() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			variant := args[0]
 			if _, ok := flutterVariants[variant]; !ok {
-				cmdError(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
+				must(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
 			}
 			fmt.Println(greenF("Building flutter variant: %s", variant))
 
-			if _, err := runFlutterBuild(variant); err != nil {
-				cmdError(err)
+			pubspecFile, err := os.Open("pubspec.yaml")
+			if errors.Is(err, os.ErrNotExist) {
+				must(fmt.Errorf("pubspec.yaml not found, make sure this is run in a valid flutter project"))
+			}
+
+			defer func() {
+				warn(pubspecFile.Close())
+			}()
+
+			var pubspec map[string]interface{}
+			must(yaml.NewDecoder(pubspecFile).Decode(&pubspec))
+			pubName, ok := pubspec["name"].(string)
+			if !ok {
+				must(fmt.Errorf("pubspec.name not found"))
+			}
+			if pubName != "brie" {
+				must(fmt.Errorf("invalid flutter project need name as brie"))
+			}
+
+			if _, err = buildFlutter(variant, ""); err != nil {
+				must(err)
 			}
 		},
 	}
@@ -136,7 +196,7 @@ func flutterBuildCommands() *cobra.Command {
 		Short: "clean flutter directories",
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := runFlutterClean(); err != nil {
-				cmdError(err)
+				must(err)
 			}
 		},
 	}

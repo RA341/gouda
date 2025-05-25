@@ -1,11 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"fmt"
 	"github.com/fatih/color"
 	"io"
-	"log/slog"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -21,14 +21,15 @@ var (
 )
 
 type GoBuildConfig struct {
-	variant    string
-	version    string
-	buildDate  time.Time
-	branch     string
-	commit     string
-	sourceHash string
-	outputDir  string
-	verbose    bool
+	Variant    string
+	Version    string
+	BuildDate  time.Time
+	Branch     string
+	Commit     string
+	SourceHash string
+	OutputDir  string
+	Verbose    bool
+	WorkingDir string
 }
 
 type BuildOpt func(*GoBuildConfig)
@@ -37,12 +38,15 @@ type BuildOpt func(*GoBuildConfig)
 const goRoot = "src"
 
 func runGoBuild(opt ...BuildOpt) (string, error) {
-	cmd, binaryPath := generateGoBuildCmd(opt...)
-	if err := executeCommand(cmd, goRoot); err != nil {
+	config := loadConfig(opt)
+	cmd, binaryPath := generateGoBuildCmd(config)
+	printCyan(cmd)
+
+	if err := executeCommand(cmd, config.WorkingDir); err != nil {
 		return "", err
 	}
 
-	abs, err := filepath.Abs(goRoot + "/" + binaryPath)
+	abs, err := filepath.Abs(config.WorkingDir + "/" + binaryPath)
 	if err != nil {
 		return "", err
 	}
@@ -50,47 +54,47 @@ func runGoBuild(opt ...BuildOpt) (string, error) {
 	return abs, nil
 }
 
-var (
-	printCyan = color.New(color.FgCyan).PrintlnFunc()
-)
-
-func generateGoBuildCmd(opt ...BuildOpt) ([]string, string) {
+func loadConfig(opt []BuildOpt) GoBuildConfig {
 	var config GoBuildConfig
 	withDefault()(&config) // start with default struct
 	for _, o := range opt {
 		o(&config)
 	}
-	printCyan("Building go with", slog.AnyValue(config).String())
+	printCyan("Building go with", fmt.Sprintf("%+v", config))
+	return config
+}
 
+var (
+	printCyan = color.New(color.FgCyan).PrintlnFunc()
+)
+
+func generateGoBuildCmd(config GoBuildConfig) ([]string, string) {
 	buildCmd := []string{"go", "build"}
-	if config.verbose {
+	if config.Verbose {
 		buildCmd = append(buildCmd, "-v")
 	}
 
 	ldflags := []string{
 		"-s", "-w",
-		addLDVar("Version", config.version),
-		addLDVar("Branch", config.branch),
-		addLDVar("CommitInfo", config.commit),
-		addLDVar("BuildDate", config.buildDate.Format(time.RFC3339)),
-		addLDVar("SourceHash", config.sourceHash),
+		addLDVar("Version", config.Version),
+		addLDVar("Branch", config.Branch),
+		addLDVar("CommitInfo", config.Commit),
+		addLDVar("BuildDate", config.BuildDate.Format(time.RFC3339)),
+		addLDVar("SourceHash", config.SourceHash),
 	}
-
-	// quotes are not needed
-	finalFlag := fmt.Sprintf(`-ldflags=%s`, strings.Join(ldflags, " "))
-	buildCmd = append(buildCmd, finalFlag)
-
-	binPath, packagePath := getBinName(config.variant)
-	if config.outputDir != "" {
-		binPath = config.outputDir + "/" + binPath
-	}
-
-	if config.variant == "desktop" && getOSName() == "windows" {
+	if config.Variant == "desktop" && getOSName() == "windows" {
 		printCyan("removing terminal from windows build")
 		// remove terminal launch on windows builds
 		ldflags = append(ldflags, "-H=windowsgui")
 	}
+	finalLDFlags := fmt.Sprintf(`-ldflags=%s`, strings.Join(ldflags, " "))
 
+	binPath, packagePath := getBinName(config.Variant)
+	if config.OutputDir != "" {
+		binPath = config.OutputDir + "/" + binPath
+	}
+
+	buildCmd = append(buildCmd, finalLDFlags)
 	buildCmd = append(buildCmd, "-o", binPath)
 	buildCmd = append(buildCmd, packagePath)
 
@@ -99,24 +103,50 @@ func generateGoBuildCmd(opt ...BuildOpt) ([]string, string) {
 
 func withDefault() BuildOpt {
 	return func(config *GoBuildConfig) {
-		config.variant = "all"
-		config.version = "dev"
-		config.buildDate = time.Now()
-		config.branch = "unknown"
-		config.commit = "unknown"
-		config.sourceHash = "unknown"
-		config.outputDir = ""
-		config.verbose = false
+		config.Variant = "all"
+		config.Version = "dev"
+		config.BuildDate = time.Now()
+		config.Branch = "unknown"
+		config.Commit = "unknown"
+		config.SourceHash = "unknown"
+		config.OutputDir = ""
+		config.Verbose = false
 	}
 }
 
-func withGitMetadata() {
+func withGoudaRoot() BuildOpt {
+	return withWorkingDir(goRoot)
+}
 
+func withWorkingDir(dir string) BuildOpt {
+	abs, err := filepath.Abs(dir)
+	must(err)
+	return func(config *GoBuildConfig) {
+		config.WorkingDir = abs
+	}
+}
+
+func withGitMetadata(info GitInfo) BuildOpt {
+	return func(config *GoBuildConfig) {
+		config.Branch = info.Branch
+		config.Commit = info.Commit
+		config.Version = info.Tag
+	}
+}
+
+func withSourceHash(workingDir string) BuildOpt {
+	hash, files, err := calculateGoSourceHash(workingDir)
+	must(err)
+	printCyan("gouda hash:", hash, "files:", files)
+
+	return func(config *GoBuildConfig) {
+		config.SourceHash = hash
+	}
 }
 
 func withVariant(variant string) BuildOpt {
 	return func(config *GoBuildConfig) {
-		config.variant = variant
+		config.Variant = variant
 	}
 }
 
@@ -142,7 +172,17 @@ func getBinName(variant string) (baseBin string, packagePath string) {
 }
 
 func getOSName() string {
-	return runtime.GOOS
+	name := runtime.GOOS
+	if name == "darwin" {
+		return "macos"
+	} else if name == "linux" {
+		return name
+	} else if name == "windows" {
+		return name
+	}
+
+	must(fmt.Errorf("unsupported  OS: %s", name))
+	return ""
 }
 
 func calculateGoSourceHash(baseDir string) (string, int, error) {
@@ -216,4 +256,48 @@ func calculateGoSourceHash(baseDir string) (string, int, error) {
 
 	finalHash := fmt.Sprintf("%x", hasher.Sum(nil))
 	return finalHash, len(goFiles), nil
+}
+
+type GitInfo struct {
+	Commit string
+	Branch string
+	Tag    string
+}
+
+// getGitInfo retrieves the latest commit hash, current branch, and latest tag
+// from the Git repository in the current working directory.
+// It assumes '.git' directory exists and 'git' command is available.
+func getGitInfo() (GitInfo, error) {
+	info := GitInfo{}
+	var err error
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+
+	commitCmd := []string{"git", "rev-parse", "HEAD"}
+	if err = executeCommand(commitCmd, "", &out, &stderr); err != nil {
+		return info, fmt.Errorf("failed to get commit hash: %w. Stderr: %s", err, stderr.String())
+	}
+	info.Commit = strings.TrimSpace(out.String())
+	out.Reset()
+	stderr.Reset()
+
+	branchCmd := []string{"git", "rev-parse", "--abbrev-ref", "HEAD"}
+	if err = executeCommand(branchCmd, "", &out, &stderr); err != nil {
+		return info, fmt.Errorf("failed to get branch name: %w. Stderr: %s", err, stderr.String())
+	}
+	info.Branch = strings.TrimSpace(out.String())
+	out.Reset()
+	stderr.Reset()
+
+	tagCmd := []string{"git", "describe", "--tags", "--abbrev=0", "HEAD"}
+	err = executeCommand(tagCmd, "", &out, &stderr)
+	if err != nil {
+		warn(fmt.Errorf("no tag retrived"))
+		info.Tag = ""
+	} else {
+		info.Tag = strings.TrimSpace(out.String())
+	}
+
+	printGreen("Git:", info)
+	return info, nil
 }

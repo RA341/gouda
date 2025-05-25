@@ -7,7 +7,9 @@ import (
 	"github.com/fatih/color"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 var (
@@ -27,10 +29,21 @@ func build(variant string, destinationDir string, opt ...BuildOpt) error {
 	if err != nil {
 		return err
 	}
+
+	if err = os.MkdirAll(destinationDir, os.ModePerm); err != nil {
+		return err
+	}
+
 	err = resolveRootDir()
 	if err != nil {
-		cmdError(err)
+		must(err)
 	}
+
+	info, err := getGitInfo()
+	if err != nil {
+		return err
+	}
+	opt = append(opt, withGitMetadata(info), withSourceHash(goRoot), withGoudaRoot())
 
 	buildMap := map[string]func(destinationDir string, flutterWebReady context.Context, opt ...BuildOpt) error{
 		"desktop": buildDesktop,
@@ -200,7 +213,7 @@ func buildAndCopyGoBinary(destinationDir string, opt ...BuildOpt) error {
 }
 
 func buildAndCopyFlutterWeb() error {
-	buildPath, err := runFlutterBuild("web")
+	buildPath, err := runFlutterBuildRoot("web")
 	if err != nil {
 		return fmt.Errorf("flutter web build failed: %v", err)
 	}
@@ -217,7 +230,7 @@ func buildAndCopyFlutterWeb() error {
 
 func buildAndCopyFlutterDesktop(outputDir string) (err error) {
 	name := getOSName()
-	flutterBuildDir, err := runFlutterBuild(name)
+	flutterBuildDir, err := runFlutterBuildRoot(name)
 	if err != nil {
 		return err
 	}
@@ -244,4 +257,22 @@ func waitForChan(errCh chan error, workerCount int) error {
 		}
 	}
 	return nil
+}
+
+const goudaModuleName = "github.com/RA341/gouda"
+
+func GetCurrentModulePath() (string, error) {
+	cmdList := []string{"go", "list", "-m", "-f", "{{.Path}}"}
+	cmd := exec.Command(cmdList[0], cmdList[1:]...)
+	output, err := cmd.Output()
+	if err != nil {
+		// Handle cases where `go list` fails (e.g., not in a module, Go tool not found)
+		// or if there's an ExitError (e.g. not a module).
+		var exitErr *exec.ExitError
+		if errors.As(err, &exitErr) {
+			return "", fmt.Errorf("go list command failed: %s\nStderr: %s", err, string(exitErr.Stderr))
+		}
+		return "", fmt.Errorf("failed to execute go list: %w", err)
+	}
+	return strings.TrimSpace(string(output)), nil
 }

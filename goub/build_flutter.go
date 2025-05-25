@@ -8,10 +8,6 @@ import (
 const flutterRoot = "brie"
 
 var (
-	printBlue = color.New(color.FgBlue).PrintlnFunc()
-)
-
-var (
 	buildRoot = flutterRoot + "/build"
 	// all paths relative to a flutter project dir
 	flutterVariants = map[string]string{
@@ -22,22 +18,29 @@ var (
 	}
 )
 
-// assumes working dir as gouda root
-func runFlutterBuild(variant string) (string, error) {
-	printBlue("Starting flutter build", variant)
+var (
+	printBlue = color.New(color.FgBlue).PrintlnFunc()
+)
+
+// assumes working dir as gouda root and flutter project is at /brie
+func runFlutterBuildRoot(variant string) (string, error) {
+	return buildFlutter(variant, flutterRoot)
+}
+
+func buildFlutter(variant string, workingDir string) (string, error) {
+	printBlue("Starting flutter build", variant, "working dir", workingDir)
 	cmd := buildFlutterCmd(variant)
-	if err := executeCommand(cmd, flutterRoot); err != nil {
+	if err := executeCommand(cmd, workingDir); err != nil {
 		return "", err
 	}
 
-	output := flutterVariants[variant]
-	result, err := filepath.Abs(output)
+	buildName := flutterVariants[variant]
+	result, err := filepath.Abs(buildName)
 	if err != nil {
 		return "", err
 	}
 
-	printBlue("Flutter build complete", "destination", result)
-
+	printBlue("Flutter build complete:", result)
 	return result, nil
 }
 
