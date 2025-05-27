@@ -1,0 +1,19 @@
+name: Release Pipeline
+
+on:
+  push:
+    branches:
+      - main # publish a dev build on main
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  build-docker:
+    name: Build and Release for Linux
+    uses: .github/workflows/action-gouda-docker.yml
+    with:
+      source_branch: ${{ github.ref_name }}
+    secrets: inherit

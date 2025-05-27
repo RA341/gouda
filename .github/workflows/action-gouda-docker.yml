@@ -1,0 +1,107 @@
+name: Gouda Docker build and release
+
+on:
+  workflow_call:
+    inputs:
+      version_tag:
+        description: 'The primary version identifier (e.g., v1.2.3, a branch name like main, or a descriptive tag).'
+        required: false
+        type: string
+      is_latest:
+        description: 'Boolean to indicate if this tag should also be pushed as "latest". Typically true for main releases.'
+        required: false
+        type: boolean
+        default: false
+      source_branch:
+        description: 'The name of the source Git branch (e.g., main, develop, feature/xyz). For build arguments or specific branch tagging.'
+        required: true
+        type: string
+    secrets:
+      GH_TOKEN:
+        description: 'GitHub Token for uploading release assets and pushing to GHCR'
+        required: true
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker for ${{ github.repository }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read   # To checkout the repository
+      packages: write  # To push Docker images to GHCR
+      # id-token: write # Uncomment if using OIDC for Docker login to GHCR
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches all history, tags, and branches; useful for metadata action
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Generate Docker image tags and labels
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            # always use the `version_tag` input directly as a tag, full vX.X.X
+            type=raw,value=${{ inputs.version_tag }}
+            
+            # assumes `version_tag` is valid SemVer skip tag if empty (vX.Y.Z or X.Y.Z), create major and major.minor tags.
+            # Example: if version_tag is "v1.2.3", this adds "v1" and "v1.2".
+            type=semver,pattern={{major}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
+
+            # `source_branch` input is provided add it as a tag.
+            type=raw,value=${{ inputs.source_branch }},enable=${{ inputs.source_branch != '' }}            
+            
+            # short commit SHA tag for traceability.
+            type=sha,format=short
+
+            # Add 'dev' tag if the source branch is 'main'.
+            type=raw,value=dev,enable=${{ inputs.source_branch == 'main' }}            
+            
+            # Add 'latest' tag if `is_latest` input is true.
+            type=raw,value=latest,enable=${{ inputs.is_latest == true }}
+
+            # Optionally, add a short commit SHA tag for traceability.
+            type=sha,format=short
+
+          labels: |
+            org.opencontainers.image.title=${{ inputs.image_name }}
+            org.opencontainers.image.description=Docker image for ${{ inputs.image_name }} application.
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            # org.opencontainers.image.version will be set by metadata-action if semver is detected from version_tag
+
+      - name: Build and push Docker image
+        id: build_and_push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version || inputs.version_tag }}
+            COMMIT_INFO=${{ github.sha }}
+            BRANCH_NAME=${{ inputs.source_branch || 'unknown' }}
+
+      - name: Echo image details
+        if: success()
+        run: |
+          echo "🚀 Docker image build and push complete for: ghcr.io/${{ github.repository }}"
+          echo "🏷️ Tags created:"
+          echo "${{ steps.meta.outputs.tags }}"
+          echo "📋 Labels applied:"
+          echo "${{ steps.meta.outputs.labels }}"
