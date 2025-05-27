@@ -80,7 +80,6 @@ func goBuildCommands() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			path, err := GetCurrentModulePath()
 			must(err)
-
 			if path != "github.com/RA341/gouda" {
 				must(fmt.Errorf(
 					"gouda go module not found in current dir\nis there a go.mod with %s as its module name ?",
@@ -99,7 +98,7 @@ func goBuildCommands() *cobra.Command {
 				must(fmt.Errorf(redF("Unsupported variant:", variant)))
 			}
 			if outputPath != "" {
-				must(os.Mkdir(outputPath, os.ModePerm))
+				must(os.MkdirAll(outputPath, os.ModePerm))
 			}
 			err = buildAndCopyGoBinary(
 				outputPath,
