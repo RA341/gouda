@@ -1,3 +1,16 @@
+FROM golang:1.24-alpine AS goub
+
+# for sqlite
+ENV CGO_ENABLED=1
+
+RUN apk update && apk add --no-cache gcc musl-dev
+
+WORKDIR /app
+
+COPY ./goub/ .
+
+RUN go build -o=goub
+
 # Flutter build
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
@@ -9,7 +22,6 @@ RUN flutter pub get
 
 COPY ./brie .
 
-# Build Flutter web
 RUN flutter build web
 
 # Stage Go build
@@ -43,19 +55,11 @@ ENV COMMIT_INFO=${COMMIT_INFO}
 ENV BUILD_DATE=${BUILD_DATE}
 ENV BRANCH=${BRANCH}
 
-# build optimized binary without debugging symbols
-RUN SOURCE_HASH=$(find . -type f -name "*.go" -print0 | sort -z | xargs -0 cat | sha256sum | cut -d ' ' -f1) && \
-    go build -ldflags "-s -w \
-        -X github.com/RA341/gouda/internal/info.Version=${VERSION} \
-        -X github.com/RA341/gouda/internal/info.CommitInfo=${COMMIT_INFO} \
-        -X github.com/RA341/gouda/internal/info.BuildDate=${BUILD_DATE} \
-        -X github.com/RA341/gouda/internal/info.Branch=${BRANCH} \
-        -X github.com/RA341/gouda/internal/info.SourceHash=${SOURCE_HASH} \
-    " \
-    -o gouda ./cmd/server
+COPY --from=goub /app/goub .
+# custom build tool
+RUN ./goub go build server -o=out -c=${COMMIT_INFO} -t=${VERSION} -b=${BRANCH}
+RUN mv out/gouda-server-linux gouda
 
-
-# Stage: Final stage
 FROM alpine:latest
 
 ENV IS_DOCKER=true
