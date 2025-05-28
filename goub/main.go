@@ -103,7 +103,7 @@ func goBuildCommands() *cobra.Command {
 			err = buildAndCopyGoBinary(
 				outputPath,
 				withVariant(variant),
-				withSourceHash("."),
+				withSourceHash(""),
 				withGitMetadata(GitInfo{Commit: commit, Branch: branch, Tag: tag}),
 				withWorkingDir("."),
 			)

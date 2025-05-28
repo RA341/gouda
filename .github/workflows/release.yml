@@ -2,7 +2,16 @@ name: Release Pipeline
 
 on:
   push:
-    branches: [ "release" ]
+    branches:
+      - release
+    paths:
+      - .github/workflows/action-*
+      - .github/workflows/build.yml
+      - .github/workflows/release.yml
+      - goub/**
+      - brie/**
+      - parmesan/**
+      - src/**
 
 permissions:
   contents: write
@@ -38,12 +47,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
 
+      - name: Get Release Tag
+        id: get_tag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
       - name: Trigger docker.yml workflow
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+        if: ${{ steps.get_tag.outputs.tag != '' }}
         # ref_name will be release
         run: |
           gh workflow run build.yml \
             --repo ${{ github.repository }} \
             --ref ${{ github.ref_name }} \
-            -f tag_name=${{ needs.tag-release.outputs.new_tag }}
+            -f tag_name=${{ steps.get_tag.outputs.tag }}

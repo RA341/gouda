@@ -33,7 +33,7 @@ func resolveRootDir() error {
 	maxLevelsToScan := 30
 
 	for range maxLevelsToScan {
-		if filepath.Base(currentDir) == "gouda" {
+		if filepath.Base(currentDir) == "gouda" || filepath.Base(currentDir) == "gouda-test" {
 			if currentDir != initialWD {
 				slog.Info("Found 'gouda', Changing current directory", "project_root", currentDir)
 				if err := os.Chdir(currentDir); err != nil {

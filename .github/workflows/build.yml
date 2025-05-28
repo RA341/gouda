@@ -12,6 +12,7 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
+  packages: write
 
 jobs:
   build-extension:
@@ -50,8 +51,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-docker:
-    name: Build and Release for Linux
-    uses: .github/workflows/action-gouda-docker.yml
+    name: Build and Release for Docker
+    uses: ./.github/workflows/action-gouda-docker.yml
     with:
       version_tag: ${{ github.event.inputs.tag_name }}
       is_latest: true
@@ -60,7 +61,7 @@ jobs:
 
   build_and_release_linux:
     name: Build and Release for Linux
-    uses: .github/workflows/action-gouda-native.yml
+    uses: ./.github/workflows/action-gouda-native.yml
     with:
       os: ubuntu-latest
       flutter_version: '3.27.1'
@@ -70,7 +71,7 @@ jobs:
 
   build_and_release_windows:
     name: Build and Release for Windows
-    uses: .github/workflows/action-gouda-native.yml
+    uses: ./.github/workflows/action-gouda-native.yml
     with:
       os: windows-latest
       flutter_version: '3.27.1'

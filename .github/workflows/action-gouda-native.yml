@@ -1,5 +1,4 @@
-# .github/workflows/reusable-build.yml
-name: Reusable Build and Release
+name: Build gouda native binaries
 
 on:
   workflow_call:
@@ -22,15 +21,13 @@ on:
         required: false
         type: string
         default: '1.24'
-    secrets:
-      GH_TOKEN:
-        description: 'GitHub Token for uploading release assets'
-        required: true
 
 jobs:
   build:
     name: Build Gouda for ${{ inputs.os }}
     runs-on: ${{ inputs.os }}
+    permissions:
+      contents: write  # Allows checking out code and uploading release assets
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,7 +39,6 @@ jobs:
         with:
           flutter-version: ${{ inputs.flutter_version }}
           channel: 'stable'
-          cache: true
 
       - name: Set up Go
         uses: actions/setup-go@v5 # Updated to v5

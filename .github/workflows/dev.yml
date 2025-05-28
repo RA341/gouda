@@ -4,16 +4,22 @@ on:
   push:
     branches:
       - main # publish a dev build on main
+    paths: # trigger only when source code changes
+      - .github/workflows/dev.yml
+      - .github/workflows/action-gouda-docker.yml
+      - goub/**
+      - brie/**
+      - parmesan/**
+      - src/**
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read   # To checkout the repository
+  packages: write  # To push Docker images to GHCR
 
 jobs:
   build-docker:
-    name: Build and Release for Linux
-    uses: .github/workflows/action-gouda-docker.yml
+    name: Build docker dev build
+    uses: ./.github/workflows/action-gouda-docker.yml
     with:
       source_branch: ${{ github.ref_name }}
     secrets: inherit

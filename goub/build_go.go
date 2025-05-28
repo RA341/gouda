@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"sort"
+	"slices"
 	"strings"
 	"time"
 )
@@ -232,7 +232,18 @@ func calculateGoSourceHash(baseDir string) (string, int, error) {
 	}
 
 	// Sort files by path for consistent hashing.
-	sort.Strings(goFiles)
+	slices.SortStableFunc(goFiles, func(a, b string) int {
+		// remove ".../Dev/Go/gouda/src" compare only the subdir and files
+		a, _ = strings.CutPrefix(a, searchPath)
+		b, _ = strings.CutPrefix(b, searchPath)
+		a = filepath.ToSlash(a)
+		b = filepath.ToSlash(b)
+		return strings.Compare(a, b)
+	})
+
+	for _, goFile := range goFiles {
+		printGreen(goFile)
+	}
 
 	hasher := sha256.New()
 	for _, goFilePath := range goFiles {

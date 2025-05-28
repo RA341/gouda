@@ -16,10 +16,6 @@ on:
         description: 'The name of the source Git branch (e.g., main, develop, feature/xyz). For build arguments or specific branch tagging.'
         required: true
         type: string
-    secrets:
-      GH_TOKEN:
-        description: 'GitHub Token for uploading release assets and pushing to GHCR'
-        required: true
 
 jobs:
   build-and-push:
@@ -44,7 +40,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GH_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Docker image tags and labels
         id: meta
@@ -52,11 +48,10 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            # always use the `version_tag` input directly as a tag, full vX.X.X
-            type=raw,value=${{ inputs.version_tag }}
-            
             # assumes `version_tag` is valid SemVer skip tag if empty (vX.Y.Z or X.Y.Z), create major and major.minor tags.
             # Example: if version_tag is "v1.2.3", this adds "v1" and "v1.2".
+            
+            type=raw,value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
             type=semver,pattern={{major}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
             type=semver,pattern={{major}}.{{minor}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
 
@@ -64,20 +59,17 @@ jobs:
             type=raw,value=${{ inputs.source_branch }},enable=${{ inputs.source_branch != '' }}            
             
             # short commit SHA tag for traceability.
-            type=sha,format=short
+            type=sha,prefix=,suffix=,format=short
 
             # Add 'dev' tag if the source branch is 'main'.
             type=raw,value=dev,enable=${{ inputs.source_branch == 'main' }}            
             
             # Add 'latest' tag if `is_latest` input is true.
-            type=raw,value=latest,enable=${{ inputs.is_latest == true }}
-
-            # Optionally, add a short commit SHA tag for traceability.
-            type=sha,format=short
+            type=raw,value=latest,enable=${{ inputs.is_latest }}
 
           labels: |
-            org.opencontainers.image.title=${{ inputs.image_name }}
-            org.opencontainers.image.description=Docker image for ${{ inputs.image_name }} application.
+            org.opencontainers.image.title=Gouda
+            org.opencontainers.image.description=Docker image for Gouda.
             org.opencontainers.image.vendor=${{ github.repository_owner }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             # org.opencontainers.image.version will be set by metadata-action if semver is detected from version_tag
@@ -95,7 +87,7 @@ jobs:
           build-args: |
             VERSION=${{ steps.meta.outputs.version || inputs.version_tag }}
             COMMIT_INFO=${{ github.sha }}
-            BRANCH_NAME=${{ inputs.source_branch || 'unknown' }}
+            BRANCH=${{ inputs.source_branch || 'unknown' }}
 
       - name: Echo image details
         if: success()
