@@ -11,7 +11,7 @@ Hence, it is intended to work with the [extension](parmesan).
 
 ## Getting Started
 
-Gouda is recommended to be used with docker, but raw binaries are provided fo platforms where docker cannot be installed
+Gouda is best used with Docker. For platforms where Docker isn't an option, binaries are provided.
 
 ### Docker
 
