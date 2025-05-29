@@ -11,7 +11,7 @@ Hence, it is intended to work with the [extension](parmesan).
 
 ## Getting Started
 
-Gouda is best used with Docker. For platforms where Docker isn't an option, binaries are provided.
+Gouda is best used with Docker. For platforms where Docker isn't an option, native binaries are provided.
 
 ### Docker
 
@@ -27,31 +27,8 @@ Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will 
     & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'extension'
     ```
 
-### Windows
-
-* Server
-    ```powershell
-    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'server'
-    ```
-
-* Desktop
-    ```powershell
-    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'desktop'
-    ```
-
-### Linux
-
-* Server
-    ```bash
-    curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- server
-    ```
-
-* Desktop
-    ```bash
-    curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- desktop
-    ```
-
-Refer the [docs](https://gouda.dumbapps.org)
+### Docs
+For configuration options, usage examples, and detailed explanations, refer to the [docs](https://gouda.dumbapps.org).
 
 ## How it Works
 
