@@ -179,7 +179,7 @@ function unzip_and_cleanup {
 if ($Args.Count -eq 0 -or [string]::IsNullOrEmpty($Args[0])) {
     Write-Host "Usage: $($MyInvocation.MyCommand.Name) <type>"
     Write-Host "Available types: extension, server, desktop, docker"
-    exit 1
+    return
 }
 
 $ACTION = $Args[0].ToLower() # Convert to lowercase for case-insensitive comparison
@@ -242,8 +242,7 @@ switch ($ACTION) {
 }
 
 if ($script_failed) {
-    exit 1
+    Write-Host "Error" -ForegroundColor Red
 } else {
     Write-Host "✅ All operations completed successfully." -ForegroundColor Green
-    exit 0
 }
