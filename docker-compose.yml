@@ -1,3 +1,4 @@
+# developer docker compose not recommended for real deployments
 services:
   gouda:
     container_name: gouda-local

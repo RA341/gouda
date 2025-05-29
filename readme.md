@@ -11,6 +11,46 @@ Hence, it is intended to work with the [extension](parmesan).
 
 ## Getting Started
 
+Gouda is recommended to be used with docker, but raw binaries are provided fo platforms where docker cannot be installed
+
+### Docker
+
+Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will need to setup your download client correctly
+
+* On linux:
+    ```bash
+    curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- docker
+    ```
+
+* On windows
+    ```powershell
+    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'extension'
+    ```
+
+### Windows
+
+* Server
+    ```powershell
+    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'server'
+    ```
+
+* Desktop
+    ```powershell
+    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'desktop'
+    ```
+
+### Linux
+
+* Server
+    ```bash
+    curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- server
+    ```
+
+* Desktop
+    ```bash
+    curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- desktop
+    ```
+
 Refer the [docs](https://gouda.dumbapps.org)
 
 ## How it Works
@@ -18,7 +58,7 @@ Refer the [docs](https://gouda.dumbapps.org)
 * When you download something from myanonmouse, You use the gouda button (from the [extension](parmesan)) instead of the
   download button.
 
-* The extension then sends the book, author, series info and the [category](#categories), to gouda.
+* The extension then sends the book, author, series info and the category, to gouda.
 
 * gouda then downloads the torrent file, sends it to the download client.
 
