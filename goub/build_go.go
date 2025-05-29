@@ -241,10 +241,6 @@ func calculateGoSourceHash(baseDir string) (string, int, error) {
 		return strings.Compare(a, b)
 	})
 
-	for _, goFile := range goFiles {
-		printGreen(goFile)
-	}
-
 	hasher := sha256.New()
 	for _, goFilePath := range goFiles {
 		file, openErr := os.Open(goFilePath)
@@ -253,16 +249,11 @@ func calculateGoSourceHash(baseDir string) (string, int, error) {
 		}
 
 		if _, copyErr := io.Copy(hasher, file); copyErr != nil {
-			if closeErr := file.Close(); closeErr != nil {
-				fmt.Printf("error ocurred while closing file '%s': %v\n", goFilePath, err)
-			}
-
+			warn(file.Close())
 			return "", 0, fmt.Errorf("failed to read/hash file '%s': %w", goFilePath, copyErr)
 		}
 
-		if closeErr := file.Close(); closeErr != nil {
-			fmt.Printf("error ocurred while closing file '%s': %v\n", goFilePath, err)
-		}
+		warn(file.Close())
 	}
 
 	finalHash := fmt.Sprintf("%x", hasher.Sum(nil))
