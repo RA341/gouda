@@ -1,0 +1,25 @@
+name: Release Pipeline
+
+on:
+  push:
+    branches:
+      - main # publish a dev build on main
+    paths: # trigger only when source code changes
+      - .github/workflows/dev.yml
+      - .github/workflows/action-gouda-docker.yml
+      - goub/**
+      - brie/**
+      - parmesan/**
+      - src/**
+
+permissions:
+  contents: read   # To checkout the repository
+  packages: write  # To push Docker images to GHCR
+
+jobs:
+  build-docker:
+    name: Build docker dev build
+    uses: ./.github/workflows/action-gouda-docker.yml
+    with:
+      source_branch: ${{ github.ref_name }}
+    secrets: inherit

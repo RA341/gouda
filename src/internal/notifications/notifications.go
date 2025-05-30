@@ -6,25 +6,25 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type NotificationService struct {
-	Urls []string
-}
+type NotificationService struct{}
 
-func (nf *NotificationService) SendNotif(message, bodyMessage string) {
-	sender, err := shoutrrr.CreateSender(nf.Urls...)
+func (nf *NotificationService) SendNotif(opts ...NotificationOpt) {
+	notif := parseOpts(opts...)
+
+	sender, err := shoutrrr.CreateSender(notif.urls...)
 	if err != nil {
 		log.Error().Err(err).Msg("Unable to create shoutrrr sender")
 		return
 	}
 
-	results := sender.Send(message, &types.Params{
-		"title": message,
-		"body":  bodyMessage,
+	results := sender.Send(notif.title, &types.Params{
+		"title": notif.title,
+		"body":  notif.body,
 	})
 
 	for index, result := range results {
 		if result != nil {
-			log.Error().Err(result).Msgf("Unable to send notification to %s", nf.Urls[index])
+			log.Error().Err(result).Msgf("Unable to send notification to %s", notif.urls[index])
 		}
 	}
 }

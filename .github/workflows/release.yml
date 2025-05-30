@@ -2,7 +2,16 @@ name: Release Pipeline
 
 on:
   push:
-    branches: [ "release" ]
+    branches:
+      - release
+    paths:
+      - .github/workflows/action-*
+      - .github/workflows/build.yml
+      - .github/workflows/release.yml
+      - goub/**
+      - brie/**
+      - parmesan/**
+      - src/**
 
 permissions:
   contents: write
@@ -42,181 +51,13 @@ jobs:
         id: get_tag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
-      - name: Extract Major Version
-        id: major_version
-        run: |
-          VERSION=${{ steps.get_tag.outputs.tag }}
-          echo "major=$(echo $VERSION | cut -d'.' -f1)" >> $GITHUB_OUTPUT
-
-  build-extension:
-    needs: tag-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Update Extension Version
-        working-directory: parmesan
-        run: |
-          VERSION="${{ needs.tag-release.outputs.new_tag }}"
-          STRIPPED_VERSION=${VERSION#v}
-          npx dot-json@1 "source/manifest.json" version "$STRIPPED_VERSION"
-
-      - name: Build and Package Extension
-        working-directory: parmesan/
-        run: |
-          npm i
-          npm run build
-          zip -j ./parmesan_extension.zip ./dist/*
-
-      - name: Upload Extension Asset
-        uses: softprops/action-gh-release@v2
-        with:
-          files: parmesan/parmesan_extension.zip
-          tag_name: ${{ needs.tag-release.outputs.new_tag }}
+      - name: Trigger docker.yml workflow
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-docker:
-    needs: tag-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/gouda:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/gouda:${{ needs.tag-release.outputs.new_tag }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/gouda:${{ needs.tag-release.outputs.major_version }}
-          labels: |
-            org.opencontainers.image.title=gouda
-            org.opencontainers.image.description=This is the stable version for gouda app.
-            org.opencontainers.image.source=https://github.com/RA341/gouda
-            org.opencontainers.image.version=${{ needs.tag-release.outputs.new_tag }}
-          build-args: |
-            VERSION=${{ needs.tag-release.outputs.new_tag }}
-
-  build-linux:
-    needs: tag-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
-
-      # just runner
-      - name: setup just
-        uses: extractions/setup-just@v2
-
-      - name: Build linux binaries
-        env:
-          CGO_ENABLED: 1
-        working-directory: build_script
-        run: just ci-lin ${{ needs.tag-release.outputs.new_tag }}
-
-      - name: Upload Release Asset
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            build_script/build_output/linux/desktop/gouda-desktop-linux.zip
-            build_script/build_output/linux/server/gouda-server-linux
-          tag_name: ${{ needs.tag-release.outputs.new_tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-windows:
-    needs: tag-release
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup MSYS2
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW64
-          update: true
-          install: >-
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-make
-
-      # flutter build
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.27.1'
-          channel: 'stable'
-          cache: true
-
-      # Enable Windows desktop support
-      - name: Enable Windows desktop support
+          GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+        if: ${{ steps.get_tag.outputs.tag != '' }}
+        # ref_name will be release
         run: |
-          flutter config --enable-windows-desktop
-          flutter doctor
-
-      # golang build
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.24'
-      # just
-      - name: setup just
-        uses: extractions/setup-just@v2
-
-      - name: Install winget
-        uses: Cyberboss/install-winget@v1
-
-      - name: Run build script
-        env:
-          CGO_ENABLED: 1
-        working-directory: build_script
-        run: |
-          just ci-win "${{ needs.tag-release.outputs.new_tag }}"
-
-      - name: Upload Release Asset
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            build_script/build_output/windows/desktop/gouda-desktop-windows.zip
-            build_script/build_output/windows/server/gouda-server-windows.exe
-          tag_name: ${{ needs.tag-release.outputs.new_tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh workflow run build.yml \
+            --repo ${{ github.repository }} \
+            --ref ${{ github.ref_name }} \
+            -f tag_name=${{ steps.get_tag.outputs.tag }}

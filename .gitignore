@@ -6,7 +6,11 @@ appdata
 sample
 build_script/build_output
 /install_scripts/parmesan_extension/
-/install_scripts/parmesan_extension.zip
 /**/web
-src/download_clients/test/downloads
-install_scripts/test
+src/downloads/clients/test/downloads
+scripts_*/**/test
+/install_scripts/**/parmesan_extension.zip
+/src/internal/downloads/test/testTorrent
+/src/internal/downloads/clients/utils-docker-compose.yml
+/**/.idea
+/**/gouda-*

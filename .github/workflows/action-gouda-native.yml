@@ -1,0 +1,88 @@
+name: Build gouda native binaries
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: 'The operating system to run the build on (e.g., ubuntu-latest, windows-latest)'
+        required: true
+        type: string
+      tag_name:
+        description: 'The release tag name for uploading assets'
+        required: true
+        type: string
+      flutter_version:
+        description: 'Flutter version to use'
+        required: false
+        type: string
+        default: '3.27.1'
+      go_version:
+        description: 'Go version to use'
+        required: false
+        type: string
+        default: '1.24'
+
+jobs:
+  build:
+    name: Build Gouda for ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+    permissions:
+      contents: write  # Allows checking out code and uploading release assets
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ inputs.flutter_version }}
+          channel: 'stable'
+
+      - name: Set up Go
+        uses: actions/setup-go@v5 # Updated to v5
+        with:
+          go-version: ${{ inputs.go_version }}
+
+      # OS-specific CGO dependencies
+      - name: Install Linux CGO dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            gcc libgtk-3-dev libayatana-appindicator3-dev
+        shell: bash
+
+      - name: Setup MSYS2 for Windows CGO
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-make
+          # Add mingw-w64-x86_64-toolchain for a more complete C/C++ dev environment if needed
+        # Ensure MSYS2/MinGW paths are correctly added for subsequent steps if 'go install' or 'goub' need them
+        # This action usually handles PATH setup for its shell environment.
+
+      - name: Build and install goub build tool
+        working-directory: goub # Assumes 'goub' is a directory in your repo root
+        run: go install
+        shell: bash # Explicitly set shell for consistency, especially on Windows
+
+      - name: Build gouda
+        env:
+          CGO_ENABLED: 1
+        run: goub build all -o=output
+        shell: bash # Explicitly set shell
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            output/*
+          tag_name: ${{ inputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

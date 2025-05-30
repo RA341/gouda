@@ -3,21 +3,22 @@ package auth
 import (
 	"errors"
 	"fmt"
+	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/pkg"
 	"github.com/rs/zerolog/log"
 )
 
 func VerifyToken(token string) (bool, error) {
-	if pkg.IsDocker() {
+	if config.IsDocker() {
 		return true, nil
 	}
 
-	apiKey := pkg.ApiKey.GetStr()
+	apiKey := config.ApiKey.GetStr()
 	if apiKey == token {
 		return true, nil
 	}
 
-	tok := pkg.UserSession.GetStr()
+	tok := config.UserSession.GetStr()
 	if tok == token {
 		return true, nil
 	}
@@ -27,8 +28,8 @@ func VerifyToken(token string) (bool, error) {
 }
 
 func CheckUserPass(user, pass string) (string, error) {
-	username := pkg.Username.GetStr()
-	password := pkg.Password.GetStr()
+	username := config.Username.GetStr()
+	password := config.Password.GetStr()
 
 	if username == user && password == pass {
 		tok, err := pkg.GenerateToken(32)
@@ -36,7 +37,7 @@ func CheckUserPass(user, pass string) (string, error) {
 			return "", fmt.Errorf("failed to generate token %v", err)
 		}
 
-		pkg.UserSession.Set(tok)
+		config.UserSession.Set(tok)
 		return tok, nil
 	}
 
