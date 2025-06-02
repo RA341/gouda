@@ -19,10 +19,10 @@ var (
 )
 
 var (
-	variants = map[string]interface{}{
-		"all":     struct{}{},
-		"desktop": struct{}{},
-		"server":  struct{}{},
+	buildMap = map[string]func(destinationDir string, flutterWebReady context.Context, opt ...BuildOpt) error{
+		"all":     buildAll,
+		"desktop": buildDesktop,
+		"server":  buildServer,
 	}
 )
 
@@ -54,12 +54,6 @@ func build(variant string, destinationDir string, opt ...BuildOpt) error {
 		return err
 	}
 	opt = append(opt, withGitMetadata(info), withSourceHash(goRoot), withGoudaRoot())
-
-	buildMap := map[string]func(destinationDir string, flutterWebReady context.Context, opt ...BuildOpt) error{
-		"desktop": buildDesktop,
-		"server":  buildServer,
-		"all":     buildAll,
-	}
 
 	buildFn, ok := buildMap[variant]
 	if !ok {

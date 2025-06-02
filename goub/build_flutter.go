@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/fatih/color"
+	"os"
 	"path/filepath"
 )
 
@@ -30,7 +31,7 @@ func runFlutterBuildRoot(variant string) (string, error) {
 func buildFlutter(variant string, workingDir string) (string, error) {
 	printBlue("Starting flutter build", variant, "working dir", workingDir)
 	cmd := buildFlutterCmd(variant)
-	if err := executeCommand(cmd, workingDir); err != nil {
+	if err := executeCommand(cmd, workingDir, os.Stdout, os.Stderr); err != nil {
 		return "", err
 	}
 
