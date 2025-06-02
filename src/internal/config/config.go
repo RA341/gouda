@@ -45,16 +45,25 @@ func Load() {
 		log.Fatal().Err(err).Msg("could not setup config options")
 	}
 
+	var setupCompleted = true
+
+	err = viper.ReadInConfig()
+	if err != nil {
+		var notfound viper.ConfigFileNotFoundError
+		if !errors.As(err, &notfound) {
+			log.Fatal().Err(err).Msg("could not read config file")
+		}
+		log.Debug().Msg("Config file not found. Setting setupComplete to false.")
+		setupCompleted = false
+	}
+
+	viper.SetDefault(SetupComplete.s(), setupCompleted)
+
 	if err := viper.SafeWriteConfig(); err != nil {
 		var configFileAlreadyExistsError viper.ConfigFileAlreadyExistsError
 		if !errors.As(err, &configFileAlreadyExistsError) {
 			log.Fatal().Err(err).Msg("viper could not write to config file")
 		}
-	}
-
-	err = viper.ReadInConfig()
-	if err != nil {
-		log.Fatal().Err(err).Msg("could not read config file")
 	}
 
 	log.Info().Msg("watching config file")
@@ -94,7 +103,6 @@ func setupConfigOptions(configDir, baseDir string) error {
 
 	// Set general settings
 	viper.SetDefault(ApiKey.s(), key)
-	viper.SetDefault(SetupComplete.s(), false)
 	viper.SetDefault(ServerPort.s(), "9862")
 	viper.SetDefault(DownloadCheckTimeout.s(), 15)
 	viper.SetDefault(IgnoreTimeout.s(), false)
