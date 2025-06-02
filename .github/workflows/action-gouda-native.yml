@@ -41,9 +41,12 @@ jobs:
           channel: 'stable'
 
       - name: Set up Go
-        uses: actions/setup-go@v5 # Updated to v5
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ inputs.go_version }}
+          cache-dependency-path: |
+            src/go.sum
+            goub/go.sum
 
       # OS-specific CGO dependencies
       - name: Install Linux CGO dependencies
