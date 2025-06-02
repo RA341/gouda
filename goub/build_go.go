@@ -42,7 +42,7 @@ func runGoBuild(opt ...BuildOpt) (string, error) {
 	cmd, binaryPath := generateGoBuildCmd(config)
 	printCyan(cmd)
 
-	if err := executeCommand(cmd, config.WorkingDir); err != nil {
+	if err := executeCommand(cmd, config.WorkingDir, os.Stdout, os.Stderr); err != nil {
 		return "", err
 	}
 

@@ -40,7 +40,7 @@ func main() {
 }
 
 func generalBuildCommands() *cobra.Command {
-	allowedVariants := "[" + strings.Join(maps.Keys(variants), "|") + "]"
+	allowedVariants := "[" + strings.Join(maps.Keys(buildMap), "|") + "]"
 
 	var outputPath string
 	buildGouda := &cobra.Command{
@@ -49,7 +49,7 @@ func generalBuildCommands() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			variant := args[0]
-			if _, ok := variants[variant]; !ok {
+			if _, ok := buildMap[variant]; !ok {
 				must(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
 			}
 
@@ -66,7 +66,7 @@ func generalBuildCommands() *cobra.Command {
 }
 
 func goBuildCommands() *cobra.Command {
-	allowedVariants := "[" + strings.Join(maps.Keys(variants), "|") + "]"
+	allowedVariants := "[" + strings.Join(maps.Keys(buildMap), "|") + "]"
 
 	var outputPath string
 	var commit string
@@ -89,7 +89,7 @@ func goBuildCommands() *cobra.Command {
 			}
 
 			variant := args[0]
-			if _, ok := variants[variant]; !ok {
+			if _, ok := buildMap[variant]; !ok {
 				must(fmt.Errorf("invalid variant: %s, allowed: %s", args[0], allowedVariants))
 			}
 
