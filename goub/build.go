@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"io"
+	"io/fs"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -34,10 +36,18 @@ func build(variant string, destinationDir string, opt ...BuildOpt) error {
 		return err
 	}
 
-	err = resolveRootDir()
+	err = verifyDir()
 	if err != nil {
-		must(err)
+		printGreen("Directory verification failed: %s\n", err.Error())
+		printGreen("Listing directories:\n")
+		err = ls()
+		return err
 	}
+
+	//err = resolveRootDir()
+	//if err != nil {
+	//	must(err)
+	//}
 
 	info, err := getGitInfo()
 	if err != nil {
@@ -63,6 +73,55 @@ func build(variant string, destinationDir string, opt ...BuildOpt) error {
 	}()
 
 	if err = buildFn(destinationDir, flutterWebCtx, opt...); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ls() error {
+	dirPath := "."
+	entries, err := os.ReadDir(dirPath)
+	if err != nil {
+		log.Fatalf("Failed to read directory %s: %v", dirPath, err)
+	}
+
+	fmt.Printf("Contents of directory '%s':\n", dirPath)
+	for _, entry := range entries {
+		fmt.Print(entry.Name())
+
+		// You can also get more information about the entry
+		if entry.IsDir() {
+			fmt.Print("/") // Indicate it's a directory
+		} else if entry.Type()&fs.ModeSymlink != 0 {
+			// Resolve symlink to see where it points, similar to `ls -l`
+			symlinkPath := filepath.Join(dirPath, entry.Name())
+			target, err := os.Readlink(symlinkPath)
+			if err != nil {
+				fmt.Printf(" -> [broken symlink] (%v)", err)
+			} else {
+				fmt.Printf(" -> %s", target)
+			}
+		}
+		fmt.Println()
+	}
+	return err
+}
+
+func verifyDir() error {
+	_, err := os.Stat("brie/pubspec.yaml")
+	if errors.Is(err, fs.ErrNotExist) {
+		return fmt.Errorf("brie dir with pubspec not found")
+	}
+	if err != nil {
+		return err
+	}
+
+	_, err = os.Stat("src/go.mod")
+	if errors.Is(err, fs.ErrNotExist) {
+		return fmt.Errorf("go dir with go.mod not found")
+	}
+	if err != nil {
 		return err
 	}
 
