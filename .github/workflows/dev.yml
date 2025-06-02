@@ -13,7 +13,7 @@ on:
       - src/**
 
 permissions:
-  contents: write   # To checkout the repository
+  contents: read   # To checkout the repository
   packages: write  # To push Docker images to GHCR
 
 
@@ -25,12 +25,12 @@ jobs:
       source_branch: ${{ github.ref_name }}
     secrets: inherit
 
-  build_and_release_linux:
-    name: Build and Release for Linux
-    uses: ./.github/workflows/action-gouda-native.yml
-    with:
-      os: ubuntu-latest
-      flutter_version: '3.27.1'
-      go_version: '1.24'
-      tag_name: dev
-    secrets: inherit
+#  build_and_release_linux:
+#    name: Build and Release for Linux
+#    uses: ./.github/workflows/action-gouda-native.yml
+#    with:
+#      os: ubuntu-latest
+#      flutter_version: '3.27.1'
+#      go_version: '1.24'
+#      tag_name: dev
+#    secrets: inherit
