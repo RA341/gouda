@@ -45,6 +45,9 @@ const (
 	// SettingsServiceGetMetadataProcedure is the fully-qualified name of the SettingsService's
 	// GetMetadata RPC.
 	SettingsServiceGetMetadataProcedure = "/settings.v1.SettingsService/GetMetadata"
+	// SettingsServiceTestClientProcedure is the fully-qualified name of the SettingsService's
+	// TestClient RPC.
+	SettingsServiceTestClientProcedure = "/settings.v1.SettingsService/TestClient"
 )
 
 // SettingsServiceClient is a client for the settings.v1.SettingsService service.
@@ -53,6 +56,7 @@ type SettingsServiceClient interface {
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
+	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
 }
 
 // NewSettingsServiceClient constructs a client for the settings.v1.SettingsService service. By
@@ -90,6 +94,12 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
 			connect.WithClientOptions(opts...),
 		),
+		testClient: connect.NewClient[v1.TorrentClient, v1.TestTorrentResponse](
+			httpClient,
+			baseURL+SettingsServiceTestClientProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("TestClient")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -99,6 +109,7 @@ type settingsServiceClient struct {
 	listSettings         *connect.Client[v1.ListSettingsResponse, v1.Settings]
 	listSupportedClients *connect.Client[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse]
 	getMetadata          *connect.Client[v1.GetMetadataRequest, v1.GetMetadataResponse]
+	testClient           *connect.Client[v1.TorrentClient, v1.TestTorrentResponse]
 }
 
 // UpdateSettings calls settings.v1.SettingsService.UpdateSettings.
@@ -121,12 +132,18 @@ func (c *settingsServiceClient) GetMetadata(ctx context.Context, req *connect.Re
 	return c.getMetadata.CallUnary(ctx, req)
 }
 
+// TestClient calls settings.v1.SettingsService.TestClient.
+func (c *settingsServiceClient) TestClient(ctx context.Context, req *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error) {
+	return c.testClient.CallUnary(ctx, req)
+}
+
 // SettingsServiceHandler is an implementation of the settings.v1.SettingsService service.
 type SettingsServiceHandler interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
+	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
 }
 
 // NewSettingsServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -160,6 +177,12 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
 		connect.WithHandlerOptions(opts...),
 	)
+	settingsServiceTestClientHandler := connect.NewUnaryHandler(
+		SettingsServiceTestClientProcedure,
+		svc.TestClient,
+		connect.WithSchema(settingsServiceMethods.ByName("TestClient")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/settings.v1.SettingsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case SettingsServiceUpdateSettingsProcedure:
@@ -170,6 +193,8 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 			settingsServiceListSupportedClientsHandler.ServeHTTP(w, r)
 		case SettingsServiceGetMetadataProcedure:
 			settingsServiceGetMetadataHandler.ServeHTTP(w, r)
+		case SettingsServiceTestClientProcedure:
+			settingsServiceTestClientHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -193,4 +218,8 @@ func (UnimplementedSettingsServiceHandler) ListSupportedClients(context.Context,
 
 func (UnimplementedSettingsServiceHandler) GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.GetMetadata is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.TestClient is not implemented"))
 }
