@@ -52,8 +52,8 @@ jobs:
             # Example: if version_tag is "v1.2.3", this adds "v1" and "v1.2".
             
             type=raw,value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
-            type=semver,pattern={{major}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
-            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
+            type=semver,pattern=v{{major}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
+            type=semver,pattern=v{{major}}.{{minor}},value=${{ inputs.version_tag }},enable=${{ inputs.version_tag != '' }}
 
             # `source_branch` input is provided add it as a tag.
             type=raw,value=${{ inputs.source_branch }},enable=${{ inputs.source_branch != '' }}            
