@@ -59,7 +59,7 @@ jobs:
             type=raw,value=${{ inputs.source_branch }},enable=${{ inputs.source_branch != '' }}            
             
             # short commit SHA tag for traceability.
-            type=sha,prefix=,suffix=,format=short
+            # type=sha,prefix=,suffix=,format=short,enable=${{ inputs.source_branch == 'main' }}
 
             # Add 'dev' tag if the source branch is 'main'.
             type=raw,value=dev,enable=${{ inputs.source_branch == 'main' }}            
@@ -71,7 +71,7 @@ jobs:
             org.opencontainers.image.title=Gouda
             org.opencontainers.image.description=Docker image for Gouda.
             org.opencontainers.image.vendor=${{ github.repository_owner }}
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            #            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             # org.opencontainers.image.version will be set by metadata-action if semver is detected from version_tag
 
       - name: Build and push Docker image
