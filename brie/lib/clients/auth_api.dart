@@ -1,3 +1,4 @@
+import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
 import 'package:brie/gen/auth/v1/auth.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
@@ -21,10 +22,14 @@ class AuthApi {
     required String user,
     required String pass,
   }) async {
-    final token = await apiClient.authenticate(AuthRequest(
-      username: user,
-      password: pass,
-    ));
+    final token = await mustRunGrpcRequest(
+      () => apiClient.authenticate(
+        AuthRequest(
+          username: user,
+          password: pass,
+        ),
+      ),
+    );
     await prefs.setString('apikey', token.authToken);
   }
 
@@ -34,8 +39,10 @@ class AuthApi {
     }
 
     try {
-      await apiClient.test(
-        AuthResponse(authToken: token),
+      await mustRunGrpcRequest(
+        () => apiClient.test(
+          AuthResponse(authToken: token),
+        ),
       );
     } catch (e) {
       logger.e('Incorrect token', error: e);
