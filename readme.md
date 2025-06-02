@@ -24,7 +24,7 @@ Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will 
 
 * On windows
     ```powershell
-    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'extension'
+    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'docker'
     ```
 
 ### Docs
