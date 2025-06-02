@@ -3,14 +3,10 @@ package manager
 import (
 	"connectrpc.com/connect"
 	"context"
-	"fmt"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
-	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
 	"github.com/RA341/gouda/internal/downloads/clients"
 	"github.com/RA341/gouda/internal/info"
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
 )
 
 type Handler struct {
@@ -21,74 +17,58 @@ func NewSettingsHandler(downloadService *downloads.DownloadService) *Handler {
 	return &Handler{downloadSrv: downloadService}
 }
 
-func (setSrv *Handler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+func (srv *Handler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return connect.NewResponse(&v1.GetMetadataResponse{
 		Version:    info.Version,
 		BinaryType: string(info.Flavour),
 	}), nil
 }
 
-func (setSrv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
+func (srv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	client, err := clients.TestTorrentClient(&clients.TorrentClient{
-		User:     settings.TorrentUser,
-		Password: settings.TorrentPassword,
-		Protocol: settings.TorrentProtocol,
-		Host:     settings.TorrentHost,
-		Type:     settings.TorrentName,
+	err := srv.downloadSrv.TestAndUpdateClient(&clients.TorrentClient{
+		User:     settings.Client.TorrentUser,
+		Password: settings.Client.TorrentPassword,
+		Protocol: settings.Client.TorrentProtocol,
+		Host:     settings.Client.TorrentHost,
+		Type:     settings.Client.TorrentName,
 	})
 	if err != nil {
-		log.Error().Err(err).Msg("Unable to connect torrent client")
-		return nil, fmt.Errorf("unable to connect torrent client: %v", err)
+		return nil, err
 	}
 
-	setSrv.downloadSrv.SetClient(client)
-
-	setSettings(settings)
-	// Save the configuration to file
-	err = viper.WriteConfig()
-	if err != nil {
-		return nil, fmt.Errorf("unable to save settings %v", err.Error())
+	if err = saveConfigFromRPC(settings); err != nil {
+		return nil, err
 	}
-
-	log.Debug().Msg("settings saved")
 
 	return connect.NewResponse(&v1.UpdateSettingsResponse{}), nil
 }
 
-func (setSrv *Handler) ListSettings(_ context.Context, _ *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error) {
-	res := connect.NewResponse(&v1.Settings{
-		// general
-		ApiKey:               config.ApiKey.GetStr(),
-		ServerPort:           config.ServerPort.GetStr(),
-		DownloadCheckTimeout: config.DownloadCheckTimeout.GetUint64(),
-		IgnoreTimeout:        config.IgnoreTimeout.GetBool(),
-		// folder settings
-		CompleteFolder: config.CompleteFolder.GetStr(),
-		DownloadFolder: config.DownloadFolder.GetStr(),
-		TorrentsFolder: config.TorrentsFolder.GetStr(),
-		// user auth
-		Username: config.Username.GetStr(),
-		Password: config.Password.GetStr(),
-		UserUid:  config.UserUid.GetUint64(),
-		GroupUid: config.GroupUid.GetUint64(),
-		// torrent stuff
-		TorrentName:     config.TorrentType.GetStr(),
-		TorrentHost:     config.TorrentHost.GetStr(),
-		TorrentProtocol: config.TorrentProtocol.GetStr(),
-		TorrentPassword: config.TorrentPassword.GetStr(),
-		TorrentUser:     config.TorrentUser.GetStr(),
+func (srv *Handler) TestClient(_ context.Context, c *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error) {
+	rpcClient := c.Msg
+	_, err := srv.downloadSrv.TestClient(&clients.TorrentClient{
+		User:     rpcClient.TorrentUser,
+		Password: rpcClient.TorrentPassword,
+		Protocol: rpcClient.TorrentProtocol,
+		Host:     rpcClient.TorrentHost,
+		Type:     rpcClient.TorrentName,
 	})
-
-	if info.IsDesktopMode() {
-		res.Msg.ExitOnClose = config.ExitOnClose.GetBool()
+	if err != nil {
+		return nil, err
 	}
 
+	// successful connect
+	return connect.NewResponse(&v1.TestTorrentResponse{}), nil
+}
+
+func (srv *Handler) ListSettings(_ context.Context, _ *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error) {
+	rpcSettings := loadConfigToRPC()
+	res := connect.NewResponse(rpcSettings)
 	return res, nil
 }
 
-func (setSrv *Handler) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+func (srv *Handler) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
 	supportedClients := clients.GetSupportedClients()
 
 	res := connect.NewResponse(&v1.ListSupportedClientsResponse{

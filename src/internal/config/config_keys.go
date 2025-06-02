@@ -9,6 +9,7 @@ const (
 	LogDir Config = "log_dir"
 	DbPath Config = "db_path"
 
+	SetupComplete        Config = "setup_complete"
 	ApiKey               Config = "apikey"
 	ServerPort           Config = "server.port"
 	DownloadCheckTimeout Config = "download.timeout"

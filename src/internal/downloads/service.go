@@ -36,8 +36,23 @@ func NewDownloadService(db Store, client dc.DownloadClient) *DownloadService {
 	return srv
 }
 
-func (d *DownloadService) SetClient(client dc.DownloadClient) {
-	d.client = client
+// TestAndUpdateClient tests the client first then updates the torrent client if successful
+func (d *DownloadService) TestAndUpdateClient(client *dc.TorrentClient) error {
+	newClient, err := d.TestClient(client)
+	if err != nil {
+		return err
+	}
+
+	d.client = newClient
+	return nil
+}
+
+func (d *DownloadService) TestClient(client *dc.TorrentClient) (dc.DownloadClient, error) {
+	newClient, err := dc.TestTorrentClient(client)
+	if err != nil {
+		return nil, fmt.Errorf("unable to connect torrent client: %v", err)
+	}
+	return newClient, nil
 }
 
 func (d *DownloadService) DownloadMedia(media *Media) error {
@@ -258,7 +273,7 @@ func (d *DownloadService) verifyClient() error {
 		if err != nil {
 			return fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
 		}
-		d.SetClient(client)
+		d.client = client
 	}
 	return nil
 }

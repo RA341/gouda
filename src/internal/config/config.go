@@ -94,6 +94,7 @@ func setupConfigOptions(configDir, baseDir string) error {
 
 	// Set general settings
 	viper.SetDefault(ApiKey.s(), key)
+	viper.SetDefault(SetupComplete.s(), false)
 	viper.SetDefault(ServerPort.s(), "9862")
 	viper.SetDefault(DownloadCheckTimeout.s(), 15)
 	viper.SetDefault(IgnoreTimeout.s(), false)
