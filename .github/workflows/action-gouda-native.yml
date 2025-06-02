@@ -15,7 +15,7 @@ on:
         description: 'Flutter version to use'
         required: false
         type: string
-        default: '3.27.1'
+        default: '3.32.0'
       go_version:
         description: 'Go version to use'
         required: false
