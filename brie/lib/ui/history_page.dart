@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:brie/clients/history_api.dart';
 import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/providers.dart';
+import 'package:brie/ui/components/page_header.dart';
 import 'package:brie/ui/components/utils.dart';
 import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
@@ -16,41 +17,60 @@ class HistoryPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final search = useTextEditingController();
-
     return Column(
+      spacing: 10,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: SearchBar(
-            controller: search,
-            hintText: 'Search media',
-            onSubmitted: (value) async {
-              ref.read(searchProvider.notifier).state = value;
-              ref.read(requestHistoryProvider.notifier).fetchData();
-            },
-            trailing: [
-              IconButton(
-                onPressed: () {
-                  ref.read(searchProvider.notifier).state = search.text;
-                  ref.read(requestHistoryProvider.notifier).fetchData();
-                },
-                icon: Icon(Icons.search),
+        Row(
+          children: [
+            Column(
+              spacing: 10,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: pageHeaderBuilder(
+                header: "Media",
+                subHeading: "List of media downloaded by gouda",
               ),
-              ref.watch(searchProvider).isNotEmpty
-                  ? IconButton(
-                      onPressed: () {
-                        search.clear();
-                        ref.invalidate(searchProvider);
-                        ref.read(requestHistoryProvider.notifier).fetchData();
-                      },
-                      icon: Icon(Icons.clear),
-                    )
-                  : SizedBox(),
-            ],
-          ),
+            ),
+            Expanded(child: Center(child: MediaSearchBar())),
+          ],
         ),
         Expanded(child: ResultViewPage()),
+      ],
+    );
+  }
+}
+
+class MediaSearchBar extends HookConsumerWidget {
+  const MediaSearchBar({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final search = useTextEditingController();
+
+    return SearchBar(
+      controller: search,
+      hintText: 'Search media',
+      onSubmitted: (value) async {
+        ref.read(searchProvider.notifier).state = value;
+        ref.read(requestHistoryProvider.notifier).fetchData();
+      },
+      trailing: [
+        IconButton(
+          onPressed: () {
+            ref.read(searchProvider.notifier).state = search.text;
+            ref.read(requestHistoryProvider.notifier).fetchData();
+          },
+          icon: Icon(Icons.search),
+        ),
+        ref.watch(searchProvider).isNotEmpty
+            ? IconButton(
+                onPressed: () {
+                  search.clear();
+                  ref.invalidate(searchProvider);
+                  ref.read(requestHistoryProvider.notifier).fetchData();
+                },
+                icon: Icon(Icons.clear),
+              )
+            : SizedBox(),
       ],
     );
   }
@@ -210,7 +230,7 @@ class HistoryView extends HookConsumerWidget {
                                     context,
                                     'Error retrying',
                                     '',
-                                    e.toString(),
+                                    errorMessage: e.toString(),
                                   );
                                 }
                               },
@@ -230,7 +250,7 @@ class HistoryView extends HookConsumerWidget {
                                     context,
                                     'Error retrying',
                                     '',
-                                    e.toString(),
+                                    errorMessage: e.toString(),
                                   );
                                 }
                               },
@@ -278,7 +298,7 @@ class PaginationActions extends HookConsumerWidget {
                         context,
                         'Unable to get previous page',
                         '',
-                        e.toString(),
+                        errorMessage: e.toString(),
                       );
                     }
                     isLoading.value = false;
@@ -314,7 +334,7 @@ class PaginationActions extends HookConsumerWidget {
                         context,
                         'Unable to get next page',
                         '',
-                        e.toString(),
+                        errorMessage: e.toString(),
                       );
                     }
                     isLoading.value = false;

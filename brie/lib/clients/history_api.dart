@@ -1,3 +1,4 @@
+import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/media_requests/v1/media_requests.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:fixnum/fixnum.dart';
@@ -24,26 +25,36 @@ class HistoryApi {
     int limit = 20,
     int offset = 20,
   }) async {
-    final medias = await apiClient.list(
-      ListRequest(
-        limit: Int64(limit),
-        offset: Int64(offset),
+    final medias = await mustRunGrpcRequest(
+      () => apiClient.list(
+        ListRequest(limit: Int64(limit), offset: Int64(offset)),
       ),
     );
     return (medias.results, medias.totalRecords);
   }
 
   Future<void> retryBookRequest(Int64 id) async {
-    await apiClient.retry(
-      RetryRequest(iD: id),
+    await mustRunGrpcRequest(
+      () => apiClient.retry(
+        RetryRequest(iD: id),
+      ),
     );
   }
 
   Future<List<Media>> searchMedia(String query) async {
-    return (await apiClient.search(SearchRequest(mediaQuery: query))).results;
+    return (await mustRunGrpcRequest(
+      () => apiClient.search(
+        SearchRequest(mediaQuery: query),
+      ),
+    ))
+        .results;
   }
 
   Future<void> deleteBookRequest(Int64 reqId) async {
-    await apiClient.delete(DeleteRequest(requestId: reqId));
+    await mustRunGrpcRequest(
+      () => apiClient.delete(
+        DeleteRequest(requestId: reqId),
+      ),
+    );
   }
 }

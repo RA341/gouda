@@ -1,11 +1,11 @@
 # Use Ubuntu as base image
-FROM ubuntu:22.04
+FROM ubuntu:24.10
 
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install essential tools and dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
     curl \
     git \
     wget \
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Go
-ENV GO_VERSION=1.24
+ENV GO_VERSION=1.24.0
 
 RUN curl -OL https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go$GO_VERSION.linux-amd64.tar.gz && \
@@ -55,9 +55,9 @@ RUN . $NVM_DIR/nvm.sh && \
     @bufbuild/protoc-gen-es
 
 # Install Go tools
-RUN go install github.com/bufbuild/buf/cmd/buf@latest
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-RUN go install connectrpc.com/connect/cmd/protoc-gen-connect-go@latest
+RUN go install github.com/bufbuild/buf/cmd/buf@latest && \
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@latest && \
+    go install connectrpc.com/connect/cmd/protoc-gen-connect-go@latest
 
 # Set up PATH for tools
 ENV PATH="/root/.pub-cache/bin:${PATH}"

@@ -2,12 +2,13 @@
 //  Generated code. Do not modify.
 //  source: media_requests/v1/media_requests.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:async' as $async;
 import 'dart:core' as $core;
@@ -21,6 +22,14 @@ export 'media_requests.pb.dart';
 
 @$pb.GrpcServiceName('media_requests.v1.MediaRequestService')
 class MediaRequestServiceClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
   static final _$search = $grpc.ClientMethod<$2.SearchRequest, $2.SearchResponse>(
       '/media_requests.v1.MediaRequestService/Search',
       ($2.SearchRequest value) => value.writeToBuffer(),
@@ -50,11 +59,7 @@ class MediaRequestServiceClient extends $grpc.Client {
       ($2.AddMediaRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $2.AddMediaResponse.fromBuffer(value));
 
-  MediaRequestServiceClient($grpc.ClientChannel channel,
-      {$grpc.CallOptions? options,
-      $core.Iterable<$grpc.ClientInterceptor>? interceptors})
-      : super(channel, options: options,
-        interceptors: interceptors);
+  MediaRequestServiceClient(super.channel, {super.options, super.interceptors});
 
   $grpc.ResponseFuture<$2.SearchResponse> search($2.SearchRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$search, request, options: options);
@@ -141,32 +146,32 @@ abstract class MediaRequestServiceBase extends $grpc.Service {
         ($2.AddMediaResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$2.SearchResponse> search_Pre($grpc.ServiceCall call, $async.Future<$2.SearchRequest> request) async {
-    return search(call, await request);
+  $async.Future<$2.SearchResponse> search_Pre($grpc.ServiceCall $call, $async.Future<$2.SearchRequest> $request) async {
+    return search($call, await $request);
   }
 
-  $async.Future<$2.ListResponse> list_Pre($grpc.ServiceCall call, $async.Future<$2.ListRequest> request) async {
-    return list(call, await request);
+  $async.Future<$2.ListResponse> list_Pre($grpc.ServiceCall $call, $async.Future<$2.ListRequest> $request) async {
+    return list($call, await $request);
   }
 
-  $async.Future<$2.DeleteResponse> delete_Pre($grpc.ServiceCall call, $async.Future<$2.DeleteRequest> request) async {
-    return delete(call, await request);
+  $async.Future<$2.DeleteResponse> delete_Pre($grpc.ServiceCall $call, $async.Future<$2.DeleteRequest> $request) async {
+    return delete($call, await $request);
   }
 
-  $async.Future<$2.EditResponse> edit_Pre($grpc.ServiceCall call, $async.Future<$2.EditRequest> request) async {
-    return edit(call, await request);
+  $async.Future<$2.EditResponse> edit_Pre($grpc.ServiceCall $call, $async.Future<$2.EditRequest> $request) async {
+    return edit($call, await $request);
   }
 
-  $async.Future<$2.ExistsResponse> exists_Pre($grpc.ServiceCall call, $async.Future<$2.ExistsRequest> request) async {
-    return exists(call, await request);
+  $async.Future<$2.ExistsResponse> exists_Pre($grpc.ServiceCall $call, $async.Future<$2.ExistsRequest> $request) async {
+    return exists($call, await $request);
   }
 
-  $async.Future<$2.RetryResponse> retry_Pre($grpc.ServiceCall call, $async.Future<$2.RetryRequest> request) async {
-    return retry(call, await request);
+  $async.Future<$2.RetryResponse> retry_Pre($grpc.ServiceCall $call, $async.Future<$2.RetryRequest> $request) async {
+    return retry($call, await $request);
   }
 
-  $async.Future<$2.AddMediaResponse> addMedia_Pre($grpc.ServiceCall call, $async.Future<$2.AddMediaRequest> request) async {
-    return addMedia(call, await request);
+  $async.Future<$2.AddMediaResponse> addMedia_Pre($grpc.ServiceCall $call, $async.Future<$2.AddMediaRequest> $request) async {
+    return addMedia($call, await $request);
   }
 
   $async.Future<$2.SearchResponse> search($grpc.ServiceCall call, $2.SearchRequest request);

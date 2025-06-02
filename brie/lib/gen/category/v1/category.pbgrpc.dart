@@ -2,12 +2,13 @@
 //  Generated code. Do not modify.
 //  source: category/v1/category.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:async' as $async;
 import 'dart:core' as $core;
@@ -21,6 +22,14 @@ export 'category.pb.dart';
 
 @$pb.GrpcServiceName('category.v1.CategoryService')
 class CategoryServiceClient extends $grpc.Client {
+  /// The hostname for this service.
+  static const $core.String defaultHost = '';
+
+  /// OAuth scopes needed for the client.
+  static const $core.List<$core.String> oauthScopes = [
+    '',
+  ];
+
   static final _$listCategories = $grpc.ClientMethod<$1.ListCategoriesRequest, $1.ListCategoriesResponse>(
       '/category.v1.CategoryService/ListCategories',
       ($1.ListCategoriesRequest value) => value.writeToBuffer(),
@@ -34,11 +43,7 @@ class CategoryServiceClient extends $grpc.Client {
       ($1.DelCategoriesRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.DelCategoriesResponse.fromBuffer(value));
 
-  CategoryServiceClient($grpc.ClientChannel channel,
-      {$grpc.CallOptions? options,
-      $core.Iterable<$grpc.ClientInterceptor>? interceptors})
-      : super(channel, options: options,
-        interceptors: interceptors);
+  CategoryServiceClient(super.channel, {super.options, super.interceptors});
 
   $grpc.ResponseFuture<$1.ListCategoriesResponse> listCategories($1.ListCategoriesRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$listCategories, request, options: options);
@@ -81,16 +86,16 @@ abstract class CategoryServiceBase extends $grpc.Service {
         ($1.DelCategoriesResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$1.ListCategoriesResponse> listCategories_Pre($grpc.ServiceCall call, $async.Future<$1.ListCategoriesRequest> request) async {
-    return listCategories(call, await request);
+  $async.Future<$1.ListCategoriesResponse> listCategories_Pre($grpc.ServiceCall $call, $async.Future<$1.ListCategoriesRequest> $request) async {
+    return listCategories($call, await $request);
   }
 
-  $async.Future<$1.AddCategoriesResponse> addCategories_Pre($grpc.ServiceCall call, $async.Future<$1.AddCategoriesRequest> request) async {
-    return addCategories(call, await request);
+  $async.Future<$1.AddCategoriesResponse> addCategories_Pre($grpc.ServiceCall $call, $async.Future<$1.AddCategoriesRequest> $request) async {
+    return addCategories($call, await $request);
   }
 
-  $async.Future<$1.DelCategoriesResponse> deleteCategories_Pre($grpc.ServiceCall call, $async.Future<$1.DelCategoriesRequest> request) async {
-    return deleteCategories(call, await request);
+  $async.Future<$1.DelCategoriesResponse> deleteCategories_Pre($grpc.ServiceCall $call, $async.Future<$1.DelCategoriesRequest> $request) async {
+    return deleteCategories($call, await $request);
   }
 
   $async.Future<$1.ListCategoriesResponse> listCategories($grpc.ServiceCall call, $1.ListCategoriesRequest request);

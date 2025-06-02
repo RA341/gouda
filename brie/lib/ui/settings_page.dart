@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'components/page_header.dart';
+
 const headerStyle = TextStyle(fontSize: 28);
 const maxSettingsWidth = 300.0;
 
@@ -55,83 +57,62 @@ class SettingsContainer extends HookConsumerWidget {
       "User": UserGroup(settings: curSettings),
     };
 
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-              width: 5,
-              color: Theme.of(context).dividerColor,
-            ),
-            borderRadius: BorderRadius.circular(20)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              spacing: 10,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Application Settings",
-                    style: TextStyle(fontSize: 40),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                      'Configure your application settings. Changes will be applied after saving.'),
-                ),
-                SizedBox(height: 35),
-                SettingsTabs(
-                  tabs: tabs.keys
-                      .map((e) => Tab(
-                            text: e,
-                            icon: e == 'Torrent Client' &&
-                                    (curSettings.value.torrentHost.isEmpty ||
-                                        curSettings
-                                            .value.torrentName.isEmpty ||
-                                        curSettings
-                                            .value.torrentPassword.isEmpty)
-                                ? Icon(Icons.error, color: Colors.red)
-                                : null,
-                          ))
-                      .toList(),
-                ),
-                SizedBox(height: 20),
-                SettingsDisplay(
-                  settings: settingsObj,
-                  settingsGroup: tabs.values.toList(),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        await ref
-                            .watch(settingsApiProvider)
-                            .update(curSettings.value);
-                        ref.invalidate(settingsProvider);
-                        if (!context.mounted) return;
-                        showSnackBar(context, 'Updated settings');
-                      } catch (e) {
-                        if (!context.mounted) return;
-                        showErrorDialog(
-                          context,
-                          'Error saving settings',
-                          '',
-                          e.toString(),
-                        );
-                      }
-                    },
-                    child: Text('Update Settings'),
-                  ),
-                )
-              ],
-            ),
+    return SingleChildScrollView(
+      child: Column(
+        spacing: 10,
+        children: [
+          ...pageHeaderBuilder(
+            header: "Settings",
+            subHeading:
+                'Configure your application settings. Changes will be applied after saving.',
           ),
-        ),
+          SizedBox(height: 35),
+          SettingsTabs(
+            tabs: tabs.keys
+                .map((e) => Tab(
+                      text: e,
+                      icon: e == 'Torrent Client' &&
+                              (curSettings.value.client.torrentHost.isEmpty ||
+                                  curSettings
+                                      .value.client.torrentName.isEmpty ||
+                                  curSettings
+                                      .value.client.torrentPassword.isEmpty)
+                          ? Icon(Icons.error, color: Colors.red)
+                          : null,
+                    ))
+                .toList(),
+          ),
+          SizedBox(height: 20),
+          SettingsDisplay(
+            settings: settingsObj,
+            settingsGroup: tabs.values.toList(),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: ElevatedButton(
+              onPressed: () async {
+                try {
+                  await ref
+                      .watch(settingsApiProvider)
+                      .update(curSettings.value);
+                  ref.invalidate(settingsProvider);
+                  if (!context.mounted) return;
+                  showSnackBar(context, 'Updated settings');
+                } catch (e) {
+                  if (!context.mounted) return;
+                  showErrorDialog(
+                    context,
+                    'Error saving settings',
+                    '',
+                    errorMessage: e.toString(),
+                  );
+                }
+              },
+              child: Text('Update Settings'),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -156,7 +137,7 @@ class SettingsTabs extends HookConsumerWidget {
       tabAlignment: TabAlignment.fill,
       dividerColor: Colors.transparent,
       indicator: BoxDecoration(
-        color: Colors.green,
+        color: Theme.of(context).focusColor,
         // backgroundBlendMode: BlendMode.darken,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),

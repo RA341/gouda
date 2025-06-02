@@ -9,9 +9,12 @@ service SettingsService {
   rpc ListSettings(ListSettingsResponse) returns (Settings) {}
   rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
   rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
+  rpc TestClient(TorrentClient) returns (TestTorrentResponse) {}
 }
 
 message GetMetadataRequest {}
+
+message TestTorrentResponse {}
 
 message GetMetadataResponse {
   string version = 1;
@@ -33,8 +36,6 @@ message Settings {
   string api_key = 1;
   string server_port = 2;
   uint64 download_check_timeout = 3;
-  bool ignore_timeout = 17;
-  bool exit_on_close = 16;
 
   // Folder settings
   string complete_folder = 4;
@@ -48,9 +49,17 @@ message Settings {
   uint64 group_uid = 10;
 
   // Torrent settings
-  string torrent_host = 11;
-  string torrent_name = 12;
-  string torrent_password = 13;
-  string torrent_protocol = 14;
-  string torrent_user = 15;
+  TorrentClient client = 11;
+
+  bool exit_on_close = 12;
+  bool ignore_timeout = 13;
+  bool setup_complete = 14;
+}
+
+message TorrentClient {
+  string torrent_host = 1;
+  string torrent_name = 2;
+  string torrent_password = 3;
+  string torrent_protocol = 4;
+  string torrent_user = 5;
 }

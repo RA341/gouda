@@ -11,14 +11,31 @@ Hence, it is intended to work with the [extension](parmesan).
 
 ## Getting Started
 
-Refer the [docs](https://gouda.dumbapps.org)
+Gouda is best used with Docker. For platforms where Docker isn't an option, native binaries are provided.
+
+### Docker
+
+Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will need to setup your download client correctly
+
+* On linux:
+    ```bash
+    curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- docker
+    ```
+
+* On windows
+    ```powershell
+    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'docker'
+    ```
+
+### Docs
+For configuration options, usage examples, and detailed explanations, refer to the [docs](https://gouda.dumbapps.org).
 
 ## How it Works
 
 * When you download something from myanonmouse, You use the gouda button (from the [extension](parmesan)) instead of the
   download button.
 
-* The extension then sends the book, author, series info and the [category](#categories), to gouda.
+* The extension then sends the book, author, series info and the category, to gouda.
 
 * gouda then downloads the torrent file, sends it to the download client.
 

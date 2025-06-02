@@ -1,7 +1,5 @@
 name: brie
-description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+description: "Gouda UI"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
@@ -20,16 +18,16 @@ dependencies:
 
   # networking
   universal_html: ^2.2.4
-  http: ^1.3.0
-  grpc: ^4.0.1
-  protobuf: ^3.1.0
+  http: ^1.4.0
+  grpc: ^4.0.4
+  protobuf: ^4.1.0
 
   # ui
   flutter_animate: ^4.5.2
-  timeago: ^3.7.0
+  timeago: ^3.7.1
 
   # misc
-  shared_preferences: ^2.5.2
+  shared_preferences: ^2.5.3
   url_launcher:
   fixnum: ^1.1.1
   logger: ^2.5.0
@@ -37,31 +35,10 @@ dependencies:
 dev_dependencies:
   custom_lint:
   riverpod_lint: ^2.6.5
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/to/asset-from-package
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

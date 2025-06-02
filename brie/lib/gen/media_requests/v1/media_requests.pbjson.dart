@@ -2,12 +2,13 @@
 //  Generated code. Do not modify.
 //  source: media_requests/v1/media_requests.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -195,9 +196,9 @@ const Media$json = {
     {'1': 'file_link', '3': 12, '4': 1, '5': 9, '10': 'fileLink'},
     {'1': 'status', '3': 8, '4': 1, '5': 9, '10': 'status'},
     {'1': 'torrent_id', '3': 9, '4': 1, '5': 9, '10': 'torrentId'},
-    {'1': 'time_running', '3': 10, '4': 1, '5': 13, '10': 'timeRunning'},
     {'1': 'torrent_file_location', '3': 11, '4': 1, '5': 9, '10': 'torrentFileLocation'},
     {'1': 'createdAt', '3': 13, '4': 1, '5': 9, '10': 'createdAt'},
+    {'1': 'updatedAt', '3': 14, '4': 1, '5': 9, '10': 'updatedAt'},
   ],
 };
 
@@ -207,8 +208,7 @@ final $typed_data.Uint8List mediaDescriptor = $convert.base64Decode(
     'gDIAEoCVIEYm9vaxIWCgZzZXJpZXMYBCABKAlSBnNlcmllcxIjCg1zZXJpZXNfbnVtYmVyGAUg'
     'ASgNUgxzZXJpZXNOdW1iZXISGgoIY2F0ZWdvcnkYBiABKAlSCGNhdGVnb3J5Eh4KC21hbV9ib2'
     '9rX2lkGAcgASgEUgltYW1Cb29rSWQSGwoJZmlsZV9saW5rGAwgASgJUghmaWxlTGluaxIWCgZz'
-    'dGF0dXMYCCABKAlSBnN0YXR1cxIdCgp0b3JyZW50X2lkGAkgASgJUgl0b3JyZW50SWQSIQoMdG'
-    'ltZV9ydW5uaW5nGAogASgNUgt0aW1lUnVubmluZxIyChV0b3JyZW50X2ZpbGVfbG9jYXRpb24Y'
-    'CyABKAlSE3RvcnJlbnRGaWxlTG9jYXRpb24SHAoJY3JlYXRlZEF0GA0gASgJUgljcmVhdGVkQX'
-    'Q=');
+    'dGF0dXMYCCABKAlSBnN0YXR1cxIdCgp0b3JyZW50X2lkGAkgASgJUgl0b3JyZW50SWQSMgoVdG'
+    '9ycmVudF9maWxlX2xvY2F0aW9uGAsgASgJUhN0b3JyZW50RmlsZUxvY2F0aW9uEhwKCWNyZWF0'
+    'ZWRBdBgNIAEoCVIJY3JlYXRlZEF0EhwKCXVwZGF0ZWRBdBgOIAEoCVIJdXBkYXRlZEF0');
 

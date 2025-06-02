@@ -1,0 +1,80 @@
+name: Release Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'The tag name to use for the release (e.g., v1.0.0). Required if manually dispatched.'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  packages: write
+
+jobs:
+  build-extension:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Update Extension Version
+        working-directory: parmesan
+        run: |
+          VERSION="${{ github.event.inputs.tag_name }}"
+          STRIPPED_VERSION=${VERSION#v}
+          npx dot-json@1 "source/manifest.json" version "$STRIPPED_VERSION"
+
+      - name: Build and Package Extension
+        working-directory: parmesan/
+        run: |
+          npm i
+          npm run build
+          zip -j ./parmesan_extension.zip ./dist/*
+
+      - name: Upload Extension Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: parmesan/parmesan_extension.zip
+          tag_name: ${{ github.event.inputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-docker:
+    name: Build and Release for Docker
+    uses: ./.github/workflows/action-gouda-docker.yml
+    with:
+      version_tag: ${{ github.event.inputs.tag_name }}
+      is_latest: true
+      source_branch: ${{ github.ref_name }}
+    secrets: inherit
+
+  build_and_release_linux:
+    name: Build and Release for Linux
+    uses: ./.github/workflows/action-gouda-native.yml
+    with:
+      os: ubuntu-latest
+      flutter_version: '3.27.1'
+      go_version: '1.24'
+      tag_name: ${{ github.event.inputs.tag_name }}
+    secrets: inherit
+
+  build_and_release_windows:
+    name: Build and Release for Windows
+    uses: ./.github/workflows/action-gouda-native.yml
+    with:
+      os: windows-latest
+      flutter_version: '3.27.1'
+      go_version: '1.24'
+      tag_name: ${{ github.event.inputs.tag_name }}
+    secrets: inherit

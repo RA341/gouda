@@ -2,15 +2,10 @@ package main
 
 import (
 	"github.com/RA341/gouda/cmd"
-	"github.com/RA341/gouda/pkg"
-	"github.com/rs/zerolog/log"
+	"github.com/RA341/gouda/internal/info"
 )
 
 func main() {
-	pkg.RunInServerMode()
-
-	cmd.InitConfigAndLogger()
-	log.Info().Msgf("running in server mode")
-
+	cmd.Setup(info.Server)
 	cmd.StartServerWithAddr()
 }

@@ -2,19 +2,12 @@ package main
 
 import (
 	"github.com/RA341/gouda/cmd"
-	"github.com/RA341/gouda/pkg"
-	"github.com/rs/zerolog/log"
+	"github.com/RA341/gouda/internal/info"
+	"github.com/RA341/gouda/internal/tray"
 )
 
 func main() {
-	pkg.RunInDesktopMode()
-
-	cmd.InitConfigAndLogger()
-	log.Info().Msgf("running in desktop mode")
-
-	// server as routine
-	go cmd.StartServerWithAddr()
-
-	// systray will run indefinitely
-	InitSystray()
+	cmd.Setup(info.Desktop)
+	go cmd.StartServerWithAddr() // server in background
+	tray.Run()
 }

@@ -1,3 +1,4 @@
+import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/category/v1/category.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,17 +21,27 @@ class CategoryApi {
   CategoryApi(this.apiClient);
 
   Future<void> addCategory(String cat) async {
-    await apiClient.addCategories(AddCategoriesRequest(category: cat));
+    await mustRunGrpcRequest(
+      () => apiClient.addCategories(
+        AddCategoriesRequest(category: cat),
+      ),
+    );
   }
 
   Future<void> deleteCategory(Category cat) async {
-    await apiClient.deleteCategories(
-      DelCategoriesRequest(category: cat),
+    await mustRunGrpcRequest(
+      () => apiClient.deleteCategories(
+        DelCategoriesRequest(category: cat),
+      ),
     );
   }
 
   Future<List<Category>> listCategory() async {
-    final resp = await apiClient.listCategories(ListCategoriesRequest());
+    final resp = await mustRunGrpcRequest(
+      () => apiClient.listCategories(
+        ListCategoriesRequest(),
+      ),
+    );
     return resp.categories;
   }
 }

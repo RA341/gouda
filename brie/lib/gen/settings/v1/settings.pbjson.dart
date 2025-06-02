@@ -2,12 +2,13 @@
 //  Generated code. Do not modify.
 //  source: settings/v1/settings.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -21,6 +22,15 @@ const GetMetadataRequest$json = {
 /// Descriptor for `GetMetadataRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getMetadataRequestDescriptor = $convert.base64Decode(
     'ChJHZXRNZXRhZGF0YVJlcXVlc3Q=');
+
+@$core.Deprecated('Use testTorrentResponseDescriptor instead')
+const TestTorrentResponse$json = {
+  '1': 'TestTorrentResponse',
+};
+
+/// Descriptor for `TestTorrentResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List testTorrentResponseDescriptor = $convert.base64Decode(
+    'ChNUZXN0VG9ycmVudFJlc3BvbnNl');
 
 @$core.Deprecated('Use getMetadataResponseDescriptor instead')
 const GetMetadataResponse$json = {
@@ -83,8 +93,6 @@ const Settings$json = {
     {'1': 'api_key', '3': 1, '4': 1, '5': 9, '10': 'apiKey'},
     {'1': 'server_port', '3': 2, '4': 1, '5': 9, '10': 'serverPort'},
     {'1': 'download_check_timeout', '3': 3, '4': 1, '5': 4, '10': 'downloadCheckTimeout'},
-    {'1': 'ignore_timeout', '3': 17, '4': 1, '5': 8, '10': 'ignoreTimeout'},
-    {'1': 'exit_on_close', '3': 16, '4': 1, '5': 8, '10': 'exitOnClose'},
     {'1': 'complete_folder', '3': 4, '4': 1, '5': 9, '10': 'completeFolder'},
     {'1': 'download_folder', '3': 5, '4': 1, '5': 9, '10': 'downloadFolder'},
     {'1': 'torrents_folder', '3': 6, '4': 1, '5': 9, '10': 'torrentsFolder'},
@@ -92,11 +100,10 @@ const Settings$json = {
     {'1': 'password', '3': 8, '4': 1, '5': 9, '10': 'password'},
     {'1': 'user_uid', '3': 9, '4': 1, '5': 4, '10': 'userUid'},
     {'1': 'group_uid', '3': 10, '4': 1, '5': 4, '10': 'groupUid'},
-    {'1': 'torrent_host', '3': 11, '4': 1, '5': 9, '10': 'torrentHost'},
-    {'1': 'torrent_name', '3': 12, '4': 1, '5': 9, '10': 'torrentName'},
-    {'1': 'torrent_password', '3': 13, '4': 1, '5': 9, '10': 'torrentPassword'},
-    {'1': 'torrent_protocol', '3': 14, '4': 1, '5': 9, '10': 'torrentProtocol'},
-    {'1': 'torrent_user', '3': 15, '4': 1, '5': 9, '10': 'torrentUser'},
+    {'1': 'client', '3': 11, '4': 1, '5': 11, '6': '.settings.v1.TorrentClient', '10': 'client'},
+    {'1': 'exit_on_close', '3': 12, '4': 1, '5': 8, '10': 'exitOnClose'},
+    {'1': 'ignore_timeout', '3': 13, '4': 1, '5': 8, '10': 'ignoreTimeout'},
+    {'1': 'setup_complete', '3': 14, '4': 1, '5': 8, '10': 'setupComplete'},
   ],
 };
 
@@ -104,14 +111,31 @@ const Settings$json = {
 final $typed_data.Uint8List settingsDescriptor = $convert.base64Decode(
     'CghTZXR0aW5ncxIXCgdhcGlfa2V5GAEgASgJUgZhcGlLZXkSHwoLc2VydmVyX3BvcnQYAiABKA'
     'lSCnNlcnZlclBvcnQSNAoWZG93bmxvYWRfY2hlY2tfdGltZW91dBgDIAEoBFIUZG93bmxvYWRD'
-    'aGVja1RpbWVvdXQSJQoOaWdub3JlX3RpbWVvdXQYESABKAhSDWlnbm9yZVRpbWVvdXQSIgoNZX'
-    'hpdF9vbl9jbG9zZRgQIAEoCFILZXhpdE9uQ2xvc2USJwoPY29tcGxldGVfZm9sZGVyGAQgASgJ'
-    'Ug5jb21wbGV0ZUZvbGRlchInCg9kb3dubG9hZF9mb2xkZXIYBSABKAlSDmRvd25sb2FkRm9sZG'
-    'VyEicKD3RvcnJlbnRzX2ZvbGRlchgGIAEoCVIOdG9ycmVudHNGb2xkZXISGgoIdXNlcm5hbWUY'
-    'ByABKAlSCHVzZXJuYW1lEhoKCHBhc3N3b3JkGAggASgJUghwYXNzd29yZBIZCgh1c2VyX3VpZB'
-    'gJIAEoBFIHdXNlclVpZBIbCglncm91cF91aWQYCiABKARSCGdyb3VwVWlkEiEKDHRvcnJlbnRf'
-    'aG9zdBgLIAEoCVILdG9ycmVudEhvc3QSIQoMdG9ycmVudF9uYW1lGAwgASgJUgt0b3JyZW50Tm'
-    'FtZRIpChB0b3JyZW50X3Bhc3N3b3JkGA0gASgJUg90b3JyZW50UGFzc3dvcmQSKQoQdG9ycmVu'
-    'dF9wcm90b2NvbBgOIAEoCVIPdG9ycmVudFByb3RvY29sEiEKDHRvcnJlbnRfdXNlchgPIAEoCV'
-    'ILdG9ycmVudFVzZXI=');
+    'aGVja1RpbWVvdXQSJwoPY29tcGxldGVfZm9sZGVyGAQgASgJUg5jb21wbGV0ZUZvbGRlchInCg'
+    '9kb3dubG9hZF9mb2xkZXIYBSABKAlSDmRvd25sb2FkRm9sZGVyEicKD3RvcnJlbnRzX2ZvbGRl'
+    'chgGIAEoCVIOdG9ycmVudHNGb2xkZXISGgoIdXNlcm5hbWUYByABKAlSCHVzZXJuYW1lEhoKCH'
+    'Bhc3N3b3JkGAggASgJUghwYXNzd29yZBIZCgh1c2VyX3VpZBgJIAEoBFIHdXNlclVpZBIbCgln'
+    'cm91cF91aWQYCiABKARSCGdyb3VwVWlkEjIKBmNsaWVudBgLIAEoCzIaLnNldHRpbmdzLnYxLl'
+    'RvcnJlbnRDbGllbnRSBmNsaWVudBIiCg1leGl0X29uX2Nsb3NlGAwgASgIUgtleGl0T25DbG9z'
+    'ZRIlCg5pZ25vcmVfdGltZW91dBgNIAEoCFINaWdub3JlVGltZW91dBIlCg5zZXR1cF9jb21wbG'
+    'V0ZRgOIAEoCFINc2V0dXBDb21wbGV0ZQ==');
+
+@$core.Deprecated('Use torrentClientDescriptor instead')
+const TorrentClient$json = {
+  '1': 'TorrentClient',
+  '2': [
+    {'1': 'torrent_host', '3': 1, '4': 1, '5': 9, '10': 'torrentHost'},
+    {'1': 'torrent_name', '3': 2, '4': 1, '5': 9, '10': 'torrentName'},
+    {'1': 'torrent_password', '3': 3, '4': 1, '5': 9, '10': 'torrentPassword'},
+    {'1': 'torrent_protocol', '3': 4, '4': 1, '5': 9, '10': 'torrentProtocol'},
+    {'1': 'torrent_user', '3': 5, '4': 1, '5': 9, '10': 'torrentUser'},
+  ],
+};
+
+/// Descriptor for `TorrentClient`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List torrentClientDescriptor = $convert.base64Decode(
+    'Cg1Ub3JyZW50Q2xpZW50EiEKDHRvcnJlbnRfaG9zdBgBIAEoCVILdG9ycmVudEhvc3QSIQoMdG'
+    '9ycmVudF9uYW1lGAIgASgJUgt0b3JyZW50TmFtZRIpChB0b3JyZW50X3Bhc3N3b3JkGAMgASgJ'
+    'Ug90b3JyZW50UGFzc3dvcmQSKQoQdG9ycmVudF9wcm90b2NvbBgEIAEoCVIPdG9ycmVudFByb3'
+    'RvY29sEiEKDHRvcnJlbnRfdXNlchgFIAEoCVILdG9ycmVudFVzZXI=');
 

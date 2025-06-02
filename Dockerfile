@@ -1,3 +1,16 @@
+FROM golang:1.24-alpine AS goub
+
+# for sqlite
+ENV CGO_ENABLED=1
+
+RUN apk update && apk add --no-cache gcc musl-dev
+
+WORKDIR /app
+
+COPY ./goub/ .
+
+RUN go build -o=goub
+
 # Flutter build
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
@@ -9,16 +22,11 @@ RUN flutter pub get
 
 COPY ./brie .
 
-# Build Flutter web
 RUN flutter build web
 
 # Stage Go build
 FROM golang:1.24-alpine AS go_builder
 
-# arg substitution
-# https://stackoverflow.com/questions/44438637/arg-substitution-in-run-command-not-working-for-dockerfile
-ARG VERSION
-ENV BV=${VERSION}
 # for sqlite
 ENV CGO_ENABLED=1
 
@@ -33,17 +41,27 @@ RUN go mod download
 COPY ./src .
 
 COPY --from=flutter_builder /app/build/web ./cmd/web
+COPY --from=goub /app/goub .
 
-# Build optimized binary without debugging symbols
-RUN go build  \
-    -ldflags "-s -w -X github.com/RA341/gouda/pkg.Version=$BV" \
-    -o gouda \
-    ./cmd/server
+# Build arguments
+ARG VERSION=dev
+ARG COMMIT_INFO=unknown
+ARG BRANCH=unknown
 
-# Stage: Final stage
+# arg substitution, do not put it higher than this for caching
+# https://stackoverflow.com/questions/44438637/arg-substitution-in-run-command-not-working-for-dockerfile
+ENV VERSION=${VERSION}
+ENV COMMIT_INFO=${COMMIT_INFO}
+ENV BRANCH=${BRANCH}
+
+# custom build tool
+RUN ./goub go build server -o=out -c=${COMMIT_INFO} -t=${VERSION} -b=${BRANCH}
+RUN mv out/gouda-server-linux gouda
+
 FROM alpine:latest
 
 ENV IS_DOCKER=true
+ENV GOUDA_LOG_LEVEL=info
 
 WORKDIR /app/
 

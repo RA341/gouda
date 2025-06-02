@@ -149,7 +149,13 @@ class FolderGroup extends BaseSettingsGroup {
 }
 
 class UserGroup extends BaseSettingsGroup {
-  const UserGroup({super.key, required super.settings});
+  const UserGroup({
+    super.key,
+    this.showFilePerm = true,
+    required super.settings,
+  });
+
+  final bool showFilePerm;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -176,36 +182,37 @@ class UserGroup extends BaseSettingsGroup {
             helpText: 'Password for gouda UI',
             child: createUpdateButtons(
               password,
-              input: 'Password',
               autofillHints: [AutofillHints.password],
               onChanged: (p0) => value.password = p0,
+              obscureText: true,
             ),
           ),
-          Row(
-            children: [
-              IntrinsicWidth(
-                child: SettingField(
-                  titleText: 'Linux UID',
-                  helpText: 'User Permission when touching files',
-                  child: createUpdateButtons(
-                    userID,
-                    onChanged: (p0) => value.userUid = Int64.parseInt(p0),
+          if (showFilePerm)
+            Row(
+              children: [
+                IntrinsicWidth(
+                  child: SettingField(
+                    titleText: 'Linux UID',
+                    helpText: 'User Permission when touching files',
+                    child: createUpdateButtons(
+                      userID,
+                      onChanged: (p0) => value.userUid = Int64.parseInt(p0),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(width: 20),
-              IntrinsicWidth(
-                child: SettingField(
-                  titleText: 'Linux GID',
-                  helpText: 'Group Permission when touching files',
-                  child: createUpdateButtons(
-                    groupID,
-                    onChanged: (p0) => value.groupUid = Int64.parseInt(p0),
+                SizedBox(width: 20),
+                IntrinsicWidth(
+                  child: SettingField(
+                    titleText: 'Linux GID',
+                    helpText: 'Group Permission when touching files',
+                    child: createUpdateButtons(
+                      groupID,
+                      onChanged: (p0) => value.groupUid = Int64.parseInt(p0),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
     );
@@ -219,13 +226,13 @@ class TorrentGroup extends BaseSettingsGroup {
   Widget build(BuildContext context, WidgetRef ref) {
     final supportedClients = ref.watch(supportedClientsProvider).value ?? [];
 
-    final torrentHost = useTextEditingController(text: value.torrentHost);
-    final clientType = useTextEditingController(text: value.torrentName);
+    final torrentHost = useTextEditingController(text: value.client.torrentHost);
+    final clientType = useTextEditingController(text: value.client.torrentName);
     final torrentPassword =
-        useTextEditingController(text: value.torrentPassword);
+        useTextEditingController(text: value.client.torrentPassword);
     final torrentProtocol =
-        useTextEditingController(text: value.torrentProtocol);
-    final torrentUser = useTextEditingController(text: value.torrentUser);
+        useTextEditingController(text: value.client.torrentProtocol);
+    final torrentUser = useTextEditingController(text: value.client.torrentUser);
 
     return AutofillGroup(
       child: Column(
@@ -233,7 +240,8 @@ class TorrentGroup extends BaseSettingsGroup {
         children: [
           SettingField(
             titleText: 'Torrent Host',
-            helpText: 'Hostname or IP of the torrent client, make sure to set protocol accordingly',
+            helpText:
+                'Hostname or IP of the torrent client, make sure to set protocol accordingly',
             child: Row(
               spacing: 10,
               children: [
@@ -241,28 +249,28 @@ class TorrentGroup extends BaseSettingsGroup {
                   supportedClients,
                   clientType,
                   "Type",
-                  onChanged: (String p0) => value.torrentName = p0,
+                  onChanged: (String p0) => value.client.torrentName = p0,
                 ),
                 createDropDown(
                   supportedProtocols,
                   torrentProtocol,
                   "Protocol",
-                  onChanged: (String p0) => value.torrentProtocol = p0,
+                  onChanged: (String p0) => value.client.torrentProtocol = p0,
                 ),
                 IntrinsicWidth(
                   child: createUpdateButtons(
                     torrentHost,
                     input: 'Host',
                     hintText: 'localhost:8080 or qbit.gg.com',
-                    onChanged: (p0) => value.torrentHost = p0,
+                    onChanged: (p0) => value.client.torrentHost = p0,
                   ),
                 ),
               ],
             ),
           ),
-          // if (value.torrentHost.isNotEmpty)
+          // if (value.client.torrentHost.isNotEmpty)
           //   Chip(
-          //     label: Text('${value.torrentProtocol}://${value.torrentHost}'),
+          //     label: Text('${value.client.torrentProtocol}://${value.client.torrentHost}'),
           //   ),
           SettingField(
             titleText: 'Torrent Username',
@@ -270,7 +278,7 @@ class TorrentGroup extends BaseSettingsGroup {
             child: createUpdateButtons(
               torrentUser,
               autofillHints: [AutofillHints.username],
-              onChanged: (p0) => value.torrentUser = p0,
+              onChanged: (p0) => value.client.torrentUser = p0,
             ),
           ),
           SettingField(
@@ -280,7 +288,8 @@ class TorrentGroup extends BaseSettingsGroup {
               torrentPassword,
               editingController: () {},
               autofillHints: [AutofillHints.password],
-              onChanged: (p0) => value.torrentPassword = p0,
+              onChanged: (p0) => value.client.torrentPassword = p0,
+              obscureText: true,
             ),
           ),
         ],
