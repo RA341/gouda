@@ -6,7 +6,6 @@ import 'package:brie/gen/category/v1/category.pb.dart';
 import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/grpc/api.dart';
-import 'package:brie/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final checkTokenProvider = FutureProvider<bool>((ref) async {
@@ -36,6 +35,11 @@ final settingsProvider = FutureProvider<Settings>((ref) async {
   return await settingsApi.list();
 });
 
+final isSetupCompleteProvider = FutureProvider<bool>((ref) async {
+  final settings = await ref.watch(settingsProvider.future);
+  return settings.setupComplete;
+});
+
 final supportedClientsProvider = FutureProvider<List<String>>((ref) async {
   return ref.watch(settingsApiProvider).listClients();
 });
@@ -63,17 +67,8 @@ class PageNotifier extends Notifier<int> {
   int build() {
     ref.watch(checkTokenProvider);
 
-    final settings = ref.watch(settingsProvider).unwrapPrevious().valueOrNull;
-    final firstTimeSetup = settings?.torrentHost.isEmpty;
-    logger.i('first time setup $firstTimeSetup');
-
     // if already on settings page and updated settings remain on settings page
     if (stateOrNull == 2) {
-      return 2;
-    }
-
-    if (firstTimeSetup ?? false) {
-      logger.i('First time setup detected: moving to settings page');
       return 2;
     }
 

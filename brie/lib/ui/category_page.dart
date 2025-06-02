@@ -5,8 +5,9 @@ import 'package:brie/ui/components/utils.dart';
 import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:grpc/grpc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'components/page_header.dart';
 
 class CategoryPage extends HookConsumerWidget {
   const CategoryPage({super.key});
@@ -18,66 +19,68 @@ class CategoryPage extends HookConsumerWidget {
 
     return cats.when(
       data: (data) => Column(
+        spacing: 10,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 200),
-            child: SizedBox(
-              width: 400,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: TextField(
-                      controller: addCategories,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Add new category',
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          if (addCategories.text.isEmpty) {
-                            throw Exception('Empty category');
-                          }
-
-                          await ref
-                              .watch(catProvider)
-                              .addCategory(addCategories.text.trim());
-                          addCategories.clear();
-                        } on GrpcError catch (e) {
-                          if (!context.mounted) return;
-                          showErrorDialog(
-                            context,
-                            'Error adding category',
-                            'You may have tried to add a category that already exists',
-                            e.message.toString(),
-                          );
-                        } catch (e) {
-                          logger.e(
-                            'An  error occurred while adding category',
-                            error: e,
-                          );
-                          if (!context.mounted) return;
-                          showErrorDialog(
-                            context,
-                            'Error adding category',
-                            'You may have tried to add a category that already exists',
-                            e.toString(),
-                          );
-                        }
-                        ref.invalidate(categoryListProvider);
-                      },
-                      child: Text('Add'),
-                    ),
-                  )
-                ],
+          Row(
+            children: [
+              Column(
+                spacing: 10,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: pageHeaderBuilder(
+                  header: "Category",
+                  subHeading: 'Each category is the root folder for your media',
+                ),
               ),
-            ),
+              Expanded(
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 400,
+                        child: TextField(
+                          controller: addCategories,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Add new category',
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              if (addCategories.text.isEmpty) {
+                                throw ('Empty category');
+                              }
+
+                              await ref
+                                  .watch(catProvider)
+                                  .addCategory(addCategories.text.trim());
+                              addCategories.clear();
+                            } catch (e) {
+                              logger.e(
+                                'An  error occurred while adding category',
+                                error: e,
+                              );
+                              if (!context.mounted) return;
+                              showErrorDialog(
+                                context,
+                                'Error adding category',
+                                e.toString(),
+                              );
+                            }
+                            ref.invalidate(categoryListProvider);
+                          },
+                          child: Text('Add'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 20),
           CategoriesView(data),
