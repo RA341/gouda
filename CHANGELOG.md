@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/RA341/gouda/compare/v1.6.2...v1.7.0) (2025-06-02)
+
+
+### Features
+
+* added setup page ([faabe42](https://github.com/RA341/gouda/commit/faabe42006531d4cf6089342474c5a0c6202c052))
+
 ## [1.6.2](https://github.com/RA341/gouda/compare/v1.6.1...v1.6.2) (2025-04-22)
 
 
