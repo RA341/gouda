@@ -50,5 +50,5 @@ func runFlutterClean() error {
 }
 
 func buildFlutterCmd(flutterVariant string) []string {
-	return []string{"flutter", "build", flutterVariant}
+	return []string{"flutter", "build", flutterVariant, "-v"}
 }
