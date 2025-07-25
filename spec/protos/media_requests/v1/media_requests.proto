@@ -12,6 +12,7 @@ service MediaRequestService {
   rpc Exists(ExistsRequest) returns (ExistsResponse) {}
   rpc Retry(RetryRequest) returns (RetryResponse) {}
   rpc AddMedia(AddMediaRequest) returns (AddMediaResponse) {}
+  rpc AddMediaWithFreeleech(AddMediaRequest) returns (AddMediaResponse) {}
 }
 
 message SearchRequest {

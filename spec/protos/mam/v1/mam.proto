@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package mam.v1;
+
+option go_package = "github.com/RA341/gouda/generated/mam/v1";
+
+service MamService {
+  rpc Search(Query) returns (SearchResults);
+  rpc BuyVip(VipRequest) returns (VipResponse);
+  rpc BuyBonus(BonusRequest) returns (BonusResponse);
+}
+
+message VipRequest {
+  int32 amountInWeeks = 1;
+}
+
+message VipResponse {
+  bool Success = 1;
+  string Type = 2;
+  float Amount = 3;
+  float SeedBonus = 4;
+}
+
+message BonusRequest {
+  int32 amountInGB = 1;
+}
+
+message BonusResponse {
+  bool Success = 1;
+  string Type = 2;
+  float Amount = 3;
+  float Seedbonus = 4;
+  int64 Uploaded = 5;
+  int64 Downloaded = 6;
+  string UploadFancy = 7;
+  string DownloadFancy = 8;
+  float Ratio = 9;
+}
+
+message SearchResults {
+  repeated Book results = 1;
+  // total found
+  int32 found = 2;
+  // total results
+  int32 total = 3;
+}
+
+message Book {
+  string id = 1;
+  string title = 2;
+  string author = 3;
+  string format = 4;
+  string length = 5;
+  string torrent_link = 6;
+  int32 category = 7;
+  string thumbnail = 8;
+  string size = 9;
+  int32 seeders = 10;
+  int32 leechers = 11;
+  string added = 12;
+  string tags = 13;
+  int32 completed = 14;
+}
+
+message FreeLeechInfo {
+  string type = 1;    // "fl", "VIP", etc.
+  string expires = 2; // Expiration date if applicable
+}
+
+message Query {
+  string query = 1;
+}

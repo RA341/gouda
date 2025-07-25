@@ -14,3 +14,5 @@ scripts_*/**/test
 /src/internal/downloads/clients/utils-docker-compose.yml
 /**/.idea
 /**/gouda-*
+/build/
+/src/build/

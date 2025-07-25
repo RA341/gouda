@@ -1,0 +1,112 @@
+# https://taskfile.dev
+version: '3'
+
+vars:
+  WORKING_DIR:
+    sh: pwd
+
+  IMAGE_NAME: protobuilder/gouda
+  CORE_DIR: ../src/generated
+  UI_DIR: ../brie/lib/gen
+  WEB_DIR: ../parmesan/source/gen
+  GENERATED_DIR: generated
+  PROTODIR: protos
+  GO_PACKAGE_BASE: "github.com/RA341/gouda/generated"
+
+tasks:
+  proto:*:*:
+    desc: "Creates a new proto file with a custom version. Usage: task proto:<package>[:version]"
+    vars:
+      PROTO_PACKAGE: "{{ index .MATCH 0 }}"
+      VERSION: '{{ index .MATCH 1 }}'
+      PACKAGE_PATH: "{{ .PROTODIR }}/{{ .PROTO_PACKAGE }}/{{ .VERSION }}"
+      FILE_PATH: "{{ .PACKAGE_PATH }}/{{ .PROTO_PACKAGE }}.proto"
+    cmds:
+      - coreutils mkdir -p {{ .PACKAGE_PATH }}
+      - |
+        coreutils cat <<EOF > {{ .FILE_PATH }}
+        syntax = "proto3";
+
+        package {{ .PROTO_PACKAGE }}.{{ .VERSION }};
+
+        option go_package = "{{ .GO_PACKAGE_BASE }}/{{ .PROTO_PACKAGE }}/{{ .VERSION }}";
+        
+        service {{ .PROTO_PACKAGE }}Service {
+        }
+        EOF
+
+  proto:*:
+    desc: "Creates a new v1 proto file. Usage: task proto:<package>"
+    vars:
+      PROTO_PACKAGE: "{{ index .MATCH 0 }}"
+    cmds:
+      - task: proto:{{ .PROTO_PACKAGE }}:v1
+
+  build:
+    desc: Build the Docker image used for proto generation
+    cmds:
+      - docker build . -t {{ .IMAGE_NAME}}
+
+  geno:
+    desc: Generate files (no move)
+    deps: [ build ]
+    cmds:
+      - docker run --rm -v "{{.WORKING_DIR}}:/workspace" {{ .IMAGE_NAME}}
+
+  gen:
+    desc: Generate and copy generated files to their respective destinations
+    deps: [ geno ]
+    cmds:
+      - task --parallel go dart web
+
+  go:
+    desc: Move generated Go files
+    cmds:
+      - echo "moving go files"
+      - task: _copy
+        vars:
+          TARGET_DIR: '{{.CORE_DIR}}'
+          SOURCE_PATTERN: '{{.GENERATED_DIR}}/go/*'
+      - coreutils rm -rf {{.GENERATED_DIR}}/go
+
+  dart:
+    desc: Move generated Dart files
+    cmds:
+      - echo "moving dart files"
+      - task: _copy
+        vars:
+          TARGET_DIR: '{{.UI_DIR}}'
+          SOURCE_PATTERN: '{{.GENERATED_DIR}}/dart/*'
+      - coreutils rm -rf {{.GENERATED_DIR}}/dart
+
+  web:
+    desc: Move generated web files
+    cmds:
+      - echo "moving web files"
+      - task: _copy
+        vars:
+          TARGET_DIR: '{{.WEB_DIR}}'
+          SOURCE_PATTERN: '{{.GENERATED_DIR}}/web/*'
+      - coreutils rm -rf {{.GENERATED_DIR}}/web
+
+  _copy:
+    internal: true
+    vars:
+      TARGET_DIR: '{{.TARGET_DIR}}'
+      SOURCE_PATTERN: '{{.SOURCE_PATTERN}}'
+    cmds:
+      - coreutils rm -f -r {{.TARGET_DIR}}/*
+      - coreutils mkdir -p {{.TARGET_DIR}}
+      - coreutils cp -r {{.SOURCE_PATTERN}} {{.TARGET_DIR}}/
+
+  it:
+    desc: Run an interactive shell inside the Docker container
+    deps: [ build ]
+    cmds:
+      - docker run --rm --name gouda_grpc_shell -v "{{.WORKING_DIR}}:/workspace" -it protobuilder:latest /bin/bash
+
+  bpsh:
+    desc: Build and push via Makefile
+    cmds:
+      - make build
+      - make push

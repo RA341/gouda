@@ -2,6 +2,7 @@ package file_utils
 
 import (
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"io"
 	"io/fs"
 	"os"
@@ -10,6 +11,13 @@ import (
 )
 
 var DefaultFilePerm = 0o775
+
+func Close(closer io.Closer) {
+	err := closer.Close()
+	if err != nil {
+		log.Warn().Err(err).Msg("error occurred while closing")
+	}
+}
 
 // RecursiveChown chowns the file/folder recursively at path
 //

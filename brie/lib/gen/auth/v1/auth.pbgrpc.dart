@@ -1,7 +1,7 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: auth/v1/auth.proto
-//
+// Generated from auth/v1/auth.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
@@ -30,24 +30,33 @@ class AuthServiceClient extends $grpc.Client {
     '',
   ];
 
-  static final _$authenticate = $grpc.ClientMethod<$0.AuthRequest, $0.AuthResponse>(
-      '/auth.v1.AuthService/Authenticate',
-      ($0.AuthRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.AuthResponse.fromBuffer(value));
-  static final _$test = $grpc.ClientMethod<$0.AuthResponse, $0.TestResponse>(
-      '/auth.v1.AuthService/Test',
-      ($0.AuthResponse value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.TestResponse.fromBuffer(value));
-
   AuthServiceClient(super.channel, {super.options, super.interceptors});
 
-  $grpc.ResponseFuture<$0.AuthResponse> authenticate($0.AuthRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.AuthResponse> authenticate(
+    $0.AuthRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$authenticate, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.TestResponse> test($0.AuthResponse request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.TestResponse> test(
+    $0.AuthResponse request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$test, request, options: options);
   }
+
+  // method descriptors
+
+  static final _$authenticate =
+      $grpc.ClientMethod<$0.AuthRequest, $0.AuthResponse>(
+          '/auth.v1.AuthService/Authenticate',
+          ($0.AuthRequest value) => value.writeToBuffer(),
+          $0.AuthResponse.fromBuffer);
+  static final _$test = $grpc.ClientMethod<$0.AuthResponse, $0.TestResponse>(
+      '/auth.v1.AuthService/Test',
+      ($0.AuthResponse value) => value.writeToBuffer(),
+      $0.TestResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('auth.v1.AuthService')
@@ -71,14 +80,19 @@ abstract class AuthServiceBase extends $grpc.Service {
         ($0.TestResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.AuthResponse> authenticate_Pre($grpc.ServiceCall $call, $async.Future<$0.AuthRequest> $request) async {
+  $async.Future<$0.AuthResponse> authenticate_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.AuthRequest> $request) async {
     return authenticate($call, await $request);
   }
 
-  $async.Future<$0.TestResponse> test_Pre($grpc.ServiceCall $call, $async.Future<$0.AuthResponse> $request) async {
+  $async.Future<$0.AuthResponse> authenticate(
+      $grpc.ServiceCall call, $0.AuthRequest request);
+
+  $async.Future<$0.TestResponse> test_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.AuthResponse> $request) async {
     return test($call, await $request);
   }
 
-  $async.Future<$0.AuthResponse> authenticate($grpc.ServiceCall call, $0.AuthRequest request);
-  $async.Future<$0.TestResponse> test($grpc.ServiceCall call, $0.AuthResponse request);
+  $async.Future<$0.TestResponse> test(
+      $grpc.ServiceCall call, $0.AuthResponse request);
 }

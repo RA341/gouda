@@ -1,14 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: media_requests/v1/media_requests.proto
-//
+// Generated from media_requests/v1/media_requests.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -30,7 +30,14 @@ final $typed_data.Uint8List searchRequestDescriptor = $convert.base64Decode(
 const SearchResponse$json = {
   '1': 'SearchResponse',
   '2': [
-    {'1': 'results', '3': 1, '4': 3, '5': 11, '6': '.media_requests.v1.Media', '10': 'results'},
+    {
+      '1': 'results',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.media_requests.v1.Media',
+      '10': 'results'
+    },
   ],
 };
 
@@ -58,7 +65,14 @@ const ListResponse$json = {
   '1': 'ListResponse',
   '2': [
     {'1': 'totalRecords', '3': 2, '4': 1, '5': 4, '10': 'totalRecords'},
-    {'1': 'results', '3': 1, '4': 3, '5': 11, '6': '.media_requests.v1.Media', '10': 'results'},
+    {
+      '1': 'results',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.media_requests.v1.Media',
+      '10': 'results'
+    },
   ],
 };
 
@@ -85,14 +99,21 @@ const DeleteResponse$json = {
 };
 
 /// Descriptor for `DeleteResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deleteResponseDescriptor = $convert.base64Decode(
-    'Cg5EZWxldGVSZXNwb25zZQ==');
+final $typed_data.Uint8List deleteResponseDescriptor =
+    $convert.base64Decode('Cg5EZWxldGVSZXNwb25zZQ==');
 
 @$core.Deprecated('Use editRequestDescriptor instead')
 const EditRequest$json = {
   '1': 'EditRequest',
   '2': [
-    {'1': 'media', '3': 1, '4': 1, '5': 11, '6': '.media_requests.v1.Media', '10': 'media'},
+    {
+      '1': 'media',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.media_requests.v1.Media',
+      '10': 'media'
+    },
   ],
 };
 
@@ -107,8 +128,8 @@ const EditResponse$json = {
 };
 
 /// Descriptor for `EditResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List editResponseDescriptor = $convert.base64Decode(
-    'CgxFZGl0UmVzcG9uc2U=');
+final $typed_data.Uint8List editResponseDescriptor =
+    $convert.base64Decode('CgxFZGl0UmVzcG9uc2U=');
 
 @$core.Deprecated('Use existsRequestDescriptor instead')
 const ExistsRequest$json = {
@@ -119,14 +140,21 @@ const ExistsRequest$json = {
 };
 
 /// Descriptor for `ExistsRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List existsRequestDescriptor = $convert.base64Decode(
-    'Cg1FeGlzdHNSZXF1ZXN0EhQKBW1hbUlkGAEgASgEUgVtYW1JZA==');
+final $typed_data.Uint8List existsRequestDescriptor = $convert
+    .base64Decode('Cg1FeGlzdHNSZXF1ZXN0EhQKBW1hbUlkGAEgASgEUgVtYW1JZA==');
 
 @$core.Deprecated('Use existsResponseDescriptor instead')
 const ExistsResponse$json = {
   '1': 'ExistsResponse',
   '2': [
-    {'1': 'media', '3': 1, '4': 1, '5': 11, '6': '.media_requests.v1.Media', '10': 'media'},
+    {
+      '1': 'media',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.media_requests.v1.Media',
+      '10': 'media'
+    },
   ],
 };
 
@@ -144,14 +172,21 @@ const RetryRequest$json = {
 };
 
 /// Descriptor for `RetryRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List retryRequestDescriptor = $convert.base64Decode(
-    'CgxSZXRyeVJlcXVlc3QSDgoCSUQYASABKARSAklE');
+final $typed_data.Uint8List retryRequestDescriptor =
+    $convert.base64Decode('CgxSZXRyeVJlcXVlc3QSDgoCSUQYASABKARSAklE');
 
 @$core.Deprecated('Use retryResponseDescriptor instead')
 const RetryResponse$json = {
   '1': 'RetryResponse',
   '2': [
-    {'1': 'media', '3': 1, '4': 1, '5': 11, '6': '.media_requests.v1.Media', '10': 'media'},
+    {
+      '1': 'media',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.media_requests.v1.Media',
+      '10': 'media'
+    },
   ],
 };
 
@@ -164,7 +199,14 @@ final $typed_data.Uint8List retryResponseDescriptor = $convert.base64Decode(
 const AddMediaRequest$json = {
   '1': 'AddMediaRequest',
   '2': [
-    {'1': 'media', '3': 1, '4': 1, '5': 11, '6': '.media_requests.v1.Media', '10': 'media'},
+    {
+      '1': 'media',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.media_requests.v1.Media',
+      '10': 'media'
+    },
   ],
 };
 
@@ -179,8 +221,8 @@ const AddMediaResponse$json = {
 };
 
 /// Descriptor for `AddMediaResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addMediaResponseDescriptor = $convert.base64Decode(
-    'ChBBZGRNZWRpYVJlc3BvbnNl');
+final $typed_data.Uint8List addMediaResponseDescriptor =
+    $convert.base64Decode('ChBBZGRNZWRpYVJlc3BvbnNl');
 
 @$core.Deprecated('Use mediaDescriptor instead')
 const Media$json = {
@@ -196,7 +238,13 @@ const Media$json = {
     {'1': 'file_link', '3': 12, '4': 1, '5': 9, '10': 'fileLink'},
     {'1': 'status', '3': 8, '4': 1, '5': 9, '10': 'status'},
     {'1': 'torrent_id', '3': 9, '4': 1, '5': 9, '10': 'torrentId'},
-    {'1': 'torrent_file_location', '3': 11, '4': 1, '5': 9, '10': 'torrentFileLocation'},
+    {
+      '1': 'torrent_file_location',
+      '3': 11,
+      '4': 1,
+      '5': 9,
+      '10': 'torrentFileLocation'
+    },
     {'1': 'createdAt', '3': 13, '4': 1, '5': 9, '10': 'createdAt'},
     {'1': 'updatedAt', '3': 14, '4': 1, '5': 9, '10': 'updatedAt'},
   ],
@@ -211,4 +259,3 @@ final $typed_data.Uint8List mediaDescriptor = $convert.base64Decode(
     'dGF0dXMYCCABKAlSBnN0YXR1cxIdCgp0b3JyZW50X2lkGAkgASgJUgl0b3JyZW50SWQSMgoVdG'
     '9ycmVudF9maWxlX2xvY2F0aW9uGAsgASgJUhN0b3JyZW50RmlsZUxvY2F0aW9uEhwKCWNyZWF0'
     'ZWRBdBgNIAEoCVIJY3JlYXRlZEF0EhwKCXVwZGF0ZWRBdBgOIAEoCVIJdXBkYXRlZEF0');
-

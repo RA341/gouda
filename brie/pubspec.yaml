@@ -19,8 +19,8 @@ dependencies:
   # networking
   universal_html: ^2.2.4
   http: ^1.4.0
-  grpc: ^4.0.4
-  protobuf: ^4.1.0
+  grpc: ^4.1.0
+  protobuf: ^4.1.1
 
   # ui
   flutter_animate: ^4.5.2
@@ -30,12 +30,14 @@ dependencies:
   shared_preferences: ^2.5.3
   url_launcher:
   fixnum: ^1.1.1
-  logger: ^2.5.0
+  logger: ^2.6.1
+  line_awesome_flutter: ^3.0.1
 
 dev_dependencies:
   custom_lint:
   riverpod_lint: ^2.6.5
   flutter_lints: ^6.0.0
+  very_good_analysis: ^9.0.0
 
 flutter:
   uses-material-design: true

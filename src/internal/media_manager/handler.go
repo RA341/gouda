@@ -16,6 +16,24 @@ func NewMediaManagerHandler(mr *MediaManagerService) *MediaManagerHandler {
 	return &MediaManagerHandler{mr}
 }
 
+func (handler *MediaManagerHandler) AddMedia(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
+	var mediaRequest downloads.Media
+	mediaRequest.FromProto(req.Msg.GetMedia())
+	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
+
+	err := handler.mr.AddMedia(&mediaRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	return connect.NewResponse(&v1.AddMediaResponse{}), nil
+}
+
+func (handler *MediaManagerHandler) AddMediaWithFreeleech(ctx context.Context, c *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (handler *MediaManagerHandler) Search(_ context.Context, req *connect.Request[v1.SearchRequest]) (*connect.Response[v1.SearchResponse], error) {
 	query := req.Msg.MediaQuery
 	results, err := handler.mr.Search(query)
@@ -81,19 +99,6 @@ func (handler *MediaManagerHandler) Retry(_ context.Context, req *connect.Reques
 	return connect.NewResponse(&v1.RetryResponse{
 		Media: retry.ToProto(),
 	}), nil
-}
-
-func (handler *MediaManagerHandler) AddMedia(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
-	var mediaRequest downloads.Media
-	mediaRequest.FromProto(req.Msg.GetMedia())
-	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
-
-	err := handler.mr.AddMedia(&mediaRequest)
-	if err != nil {
-		return nil, err
-	}
-
-	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
 
 func convertToGRPCMedia(requests []downloads.Media) []*v1.Media {

@@ -1,6 +1,6 @@
 # Stubs
 
-This folder contains all grpc stubs used in gouda
+This folder contains all grpc stubs used in project
 
 ## Usage
 

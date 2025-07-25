@@ -1,14 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: category/v1/category.proto
-//
+// Generated from category/v1/category.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
@@ -20,21 +20,29 @@ const ListCategoriesRequest$json = {
 };
 
 /// Descriptor for `ListCategoriesRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listCategoriesRequestDescriptor = $convert.base64Decode(
-    'ChVMaXN0Q2F0ZWdvcmllc1JlcXVlc3Q=');
+final $typed_data.Uint8List listCategoriesRequestDescriptor =
+    $convert.base64Decode('ChVMaXN0Q2F0ZWdvcmllc1JlcXVlc3Q=');
 
 @$core.Deprecated('Use listCategoriesResponseDescriptor instead')
 const ListCategoriesResponse$json = {
   '1': 'ListCategoriesResponse',
   '2': [
-    {'1': 'categories', '3': 1, '4': 3, '5': 11, '6': '.category.v1.Category', '10': 'categories'},
+    {
+      '1': 'categories',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.category.v1.Category',
+      '10': 'categories'
+    },
   ],
 };
 
 /// Descriptor for `ListCategoriesResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listCategoriesResponseDescriptor = $convert.base64Decode(
-    'ChZMaXN0Q2F0ZWdvcmllc1Jlc3BvbnNlEjUKCmNhdGVnb3JpZXMYASADKAsyFS5jYXRlZ29yeS'
-    '52MS5DYXRlZ29yeVIKY2F0ZWdvcmllcw==');
+final $typed_data.Uint8List listCategoriesResponseDescriptor =
+    $convert.base64Decode(
+        'ChZMaXN0Q2F0ZWdvcmllc1Jlc3BvbnNlEjUKCmNhdGVnb3JpZXMYASADKAsyFS5jYXRlZ29yeS'
+        '52MS5DYXRlZ29yeVIKY2F0ZWdvcmllcw==');
 
 @$core.Deprecated('Use addCategoriesRequestDescriptor instead')
 const AddCategoriesRequest$json = {
@@ -45,8 +53,9 @@ const AddCategoriesRequest$json = {
 };
 
 /// Descriptor for `AddCategoriesRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addCategoriesRequestDescriptor = $convert.base64Decode(
-    'ChRBZGRDYXRlZ29yaWVzUmVxdWVzdBIaCghjYXRlZ29yeRgBIAEoCVIIY2F0ZWdvcnk=');
+final $typed_data.Uint8List addCategoriesRequestDescriptor =
+    $convert.base64Decode(
+        'ChRBZGRDYXRlZ29yaWVzUmVxdWVzdBIaCghjYXRlZ29yeRgBIAEoCVIIY2F0ZWdvcnk=');
 
 @$core.Deprecated('Use addCategoriesResponseDescriptor instead')
 const AddCategoriesResponse$json = {
@@ -54,14 +63,21 @@ const AddCategoriesResponse$json = {
 };
 
 /// Descriptor for `AddCategoriesResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addCategoriesResponseDescriptor = $convert.base64Decode(
-    'ChVBZGRDYXRlZ29yaWVzUmVzcG9uc2U=');
+final $typed_data.Uint8List addCategoriesResponseDescriptor =
+    $convert.base64Decode('ChVBZGRDYXRlZ29yaWVzUmVzcG9uc2U=');
 
 @$core.Deprecated('Use delCategoriesRequestDescriptor instead')
 const DelCategoriesRequest$json = {
   '1': 'DelCategoriesRequest',
   '2': [
-    {'1': 'category', '3': 1, '4': 1, '5': 11, '6': '.category.v1.Category', '10': 'category'},
+    {
+      '1': 'category',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.category.v1.Category',
+      '10': 'category'
+    },
   ],
 };
 
@@ -76,8 +92,8 @@ const DelCategoriesResponse$json = {
 };
 
 /// Descriptor for `DelCategoriesResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List delCategoriesResponseDescriptor = $convert.base64Decode(
-    'ChVEZWxDYXRlZ29yaWVzUmVzcG9uc2U=');
+final $typed_data.Uint8List delCategoriesResponseDescriptor =
+    $convert.base64Decode('ChVEZWxDYXRlZ29yaWVzUmVzcG9uc2U=');
 
 @$core.Deprecated('Use categoryDescriptor instead')
 const Category$json = {
@@ -91,4 +107,3 @@ const Category$json = {
 /// Descriptor for `Category`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List categoryDescriptor = $convert.base64Decode(
     'CghDYXRlZ29yeRIOCgJJRBgBIAEoBFICSUQSGgoIY2F0ZWdvcnkYAiABKAlSCGNhdGVnb3J5');
-

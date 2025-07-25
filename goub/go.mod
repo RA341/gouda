@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/fatih/color v1.18.0
 	github.com/spf13/cobra v1.9.1
-	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792
 )
 
 require (

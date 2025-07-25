@@ -14,21 +14,33 @@ import (
 )
 
 type DownloadService struct {
-	client        dc.DownloadClient
-	db            Store
-	workerChan    chan interface{}
+	db     Store
+	client dc.DownloadClient
+
+	perms         *config.UserPermissions
+	dirs          *config.Directories
 	checkInterval time.Duration
+	timout        time.Duration
+	ignoreTimeout bool
+
+	workerChan chan interface{}
 }
 
-func NewDownloadService(db Store, client dc.DownloadClient) *DownloadService {
+func NewDownloadService(conf *config.GoudaConfig, db Store, client dc.DownloadClient) *DownloadService {
+	limit, err := conf.Downloader.GetLimit()
+	if err != nil {
+		log.Fatal().Err(err).Msg("Invalid time string")
+	}
+
 	srv := &DownloadService{
-		client: client,
-		db:     db,
-		workerChan: make(
-			chan interface{},
-			1,
-		),
+		db:            db,
+		client:        client,
+		perms:         &conf.Permissions,
+		dirs:          &conf.Dir,
 		checkInterval: 30 * time.Second,
+		ignoreTimeout: conf.Downloader.IgnoreTimeout,
+		timout:        limit,
+		workerChan:    make(chan interface{}, 1),
 	}
 	if srv.client != nil {
 		go srv.startMonitor() // initial download check
@@ -68,9 +80,9 @@ func (d *DownloadService) DownloadMedia(media *Media) error {
 	media.TorrentMagentLink = magnetLink
 	log.Debug().Str("magnet_link", media.TorrentMagentLink).Msg("using magnet URL")
 
-	downloadsDir, err := filepath.Abs(config.DownloadFolder.GetStr())
+	downloadsDir, err := filepath.Abs(d.dirs.DownloadDir)
 	if err != nil {
-		return fmt.Errorf("unable to determine absolute path: %s", config.DownloadFolder.GetStr())
+		return fmt.Errorf("unable to determine absolute path: %s", d.dirs.DownloadDir)
 	}
 
 	torrentId, err := d.client.DownloadTorrentWithMagnet(media.TorrentMagentLink, downloadsDir, media.Category)
@@ -97,7 +109,7 @@ func (d *DownloadService) startMonitor() {
 		log.Debug().Msg("Starting download monitor")
 		d.monitorDownloads()
 		_ = d.workerChan // empty channel, monitoring complete
-		log.Debug().Msg("Monitoring complete, reseting worker")
+		log.Debug().Msg("Monitoring complete, resetting worker")
 	default: // channel is full, means that there is already an active monitor
 		log.Debug().Msg("Worker is already online, nothing to do")
 		return
@@ -110,9 +122,7 @@ func (d *DownloadService) monitorDownloads() {
 		return
 	}
 
-	torrentCheckTimeout := time.Minute * config.DownloadCheckTimeout.GetDuration()
-	ignoreTimeout := config.IgnoreTimeout.GetBool()
-	timeoutFunc := d.setupTimeoutFunc(ignoreTimeout, torrentCheckTimeout)
+	timeoutFunc := d.setupTimeoutFunc()
 
 	ticker := time.NewTicker(d.checkInterval) // run check every minute
 	defer ticker.Stop()
@@ -160,7 +170,9 @@ func (d *DownloadService) checkDownload(media *Media, torrentStatus *dc.TorrentS
 	}()
 
 	if torrentStatus.ParsedStatus == dc.Complete {
-		if err := d.finalizeDownload(media, torrentStatus); err != nil {
+		log.Info().Str("Media", media.Book).Msg("Download complete, finalizing media...")
+		err := d.finalizeDownload(media, torrentStatus)
+		if err != nil {
 			log.Error().Err(err).
 				Any("torrent", torrentStatus).
 				Any("media", media).
@@ -170,6 +182,14 @@ func (d *DownloadService) checkDownload(media *Media, torrentStatus *dc.TorrentS
 			return
 		}
 		media.MarkComplete()
+		return
+	}
+
+	if torrentStatus.ParsedStatus == dc.Error {
+		log.Error().
+			Str("Media", media.Book).
+			Msg("Download failed, check your torrent client")
+		media.MarkError(fmt.Errorf("download failed, check your client: %v", torrentStatus.ClientStatus))
 		return
 	}
 
@@ -189,7 +209,7 @@ func (d *DownloadService) checkDownload(media *Media, torrentStatus *dc.TorrentS
 }
 
 func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus *dc.TorrentStatus) error {
-	categoryPath := fmt.Sprintf("%s/%s", config.CompleteFolder.GetStr(), torrentRequest.Category)
+	categoryPath := fmt.Sprintf("%s/%s", d.dirs.CompleteDir, torrentRequest.Category)
 	destPath := fmt.Sprintf("%s/%s/%s", categoryPath, torrentRequest.Author, torrentRequest.Book)
 	torrentStatus.DownloadPath = fmt.Sprintf("%s/%s", torrentStatus.DownloadPath, torrentStatus.Name)
 
@@ -206,8 +226,8 @@ func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus 
 		}
 	}
 
-	sourceUID := config.UserUid.GetInt()
-	sourceGID := config.GroupUid.GetInt()
+	sourceUID := d.perms.UID
+	sourceGID := d.perms.GID
 	log.Info().Int("UID", sourceUID).Int("GID", sourceGID).Msg("Changing file perm")
 	if err = fu.RecursiveChown(categoryPath, sourceUID, sourceGID); err != nil {
 		return fmt.Errorf("failed to chown download: %v", err)
@@ -222,7 +242,10 @@ func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus 
 	return nil
 }
 
-func (d *DownloadService) setupTimeoutFunc(ignoreTimeout bool, torrentCheckTimeout time.Duration) func(media *Media) (time.Duration, bool) {
+func (d *DownloadService) setupTimeoutFunc() func(media *Media) (time.Duration, bool) {
+	ignoreTimeout := d.ignoreTimeout
+	torrentCheckTimeout := d.timout
+
 	if ignoreTimeout {
 		log.Info().
 			Bool("ignore_timeout", ignoreTimeout).
@@ -233,7 +256,7 @@ func (d *DownloadService) setupTimeoutFunc(ignoreTimeout bool, torrentCheckTimeo
 		}
 	}
 
-	log.Info().Dur("timeout", torrentCheckTimeout).Msg("download timeout is set to...")
+	log.Info().Str("timeout", torrentCheckTimeout.String()).Msg("download timeout is set to...")
 	return func(media *Media) (time.Duration, bool) {
 		torrentRunningDuration := time.Now().Sub(media.CreatedAt)
 

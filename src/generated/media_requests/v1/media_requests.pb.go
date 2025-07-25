@@ -817,7 +817,7 @@ const file_media_requests_v1_media_requests_proto_rawDesc = "" +
 	"torrent_id\x18\t \x01(\tR\ttorrentId\x122\n" +
 	"\x15torrent_file_location\x18\v \x01(\tR\x13torrentFileLocation\x12\x1c\n" +
 	"\tcreatedAt\x18\r \x01(\tR\tcreatedAt\x12\x1c\n" +
-	"\tupdatedAt\x18\x0e \x01(\tR\tupdatedAt2\xc3\x04\n" +
+	"\tupdatedAt\x18\x0e \x01(\tR\tupdatedAt2\xa7\x05\n" +
 	"\x13MediaRequestService\x12O\n" +
 	"\x06Search\x12 .media_requests.v1.SearchRequest\x1a!.media_requests.v1.SearchResponse\"\x00\x12I\n" +
 	"\x04List\x12\x1e.media_requests.v1.ListRequest\x1a\x1f.media_requests.v1.ListResponse\"\x00\x12O\n" +
@@ -825,7 +825,8 @@ const file_media_requests_v1_media_requests_proto_rawDesc = "" +
 	"\x04Edit\x12\x1e.media_requests.v1.EditRequest\x1a\x1f.media_requests.v1.EditResponse\"\x00\x12O\n" +
 	"\x06Exists\x12 .media_requests.v1.ExistsRequest\x1a!.media_requests.v1.ExistsResponse\"\x00\x12L\n" +
 	"\x05Retry\x12\x1f.media_requests.v1.RetryRequest\x1a .media_requests.v1.RetryResponse\"\x00\x12U\n" +
-	"\bAddMedia\x12\".media_requests.v1.AddMediaRequest\x1a#.media_requests.v1.AddMediaResponse\"\x00B\xc0\x01\n" +
+	"\bAddMedia\x12\".media_requests.v1.AddMediaRequest\x1a#.media_requests.v1.AddMediaResponse\"\x00\x12b\n" +
+	"\x15AddMediaWithFreeleech\x12\".media_requests.v1.AddMediaRequest\x1a#.media_requests.v1.AddMediaResponse\"\x00B\xc0\x01\n" +
 	"\x15com.media_requests.v1B\x12MediaRequestsProtoP\x01Z2github.com/RA341/gouda/generated/media_requests/v1\xa2\x02\x03MXX\xaa\x02\x10MediaRequests.V1\xca\x02\x10MediaRequests\\V1\xe2\x02\x1cMediaRequests\\V1\\GPBMetadata\xea\x02\x11MediaRequests::V1b\x06proto3"
 
 var (
@@ -872,15 +873,17 @@ var file_media_requests_v1_media_requests_proto_depIdxs = []int32{
 	8,  // 10: media_requests.v1.MediaRequestService.Exists:input_type -> media_requests.v1.ExistsRequest
 	10, // 11: media_requests.v1.MediaRequestService.Retry:input_type -> media_requests.v1.RetryRequest
 	12, // 12: media_requests.v1.MediaRequestService.AddMedia:input_type -> media_requests.v1.AddMediaRequest
-	1,  // 13: media_requests.v1.MediaRequestService.Search:output_type -> media_requests.v1.SearchResponse
-	3,  // 14: media_requests.v1.MediaRequestService.List:output_type -> media_requests.v1.ListResponse
-	5,  // 15: media_requests.v1.MediaRequestService.Delete:output_type -> media_requests.v1.DeleteResponse
-	7,  // 16: media_requests.v1.MediaRequestService.Edit:output_type -> media_requests.v1.EditResponse
-	9,  // 17: media_requests.v1.MediaRequestService.Exists:output_type -> media_requests.v1.ExistsResponse
-	11, // 18: media_requests.v1.MediaRequestService.Retry:output_type -> media_requests.v1.RetryResponse
-	13, // 19: media_requests.v1.MediaRequestService.AddMedia:output_type -> media_requests.v1.AddMediaResponse
-	13, // [13:20] is the sub-list for method output_type
-	6,  // [6:13] is the sub-list for method input_type
+	12, // 13: media_requests.v1.MediaRequestService.AddMediaWithFreeleech:input_type -> media_requests.v1.AddMediaRequest
+	1,  // 14: media_requests.v1.MediaRequestService.Search:output_type -> media_requests.v1.SearchResponse
+	3,  // 15: media_requests.v1.MediaRequestService.List:output_type -> media_requests.v1.ListResponse
+	5,  // 16: media_requests.v1.MediaRequestService.Delete:output_type -> media_requests.v1.DeleteResponse
+	7,  // 17: media_requests.v1.MediaRequestService.Edit:output_type -> media_requests.v1.EditResponse
+	9,  // 18: media_requests.v1.MediaRequestService.Exists:output_type -> media_requests.v1.ExistsResponse
+	11, // 19: media_requests.v1.MediaRequestService.Retry:output_type -> media_requests.v1.RetryResponse
+	13, // 20: media_requests.v1.MediaRequestService.AddMedia:output_type -> media_requests.v1.AddMediaResponse
+	13, // 21: media_requests.v1.MediaRequestService.AddMediaWithFreeleech:output_type -> media_requests.v1.AddMediaResponse
+	14, // [14:22] is the sub-list for method output_type
+	6,  // [6:14] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
 	6,  // [6:6] is the sub-list for extension extendee
 	0,  // [0:6] is the sub-list for field type_name

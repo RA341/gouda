@@ -4,27 +4,28 @@ import (
 	"github.com/RA341/gouda/internal/category"
 	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
+	"github.com/RA341/gouda/internal/info"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	"path/filepath"
 )
 
-func connect() (*gorm.DB, error) {
-	dbPath := config.DbPath.GetStr()
+func connect(goudaConf *config.GoudaConfig) (*gorm.DB, error) {
+	dbPath := filepath.Join(goudaConf.Dir.ConfigDir, "gouda.db")
 	if dbPath == "" {
-		log.Fatal().Msgf("db_path is empty")
+		log.Fatal().Msgf("db path is empty")
 	}
 
 	// Configure SQLite to use WAL mode
 	connectionStr := sqlite.Open(dbPath + "?_journal_mode=WAL&_busy_timeout=5000")
-
 	conf := &gorm.Config{
 		PrepareStmt: true,
 	}
-	if config.IsDebugMode() {
+
+	if info.IsDev() {
 		conf = &gorm.Config{
-			Logger:      logger.Default.LogMode(logger.Info),
+			//Logger:      logger.Default.LogMode(logger.Info),
 			PrepareStmt: true,
 		}
 	}
@@ -34,14 +35,8 @@ func connect() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&category.Categories{}, &downloads.Media{})
-	if err != nil {
-		log.Fatal().Err(err).Msgf("Failed migrate tables")
-	}
-
-	_, err = db.DB()
-	if err != nil {
-		return nil, err
+	if err = db.AutoMigrate(&category.Categories{}, &downloads.Media{}); err != nil {
+		log.Fatal().Err(err).Msg("Failed migrate tables")
 	}
 
 	log.Info().Str("path", dbPath).Msg("Connected to database")

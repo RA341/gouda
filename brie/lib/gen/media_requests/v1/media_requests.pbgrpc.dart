@@ -1,7 +1,7 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: media_requests/v1/media_requests.proto
-//
+// Generated from media_requests/v1/media_requests.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
@@ -16,7 +16,7 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'media_requests.pb.dart' as $2;
+import 'media_requests.pb.dart' as $0;
 
 export 'media_requests.pb.dart';
 
@@ -30,64 +30,103 @@ class MediaRequestServiceClient extends $grpc.Client {
     '',
   ];
 
-  static final _$search = $grpc.ClientMethod<$2.SearchRequest, $2.SearchResponse>(
-      '/media_requests.v1.MediaRequestService/Search',
-      ($2.SearchRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.SearchResponse.fromBuffer(value));
-  static final _$list = $grpc.ClientMethod<$2.ListRequest, $2.ListResponse>(
-      '/media_requests.v1.MediaRequestService/List',
-      ($2.ListRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.ListResponse.fromBuffer(value));
-  static final _$delete = $grpc.ClientMethod<$2.DeleteRequest, $2.DeleteResponse>(
-      '/media_requests.v1.MediaRequestService/Delete',
-      ($2.DeleteRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.DeleteResponse.fromBuffer(value));
-  static final _$edit = $grpc.ClientMethod<$2.EditRequest, $2.EditResponse>(
-      '/media_requests.v1.MediaRequestService/Edit',
-      ($2.EditRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.EditResponse.fromBuffer(value));
-  static final _$exists = $grpc.ClientMethod<$2.ExistsRequest, $2.ExistsResponse>(
-      '/media_requests.v1.MediaRequestService/Exists',
-      ($2.ExistsRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.ExistsResponse.fromBuffer(value));
-  static final _$retry = $grpc.ClientMethod<$2.RetryRequest, $2.RetryResponse>(
-      '/media_requests.v1.MediaRequestService/Retry',
-      ($2.RetryRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.RetryResponse.fromBuffer(value));
-  static final _$addMedia = $grpc.ClientMethod<$2.AddMediaRequest, $2.AddMediaResponse>(
-      '/media_requests.v1.MediaRequestService/AddMedia',
-      ($2.AddMediaRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.AddMediaResponse.fromBuffer(value));
-
   MediaRequestServiceClient(super.channel, {super.options, super.interceptors});
 
-  $grpc.ResponseFuture<$2.SearchResponse> search($2.SearchRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.SearchResponse> search(
+    $0.SearchRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$search, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.ListResponse> list($2.ListRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.ListResponse> list(
+    $0.ListRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$list, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.DeleteResponse> delete($2.DeleteRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.DeleteResponse> delete(
+    $0.DeleteRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$delete, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.EditResponse> edit($2.EditRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.EditResponse> edit(
+    $0.EditRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$edit, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.ExistsResponse> exists($2.ExistsRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.ExistsResponse> exists(
+    $0.ExistsRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$exists, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.RetryResponse> retry($2.RetryRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.RetryResponse> retry(
+    $0.RetryRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$retry, request, options: options);
   }
 
-  $grpc.ResponseFuture<$2.AddMediaResponse> addMedia($2.AddMediaRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.AddMediaResponse> addMedia(
+    $0.AddMediaRequest request, {
+    $grpc.CallOptions? options,
+  }) {
     return $createUnaryCall(_$addMedia, request, options: options);
   }
+
+  $grpc.ResponseFuture<$0.AddMediaResponse> addMediaWithFreeleech(
+    $0.AddMediaRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$addMediaWithFreeleech, request, options: options);
+  }
+
+  // method descriptors
+
+  static final _$search =
+      $grpc.ClientMethod<$0.SearchRequest, $0.SearchResponse>(
+          '/media_requests.v1.MediaRequestService/Search',
+          ($0.SearchRequest value) => value.writeToBuffer(),
+          $0.SearchResponse.fromBuffer);
+  static final _$list = $grpc.ClientMethod<$0.ListRequest, $0.ListResponse>(
+      '/media_requests.v1.MediaRequestService/List',
+      ($0.ListRequest value) => value.writeToBuffer(),
+      $0.ListResponse.fromBuffer);
+  static final _$delete =
+      $grpc.ClientMethod<$0.DeleteRequest, $0.DeleteResponse>(
+          '/media_requests.v1.MediaRequestService/Delete',
+          ($0.DeleteRequest value) => value.writeToBuffer(),
+          $0.DeleteResponse.fromBuffer);
+  static final _$edit = $grpc.ClientMethod<$0.EditRequest, $0.EditResponse>(
+      '/media_requests.v1.MediaRequestService/Edit',
+      ($0.EditRequest value) => value.writeToBuffer(),
+      $0.EditResponse.fromBuffer);
+  static final _$exists =
+      $grpc.ClientMethod<$0.ExistsRequest, $0.ExistsResponse>(
+          '/media_requests.v1.MediaRequestService/Exists',
+          ($0.ExistsRequest value) => value.writeToBuffer(),
+          $0.ExistsResponse.fromBuffer);
+  static final _$retry = $grpc.ClientMethod<$0.RetryRequest, $0.RetryResponse>(
+      '/media_requests.v1.MediaRequestService/Retry',
+      ($0.RetryRequest value) => value.writeToBuffer(),
+      $0.RetryResponse.fromBuffer);
+  static final _$addMedia =
+      $grpc.ClientMethod<$0.AddMediaRequest, $0.AddMediaResponse>(
+          '/media_requests.v1.MediaRequestService/AddMedia',
+          ($0.AddMediaRequest value) => value.writeToBuffer(),
+          $0.AddMediaResponse.fromBuffer);
+  static final _$addMediaWithFreeleech =
+      $grpc.ClientMethod<$0.AddMediaRequest, $0.AddMediaResponse>(
+          '/media_requests.v1.MediaRequestService/AddMediaWithFreeleech',
+          ($0.AddMediaRequest value) => value.writeToBuffer(),
+          $0.AddMediaResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('media_requests.v1.MediaRequestService')
@@ -95,90 +134,126 @@ abstract class MediaRequestServiceBase extends $grpc.Service {
   $core.String get $name => 'media_requests.v1.MediaRequestService';
 
   MediaRequestServiceBase() {
-    $addMethod($grpc.ServiceMethod<$2.SearchRequest, $2.SearchResponse>(
+    $addMethod($grpc.ServiceMethod<$0.SearchRequest, $0.SearchResponse>(
         'Search',
         search_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.SearchRequest.fromBuffer(value),
-        ($2.SearchResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.ListRequest, $2.ListResponse>(
+        ($core.List<$core.int> value) => $0.SearchRequest.fromBuffer(value),
+        ($0.SearchResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ListRequest, $0.ListResponse>(
         'List',
         list_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.ListRequest.fromBuffer(value),
-        ($2.ListResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.DeleteRequest, $2.DeleteResponse>(
+        ($core.List<$core.int> value) => $0.ListRequest.fromBuffer(value),
+        ($0.ListResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DeleteRequest, $0.DeleteResponse>(
         'Delete',
         delete_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.DeleteRequest.fromBuffer(value),
-        ($2.DeleteResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.EditRequest, $2.EditResponse>(
+        ($core.List<$core.int> value) => $0.DeleteRequest.fromBuffer(value),
+        ($0.DeleteResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.EditRequest, $0.EditResponse>(
         'Edit',
         edit_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.EditRequest.fromBuffer(value),
-        ($2.EditResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.ExistsRequest, $2.ExistsResponse>(
+        ($core.List<$core.int> value) => $0.EditRequest.fromBuffer(value),
+        ($0.EditResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ExistsRequest, $0.ExistsResponse>(
         'Exists',
         exists_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.ExistsRequest.fromBuffer(value),
-        ($2.ExistsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.RetryRequest, $2.RetryResponse>(
+        ($core.List<$core.int> value) => $0.ExistsRequest.fromBuffer(value),
+        ($0.ExistsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RetryRequest, $0.RetryResponse>(
         'Retry',
         retry_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.RetryRequest.fromBuffer(value),
-        ($2.RetryResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$2.AddMediaRequest, $2.AddMediaResponse>(
+        ($core.List<$core.int> value) => $0.RetryRequest.fromBuffer(value),
+        ($0.RetryResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.AddMediaRequest, $0.AddMediaResponse>(
         'AddMedia',
         addMedia_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $2.AddMediaRequest.fromBuffer(value),
-        ($2.AddMediaResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $0.AddMediaRequest.fromBuffer(value),
+        ($0.AddMediaResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.AddMediaRequest, $0.AddMediaResponse>(
+        'AddMediaWithFreeleech',
+        addMediaWithFreeleech_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.AddMediaRequest.fromBuffer(value),
+        ($0.AddMediaResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$2.SearchResponse> search_Pre($grpc.ServiceCall $call, $async.Future<$2.SearchRequest> $request) async {
+  $async.Future<$0.SearchResponse> search_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.SearchRequest> $request) async {
     return search($call, await $request);
   }
 
-  $async.Future<$2.ListResponse> list_Pre($grpc.ServiceCall $call, $async.Future<$2.ListRequest> $request) async {
+  $async.Future<$0.SearchResponse> search(
+      $grpc.ServiceCall call, $0.SearchRequest request);
+
+  $async.Future<$0.ListResponse> list_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.ListRequest> $request) async {
     return list($call, await $request);
   }
 
-  $async.Future<$2.DeleteResponse> delete_Pre($grpc.ServiceCall $call, $async.Future<$2.DeleteRequest> $request) async {
+  $async.Future<$0.ListResponse> list(
+      $grpc.ServiceCall call, $0.ListRequest request);
+
+  $async.Future<$0.DeleteResponse> delete_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.DeleteRequest> $request) async {
     return delete($call, await $request);
   }
 
-  $async.Future<$2.EditResponse> edit_Pre($grpc.ServiceCall $call, $async.Future<$2.EditRequest> $request) async {
+  $async.Future<$0.DeleteResponse> delete(
+      $grpc.ServiceCall call, $0.DeleteRequest request);
+
+  $async.Future<$0.EditResponse> edit_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.EditRequest> $request) async {
     return edit($call, await $request);
   }
 
-  $async.Future<$2.ExistsResponse> exists_Pre($grpc.ServiceCall $call, $async.Future<$2.ExistsRequest> $request) async {
+  $async.Future<$0.EditResponse> edit(
+      $grpc.ServiceCall call, $0.EditRequest request);
+
+  $async.Future<$0.ExistsResponse> exists_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.ExistsRequest> $request) async {
     return exists($call, await $request);
   }
 
-  $async.Future<$2.RetryResponse> retry_Pre($grpc.ServiceCall $call, $async.Future<$2.RetryRequest> $request) async {
+  $async.Future<$0.ExistsResponse> exists(
+      $grpc.ServiceCall call, $0.ExistsRequest request);
+
+  $async.Future<$0.RetryResponse> retry_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.RetryRequest> $request) async {
     return retry($call, await $request);
   }
 
-  $async.Future<$2.AddMediaResponse> addMedia_Pre($grpc.ServiceCall $call, $async.Future<$2.AddMediaRequest> $request) async {
+  $async.Future<$0.RetryResponse> retry(
+      $grpc.ServiceCall call, $0.RetryRequest request);
+
+  $async.Future<$0.AddMediaResponse> addMedia_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.AddMediaRequest> $request) async {
     return addMedia($call, await $request);
   }
 
-  $async.Future<$2.SearchResponse> search($grpc.ServiceCall call, $2.SearchRequest request);
-  $async.Future<$2.ListResponse> list($grpc.ServiceCall call, $2.ListRequest request);
-  $async.Future<$2.DeleteResponse> delete($grpc.ServiceCall call, $2.DeleteRequest request);
-  $async.Future<$2.EditResponse> edit($grpc.ServiceCall call, $2.EditRequest request);
-  $async.Future<$2.ExistsResponse> exists($grpc.ServiceCall call, $2.ExistsRequest request);
-  $async.Future<$2.RetryResponse> retry($grpc.ServiceCall call, $2.RetryRequest request);
-  $async.Future<$2.AddMediaResponse> addMedia($grpc.ServiceCall call, $2.AddMediaRequest request);
+  $async.Future<$0.AddMediaResponse> addMedia(
+      $grpc.ServiceCall call, $0.AddMediaRequest request);
+
+  $async.Future<$0.AddMediaResponse> addMediaWithFreeleech_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.AddMediaRequest> $request) async {
+    return addMediaWithFreeleech($call, await $request);
+  }
+
+  $async.Future<$0.AddMediaResponse> addMediaWithFreeleech(
+      $grpc.ServiceCall call, $0.AddMediaRequest request);
 }

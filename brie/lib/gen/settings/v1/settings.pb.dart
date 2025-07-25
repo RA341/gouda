@@ -1,7 +1,7 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: settings/v1/settings.proto
-//
+// Generated from settings/v1/settings.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
@@ -22,17 +22,25 @@ class GetMetadataRequest extends $pb.GeneratedMessage {
 
   GetMetadataRequest._();
 
-  factory GetMetadataRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory GetMetadataRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory GetMetadataRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetMetadataRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetMetadataRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetMetadataRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   GetMetadataRequest clone() => GetMetadataRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  GetMetadataRequest copyWith(void Function(GetMetadataRequest) updates) => super.copyWith((message) => updates(message as GetMetadataRequest)) as GetMetadataRequest;
+  GetMetadataRequest copyWith(void Function(GetMetadataRequest) updates) =>
+      super.copyWith((message) => updates(message as GetMetadataRequest))
+          as GetMetadataRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -41,9 +49,11 @@ class GetMetadataRequest extends $pb.GeneratedMessage {
   static GetMetadataRequest create() => GetMetadataRequest._();
   @$core.override
   GetMetadataRequest createEmptyInstance() => create();
-  static $pb.PbList<GetMetadataRequest> createRepeated() => $pb.PbList<GetMetadataRequest>();
+  static $pb.PbList<GetMetadataRequest> createRepeated() =>
+      $pb.PbList<GetMetadataRequest>();
   @$core.pragma('dart2js:noInline')
-  static GetMetadataRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetMetadataRequest>(create);
+  static GetMetadataRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetMetadataRequest>(create);
   static GetMetadataRequest? _defaultInstance;
 }
 
@@ -52,17 +62,25 @@ class TestTorrentResponse extends $pb.GeneratedMessage {
 
   TestTorrentResponse._();
 
-  factory TestTorrentResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory TestTorrentResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory TestTorrentResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory TestTorrentResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TestTorrentResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TestTorrentResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   TestTorrentResponse clone() => TestTorrentResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  TestTorrentResponse copyWith(void Function(TestTorrentResponse) updates) => super.copyWith((message) => updates(message as TestTorrentResponse)) as TestTorrentResponse;
+  TestTorrentResponse copyWith(void Function(TestTorrentResponse) updates) =>
+      super.copyWith((message) => updates(message as TestTorrentResponse))
+          as TestTorrentResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -71,9 +89,11 @@ class TestTorrentResponse extends $pb.GeneratedMessage {
   static TestTorrentResponse create() => TestTorrentResponse._();
   @$core.override
   TestTorrentResponse createEmptyInstance() => create();
-  static $pb.PbList<TestTorrentResponse> createRepeated() => $pb.PbList<TestTorrentResponse>();
+  static $pb.PbList<TestTorrentResponse> createRepeated() =>
+      $pb.PbList<TestTorrentResponse>();
   @$core.pragma('dart2js:noInline')
-  static TestTorrentResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TestTorrentResponse>(create);
+  static TestTorrentResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TestTorrentResponse>(create);
   static TestTorrentResponse? _defaultInstance;
 }
 
@@ -90,19 +110,27 @@ class GetMetadataResponse extends $pb.GeneratedMessage {
 
   GetMetadataResponse._();
 
-  factory GetMetadataResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory GetMetadataResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory GetMetadataResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetMetadataResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetMetadataResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetMetadataResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'version')
     ..aOS(2, _omitFieldNames ? '' : 'binaryType', protoName: 'binaryType')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   GetMetadataResponse clone() => GetMetadataResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  GetMetadataResponse copyWith(void Function(GetMetadataResponse) updates) => super.copyWith((message) => updates(message as GetMetadataResponse)) as GetMetadataResponse;
+  GetMetadataResponse copyWith(void Function(GetMetadataResponse) updates) =>
+      super.copyWith((message) => updates(message as GetMetadataResponse))
+          as GetMetadataResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -111,9 +139,11 @@ class GetMetadataResponse extends $pb.GeneratedMessage {
   static GetMetadataResponse create() => GetMetadataResponse._();
   @$core.override
   GetMetadataResponse createEmptyInstance() => create();
-  static $pb.PbList<GetMetadataResponse> createRepeated() => $pb.PbList<GetMetadataResponse>();
+  static $pb.PbList<GetMetadataResponse> createRepeated() =>
+      $pb.PbList<GetMetadataResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetMetadataResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetMetadataResponse>(create);
+  static GetMetadataResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetMetadataResponse>(create);
   static GetMetadataResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -140,28 +170,42 @@ class ListSupportedClientsRequest extends $pb.GeneratedMessage {
 
   ListSupportedClientsRequest._();
 
-  factory ListSupportedClientsRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory ListSupportedClientsRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory ListSupportedClientsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSupportedClientsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSupportedClientsRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListSupportedClientsRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSupportedClientsRequest clone() => ListSupportedClientsRequest()..mergeFromMessage(this);
+  ListSupportedClientsRequest clone() =>
+      ListSupportedClientsRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSupportedClientsRequest copyWith(void Function(ListSupportedClientsRequest) updates) => super.copyWith((message) => updates(message as ListSupportedClientsRequest)) as ListSupportedClientsRequest;
+  ListSupportedClientsRequest copyWith(
+          void Function(ListSupportedClientsRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as ListSupportedClientsRequest))
+          as ListSupportedClientsRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static ListSupportedClientsRequest create() => ListSupportedClientsRequest._();
+  static ListSupportedClientsRequest create() =>
+      ListSupportedClientsRequest._();
   @$core.override
   ListSupportedClientsRequest createEmptyInstance() => create();
-  static $pb.PbList<ListSupportedClientsRequest> createRepeated() => $pb.PbList<ListSupportedClientsRequest>();
+  static $pb.PbList<ListSupportedClientsRequest> createRepeated() =>
+      $pb.PbList<ListSupportedClientsRequest>();
   @$core.pragma('dart2js:noInline')
-  static ListSupportedClientsRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsRequest>(create);
+  static ListSupportedClientsRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsRequest>(create);
   static ListSupportedClientsRequest? _defaultInstance;
 }
 
@@ -176,29 +220,43 @@ class ListSupportedClientsResponse extends $pb.GeneratedMessage {
 
   ListSupportedClientsResponse._();
 
-  factory ListSupportedClientsResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory ListSupportedClientsResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory ListSupportedClientsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSupportedClientsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSupportedClientsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListSupportedClientsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
     ..pPS(1, _omitFieldNames ? '' : 'clients')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSupportedClientsResponse clone() => ListSupportedClientsResponse()..mergeFromMessage(this);
+  ListSupportedClientsResponse clone() =>
+      ListSupportedClientsResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSupportedClientsResponse copyWith(void Function(ListSupportedClientsResponse) updates) => super.copyWith((message) => updates(message as ListSupportedClientsResponse)) as ListSupportedClientsResponse;
+  ListSupportedClientsResponse copyWith(
+          void Function(ListSupportedClientsResponse) updates) =>
+      super.copyWith(
+              (message) => updates(message as ListSupportedClientsResponse))
+          as ListSupportedClientsResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static ListSupportedClientsResponse create() => ListSupportedClientsResponse._();
+  static ListSupportedClientsResponse create() =>
+      ListSupportedClientsResponse._();
   @$core.override
   ListSupportedClientsResponse createEmptyInstance() => create();
-  static $pb.PbList<ListSupportedClientsResponse> createRepeated() => $pb.PbList<ListSupportedClientsResponse>();
+  static $pb.PbList<ListSupportedClientsResponse> createRepeated() =>
+      $pb.PbList<ListSupportedClientsResponse>();
   @$core.pragma('dart2js:noInline')
-  static ListSupportedClientsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsResponse>(create);
+  static ListSupportedClientsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListSupportedClientsResponse>(create);
   static ListSupportedClientsResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -210,17 +268,27 @@ class UpdateSettingsResponse extends $pb.GeneratedMessage {
 
   UpdateSettingsResponse._();
 
-  factory UpdateSettingsResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory UpdateSettingsResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory UpdateSettingsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateSettingsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateSettingsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateSettingsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateSettingsResponse clone() => UpdateSettingsResponse()..mergeFromMessage(this);
+  UpdateSettingsResponse clone() =>
+      UpdateSettingsResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateSettingsResponse copyWith(void Function(UpdateSettingsResponse) updates) => super.copyWith((message) => updates(message as UpdateSettingsResponse)) as UpdateSettingsResponse;
+  UpdateSettingsResponse copyWith(
+          void Function(UpdateSettingsResponse) updates) =>
+      super.copyWith((message) => updates(message as UpdateSettingsResponse))
+          as UpdateSettingsResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -229,9 +297,11 @@ class UpdateSettingsResponse extends $pb.GeneratedMessage {
   static UpdateSettingsResponse create() => UpdateSettingsResponse._();
   @$core.override
   UpdateSettingsResponse createEmptyInstance() => create();
-  static $pb.PbList<UpdateSettingsResponse> createRepeated() => $pb.PbList<UpdateSettingsResponse>();
+  static $pb.PbList<UpdateSettingsResponse> createRepeated() =>
+      $pb.PbList<UpdateSettingsResponse>();
   @$core.pragma('dart2js:noInline')
-  static UpdateSettingsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateSettingsResponse>(create);
+  static UpdateSettingsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateSettingsResponse>(create);
   static UpdateSettingsResponse? _defaultInstance;
 }
 
@@ -240,17 +310,26 @@ class ListSettingsResponse extends $pb.GeneratedMessage {
 
   ListSettingsResponse._();
 
-  factory ListSettingsResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory ListSettingsResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory ListSettingsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSettingsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSettingsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'ListSettingsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSettingsResponse clone() => ListSettingsResponse()..mergeFromMessage(this);
+  ListSettingsResponse clone() =>
+      ListSettingsResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSettingsResponse copyWith(void Function(ListSettingsResponse) updates) => super.copyWith((message) => updates(message as ListSettingsResponse)) as ListSettingsResponse;
+  ListSettingsResponse copyWith(void Function(ListSettingsResponse) updates) =>
+      super.copyWith((message) => updates(message as ListSettingsResponse))
+          as ListSettingsResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -259,9 +338,11 @@ class ListSettingsResponse extends $pb.GeneratedMessage {
   static ListSettingsResponse create() => ListSettingsResponse._();
   @$core.override
   ListSettingsResponse createEmptyInstance() => create();
-  static $pb.PbList<ListSettingsResponse> createRepeated() => $pb.PbList<ListSettingsResponse>();
+  static $pb.PbList<ListSettingsResponse> createRepeated() =>
+      $pb.PbList<ListSettingsResponse>();
   @$core.pragma('dart2js:noInline')
-  static ListSettingsResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSettingsResponse>(create);
+  static ListSettingsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListSettingsResponse>(create);
   static ListSettingsResponse? _defaultInstance;
 }
 
@@ -285,7 +366,8 @@ class Settings extends $pb.GeneratedMessage {
     final result = create();
     if (apiKey != null) result.apiKey = apiKey;
     if (serverPort != null) result.serverPort = serverPort;
-    if (downloadCheckTimeout != null) result.downloadCheckTimeout = downloadCheckTimeout;
+    if (downloadCheckTimeout != null)
+      result.downloadCheckTimeout = downloadCheckTimeout;
     if (completeFolder != null) result.completeFolder = completeFolder;
     if (downloadFolder != null) result.downloadFolder = downloadFolder;
     if (torrentsFolder != null) result.torrentsFolder = torrentsFolder;
@@ -302,31 +384,44 @@ class Settings extends $pb.GeneratedMessage {
 
   Settings._();
 
-  factory Settings.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory Settings.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory Settings.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Settings.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Settings', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Settings',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'apiKey')
     ..aOS(2, _omitFieldNames ? '' : 'serverPort')
-    ..a<$fixnum.Int64>(3, _omitFieldNames ? '' : 'downloadCheckTimeout', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(
+        3, _omitFieldNames ? '' : 'downloadCheckTimeout', $pb.PbFieldType.OU6,
+        defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOS(4, _omitFieldNames ? '' : 'completeFolder')
     ..aOS(5, _omitFieldNames ? '' : 'downloadFolder')
     ..aOS(6, _omitFieldNames ? '' : 'torrentsFolder')
     ..aOS(7, _omitFieldNames ? '' : 'username')
     ..aOS(8, _omitFieldNames ? '' : 'password')
-    ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'userUid', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..a<$fixnum.Int64>(10, _omitFieldNames ? '' : 'groupUid', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOM<TorrentClient>(11, _omitFieldNames ? '' : 'client', subBuilder: TorrentClient.create)
+    ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'userUid', $pb.PbFieldType.OU6,
+        defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(
+        10, _omitFieldNames ? '' : 'groupUid', $pb.PbFieldType.OU6,
+        defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOM<TorrentClient>(11, _omitFieldNames ? '' : 'client',
+        subBuilder: TorrentClient.create)
     ..aOB(12, _omitFieldNames ? '' : 'exitOnClose')
     ..aOB(13, _omitFieldNames ? '' : 'ignoreTimeout')
     ..aOB(14, _omitFieldNames ? '' : 'setupComplete')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   Settings clone() => Settings()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  Settings copyWith(void Function(Settings) updates) => super.copyWith((message) => updates(message as Settings)) as Settings;
+  Settings copyWith(void Function(Settings) updates) =>
+      super.copyWith((message) => updates(message as Settings)) as Settings;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -337,7 +432,8 @@ class Settings extends $pb.GeneratedMessage {
   Settings createEmptyInstance() => create();
   static $pb.PbList<Settings> createRepeated() => $pb.PbList<Settings>();
   @$core.pragma('dart2js:noInline')
-  static Settings getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Settings>(create);
+  static Settings getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Settings>(create);
   static Settings? _defaultInstance;
 
   /// General settings
@@ -492,22 +588,30 @@ class TorrentClient extends $pb.GeneratedMessage {
 
   TorrentClient._();
 
-  factory TorrentClient.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory TorrentClient.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory TorrentClient.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory TorrentClient.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TorrentClient', package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TorrentClient',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'torrentHost')
     ..aOS(2, _omitFieldNames ? '' : 'torrentName')
     ..aOS(3, _omitFieldNames ? '' : 'torrentPassword')
     ..aOS(4, _omitFieldNames ? '' : 'torrentProtocol')
     ..aOS(5, _omitFieldNames ? '' : 'torrentUser')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   TorrentClient clone() => TorrentClient()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  TorrentClient copyWith(void Function(TorrentClient) updates) => super.copyWith((message) => updates(message as TorrentClient)) as TorrentClient;
+  TorrentClient copyWith(void Function(TorrentClient) updates) =>
+      super.copyWith((message) => updates(message as TorrentClient))
+          as TorrentClient;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -516,9 +620,11 @@ class TorrentClient extends $pb.GeneratedMessage {
   static TorrentClient create() => TorrentClient._();
   @$core.override
   TorrentClient createEmptyInstance() => create();
-  static $pb.PbList<TorrentClient> createRepeated() => $pb.PbList<TorrentClient>();
+  static $pb.PbList<TorrentClient> createRepeated() =>
+      $pb.PbList<TorrentClient>();
   @$core.pragma('dart2js:noInline')
-  static TorrentClient getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TorrentClient>(create);
+  static TorrentClient getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TorrentClient>(create);
   static TorrentClient? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -567,6 +673,7 @@ class TorrentClient extends $pb.GeneratedMessage {
   void clearTorrentUser() => $_clearField(5);
 }
 
-
-const $core.bool _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const $core.bool _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
+    $core.bool.fromEnvironment('protobuf.omit_message_names');

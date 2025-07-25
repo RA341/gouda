@@ -54,6 +54,9 @@ const (
 	// MediaRequestServiceAddMediaProcedure is the fully-qualified name of the MediaRequestService's
 	// AddMedia RPC.
 	MediaRequestServiceAddMediaProcedure = "/media_requests.v1.MediaRequestService/AddMedia"
+	// MediaRequestServiceAddMediaWithFreeleechProcedure is the fully-qualified name of the
+	// MediaRequestService's AddMediaWithFreeleech RPC.
+	MediaRequestServiceAddMediaWithFreeleechProcedure = "/media_requests.v1.MediaRequestService/AddMediaWithFreeleech"
 )
 
 // MediaRequestServiceClient is a client for the media_requests.v1.MediaRequestService service.
@@ -65,6 +68,7 @@ type MediaRequestServiceClient interface {
 	Exists(context.Context, *connect.Request[v1.ExistsRequest]) (*connect.Response[v1.ExistsResponse], error)
 	Retry(context.Context, *connect.Request[v1.RetryRequest]) (*connect.Response[v1.RetryResponse], error)
 	AddMedia(context.Context, *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error)
+	AddMediaWithFreeleech(context.Context, *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error)
 }
 
 // NewMediaRequestServiceClient constructs a client for the media_requests.v1.MediaRequestService
@@ -120,18 +124,25 @@ func NewMediaRequestServiceClient(httpClient connect.HTTPClient, baseURL string,
 			connect.WithSchema(mediaRequestServiceMethods.ByName("AddMedia")),
 			connect.WithClientOptions(opts...),
 		),
+		addMediaWithFreeleech: connect.NewClient[v1.AddMediaRequest, v1.AddMediaResponse](
+			httpClient,
+			baseURL+MediaRequestServiceAddMediaWithFreeleechProcedure,
+			connect.WithSchema(mediaRequestServiceMethods.ByName("AddMediaWithFreeleech")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // mediaRequestServiceClient implements MediaRequestServiceClient.
 type mediaRequestServiceClient struct {
-	search   *connect.Client[v1.SearchRequest, v1.SearchResponse]
-	list     *connect.Client[v1.ListRequest, v1.ListResponse]
-	delete   *connect.Client[v1.DeleteRequest, v1.DeleteResponse]
-	edit     *connect.Client[v1.EditRequest, v1.EditResponse]
-	exists   *connect.Client[v1.ExistsRequest, v1.ExistsResponse]
-	retry    *connect.Client[v1.RetryRequest, v1.RetryResponse]
-	addMedia *connect.Client[v1.AddMediaRequest, v1.AddMediaResponse]
+	search                *connect.Client[v1.SearchRequest, v1.SearchResponse]
+	list                  *connect.Client[v1.ListRequest, v1.ListResponse]
+	delete                *connect.Client[v1.DeleteRequest, v1.DeleteResponse]
+	edit                  *connect.Client[v1.EditRequest, v1.EditResponse]
+	exists                *connect.Client[v1.ExistsRequest, v1.ExistsResponse]
+	retry                 *connect.Client[v1.RetryRequest, v1.RetryResponse]
+	addMedia              *connect.Client[v1.AddMediaRequest, v1.AddMediaResponse]
+	addMediaWithFreeleech *connect.Client[v1.AddMediaRequest, v1.AddMediaResponse]
 }
 
 // Search calls media_requests.v1.MediaRequestService.Search.
@@ -169,6 +180,11 @@ func (c *mediaRequestServiceClient) AddMedia(ctx context.Context, req *connect.R
 	return c.addMedia.CallUnary(ctx, req)
 }
 
+// AddMediaWithFreeleech calls media_requests.v1.MediaRequestService.AddMediaWithFreeleech.
+func (c *mediaRequestServiceClient) AddMediaWithFreeleech(ctx context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
+	return c.addMediaWithFreeleech.CallUnary(ctx, req)
+}
+
 // MediaRequestServiceHandler is an implementation of the media_requests.v1.MediaRequestService
 // service.
 type MediaRequestServiceHandler interface {
@@ -179,6 +195,7 @@ type MediaRequestServiceHandler interface {
 	Exists(context.Context, *connect.Request[v1.ExistsRequest]) (*connect.Response[v1.ExistsResponse], error)
 	Retry(context.Context, *connect.Request[v1.RetryRequest]) (*connect.Response[v1.RetryResponse], error)
 	AddMedia(context.Context, *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error)
+	AddMediaWithFreeleech(context.Context, *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error)
 }
 
 // NewMediaRequestServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -230,6 +247,12 @@ func NewMediaRequestServiceHandler(svc MediaRequestServiceHandler, opts ...conne
 		connect.WithSchema(mediaRequestServiceMethods.ByName("AddMedia")),
 		connect.WithHandlerOptions(opts...),
 	)
+	mediaRequestServiceAddMediaWithFreeleechHandler := connect.NewUnaryHandler(
+		MediaRequestServiceAddMediaWithFreeleechProcedure,
+		svc.AddMediaWithFreeleech,
+		connect.WithSchema(mediaRequestServiceMethods.ByName("AddMediaWithFreeleech")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/media_requests.v1.MediaRequestService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case MediaRequestServiceSearchProcedure:
@@ -246,6 +269,8 @@ func NewMediaRequestServiceHandler(svc MediaRequestServiceHandler, opts ...conne
 			mediaRequestServiceRetryHandler.ServeHTTP(w, r)
 		case MediaRequestServiceAddMediaProcedure:
 			mediaRequestServiceAddMediaHandler.ServeHTTP(w, r)
+		case MediaRequestServiceAddMediaWithFreeleechProcedure:
+			mediaRequestServiceAddMediaWithFreeleechHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -281,4 +306,8 @@ func (UnimplementedMediaRequestServiceHandler) Retry(context.Context, *connect.R
 
 func (UnimplementedMediaRequestServiceHandler) AddMedia(context.Context, *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("media_requests.v1.MediaRequestService.AddMedia is not implemented"))
+}
+
+func (UnimplementedMediaRequestServiceHandler) AddMediaWithFreeleech(context.Context, *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("media_requests.v1.MediaRequestService.AddMediaWithFreeleech is not implemented"))
 }

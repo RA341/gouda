@@ -2,7 +2,6 @@ package clients
 
 import (
 	"fmt"
-	"github.com/RA341/gouda/internal/config"
 )
 
 type ClientInit func(info *TorrentClient) (DownloadClient, error)
@@ -42,10 +41,10 @@ func TestTorrentClient(details *TorrentClient) (DownloadClient, error) {
 
 func getTorrentClientFromConfig() *TorrentClient {
 	return &TorrentClient{
-		User:     config.TorrentUser.GetStr(),
-		Password: config.TorrentPassword.GetStr(),
-		Protocol: config.TorrentProtocol.GetStr(),
-		Host:     config.TorrentHost.GetStr(),
-		Type:     config.TorrentType.GetStr(),
+		//User:     config.TorrentUser.GetStr(),
+		//Password: config.TorrentPassword.GetStr(),
+		//Protocol: config.TorrentProtocol.GetStr(),
+		//Host:     config.TorrentHost.GetStr(),
+		//Type:     config.TorrentType.GetStr(),
 	}
 }

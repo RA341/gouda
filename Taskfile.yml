@@ -1,0 +1,96 @@
+version: '3'
+
+vars:
+  CORE_DIR: src/
+  UI_DIR: brie/
+  DOCKMAN_IMAGE_BASE: gouda
+  # Directory for Go source commands
+  GO_CMD_DIR: cmd
+  # Directory for build output
+  BUILD_DIR: build
+
+tasks:
+  default:
+    desc: "Lists all available tasks"
+    cmds:
+      - task --list --sort=alphanumeric
+
+  init:
+    desc: "Setup dockman dev environment should be run only once after cloning the project."
+    deps:
+      - init:build
+      - tidy
+
+  init:build:
+    desc: "Creates the build dir"
+    cmd: coreutils mkdir -p {{.BUILD_DIR}}
+    status:
+      # This command checks if the directory exists. If it does, the task is considered "up-to-date" and won't run.
+      - test -d {{.BUILD_DIR}}
+
+  clean:
+    desc: "Removes all files in {{.BUILD_DIR}}"
+    cmds:
+      - coreutils rm -rf {{.BUILD_DIR}}/*
+
+  tidy:
+    desc: "Calls go mod tidy in {{.CORE_DIR}}"
+    dir: "{{.CORE_DIR}}"
+    cmds:
+      - go mod tidy -v -x
+
+  go:b:*:
+    dir: "{{.CORE_DIR}}"
+    desc: "Builds a Go target. Usage: task go:<target>"
+    vars:
+      CMD_NAME: "{{index .MATCH 0}}"
+      EXE_EXT: '{{if eq OS "windows"}}.exe{{end}}'
+    deps:
+      - task: init:build
+    sources:
+      - "**/*.go"
+    generates:
+      - "{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}}"
+    cmds:
+      - go build -v -o ../{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}} ./{{.GO_CMD_DIR}}/{{.CMD_NAME}}
+    summary: |
+      Builds the '{{.CMD_NAME}}' Go command.
+      Source: '{{.GO_CMD_DIR}}/{{.CMD_NAME}}'
+      Output: '{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}}'
+
+  go:*:
+    dir: "{{.BUILD_DIR}}"
+    desc: "Builds and runs a Go target. Usage: task go:r:<target>"
+    vars:
+      CMD_NAME: "{{index .MATCH 0}}"
+      EXE_EXT: '{{if eq OS "windows"}}.exe{{end}}'
+      ARGS: '{{if eq .CMD_NAME "updater"}} -cr={{.CMD_NAME}}/compose {{else}} -conf={{.CMD_NAME}}/config -cr={{.CMD_NAME}}/compose{{end}}'
+    cmds:
+      - task: go:b:{{.CMD_NAME}}
+      - ../{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}}{{.ARGS}}
+
+  dk:b:*:
+    desc: "Builds the main dockman image for a specific target. Usage: task dk:<target>"
+    vars:
+      TARGET: "{{index .MATCH 0}}"
+    cmds:
+      - docker build . -t {{.DOCKMAN_IMAGE_BASE}}:{{.TARGET}} --target {{.TARGET}}
+    preconditions:
+      - sh: 'test -n "{{.TARGET}}"'
+        msg: "The 'target' variable must be provided. Usage: task dk.<target-name>"
+
+  dk:*:
+    desc: "Builds and runs the main dockman image for a specific target. Usage: task dk:r:<target>"
+    vars:
+      TARGET: "{{index .MATCH 0}}"
+    cmds:
+      - task dk:b:{{.TARGET}}
+      - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -p 8221:8866 {{.DOCKMAN_IMAGE_BASE}}:{{.TARGET}}
+    preconditions:
+      - sh: 'test -n "{{.TARGET}}"'
+        msg: "The 'target' variable must be provided. Usage: task dk:r.<target-name>"
+
+  dk:prune:
+    desc: "Prune docker images."
+    cmds:
+      - docker image prune -f

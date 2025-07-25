@@ -2,18 +2,21 @@ package media_manager
 
 import (
 	"fmt"
-	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
+	"github.com/RA341/gouda/internal/info"
+	"github.com/RA341/gouda/internal/mam"
 	"github.com/rs/zerolog/log"
+	"strconv"
 )
 
 type MediaManagerService struct {
-	db Store
-	ds *downloads.DownloadService
+	db  Store
+	ds  *downloads.DownloadService
+	mam *mam.Service
 }
 
-func NewMediaManagerService(db Store, ds *downloads.DownloadService) *MediaManagerService {
-	return &MediaManagerService{db: db, ds: ds}
+func NewMediaManagerService(db Store, ds *downloads.DownloadService, mam *mam.Service) *MediaManagerService {
+	return &MediaManagerService{db: db, ds: ds, mam: mam}
 }
 
 func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
@@ -21,9 +24,8 @@ func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
 
 	err := srv.ds.DownloadMedia(mediaRequest)
 	if err != nil {
-		mediaRequest.Status = downloads.Error
-		mediaRequest.ErrorMessage = err.Error()
-		err = srv.db.Edit(mediaRequest)
+		mediaRequest.MarkError(err)
+		err = srv.db.Edit(mediaRequest) // update in db
 		if err != nil {
 			log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
 			return err
@@ -34,8 +36,18 @@ func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
 	return nil
 }
 
+func (srv *MediaManagerService) AddMediaWithFreeleech(mediaRequest *downloads.Media) error {
+	freeleech, err := srv.mam.UseFreeleech(strconv.Itoa(int(mediaRequest.ID)), mam.FreeLeechPersonal)
+	if err != nil {
+		return fmt.Errorf("failed to buy free leech to media manager: %v", err)
+	}
+	log.Info().Any("leech-response", freeleech).Msg("Adding free leech to media manager")
+
+	return srv.AddMedia(mediaRequest)
+}
+
 func (srv *MediaManagerService) List(limit, offset int) (int64, []downloads.Media, error) {
-	if config.IsDebugMode() {
+	if info.IsDev() {
 		log.Debug().Int("limit", limit).Int("offset", offset).Msg("history query limits")
 	}
 

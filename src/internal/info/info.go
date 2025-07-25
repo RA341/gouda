@@ -1,22 +1,20 @@
 package info
 
 import (
-	"fmt"
-	"math/rand/v2"
+	"github.com/RA341/gouda/pkg/litany"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 // build args to modify vars
 //
-// go build -ldflags "\
-//  -X github.com/RA341/gouda/internal/info.Version=0.1.0 \
-//  -X github.com/RA341/gouda/internal/info.CommitInfo=$(git rev-parse HEAD) \
-//  -X github.com/RA341/gouda/internal/info.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
-//  -X github.com/RA341/gouda/internal/info.Branch=$(git rev-parse --abbrev-ref HEAD) \
-//  "
-// cmd/server.go
+//go build -ldflags "\
+// -X github.com/RA341/gouda/internal/info.Version=0.1.0 \
+// -X github.com/RA341/gouda/internal/info.CommitInfo=$(git rev-parse HEAD) \
+// -X github.com/RA341/gouda/internal/info.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+// -X github.com/RA341/gouda/internal/info.Branch=$(git rev-parse --abbrev-ref HEAD) \
+// "
+//cmd/server.go
 
 func PrintInfo() {
 	// generated from https://patorjk.com/software/taag/#p=testall&f=Graffiti&t=gouda
@@ -56,51 +54,28 @@ $$\   $$ |
 		"                                                           \n                                        ,---,              \n              ,---.           ,--,    ,---.'|              \n  ,----._,.  '   ,'\\        ,'_ /|    |   | :              \n /   /  ' / /   /   |  .--. |  | :    |   | |   ,--.--.    \n|   :     |.   ; ,. :,'_ /| :  . |  ,--.__| |  /       \\   \n|   | .\\  .'   | |: :|  ' | |  . . /   ,'   | .--.  .-. |  \n.   ; ';  |'   | .; :|  | ' |  | |.   '  /  |  \\__\\/: . .  \n'   .   . ||   :    |:  | : ;  ; |'   ; |:  |  ,\" .--.; |  \n `---`-'| | \\   \\  / '  :  `--'   \\   | '/  ' /  /  ,.  |  \n .'__/\\_: |  `----'  :  ,      .-./   :    :|;  :   .'   \\ \n |   :    :           `--`----'    \\   \\  /  |  ,     .-./ \n  \\   \\  /                          `----'    `--`---'     \n   `--`-'                                                  \n",
 	}
 
-	const (
-		width      = 90
-		colorReset = "\033[0m"
-		// Nord color palette ANSI equivalents
-		nord4  = "\033[38;5;188m" // Snow Storm (darkest) - main text color
-		nord8  = "\033[38;5;110m" // Frost - light blue
-		nord9  = "\033[38;5;111m" // Frost - blue
-		nord10 = "\033[38;5;111m" // Frost - deep blue
-		nord15 = "\033[38;5;139m" // Aurora - purple
-	)
+	fields := litany.NewFieldConfig()
 
-	equalDivider := nord9 + strings.Repeat("=", width) + colorReset
-	dashDivider := nord10 + strings.Repeat("-", width) + colorReset
-
-	fmt.Println(equalDivider)
-	fmt.Printf("%s%s %s %s\n", nord15, strings.Repeat(" ", (width-24)/2), (headers[rand.IntN(len(headers))]), colorReset)
-	fmt.Println(equalDivider)
-
-	// Print app info with aligned values
-	printField := func(name, value string) {
-		fmt.Printf("%s%-15s: %s%s%s\n", nord4, name, nord8, value, colorReset)
+	fields.NewStrField("Version", Version)
+	fields.NewStrField("Flavour", string(Flavour))
+	fields.NewStrField("BuildDate", litany.TimeFormatter(BuildDate))
+	fields.NewStrField("GoVersion", GoVersion)
+	if !IsDocker() {
+		// show tracing for server and desktop binaries,
+		// we don't need for docker since its immutable
+		fields.NewStrField("BinaryPath", filepath.Base(os.Args[0]))
 	}
 
-	printField("Version", Version)
-	printField("Flavour", string(Flavour))
-	printField("BinaryPath", filepath.Base(os.Args[0]))
-	printField("BuildDate", formatTime(BuildDate))
-
-	fmt.Println(equalDivider)
-
-	printField("Branch", Branch)
-	printField("CommitInfo", CommitInfo)
-	printField("Source Hash", SourceHash)
-	printField("GoVersion", GoVersion)
-
-	if Branch != "unknown" && CommitInfo != "unknown" {
-		fmt.Println(dashDivider)
-		var baseRepo = fmt.Sprintf("https://github.com/RA341/gouda")
-		branchURL := fmt.Sprintf("%s/tree/%s", baseRepo, Branch)
-		commitURL := fmt.Sprintf("%s/commit/%s", baseRepo, CommitInfo)
-
-		printField("Repo", baseRepo)
-		printField("Branch", branchURL)
-		printField("Commit", commitURL)
+	if IsKnown(Branch) && IsKnown(CommitInfo) {
+		fields.DashDivider()
+		fields.NewGithubMetadata(
+			"https://github.com/RA341/gouda",
+			CommitInfo,
+			Branch,
+		)
 	}
 
-	fmt.Println(equalDivider)
+	fields.EqualDivider()
+
+	litany.Announce(headers, fields)
 }

@@ -72,6 +72,7 @@ class PageNotifier extends Notifier<int> {
       return 2;
     }
 
+    return 2; // todo change before commit
     return 0;
   }
 
