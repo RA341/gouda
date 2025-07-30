@@ -7,7 +7,23 @@ option go_package = "github.com/RA341/gouda/generated/mam/v1";
 service MamService {
   rpc Search(Query) returns (SearchResults);
   rpc BuyVip(VipRequest) returns (VipResponse);
+  rpc GetProfile(Empty) returns (UserData);
   rpc BuyBonus(BonusRequest) returns (BonusResponse);
+}
+
+message UserData {
+  string classname = 1;
+  string country_code = 2;
+  string country_name = 3;
+  string downloaded = 4;
+  int64 downloaded_bytes = 5;
+  double ratio = 6;
+  int32 seedbonus = 7;
+  int32 uid = 8;
+  string uploaded = 9;
+  int64 uploaded_bytes = 10;
+  string username = 11;
+  string vip_until = 12;
 }
 
 message VipRequest {
@@ -70,3 +86,5 @@ message FreeLeechInfo {
 message Query {
   string query = 1;
 }
+
+message Empty {}

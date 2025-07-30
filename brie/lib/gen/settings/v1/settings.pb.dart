@@ -346,6 +346,460 @@ class ListSettingsResponse extends $pb.GeneratedMessage {
   static ListSettingsResponse? _defaultInstance;
 }
 
+/// Top-level Gouda configuration
+class GoudaConfig extends $pb.GeneratedMessage {
+  factory GoudaConfig({
+    $core.int? port,
+    $core.String? allowedOrigins,
+    $core.String? uiPath,
+    $core.bool? auth,
+    $core.String? mamToken,
+    Directories? dir,
+    Logger? log,
+    Downloader? downloader,
+    UserPermissions? permissions,
+  }) {
+    final result = create();
+    if (port != null) result.port = port;
+    if (allowedOrigins != null) result.allowedOrigins = allowedOrigins;
+    if (uiPath != null) result.uiPath = uiPath;
+    if (auth != null) result.auth = auth;
+    if (mamToken != null) result.mamToken = mamToken;
+    if (dir != null) result.dir = dir;
+    if (log != null) result.log = log;
+    if (downloader != null) result.downloader = downloader;
+    if (permissions != null) result.permissions = permissions;
+    return result;
+  }
+
+  GoudaConfig._();
+
+  factory GoudaConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GoudaConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GoudaConfig',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'port', $pb.PbFieldType.O3)
+    ..aOS(2, _omitFieldNames ? '' : 'allowedOrigins')
+    ..aOS(3, _omitFieldNames ? '' : 'uiPath')
+    ..aOB(4, _omitFieldNames ? '' : 'auth')
+    ..aOS(5, _omitFieldNames ? '' : 'mamToken')
+    ..aOM<Directories>(6, _omitFieldNames ? '' : 'dir',
+        subBuilder: Directories.create)
+    ..aOM<Logger>(7, _omitFieldNames ? '' : 'log', subBuilder: Logger.create)
+    ..aOM<Downloader>(8, _omitFieldNames ? '' : 'downloader',
+        subBuilder: Downloader.create)
+    ..aOM<UserPermissions>(9, _omitFieldNames ? '' : 'permissions',
+        subBuilder: UserPermissions.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GoudaConfig clone() => GoudaConfig()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GoudaConfig copyWith(void Function(GoudaConfig) updates) =>
+      super.copyWith((message) => updates(message as GoudaConfig))
+          as GoudaConfig;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GoudaConfig create() => GoudaConfig._();
+  @$core.override
+  GoudaConfig createEmptyInstance() => create();
+  static $pb.PbList<GoudaConfig> createRepeated() => $pb.PbList<GoudaConfig>();
+  @$core.pragma('dart2js:noInline')
+  static GoudaConfig getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GoudaConfig>(create);
+  static GoudaConfig? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get port => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set port($core.int value) => $_setSignedInt32(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasPort() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPort() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get allowedOrigins => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set allowedOrigins($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAllowedOrigins() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAllowedOrigins() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get uiPath => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set uiPath($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasUiPath() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUiPath() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.bool get auth => $_getBF(3);
+  @$pb.TagNumber(4)
+  set auth($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasAuth() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAuth() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get mamToken => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set mamToken($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasMamToken() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearMamToken() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  Directories get dir => $_getN(5);
+  @$pb.TagNumber(6)
+  set dir(Directories value) => $_setField(6, value);
+  @$pb.TagNumber(6)
+  $core.bool hasDir() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearDir() => $_clearField(6);
+  @$pb.TagNumber(6)
+  Directories ensureDir() => $_ensure(5);
+
+  @$pb.TagNumber(7)
+  Logger get log => $_getN(6);
+  @$pb.TagNumber(7)
+  set log(Logger value) => $_setField(7, value);
+  @$pb.TagNumber(7)
+  $core.bool hasLog() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearLog() => $_clearField(7);
+  @$pb.TagNumber(7)
+  Logger ensureLog() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  Downloader get downloader => $_getN(7);
+  @$pb.TagNumber(8)
+  set downloader(Downloader value) => $_setField(8, value);
+  @$pb.TagNumber(8)
+  $core.bool hasDownloader() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearDownloader() => $_clearField(8);
+  @$pb.TagNumber(8)
+  Downloader ensureDownloader() => $_ensure(7);
+
+  @$pb.TagNumber(9)
+  UserPermissions get permissions => $_getN(8);
+  @$pb.TagNumber(9)
+  set permissions(UserPermissions value) => $_setField(9, value);
+  @$pb.TagNumber(9)
+  $core.bool hasPermissions() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearPermissions() => $_clearField(9);
+  @$pb.TagNumber(9)
+  UserPermissions ensurePermissions() => $_ensure(8);
+}
+
+class Directories extends $pb.GeneratedMessage {
+  factory Directories({
+    $core.String? configDir,
+    $core.String? downloadDir,
+    $core.String? completeDir,
+    $core.String? torrentDir,
+  }) {
+    final result = create();
+    if (configDir != null) result.configDir = configDir;
+    if (downloadDir != null) result.downloadDir = downloadDir;
+    if (completeDir != null) result.completeDir = completeDir;
+    if (torrentDir != null) result.torrentDir = torrentDir;
+    return result;
+  }
+
+  Directories._();
+
+  factory Directories.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Directories.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Directories',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'configDir')
+    ..aOS(2, _omitFieldNames ? '' : 'downloadDir')
+    ..aOS(3, _omitFieldNames ? '' : 'completeDir')
+    ..aOS(4, _omitFieldNames ? '' : 'torrentDir')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Directories clone() => Directories()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Directories copyWith(void Function(Directories) updates) =>
+      super.copyWith((message) => updates(message as Directories))
+          as Directories;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Directories create() => Directories._();
+  @$core.override
+  Directories createEmptyInstance() => create();
+  static $pb.PbList<Directories> createRepeated() => $pb.PbList<Directories>();
+  @$core.pragma('dart2js:noInline')
+  static Directories getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<Directories>(create);
+  static Directories? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get configDir => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set configDir($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasConfigDir() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearConfigDir() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get downloadDir => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set downloadDir($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasDownloadDir() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDownloadDir() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get completeDir => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set completeDir($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasCompleteDir() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCompleteDir() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get torrentDir => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set torrentDir($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasTorrentDir() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearTorrentDir() => $_clearField(4);
+}
+
+class Logger extends $pb.GeneratedMessage {
+  factory Logger({
+    $core.String? level,
+    $core.bool? verbose,
+  }) {
+    final result = create();
+    if (level != null) result.level = level;
+    if (verbose != null) result.verbose = verbose;
+    return result;
+  }
+
+  Logger._();
+
+  factory Logger.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Logger.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Logger',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'level')
+    ..aOB(2, _omitFieldNames ? '' : 'verbose')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Logger clone() => Logger()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Logger copyWith(void Function(Logger) updates) =>
+      super.copyWith((message) => updates(message as Logger)) as Logger;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Logger create() => Logger._();
+  @$core.override
+  Logger createEmptyInstance() => create();
+  static $pb.PbList<Logger> createRepeated() => $pb.PbList<Logger>();
+  @$core.pragma('dart2js:noInline')
+  static Logger getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Logger>(create);
+  static Logger? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get level => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set level($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasLevel() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearLevel() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get verbose => $_getBF(1);
+  @$pb.TagNumber(2)
+  set verbose($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasVerbose() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearVerbose() => $_clearField(2);
+}
+
+class Downloader extends $pb.GeneratedMessage {
+  factory Downloader({
+    $core.String? timeout,
+    $core.bool? ignoreTimeout,
+  }) {
+    final result = create();
+    if (timeout != null) result.timeout = timeout;
+    if (ignoreTimeout != null) result.ignoreTimeout = ignoreTimeout;
+    return result;
+  }
+
+  Downloader._();
+
+  factory Downloader.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Downloader.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Downloader',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'timeout')
+    ..aOB(2, _omitFieldNames ? '' : 'ignoreTimeout')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Downloader clone() => Downloader()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Downloader copyWith(void Function(Downloader) updates) =>
+      super.copyWith((message) => updates(message as Downloader)) as Downloader;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Downloader create() => Downloader._();
+  @$core.override
+  Downloader createEmptyInstance() => create();
+  static $pb.PbList<Downloader> createRepeated() => $pb.PbList<Downloader>();
+  @$core.pragma('dart2js:noInline')
+  static Downloader getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<Downloader>(create);
+  static Downloader? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get timeout => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set timeout($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTimeout() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTimeout() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get ignoreTimeout => $_getBF(1);
+  @$pb.TagNumber(2)
+  set ignoreTimeout($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasIgnoreTimeout() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearIgnoreTimeout() => $_clearField(2);
+}
+
+class UserPermissions extends $pb.GeneratedMessage {
+  factory UserPermissions({
+    $core.int? uid,
+    $core.int? gid,
+  }) {
+    final result = create();
+    if (uid != null) result.uid = uid;
+    if (gid != null) result.gid = gid;
+    return result;
+  }
+
+  UserPermissions._();
+
+  factory UserPermissions.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserPermissions.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserPermissions',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'uid', $pb.PbFieldType.O3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'gid', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserPermissions clone() => UserPermissions()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserPermissions copyWith(void Function(UserPermissions) updates) =>
+      super.copyWith((message) => updates(message as UserPermissions))
+          as UserPermissions;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UserPermissions create() => UserPermissions._();
+  @$core.override
+  UserPermissions createEmptyInstance() => create();
+  static $pb.PbList<UserPermissions> createRepeated() =>
+      $pb.PbList<UserPermissions>();
+  @$core.pragma('dart2js:noInline')
+  static UserPermissions getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UserPermissions>(create);
+  static UserPermissions? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get uid => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set uid($core.int value) => $_setSignedInt32(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasUid() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUid() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get gid => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set gid($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasGid() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearGid() => $_clearField(2);
+}
+
 class Settings extends $pb.GeneratedMessage {
   factory Settings({
     $core.String? apiKey,

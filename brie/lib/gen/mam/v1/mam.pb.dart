@@ -17,6 +17,192 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class UserData extends $pb.GeneratedMessage {
+  factory UserData({
+    $core.String? classname,
+    $core.String? countryCode,
+    $core.String? countryName,
+    $core.String? downloaded,
+    $fixnum.Int64? downloadedBytes,
+    $core.double? ratio,
+    $core.int? seedbonus,
+    $core.int? uid,
+    $core.String? uploaded,
+    $fixnum.Int64? uploadedBytes,
+    $core.String? username,
+    $core.String? vipUntil,
+  }) {
+    final result = create();
+    if (classname != null) result.classname = classname;
+    if (countryCode != null) result.countryCode = countryCode;
+    if (countryName != null) result.countryName = countryName;
+    if (downloaded != null) result.downloaded = downloaded;
+    if (downloadedBytes != null) result.downloadedBytes = downloadedBytes;
+    if (ratio != null) result.ratio = ratio;
+    if (seedbonus != null) result.seedbonus = seedbonus;
+    if (uid != null) result.uid = uid;
+    if (uploaded != null) result.uploaded = uploaded;
+    if (uploadedBytes != null) result.uploadedBytes = uploadedBytes;
+    if (username != null) result.username = username;
+    if (vipUntil != null) result.vipUntil = vipUntil;
+    return result;
+  }
+
+  UserData._();
+
+  factory UserData.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserData.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserData',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'classname')
+    ..aOS(2, _omitFieldNames ? '' : 'countryCode')
+    ..aOS(3, _omitFieldNames ? '' : 'countryName')
+    ..aOS(4, _omitFieldNames ? '' : 'downloaded')
+    ..aInt64(5, _omitFieldNames ? '' : 'downloadedBytes')
+    ..a<$core.double>(6, _omitFieldNames ? '' : 'ratio', $pb.PbFieldType.OD)
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'seedbonus', $pb.PbFieldType.O3)
+    ..a<$core.int>(8, _omitFieldNames ? '' : 'uid', $pb.PbFieldType.O3)
+    ..aOS(9, _omitFieldNames ? '' : 'uploaded')
+    ..aInt64(10, _omitFieldNames ? '' : 'uploadedBytes')
+    ..aOS(11, _omitFieldNames ? '' : 'username')
+    ..aOS(12, _omitFieldNames ? '' : 'vipUntil')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserData clone() => UserData()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserData copyWith(void Function(UserData) updates) =>
+      super.copyWith((message) => updates(message as UserData)) as UserData;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UserData create() => UserData._();
+  @$core.override
+  UserData createEmptyInstance() => create();
+  static $pb.PbList<UserData> createRepeated() => $pb.PbList<UserData>();
+  @$core.pragma('dart2js:noInline')
+  static UserData getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UserData>(create);
+  static UserData? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get classname => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set classname($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasClassname() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearClassname() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get countryCode => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set countryCode($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCountryCode() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCountryCode() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get countryName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set countryName($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasCountryName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCountryName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get downloaded => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set downloaded($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasDownloaded() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDownloaded() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $fixnum.Int64 get downloadedBytes => $_getI64(4);
+  @$pb.TagNumber(5)
+  set downloadedBytes($fixnum.Int64 value) => $_setInt64(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasDownloadedBytes() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDownloadedBytes() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.double get ratio => $_getN(5);
+  @$pb.TagNumber(6)
+  set ratio($core.double value) => $_setDouble(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasRatio() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearRatio() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.int get seedbonus => $_getIZ(6);
+  @$pb.TagNumber(7)
+  set seedbonus($core.int value) => $_setSignedInt32(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasSeedbonus() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearSeedbonus() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.int get uid => $_getIZ(7);
+  @$pb.TagNumber(8)
+  set uid($core.int value) => $_setSignedInt32(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasUid() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearUid() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get uploaded => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set uploaded($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasUploaded() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearUploaded() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $fixnum.Int64 get uploadedBytes => $_getI64(9);
+  @$pb.TagNumber(10)
+  set uploadedBytes($fixnum.Int64 value) => $_setInt64(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasUploadedBytes() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearUploadedBytes() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get username => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set username($core.String value) => $_setString(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasUsername() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearUsername() => $_clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get vipUntil => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set vipUntil($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasVipUntil() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearVipUntil() => $_clearField(12);
+}
+
 class VipRequest extends $pb.GeneratedMessage {
   factory VipRequest({
     $core.int? amountInWeeks,
@@ -785,6 +971,44 @@ class Query extends $pb.GeneratedMessage {
   $core.bool hasQuery() => $_has(0);
   @$pb.TagNumber(1)
   void clearQuery() => $_clearField(1);
+}
+
+class Empty extends $pb.GeneratedMessage {
+  factory Empty() => create();
+
+  Empty._();
+
+  factory Empty.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Empty.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Empty',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Empty clone() => Empty()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Empty copyWith(void Function(Empty) updates) =>
+      super.copyWith((message) => updates(message as Empty)) as Empty;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Empty create() => Empty._();
+  @$core.override
+  Empty createEmptyInstance() => create();
+  static $pb.PbList<Empty> createRepeated() => $pb.PbList<Empty>();
+  @$core.pragma('dart2js:noInline')
+  static Empty getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Empty>(create);
+  static Empty? _defaultInstance;
 }
 
 const $core.bool _omitFieldNames =

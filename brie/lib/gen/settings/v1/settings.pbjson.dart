@@ -87,6 +87,118 @@ const ListSettingsResponse$json = {
 final $typed_data.Uint8List listSettingsResponseDescriptor =
     $convert.base64Decode('ChRMaXN0U2V0dGluZ3NSZXNwb25zZQ==');
 
+@$core.Deprecated('Use goudaConfigDescriptor instead')
+const GoudaConfig$json = {
+  '1': 'GoudaConfig',
+  '2': [
+    {'1': 'port', '3': 1, '4': 1, '5': 5, '10': 'port'},
+    {'1': 'allowed_origins', '3': 2, '4': 1, '5': 9, '10': 'allowedOrigins'},
+    {'1': 'ui_path', '3': 3, '4': 1, '5': 9, '10': 'uiPath'},
+    {'1': 'auth', '3': 4, '4': 1, '5': 8, '10': 'auth'},
+    {'1': 'mam_token', '3': 5, '4': 1, '5': 9, '10': 'mamToken'},
+    {
+      '1': 'dir',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.settings.v1.Directories',
+      '10': 'dir'
+    },
+    {
+      '1': 'log',
+      '3': 7,
+      '4': 1,
+      '5': 11,
+      '6': '.settings.v1.Logger',
+      '10': 'log'
+    },
+    {
+      '1': 'downloader',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.settings.v1.Downloader',
+      '10': 'downloader'
+    },
+    {
+      '1': 'permissions',
+      '3': 9,
+      '4': 1,
+      '5': 11,
+      '6': '.settings.v1.UserPermissions',
+      '10': 'permissions'
+    },
+  ],
+};
+
+/// Descriptor for `GoudaConfig`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List goudaConfigDescriptor = $convert.base64Decode(
+    'CgtHb3VkYUNvbmZpZxISCgRwb3J0GAEgASgFUgRwb3J0EicKD2FsbG93ZWRfb3JpZ2lucxgCIA'
+    'EoCVIOYWxsb3dlZE9yaWdpbnMSFwoHdWlfcGF0aBgDIAEoCVIGdWlQYXRoEhIKBGF1dGgYBCAB'
+    'KAhSBGF1dGgSGwoJbWFtX3Rva2VuGAUgASgJUghtYW1Ub2tlbhIqCgNkaXIYBiABKAsyGC5zZX'
+    'R0aW5ncy52MS5EaXJlY3Rvcmllc1IDZGlyEiUKA2xvZxgHIAEoCzITLnNldHRpbmdzLnYxLkxv'
+    'Z2dlclIDbG9nEjcKCmRvd25sb2FkZXIYCCABKAsyFy5zZXR0aW5ncy52MS5Eb3dubG9hZGVyUg'
+    'pkb3dubG9hZGVyEj4KC3Blcm1pc3Npb25zGAkgASgLMhwuc2V0dGluZ3MudjEuVXNlclBlcm1p'
+    'c3Npb25zUgtwZXJtaXNzaW9ucw==');
+
+@$core.Deprecated('Use directoriesDescriptor instead')
+const Directories$json = {
+  '1': 'Directories',
+  '2': [
+    {'1': 'config_dir', '3': 1, '4': 1, '5': 9, '10': 'configDir'},
+    {'1': 'download_dir', '3': 2, '4': 1, '5': 9, '10': 'downloadDir'},
+    {'1': 'complete_dir', '3': 3, '4': 1, '5': 9, '10': 'completeDir'},
+    {'1': 'torrent_dir', '3': 4, '4': 1, '5': 9, '10': 'torrentDir'},
+  ],
+};
+
+/// Descriptor for `Directories`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List directoriesDescriptor = $convert.base64Decode(
+    'CgtEaXJlY3RvcmllcxIdCgpjb25maWdfZGlyGAEgASgJUgljb25maWdEaXISIQoMZG93bmxvYW'
+    'RfZGlyGAIgASgJUgtkb3dubG9hZERpchIhCgxjb21wbGV0ZV9kaXIYAyABKAlSC2NvbXBsZXRl'
+    'RGlyEh8KC3RvcnJlbnRfZGlyGAQgASgJUgp0b3JyZW50RGly');
+
+@$core.Deprecated('Use loggerDescriptor instead')
+const Logger$json = {
+  '1': 'Logger',
+  '2': [
+    {'1': 'level', '3': 1, '4': 1, '5': 9, '10': 'level'},
+    {'1': 'verbose', '3': 2, '4': 1, '5': 8, '10': 'verbose'},
+  ],
+};
+
+/// Descriptor for `Logger`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List loggerDescriptor = $convert.base64Decode(
+    'CgZMb2dnZXISFAoFbGV2ZWwYASABKAlSBWxldmVsEhgKB3ZlcmJvc2UYAiABKAhSB3ZlcmJvc2'
+    'U=');
+
+@$core.Deprecated('Use downloaderDescriptor instead')
+const Downloader$json = {
+  '1': 'Downloader',
+  '2': [
+    {'1': 'timeout', '3': 1, '4': 1, '5': 9, '10': 'timeout'},
+    {'1': 'ignore_timeout', '3': 2, '4': 1, '5': 8, '10': 'ignoreTimeout'},
+  ],
+};
+
+/// Descriptor for `Downloader`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloaderDescriptor = $convert.base64Decode(
+    'CgpEb3dubG9hZGVyEhgKB3RpbWVvdXQYASABKAlSB3RpbWVvdXQSJQoOaWdub3JlX3RpbWVvdX'
+    'QYAiABKAhSDWlnbm9yZVRpbWVvdXQ=');
+
+@$core.Deprecated('Use userPermissionsDescriptor instead')
+const UserPermissions$json = {
+  '1': 'UserPermissions',
+  '2': [
+    {'1': 'uid', '3': 1, '4': 1, '5': 5, '10': 'uid'},
+    {'1': 'gid', '3': 2, '4': 1, '5': 5, '10': 'gid'},
+  ],
+};
+
+/// Descriptor for `UserPermissions`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userPermissionsDescriptor = $convert.base64Decode(
+    'Cg9Vc2VyUGVybWlzc2lvbnMSEAoDdWlkGAEgASgFUgN1aWQSEAoDZ2lkGAIgASgFUgNnaWQ=');
+
 @$core.Deprecated('Use settingsDescriptor instead')
 const Settings$json = {
   '1': 'Settings',

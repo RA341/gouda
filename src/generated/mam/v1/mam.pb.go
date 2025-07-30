@@ -21,6 +21,138 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type UserData struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Classname       string                 `protobuf:"bytes,1,opt,name=classname,proto3" json:"classname,omitempty"`
+	CountryCode     string                 `protobuf:"bytes,2,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"`
+	CountryName     string                 `protobuf:"bytes,3,opt,name=country_name,json=countryName,proto3" json:"country_name,omitempty"`
+	Downloaded      string                 `protobuf:"bytes,4,opt,name=downloaded,proto3" json:"downloaded,omitempty"`
+	DownloadedBytes int64                  `protobuf:"varint,5,opt,name=downloaded_bytes,json=downloadedBytes,proto3" json:"downloaded_bytes,omitempty"`
+	Ratio           float64                `protobuf:"fixed64,6,opt,name=ratio,proto3" json:"ratio,omitempty"`
+	Seedbonus       int32                  `protobuf:"varint,7,opt,name=seedbonus,proto3" json:"seedbonus,omitempty"`
+	Uid             int32                  `protobuf:"varint,8,opt,name=uid,proto3" json:"uid,omitempty"`
+	Uploaded        string                 `protobuf:"bytes,9,opt,name=uploaded,proto3" json:"uploaded,omitempty"`
+	UploadedBytes   int64                  `protobuf:"varint,10,opt,name=uploaded_bytes,json=uploadedBytes,proto3" json:"uploaded_bytes,omitempty"`
+	Username        string                 `protobuf:"bytes,11,opt,name=username,proto3" json:"username,omitempty"`
+	VipUntil        string                 `protobuf:"bytes,12,opt,name=vip_until,json=vipUntil,proto3" json:"vip_until,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UserData) Reset() {
+	*x = UserData{}
+	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserData) ProtoMessage() {}
+
+func (x *UserData) ProtoReflect() protoreflect.Message {
+	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserData.ProtoReflect.Descriptor instead.
+func (*UserData) Descriptor() ([]byte, []int) {
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *UserData) GetClassname() string {
+	if x != nil {
+		return x.Classname
+	}
+	return ""
+}
+
+func (x *UserData) GetCountryCode() string {
+	if x != nil {
+		return x.CountryCode
+	}
+	return ""
+}
+
+func (x *UserData) GetCountryName() string {
+	if x != nil {
+		return x.CountryName
+	}
+	return ""
+}
+
+func (x *UserData) GetDownloaded() string {
+	if x != nil {
+		return x.Downloaded
+	}
+	return ""
+}
+
+func (x *UserData) GetDownloadedBytes() int64 {
+	if x != nil {
+		return x.DownloadedBytes
+	}
+	return 0
+}
+
+func (x *UserData) GetRatio() float64 {
+	if x != nil {
+		return x.Ratio
+	}
+	return 0
+}
+
+func (x *UserData) GetSeedbonus() int32 {
+	if x != nil {
+		return x.Seedbonus
+	}
+	return 0
+}
+
+func (x *UserData) GetUid() int32 {
+	if x != nil {
+		return x.Uid
+	}
+	return 0
+}
+
+func (x *UserData) GetUploaded() string {
+	if x != nil {
+		return x.Uploaded
+	}
+	return ""
+}
+
+func (x *UserData) GetUploadedBytes() int64 {
+	if x != nil {
+		return x.UploadedBytes
+	}
+	return 0
+}
+
+func (x *UserData) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *UserData) GetVipUntil() string {
+	if x != nil {
+		return x.VipUntil
+	}
+	return ""
+}
+
 type VipRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AmountInWeeks int32                  `protobuf:"varint,1,opt,name=amountInWeeks,proto3" json:"amountInWeeks,omitempty"`
@@ -30,7 +162,7 @@ type VipRequest struct {
 
 func (x *VipRequest) Reset() {
 	*x = VipRequest{}
-	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	mi := &file_mam_v1_mam_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +174,7 @@ func (x *VipRequest) String() string {
 func (*VipRequest) ProtoMessage() {}
 
 func (x *VipRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	mi := &file_mam_v1_mam_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +187,7 @@ func (x *VipRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VipRequest.ProtoReflect.Descriptor instead.
 func (*VipRequest) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{0}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *VipRequest) GetAmountInWeeks() int32 {
@@ -77,7 +209,7 @@ type VipResponse struct {
 
 func (x *VipResponse) Reset() {
 	*x = VipResponse{}
-	mi := &file_mam_v1_mam_proto_msgTypes[1]
+	mi := &file_mam_v1_mam_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -89,7 +221,7 @@ func (x *VipResponse) String() string {
 func (*VipResponse) ProtoMessage() {}
 
 func (x *VipResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[1]
+	mi := &file_mam_v1_mam_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -102,7 +234,7 @@ func (x *VipResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VipResponse.ProtoReflect.Descriptor instead.
 func (*VipResponse) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{1}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *VipResponse) GetSuccess() bool {
@@ -142,7 +274,7 @@ type BonusRequest struct {
 
 func (x *BonusRequest) Reset() {
 	*x = BonusRequest{}
-	mi := &file_mam_v1_mam_proto_msgTypes[2]
+	mi := &file_mam_v1_mam_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -154,7 +286,7 @@ func (x *BonusRequest) String() string {
 func (*BonusRequest) ProtoMessage() {}
 
 func (x *BonusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[2]
+	mi := &file_mam_v1_mam_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -167,7 +299,7 @@ func (x *BonusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BonusRequest.ProtoReflect.Descriptor instead.
 func (*BonusRequest) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{2}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *BonusRequest) GetAmountInGB() int32 {
@@ -194,7 +326,7 @@ type BonusResponse struct {
 
 func (x *BonusResponse) Reset() {
 	*x = BonusResponse{}
-	mi := &file_mam_v1_mam_proto_msgTypes[3]
+	mi := &file_mam_v1_mam_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -206,7 +338,7 @@ func (x *BonusResponse) String() string {
 func (*BonusResponse) ProtoMessage() {}
 
 func (x *BonusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[3]
+	mi := &file_mam_v1_mam_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -219,7 +351,7 @@ func (x *BonusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BonusResponse.ProtoReflect.Descriptor instead.
 func (*BonusResponse) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{3}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *BonusResponse) GetSuccess() bool {
@@ -298,7 +430,7 @@ type SearchResults struct {
 
 func (x *SearchResults) Reset() {
 	*x = SearchResults{}
-	mi := &file_mam_v1_mam_proto_msgTypes[4]
+	mi := &file_mam_v1_mam_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -310,7 +442,7 @@ func (x *SearchResults) String() string {
 func (*SearchResults) ProtoMessage() {}
 
 func (x *SearchResults) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[4]
+	mi := &file_mam_v1_mam_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +455,7 @@ func (x *SearchResults) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchResults.ProtoReflect.Descriptor instead.
 func (*SearchResults) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{4}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SearchResults) GetResults() []*Book {
@@ -369,7 +501,7 @@ type Book struct {
 
 func (x *Book) Reset() {
 	*x = Book{}
-	mi := &file_mam_v1_mam_proto_msgTypes[5]
+	mi := &file_mam_v1_mam_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -381,7 +513,7 @@ func (x *Book) String() string {
 func (*Book) ProtoMessage() {}
 
 func (x *Book) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[5]
+	mi := &file_mam_v1_mam_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -394,7 +526,7 @@ func (x *Book) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Book.ProtoReflect.Descriptor instead.
 func (*Book) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{5}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Book) GetId() string {
@@ -505,7 +637,7 @@ type FreeLeechInfo struct {
 
 func (x *FreeLeechInfo) Reset() {
 	*x = FreeLeechInfo{}
-	mi := &file_mam_v1_mam_proto_msgTypes[6]
+	mi := &file_mam_v1_mam_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -517,7 +649,7 @@ func (x *FreeLeechInfo) String() string {
 func (*FreeLeechInfo) ProtoMessage() {}
 
 func (x *FreeLeechInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[6]
+	mi := &file_mam_v1_mam_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -530,7 +662,7 @@ func (x *FreeLeechInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FreeLeechInfo.ProtoReflect.Descriptor instead.
 func (*FreeLeechInfo) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{6}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *FreeLeechInfo) GetType() string {
@@ -556,7 +688,7 @@ type Query struct {
 
 func (x *Query) Reset() {
 	*x = Query{}
-	mi := &file_mam_v1_mam_proto_msgTypes[7]
+	mi := &file_mam_v1_mam_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -568,7 +700,7 @@ func (x *Query) String() string {
 func (*Query) ProtoMessage() {}
 
 func (x *Query) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[7]
+	mi := &file_mam_v1_mam_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -581,7 +713,7 @@ func (x *Query) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Query.ProtoReflect.Descriptor instead.
 func (*Query) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{7}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Query) GetQuery() string {
@@ -591,11 +723,63 @@ func (x *Query) GetQuery() string {
 	return ""
 }
 
+type Empty struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Empty) Reset() {
+	*x = Empty{}
+	mi := &file_mam_v1_mam_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Empty) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Empty) ProtoMessage() {}
+
+func (x *Empty) ProtoReflect() protoreflect.Message {
+	mi := &file_mam_v1_mam_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
+func (*Empty) Descriptor() ([]byte, []int) {
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{9}
+}
+
 var File_mam_v1_mam_proto protoreflect.FileDescriptor
 
 const file_mam_v1_mam_proto_rawDesc = "" +
 	"\n" +
-	"\x10mam/v1/mam.proto\x12\x06mam.v1\"2\n" +
+	"\x10mam/v1/mam.proto\x12\x06mam.v1\"\xfb\x02\n" +
+	"\bUserData\x12\x1c\n" +
+	"\tclassname\x18\x01 \x01(\tR\tclassname\x12!\n" +
+	"\fcountry_code\x18\x02 \x01(\tR\vcountryCode\x12!\n" +
+	"\fcountry_name\x18\x03 \x01(\tR\vcountryName\x12\x1e\n" +
+	"\n" +
+	"downloaded\x18\x04 \x01(\tR\n" +
+	"downloaded\x12)\n" +
+	"\x10downloaded_bytes\x18\x05 \x01(\x03R\x0fdownloadedBytes\x12\x14\n" +
+	"\x05ratio\x18\x06 \x01(\x01R\x05ratio\x12\x1c\n" +
+	"\tseedbonus\x18\a \x01(\x05R\tseedbonus\x12\x10\n" +
+	"\x03uid\x18\b \x01(\x05R\x03uid\x12\x1a\n" +
+	"\buploaded\x18\t \x01(\tR\buploaded\x12%\n" +
+	"\x0euploaded_bytes\x18\n" +
+	" \x01(\x03R\ruploadedBytes\x12\x1a\n" +
+	"\busername\x18\v \x01(\tR\busername\x12\x1b\n" +
+	"\tvip_until\x18\f \x01(\tR\bvipUntil\"2\n" +
 	"\n" +
 	"VipRequest\x12$\n" +
 	"\ramountInWeeks\x18\x01 \x01(\x05R\ramountInWeeks\"q\n" +
@@ -644,11 +828,14 @@ const file_mam_v1_mam_proto_rawDesc = "" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x18\n" +
 	"\aexpires\x18\x02 \x01(\tR\aexpires\"\x1d\n" +
 	"\x05Query\x12\x14\n" +
-	"\x05query\x18\x01 \x01(\tR\x05query2\xa8\x01\n" +
+	"\x05query\x18\x01 \x01(\tR\x05query\"\a\n" +
+	"\x05Empty2\xd7\x01\n" +
 	"\n" +
 	"MamService\x12.\n" +
 	"\x06Search\x12\r.mam.v1.Query\x1a\x15.mam.v1.SearchResults\x121\n" +
-	"\x06BuyVip\x12\x12.mam.v1.VipRequest\x1a\x13.mam.v1.VipResponse\x127\n" +
+	"\x06BuyVip\x12\x12.mam.v1.VipRequest\x1a\x13.mam.v1.VipResponse\x12-\n" +
+	"\n" +
+	"GetProfile\x12\r.mam.v1.Empty\x1a\x10.mam.v1.UserData\x127\n" +
 	"\bBuyBonus\x12\x14.mam.v1.BonusRequest\x1a\x15.mam.v1.BonusResponseBx\n" +
 	"\n" +
 	"com.mam.v1B\bMamProtoP\x01Z'github.com/RA341/gouda/generated/mam/v1\xa2\x02\x03MXX\xaa\x02\x06Mam.V1\xca\x02\x06Mam\\V1\xe2\x02\x12Mam\\V1\\GPBMetadata\xea\x02\aMam::V1b\x06proto3"
@@ -665,27 +852,31 @@ func file_mam_v1_mam_proto_rawDescGZIP() []byte {
 	return file_mam_v1_mam_proto_rawDescData
 }
 
-var file_mam_v1_mam_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_mam_v1_mam_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_mam_v1_mam_proto_goTypes = []any{
-	(*VipRequest)(nil),    // 0: mam.v1.VipRequest
-	(*VipResponse)(nil),   // 1: mam.v1.VipResponse
-	(*BonusRequest)(nil),  // 2: mam.v1.BonusRequest
-	(*BonusResponse)(nil), // 3: mam.v1.BonusResponse
-	(*SearchResults)(nil), // 4: mam.v1.SearchResults
-	(*Book)(nil),          // 5: mam.v1.Book
-	(*FreeLeechInfo)(nil), // 6: mam.v1.FreeLeechInfo
-	(*Query)(nil),         // 7: mam.v1.Query
+	(*UserData)(nil),      // 0: mam.v1.UserData
+	(*VipRequest)(nil),    // 1: mam.v1.VipRequest
+	(*VipResponse)(nil),   // 2: mam.v1.VipResponse
+	(*BonusRequest)(nil),  // 3: mam.v1.BonusRequest
+	(*BonusResponse)(nil), // 4: mam.v1.BonusResponse
+	(*SearchResults)(nil), // 5: mam.v1.SearchResults
+	(*Book)(nil),          // 6: mam.v1.Book
+	(*FreeLeechInfo)(nil), // 7: mam.v1.FreeLeechInfo
+	(*Query)(nil),         // 8: mam.v1.Query
+	(*Empty)(nil),         // 9: mam.v1.Empty
 }
 var file_mam_v1_mam_proto_depIdxs = []int32{
-	5, // 0: mam.v1.SearchResults.results:type_name -> mam.v1.Book
-	7, // 1: mam.v1.MamService.Search:input_type -> mam.v1.Query
-	0, // 2: mam.v1.MamService.BuyVip:input_type -> mam.v1.VipRequest
-	2, // 3: mam.v1.MamService.BuyBonus:input_type -> mam.v1.BonusRequest
-	4, // 4: mam.v1.MamService.Search:output_type -> mam.v1.SearchResults
-	1, // 5: mam.v1.MamService.BuyVip:output_type -> mam.v1.VipResponse
-	3, // 6: mam.v1.MamService.BuyBonus:output_type -> mam.v1.BonusResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
+	6, // 0: mam.v1.SearchResults.results:type_name -> mam.v1.Book
+	8, // 1: mam.v1.MamService.Search:input_type -> mam.v1.Query
+	1, // 2: mam.v1.MamService.BuyVip:input_type -> mam.v1.VipRequest
+	9, // 3: mam.v1.MamService.GetProfile:input_type -> mam.v1.Empty
+	3, // 4: mam.v1.MamService.BuyBonus:input_type -> mam.v1.BonusRequest
+	5, // 5: mam.v1.MamService.Search:output_type -> mam.v1.SearchResults
+	2, // 6: mam.v1.MamService.BuyVip:output_type -> mam.v1.VipResponse
+	0, // 7: mam.v1.MamService.GetProfile:output_type -> mam.v1.UserData
+	4, // 8: mam.v1.MamService.BuyBonus:output_type -> mam.v1.BonusResponse
+	5, // [5:9] is the sub-list for method output_type
+	1, // [1:5] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -702,7 +893,7 @@ func file_mam_v1_mam_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_mam_v1_mam_proto_rawDesc), len(file_mam_v1_mam_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

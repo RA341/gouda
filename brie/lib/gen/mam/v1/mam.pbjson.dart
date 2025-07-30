@@ -14,6 +14,35 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use userDataDescriptor instead')
+const UserData$json = {
+  '1': 'UserData',
+  '2': [
+    {'1': 'classname', '3': 1, '4': 1, '5': 9, '10': 'classname'},
+    {'1': 'country_code', '3': 2, '4': 1, '5': 9, '10': 'countryCode'},
+    {'1': 'country_name', '3': 3, '4': 1, '5': 9, '10': 'countryName'},
+    {'1': 'downloaded', '3': 4, '4': 1, '5': 9, '10': 'downloaded'},
+    {'1': 'downloaded_bytes', '3': 5, '4': 1, '5': 3, '10': 'downloadedBytes'},
+    {'1': 'ratio', '3': 6, '4': 1, '5': 1, '10': 'ratio'},
+    {'1': 'seedbonus', '3': 7, '4': 1, '5': 5, '10': 'seedbonus'},
+    {'1': 'uid', '3': 8, '4': 1, '5': 5, '10': 'uid'},
+    {'1': 'uploaded', '3': 9, '4': 1, '5': 9, '10': 'uploaded'},
+    {'1': 'uploaded_bytes', '3': 10, '4': 1, '5': 3, '10': 'uploadedBytes'},
+    {'1': 'username', '3': 11, '4': 1, '5': 9, '10': 'username'},
+    {'1': 'vip_until', '3': 12, '4': 1, '5': 9, '10': 'vipUntil'},
+  ],
+};
+
+/// Descriptor for `UserData`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userDataDescriptor = $convert.base64Decode(
+    'CghVc2VyRGF0YRIcCgljbGFzc25hbWUYASABKAlSCWNsYXNzbmFtZRIhCgxjb3VudHJ5X2NvZG'
+    'UYAiABKAlSC2NvdW50cnlDb2RlEiEKDGNvdW50cnlfbmFtZRgDIAEoCVILY291bnRyeU5hbWUS'
+    'HgoKZG93bmxvYWRlZBgEIAEoCVIKZG93bmxvYWRlZBIpChBkb3dubG9hZGVkX2J5dGVzGAUgAS'
+    'gDUg9kb3dubG9hZGVkQnl0ZXMSFAoFcmF0aW8YBiABKAFSBXJhdGlvEhwKCXNlZWRib251cxgH'
+    'IAEoBVIJc2VlZGJvbnVzEhAKA3VpZBgIIAEoBVIDdWlkEhoKCHVwbG9hZGVkGAkgASgJUgh1cG'
+    'xvYWRlZBIlCg51cGxvYWRlZF9ieXRlcxgKIAEoA1INdXBsb2FkZWRCeXRlcxIaCgh1c2VybmFt'
+    'ZRgLIAEoCVIIdXNlcm5hbWUSGwoJdmlwX3VudGlsGAwgASgJUgh2aXBVbnRpbA==');
+
 @$core.Deprecated('Use vipRequestDescriptor instead')
 const VipRequest$json = {
   '1': 'VipRequest',
@@ -157,3 +186,12 @@ const Query$json = {
 /// Descriptor for `Query`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List queryDescriptor =
     $convert.base64Decode('CgVRdWVyeRIUCgVxdWVyeRgBIAEoCVIFcXVlcnk=');
+
+@$core.Deprecated('Use emptyDescriptor instead')
+const Empty$json = {
+  '1': 'Empty',
+};
+
+/// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List emptyDescriptor =
+    $convert.base64Decode('CgVFbXB0eQ==');

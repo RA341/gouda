@@ -46,6 +46,13 @@ class MamServiceClient extends $grpc.Client {
     return $createUnaryCall(_$buyVip, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.UserData> getProfile(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getProfile, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.BonusResponse> buyBonus(
     $0.BonusRequest request, {
     $grpc.CallOptions? options,
@@ -63,6 +70,10 @@ class MamServiceClient extends $grpc.Client {
       '/mam.v1.MamService/BuyVip',
       ($0.VipRequest value) => value.writeToBuffer(),
       $0.VipResponse.fromBuffer);
+  static final _$getProfile = $grpc.ClientMethod<$0.Empty, $0.UserData>(
+      '/mam.v1.MamService/GetProfile',
+      ($0.Empty value) => value.writeToBuffer(),
+      $0.UserData.fromBuffer);
   static final _$buyBonus =
       $grpc.ClientMethod<$0.BonusRequest, $0.BonusResponse>(
           '/mam.v1.MamService/BuyBonus',
@@ -89,6 +100,13 @@ abstract class MamServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.VipRequest.fromBuffer(value),
         ($0.VipResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.UserData>(
+        'GetProfile',
+        getProfile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.UserData value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.BonusRequest, $0.BonusResponse>(
         'BuyBonus',
         buyBonus_Pre,
@@ -113,6 +131,14 @@ abstract class MamServiceBase extends $grpc.Service {
 
   $async.Future<$0.VipResponse> buyVip(
       $grpc.ServiceCall call, $0.VipRequest request);
+
+  $async.Future<$0.UserData> getProfile_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return getProfile($call, await $request);
+  }
+
+  $async.Future<$0.UserData> getProfile(
+      $grpc.ServiceCall call, $0.Empty request);
 
   $async.Future<$0.BonusResponse> buyBonus_Pre(
       $grpc.ServiceCall $call, $async.Future<$0.BonusRequest> $request) async {

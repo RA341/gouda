@@ -10,7 +10,79 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file mam/v1/mam.proto.
  */
 export const file_mam_v1_mam: GenFile = /*@__PURE__*/
-  fileDesc("ChBtYW0vdjEvbWFtLnByb3RvEgZtYW0udjEiIwoKVmlwUmVxdWVzdBIVCg1hbW91bnRJbldlZWtzGAEgASgFIk8KC1ZpcFJlc3BvbnNlEg8KB1N1Y2Nlc3MYASABKAgSDAoEVHlwZRgCIAEoCRIOCgZBbW91bnQYAyABKAISEQoJU2VlZEJvbnVzGAQgASgCIiIKDEJvbnVzUmVxdWVzdBISCgphbW91bnRJbkdCGAEgASgFIrIBCg1Cb251c1Jlc3BvbnNlEg8KB1N1Y2Nlc3MYASABKAgSDAoEVHlwZRgCIAEoCRIOCgZBbW91bnQYAyABKAISEQoJU2VlZGJvbnVzGAQgASgCEhAKCFVwbG9hZGVkGAUgASgDEhIKCkRvd25sb2FkZWQYBiABKAMSEwoLVXBsb2FkRmFuY3kYByABKAkSFQoNRG93bmxvYWRGYW5jeRgIIAEoCRINCgVSYXRpbxgJIAEoAiJMCg1TZWFyY2hSZXN1bHRzEh0KB3Jlc3VsdHMYASADKAsyDC5tYW0udjEuQm9vaxINCgVmb3VuZBgCIAEoBRINCgV0b3RhbBgDIAEoBSLtAQoEQm9vaxIKCgJpZBgBIAEoCRINCgV0aXRsZRgCIAEoCRIOCgZhdXRob3IYAyABKAkSDgoGZm9ybWF0GAQgASgJEg4KBmxlbmd0aBgFIAEoCRIUCgx0b3JyZW50X2xpbmsYBiABKAkSEAoIY2F0ZWdvcnkYByABKAUSEQoJdGh1bWJuYWlsGAggASgJEgwKBHNpemUYCSABKAkSDwoHc2VlZGVycxgKIAEoBRIQCghsZWVjaGVycxgLIAEoBRINCgVhZGRlZBgMIAEoCRIMCgR0YWdzGA0gASgJEhEKCWNvbXBsZXRlZBgOIAEoBSIuCg1GcmVlTGVlY2hJbmZvEgwKBHR5cGUYASABKAkSDwoHZXhwaXJlcxgCIAEoCSIWCgVRdWVyeRINCgVxdWVyeRgBIAEoCTKoAQoKTWFtU2VydmljZRIuCgZTZWFyY2gSDS5tYW0udjEuUXVlcnkaFS5tYW0udjEuU2VhcmNoUmVzdWx0cxIxCgZCdXlWaXASEi5tYW0udjEuVmlwUmVxdWVzdBoTLm1hbS52MS5WaXBSZXNwb25zZRI3CghCdXlCb251cxIULm1hbS52MS5Cb251c1JlcXVlc3QaFS5tYW0udjEuQm9udXNSZXNwb25zZUJ4Cgpjb20ubWFtLnYxQghNYW1Qcm90b1ABWidnaXRodWIuY29tL1JBMzQxL2dvdWRhL2dlbmVyYXRlZC9tYW0vdjGiAgNNWFiqAgZNYW0uVjHKAgZNYW1cVjHiAhJNYW1cVjFcR1BCTWV0YWRhdGHqAgdNYW06OlYxYgZwcm90bzM");
+  fileDesc("ChBtYW0vdjEvbWFtLnByb3RvEgZtYW0udjEi9QEKCFVzZXJEYXRhEhEKCWNsYXNzbmFtZRgBIAEoCRIUCgxjb3VudHJ5X2NvZGUYAiABKAkSFAoMY291bnRyeV9uYW1lGAMgASgJEhIKCmRvd25sb2FkZWQYBCABKAkSGAoQZG93bmxvYWRlZF9ieXRlcxgFIAEoAxINCgVyYXRpbxgGIAEoARIRCglzZWVkYm9udXMYByABKAUSCwoDdWlkGAggASgFEhAKCHVwbG9hZGVkGAkgASgJEhYKDnVwbG9hZGVkX2J5dGVzGAogASgDEhAKCHVzZXJuYW1lGAsgASgJEhEKCXZpcF91bnRpbBgMIAEoCSIjCgpWaXBSZXF1ZXN0EhUKDWFtb3VudEluV2Vla3MYASABKAUiTwoLVmlwUmVzcG9uc2USDwoHU3VjY2VzcxgBIAEoCBIMCgRUeXBlGAIgASgJEg4KBkFtb3VudBgDIAEoAhIRCglTZWVkQm9udXMYBCABKAIiIgoMQm9udXNSZXF1ZXN0EhIKCmFtb3VudEluR0IYASABKAUisgEKDUJvbnVzUmVzcG9uc2USDwoHU3VjY2VzcxgBIAEoCBIMCgRUeXBlGAIgASgJEg4KBkFtb3VudBgDIAEoAhIRCglTZWVkYm9udXMYBCABKAISEAoIVXBsb2FkZWQYBSABKAMSEgoKRG93bmxvYWRlZBgGIAEoAxITCgtVcGxvYWRGYW5jeRgHIAEoCRIVCg1Eb3dubG9hZEZhbmN5GAggASgJEg0KBVJhdGlvGAkgASgCIkwKDVNlYXJjaFJlc3VsdHMSHQoHcmVzdWx0cxgBIAMoCzIMLm1hbS52MS5Cb29rEg0KBWZvdW5kGAIgASgFEg0KBXRvdGFsGAMgASgFIu0BCgRCb29rEgoKAmlkGAEgASgJEg0KBXRpdGxlGAIgASgJEg4KBmF1dGhvchgDIAEoCRIOCgZmb3JtYXQYBCABKAkSDgoGbGVuZ3RoGAUgASgJEhQKDHRvcnJlbnRfbGluaxgGIAEoCRIQCghjYXRlZ29yeRgHIAEoBRIRCgl0aHVtYm5haWwYCCABKAkSDAoEc2l6ZRgJIAEoCRIPCgdzZWVkZXJzGAogASgFEhAKCGxlZWNoZXJzGAsgASgFEg0KBWFkZGVkGAwgASgJEgwKBHRhZ3MYDSABKAkSEQoJY29tcGxldGVkGA4gASgFIi4KDUZyZWVMZWVjaEluZm8SDAoEdHlwZRgBIAEoCRIPCgdleHBpcmVzGAIgASgJIhYKBVF1ZXJ5Eg0KBXF1ZXJ5GAEgASgJIgcKBUVtcHR5MtcBCgpNYW1TZXJ2aWNlEi4KBlNlYXJjaBINLm1hbS52MS5RdWVyeRoVLm1hbS52MS5TZWFyY2hSZXN1bHRzEjEKBkJ1eVZpcBISLm1hbS52MS5WaXBSZXF1ZXN0GhMubWFtLnYxLlZpcFJlc3BvbnNlEi0KCkdldFByb2ZpbGUSDS5tYW0udjEuRW1wdHkaEC5tYW0udjEuVXNlckRhdGESNwoIQnV5Qm9udXMSFC5tYW0udjEuQm9udXNSZXF1ZXN0GhUubWFtLnYxLkJvbnVzUmVzcG9uc2VCeAoKY29tLm1hbS52MUIITWFtUHJvdG9QAVonZ2l0aHViLmNvbS9SQTM0MS9nb3VkYS9nZW5lcmF0ZWQvbWFtL3YxogIDTVhYqgIGTWFtLlYxygIGTWFtXFYx4gISTWFtXFYxXEdQQk1ldGFkYXRh6gIHTWFtOjpWMWIGcHJvdG8z");
+
+/**
+ * @generated from message mam.v1.UserData
+ */
+export type UserData = Message<"mam.v1.UserData"> & {
+  /**
+   * @generated from field: string classname = 1;
+   */
+  classname: string;
+
+  /**
+   * @generated from field: string country_code = 2;
+   */
+  countryCode: string;
+
+  /**
+   * @generated from field: string country_name = 3;
+   */
+  countryName: string;
+
+  /**
+   * @generated from field: string downloaded = 4;
+   */
+  downloaded: string;
+
+  /**
+   * @generated from field: int64 downloaded_bytes = 5;
+   */
+  downloadedBytes: bigint;
+
+  /**
+   * @generated from field: double ratio = 6;
+   */
+  ratio: number;
+
+  /**
+   * @generated from field: int32 seedbonus = 7;
+   */
+  seedbonus: number;
+
+  /**
+   * @generated from field: int32 uid = 8;
+   */
+  uid: number;
+
+  /**
+   * @generated from field: string uploaded = 9;
+   */
+  uploaded: string;
+
+  /**
+   * @generated from field: int64 uploaded_bytes = 10;
+   */
+  uploadedBytes: bigint;
+
+  /**
+   * @generated from field: string username = 11;
+   */
+  username: string;
+
+  /**
+   * @generated from field: string vip_until = 12;
+   */
+  vipUntil: string;
+};
+
+/**
+ * Describes the message mam.v1.UserData.
+ * Use `create(UserDataSchema)` to create a new message.
+ */
+export const UserDataSchema: GenMessage<UserData> = /*@__PURE__*/
+  messageDesc(file_mam_v1_mam, 0);
 
 /**
  * @generated from message mam.v1.VipRequest
@@ -27,7 +99,7 @@ export type VipRequest = Message<"mam.v1.VipRequest"> & {
  * Use `create(VipRequestSchema)` to create a new message.
  */
 export const VipRequestSchema: GenMessage<VipRequest> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 0);
+  messageDesc(file_mam_v1_mam, 1);
 
 /**
  * @generated from message mam.v1.VipResponse
@@ -59,7 +131,7 @@ export type VipResponse = Message<"mam.v1.VipResponse"> & {
  * Use `create(VipResponseSchema)` to create a new message.
  */
 export const VipResponseSchema: GenMessage<VipResponse> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 1);
+  messageDesc(file_mam_v1_mam, 2);
 
 /**
  * @generated from message mam.v1.BonusRequest
@@ -76,7 +148,7 @@ export type BonusRequest = Message<"mam.v1.BonusRequest"> & {
  * Use `create(BonusRequestSchema)` to create a new message.
  */
 export const BonusRequestSchema: GenMessage<BonusRequest> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 2);
+  messageDesc(file_mam_v1_mam, 3);
 
 /**
  * @generated from message mam.v1.BonusResponse
@@ -133,7 +205,7 @@ export type BonusResponse = Message<"mam.v1.BonusResponse"> & {
  * Use `create(BonusResponseSchema)` to create a new message.
  */
 export const BonusResponseSchema: GenMessage<BonusResponse> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 3);
+  messageDesc(file_mam_v1_mam, 4);
 
 /**
  * @generated from message mam.v1.SearchResults
@@ -164,7 +236,7 @@ export type SearchResults = Message<"mam.v1.SearchResults"> & {
  * Use `create(SearchResultsSchema)` to create a new message.
  */
 export const SearchResultsSchema: GenMessage<SearchResults> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 4);
+  messageDesc(file_mam_v1_mam, 5);
 
 /**
  * @generated from message mam.v1.Book
@@ -246,7 +318,7 @@ export type Book = Message<"mam.v1.Book"> & {
  * Use `create(BookSchema)` to create a new message.
  */
 export const BookSchema: GenMessage<Book> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 5);
+  messageDesc(file_mam_v1_mam, 6);
 
 /**
  * @generated from message mam.v1.FreeLeechInfo
@@ -272,7 +344,7 @@ export type FreeLeechInfo = Message<"mam.v1.FreeLeechInfo"> & {
  * Use `create(FreeLeechInfoSchema)` to create a new message.
  */
 export const FreeLeechInfoSchema: GenMessage<FreeLeechInfo> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 6);
+  messageDesc(file_mam_v1_mam, 7);
 
 /**
  * @generated from message mam.v1.Query
@@ -289,7 +361,20 @@ export type Query = Message<"mam.v1.Query"> & {
  * Use `create(QuerySchema)` to create a new message.
  */
 export const QuerySchema: GenMessage<Query> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 7);
+  messageDesc(file_mam_v1_mam, 8);
+
+/**
+ * @generated from message mam.v1.Empty
+ */
+export type Empty = Message<"mam.v1.Empty"> & {
+};
+
+/**
+ * Describes the message mam.v1.Empty.
+ * Use `create(EmptySchema)` to create a new message.
+ */
+export const EmptySchema: GenMessage<Empty> = /*@__PURE__*/
+  messageDesc(file_mam_v1_mam, 9);
 
 /**
  * @generated from service mam.v1.MamService
@@ -310,6 +395,14 @@ export const MamService: GenService<{
     methodKind: "unary";
     input: typeof VipRequestSchema;
     output: typeof VipResponseSchema;
+  },
+  /**
+   * @generated from rpc mam.v1.MamService.GetProfile
+   */
+  getProfile: {
+    methodKind: "unary";
+    input: typeof EmptySchema;
+    output: typeof UserDataSchema;
   },
   /**
    * @generated from rpc mam.v1.MamService.BuyBonus

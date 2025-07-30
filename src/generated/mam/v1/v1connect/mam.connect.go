@@ -37,6 +37,8 @@ const (
 	MamServiceSearchProcedure = "/mam.v1.MamService/Search"
 	// MamServiceBuyVipProcedure is the fully-qualified name of the MamService's BuyVip RPC.
 	MamServiceBuyVipProcedure = "/mam.v1.MamService/BuyVip"
+	// MamServiceGetProfileProcedure is the fully-qualified name of the MamService's GetProfile RPC.
+	MamServiceGetProfileProcedure = "/mam.v1.MamService/GetProfile"
 	// MamServiceBuyBonusProcedure is the fully-qualified name of the MamService's BuyBonus RPC.
 	MamServiceBuyBonusProcedure = "/mam.v1.MamService/BuyBonus"
 )
@@ -45,6 +47,7 @@ const (
 type MamServiceClient interface {
 	Search(context.Context, *connect.Request[v1.Query]) (*connect.Response[v1.SearchResults], error)
 	BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error)
+	GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error)
 	BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error)
 }
 
@@ -71,6 +74,12 @@ func NewMamServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...
 			connect.WithSchema(mamServiceMethods.ByName("BuyVip")),
 			connect.WithClientOptions(opts...),
 		),
+		getProfile: connect.NewClient[v1.Empty, v1.UserData](
+			httpClient,
+			baseURL+MamServiceGetProfileProcedure,
+			connect.WithSchema(mamServiceMethods.ByName("GetProfile")),
+			connect.WithClientOptions(opts...),
+		),
 		buyBonus: connect.NewClient[v1.BonusRequest, v1.BonusResponse](
 			httpClient,
 			baseURL+MamServiceBuyBonusProcedure,
@@ -82,9 +91,10 @@ func NewMamServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...
 
 // mamServiceClient implements MamServiceClient.
 type mamServiceClient struct {
-	search   *connect.Client[v1.Query, v1.SearchResults]
-	buyVip   *connect.Client[v1.VipRequest, v1.VipResponse]
-	buyBonus *connect.Client[v1.BonusRequest, v1.BonusResponse]
+	search     *connect.Client[v1.Query, v1.SearchResults]
+	buyVip     *connect.Client[v1.VipRequest, v1.VipResponse]
+	getProfile *connect.Client[v1.Empty, v1.UserData]
+	buyBonus   *connect.Client[v1.BonusRequest, v1.BonusResponse]
 }
 
 // Search calls mam.v1.MamService.Search.
@@ -97,6 +107,11 @@ func (c *mamServiceClient) BuyVip(ctx context.Context, req *connect.Request[v1.V
 	return c.buyVip.CallUnary(ctx, req)
 }
 
+// GetProfile calls mam.v1.MamService.GetProfile.
+func (c *mamServiceClient) GetProfile(ctx context.Context, req *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error) {
+	return c.getProfile.CallUnary(ctx, req)
+}
+
 // BuyBonus calls mam.v1.MamService.BuyBonus.
 func (c *mamServiceClient) BuyBonus(ctx context.Context, req *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error) {
 	return c.buyBonus.CallUnary(ctx, req)
@@ -106,6 +121,7 @@ func (c *mamServiceClient) BuyBonus(ctx context.Context, req *connect.Request[v1
 type MamServiceHandler interface {
 	Search(context.Context, *connect.Request[v1.Query]) (*connect.Response[v1.SearchResults], error)
 	BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error)
+	GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error)
 	BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error)
 }
 
@@ -128,6 +144,12 @@ func NewMamServiceHandler(svc MamServiceHandler, opts ...connect.HandlerOption) 
 		connect.WithSchema(mamServiceMethods.ByName("BuyVip")),
 		connect.WithHandlerOptions(opts...),
 	)
+	mamServiceGetProfileHandler := connect.NewUnaryHandler(
+		MamServiceGetProfileProcedure,
+		svc.GetProfile,
+		connect.WithSchema(mamServiceMethods.ByName("GetProfile")),
+		connect.WithHandlerOptions(opts...),
+	)
 	mamServiceBuyBonusHandler := connect.NewUnaryHandler(
 		MamServiceBuyBonusProcedure,
 		svc.BuyBonus,
@@ -140,6 +162,8 @@ func NewMamServiceHandler(svc MamServiceHandler, opts ...connect.HandlerOption) 
 			mamServiceSearchHandler.ServeHTTP(w, r)
 		case MamServiceBuyVipProcedure:
 			mamServiceBuyVipHandler.ServeHTTP(w, r)
+		case MamServiceGetProfileProcedure:
+			mamServiceGetProfileHandler.ServeHTTP(w, r)
 		case MamServiceBuyBonusProcedure:
 			mamServiceBuyBonusHandler.ServeHTTP(w, r)
 		default:
@@ -157,6 +181,10 @@ func (UnimplementedMamServiceHandler) Search(context.Context, *connect.Request[v
 
 func (UnimplementedMamServiceHandler) BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("mam.v1.MamService.BuyVip is not implemented"))
+}
+
+func (UnimplementedMamServiceHandler) GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("mam.v1.MamService.GetProfile is not implemented"))
 }
 
 func (UnimplementedMamServiceHandler) BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error) {
