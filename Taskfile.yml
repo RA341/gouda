@@ -1,8 +1,8 @@
 version: '3'
 
 vars:
-  CORE_DIR: src/
-  UI_DIR: brie/
+  CORE_DIR: src
+  UI_DIR: brie
   DOCKMAN_IMAGE_BASE: gouda
   # Directory for Go source commands
   GO_CMD_DIR: cmd
@@ -27,6 +27,43 @@ tasks:
     status:
       # This command checks if the directory exists. If it does, the task is considered "up-to-date" and won't run.
       - test -d {{.BUILD_DIR}}
+
+  ui:b:*:
+    dir: "{{ .UI_DIR }}"
+    desc: "build gouda UI for target, usage task ui:b:android"
+    vars:
+      TARGET: "{{index .MATCH 0}}"
+    cmds:
+      - flutter build {{ .TARGET }}
+
+  ui:web:
+    dir: "{{ .UI_DIR }}"
+    desc: "build gouda UI"
+    cmds:
+      - task ui:b:web
+
+  ui:win:
+    dir: "{{ .UI_DIR }}"
+    desc: "build gouda exe"
+    vars:
+      EXE: "build/windows/x64/runner/Release"
+    cmds:
+      - task ui:b:windows
+
+  ui:apk:
+    dir: "{{ .UI_DIR }}"
+    desc: "build gouda apk"
+    cmds:
+      - task ui:b:apk
+
+  ui:w:*:
+    desc: "build gouda Web UI and transfer to a specific build target in {{ .FULL_PATH }}"
+    vars:
+      CMD_NAME: "{{index .MATCH 0}}"
+      FULL_PATH: "{{ .CORE_DIR }}/{{ .GO_CMD_DIR }}/{{ .CMD_NAME }}/web"
+    deps: [ ui:web ]
+    cmds:
+      - coreutils cp -r {{ .UI_DIR }}/build/web {{ .FULL_PATH }}
 
   clean:
     desc: "Removes all files in {{.BUILD_DIR}}"
@@ -94,3 +131,59 @@ tasks:
     desc: "Prune docker images."
     cmds:
       - docker image prune -f
+
+
+  tr:
+    desc: "start a temp transmission client"
+    vars:
+      SAVE_DIR: "build/tansmission"
+    cmds:
+      - coreutils mkdir -p {{ .SAVE_DIR }}
+      - docker run --rm
+        -e PUID=1000
+        -e PGID=1000
+        -e TZ=${TZ}
+        -e USER=admin
+        -e PASS=admin
+        -e PEERPORT=9161
+        -v "./{{ .SAVE_DIR }}:/media"
+        -p 9092:9091
+        -p 9161:9161
+        lscr.io/linuxserver/transmission:latest
+
+  qb:
+    desc: "start a temp qbittorrent client"
+    vars:
+      SAVE_DIR: "build/qbittorrent"
+    cmds:
+      - coreutils mkdir -p {{ .SAVE_DIR }}
+      - docker run --rm
+        --name qbittorrent
+        -e PUID=1000
+        -e PGID=1000
+        -e TZ=Etc/UTC
+        -e WEBUI_PORT=8722
+        -e TORRENTING_PORT=17693
+        -v "./{{ .SAVE_DIR }}:/downloads"
+        -p 8722:8722
+        -p 17693:17693
+        -p 17693:17693/udp
+        lscr.io/linuxserver/qbittorrent:latest
+
+  dg:
+    desc: "start a temp deluge client"
+    vars:
+      SAVE_DIR: "build/deluge"
+    cmds:
+      - coreutils mkdir -p {{ .SAVE_DIR }}
+      - docker run --rm
+        --name deluge
+        -e PUID=1000
+        -e PGID=1000
+        -e TZ=Etc/UTC
+        -v "./{{ .SAVE_DIR }}:/downloads"
+        -p 8112:8112
+        -p 17693:17693
+        -p 17693:17693/udp
+        -p 58846:58846
+        linuxserver/deluge:latest
