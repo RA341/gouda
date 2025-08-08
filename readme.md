@@ -1,12 +1,24 @@
 # Gouda
 
+> [!Important]
+> Project status:
+> Well, well, well... look who decided to dust off this repository after months! Finally getting around to this project after months of procrastination; this baby is getting a complete makeover.
+>
+> **What's brewing:**
+> - Direct download functionality (no need for the extension, you can also download with wedges)
+> - Overseer-like request system so your family can also get their books
+> - Enhanced architecture and performance improvements (translation: I'm fixing all the "TODO: refactor this mess" comments)
+> - Mobile App !!!
+>
+> The current version works perfectly fine, so feel free to use it while I'm busy working through this overhaul!, but dont expect any bug fixes/features.
+
 A lightweight download automation tool for MyAnonaMouse users, offering a simpler alternative
 to [Readarr](https://github.com/Readarr/Readarr).
 
-Most of the features offered by readarr are overkill for me, I just want to download my media without monitoring the
+Most of the features offered by readarr are overkill for me. I just want to download my media without monitoring the
 entire authors' collection.
 
-So I made this, key difference is that gouda is designed to be used from within myanonamouse site, without leaving it.
+So I made this, the key difference is that Gouda is designed to be used from within myanonamouse site, without leaving it.
 Hence, it is intended to work with the [extension](parmesan).
 
 ## Getting Started
@@ -17,43 +29,43 @@ Gouda is best used with Docker. For platforms where Docker isn't an option, nati
 
 Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will need to setup your download client correctly
 
-* On linux:
+* On Linux:
     ```bash
     curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- docker
     ```
 
-* On windows
+* On Windows
     ```powershell
     & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'docker'
     ```
 
 ### Docs
-For configuration options, usage examples, and detailed explanations, refer to the [docs](https://gouda.dumbapps.org).
+For configuration options, usage examples, and detailed explanations, refer to the [docs](https://gouda.radn.dev).
 
 ## How it Works
 
-* When you download something from myanonmouse, You use the gouda button (from the [extension](parmesan)) instead of the
+* When you download something from myanonmouse, you use the gouda button (from the [extension](parmesan)) instead of the
   download button.
 
-* The extension then sends the book, author, series info and the category, to gouda.
+* The extension then sends the book, author, series info, and the category to Gouda.
 
-* gouda then downloads the torrent file, sends it to the download client.
+* Gouda then downloads the torrent file, sends it to the download client.
 
-* gouda will continue to monitor downloads until,
-    * Its complete
+* Gouda will continue to monitor downloads until,
+    * It's complete
         * then [hardlinks](#storage-setup-guide) to save storage space, to the location you specify while setting up
-          gouda.
+          Gouda.
     * It fails
-        * if it takes to long (default limit is 15 minutes, this can be changed).
-        * Or there was an issue hardlinking, (e.g. the file path already exists).
-        * In either case, gouda will not do anything (only display an error), the original downloaded file will remain
+        * if it takes too long (default limit is 15 minutes, this can be changed).
+        * Or there was an issue hardlinking (e.g. the file path already exists).
+        * In either case, Gouda will not do anything (only display an error), the original downloaded file will remain
           untouched (if it successfully downloaded)
 
 ## Help and suggestions
 
 If you need help, encounter a bug, or want a new feature
 
-open an issue or start a discussion here https://github.com/RA341/gouda/discussions
+Open an issue or start a discussion here https://github.com/RA341/gouda/discussions
 
 ## License
 
