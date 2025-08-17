@@ -8,6 +8,8 @@ on:
       - .github/workflows/action-*
       - .github/workflows/build.yml
       - .github/workflows/release.yml
+      - Dockerfile
+      - .dockerignore
       - goub/**
       - brie/**
       - parmesan/**

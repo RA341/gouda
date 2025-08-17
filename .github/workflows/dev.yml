@@ -7,6 +7,8 @@ on:
     paths: # trigger only when source code changes
       - .github/workflows/dev.yml
       - .github/workflows/action-gouda-docker.yml
+      - Dockerfile
+      - .dockerignore
       - goub/**
       - brie/**
       - parmesan/**
