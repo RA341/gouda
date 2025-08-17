@@ -12,7 +12,7 @@ COPY ./brie .
 RUN flutter build web
 
 # Stage Go build
-FROM golang:1.24-alpine AS go_builder
+FROM golang:1-alpine AS go_builder
 
 # for sqlite
 ENV CGO_ENABLED=1
@@ -40,7 +40,7 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags "-s -w \
              -X ${INFO_PACKAGE}.Branch=${BRANCH}" \
     -o gouda "./cmd/server"
 
-FROM alpine:latest as main
+FROM alpine:latest AS main
 
 ENV GOUDA_LOG_LEVEL=info
 ENV GOUDA_CONFIG=/config

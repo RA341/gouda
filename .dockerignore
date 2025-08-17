@@ -8,6 +8,9 @@ src/web
 spec
 build_script/
 install_scripts
+brie/.dart_tool
+brie/build
+brie/.idea
 
 ## extension
 
