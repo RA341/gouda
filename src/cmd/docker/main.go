@@ -1,4 +1,4 @@
-package dockerpackage
+package main
 
 import (
 	"github.com/RA341/gouda/cmd"

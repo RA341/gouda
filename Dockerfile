@@ -38,7 +38,7 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags "-s -w \
              -X ${INFO_PACKAGE}.CommitInfo=${COMMIT_INFO} \
              -X ${INFO_PACKAGE}.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
              -X ${INFO_PACKAGE}.Branch=${BRANCH}" \
-    -o gouda "./cmd/server"
+    -o gouda "./cmd/docker"
 
 FROM alpine:latest AS main
 
