@@ -136,19 +136,17 @@ tasks:
   tr:
     desc: "start a temp transmission client"
     vars:
-      SAVE_DIR: "build/tansmission"
+      SAVE_DIR: "build/transmission"
     cmds:
       - coreutils mkdir -p {{ .SAVE_DIR }}
       - docker run --rm
-        -e PUID=1000
+        -e PUID=1000 
         -e PGID=1000
-        -e TZ=${TZ}
-        -e USER=admin
+        -e USER=admin 
         -e PASS=admin
         -e PEERPORT=9161
         -v "./{{ .SAVE_DIR }}:/media"
         -p 9092:9091
-        -p 9161:9161
         lscr.io/linuxserver/transmission:latest
 
   qb:

@@ -3,10 +3,12 @@ package clients
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/rs/zerolog/log"
-	"resty.dev/v3"
 	"strings"
 	"time"
+
+	"github.com/RA341/gouda/internal/config"
+	"github.com/rs/zerolog/log"
+	"resty.dev/v3"
 )
 
 // LoginResponse represents the Deluge JSON-RPC response
@@ -35,7 +37,7 @@ type DelugeClient struct {
 	userId    int
 }
 
-func NewDelugeClient(client *TorrentClient) (DownloadClient, error) {
+func NewDelugeClient(client *config.TorrentClient) (DownloadClient, error) {
 	deluge := &DelugeClient{
 		client:    resty.New().SetTimeout(time.Second * 5),
 		jsonURL:   fmt.Sprintf("%s://%s/json", client.Protocol, client.Host),

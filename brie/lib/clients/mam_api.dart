@@ -16,12 +16,9 @@ final mamApiProvider = Provider<MamApi>((ref) {
   return MamApi(client);
 });
 
-final searchProvider = FutureProvider<SearchResults>((ref) async {
-  const query = 'hitchhikers';
-
+final mamProfileProvider = FutureProvider<UserData>((ref) async {
   final mam = ref.watch(mamApiProvider);
-
-  return mam.list(query);
+  return mam.apiClient.getProfile(Empty());
 });
 
 class MamApi {
@@ -35,11 +32,11 @@ class MamApi {
 }
 
 final mamBooksSearchNotifier =
-    AsyncNotifierProvider<MamBooksSearchNotifier, List<Book>>(() {
+    AsyncNotifierProvider<MamBooksSearchNotifier, List<SearchBook>>(() {
       return MamBooksSearchNotifier();
     });
 
-class MamBooksSearchNotifier extends AsyncNotifier<List<Book>> {
+class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
   int page = 0;
   int found = 0;
   int total = 0;
@@ -49,11 +46,11 @@ class MamBooksSearchNotifier extends AsyncNotifier<List<Book>> {
   // .includeThumbnail();
 
   @override
-  Future<List<Book>> build() async {
+  Future<List<SearchBook>> build() async {
     return search();
   }
 
-  Future<List<Book>> search() async {
+  Future<List<SearchBook>> search() async {
     final mam = ref.watch(mamApiProvider);
     if ((query.text ?? '').isEmpty) {
       return [];

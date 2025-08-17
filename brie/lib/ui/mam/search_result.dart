@@ -1,11 +1,15 @@
+import 'package:brie/clients/history_api.dart';
 import 'package:brie/gen/mam/v1/mam.pb.dart';
+import 'package:brie/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class BookItem extends StatelessWidget {
   const BookItem({required this.book, super.key});
 
-  final Book book;
+  final SearchBook book;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +26,13 @@ class BookItem extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(book.author, style: TextStyle(color: Colors.grey[600])),
+            AuthorsList(authors: book.author),
             const SizedBox(height: 4),
             Row(
               children: [
                 CategoryChip(book: book),
                 const SizedBox(width: 8),
-                FormatChip(format: book.format),
+                FormatChip(format: book.mediaFormat),
               ],
             ),
           ],
@@ -39,11 +43,14 @@ class BookItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InfoRow(label: 'Size', value: book.size),
-                InfoRow(label: 'Length', value: book.length),
-                InfoRow(label: 'Added', value: _formatDate(book.added)),
+                InfoRow(label: 'Size', value: book.mediaSize),
+                // todo
+                // InfoRow(label: 'Length', value: "Unknown"),
+                InfoRow(label: 'Added', value: _formatDate(book.dateAddedIso)),
                 SeedersInfo(book: book),
                 if (book.tags.isNotEmpty) TagsWidget(tags: book.tags),
+                const SizedBox(height: 12),
+                DescriptionView(book: book),
                 const SizedBox(height: 12),
                 ActionButtons(book: book),
               ],
@@ -77,10 +84,83 @@ class BookItem extends StatelessWidget {
   }
 }
 
+class AuthorsList extends StatelessWidget {
+  const AuthorsList({
+    required this.authors,
+    this.maxAuthors = 2,
+    super.key,
+  });
+
+  final List<Author> authors;
+  final int maxAuthors;
+
+  @override
+  Widget build(BuildContext context) {
+    // ...book.author.map(
+    // (element) =>
+    // Text(element.name, style: TextStyle(color: Colors.grey[600])),
+    // )
+    final authorOverflow = authors.length > maxAuthors;
+
+    return Row(
+      spacing: 10,
+      children: [
+        ...authors
+            .take(maxAuthors)
+            .map(
+              (e) => StringLink(
+                data: e.name,
+                onPress: (data) {
+                  // todo
+                },
+              ),
+            ),
+        if (authorOverflow) Text('and ${authors.length - maxAuthors} more'),
+      ],
+    );
+  }
+}
+
+class DescriptionView extends StatelessWidget {
+  const DescriptionView({required this.book, super.key});
+
+  final SearchBook book;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      book.description,
+      style: const TextStyle(overflow: TextOverflow.ellipsis),
+    );
+  }
+}
+
+class StringLink extends ConsumerWidget {
+  const StringLink({
+    required this.data,
+    required this.onPress,
+    super.key,
+  });
+
+  final String data;
+  final void Function(String data) onPress;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      child: Text(
+        data,
+        style: TextStyle(color: Colors.blue[200]),
+      ),
+      onTap: () => onPress(data),
+    );
+  }
+}
+
 class ThumbnailWidget extends StatelessWidget {
   const ThumbnailWidget({required this.book, super.key});
 
-  final Book book;
+  final SearchBook book;
 
   @override
   Widget build(BuildContext context) {
@@ -93,31 +173,46 @@ class ThumbnailWidget extends StatelessWidget {
           height: 70,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) =>
-              _loadIcon(book.category),
+              _loadMediaCategoryIcon(book.mediaCategory),
         ),
       );
     }
-    return _loadIcon(book.category);
+    return _loadMediaCategoryIcon(book.mediaCategory);
   }
+}
 
-  Icon _loadIcon(int category) {
-    switch (category) {
-      case 13: // audiobooks
-        return const Icon(Icons.headphones, color: Colors.pinkAccent, size: 32);
-      case 15: // musicology
-        return const Icon(Icons.music_note, color: Colors.blueAccent, size: 32);
-      case 16: // radio
-        return const Icon(Icons.radio, color: Colors.redAccent, size: 32);
-      default: // 14 -> ebooks and anything else
-        return const Icon(Icons.book_rounded, color: Colors.teal, size: 32);
-    }
+Icon _loadMediaCategoryIcon(String category) {
+  switch (category) {
+    case 'AudioBooks':
+      return const Icon(Icons.headphones, color: Colors.pinkAccent, size: 32);
+    case 'Musicology':
+      return const Icon(Icons.music_note, color: Colors.blueAccent, size: 32);
+    case 'Radio':
+      return const Icon(Icons.radio, color: Colors.redAccent, size: 32);
+    case 'EBooks':
+    default:
+      return const Icon(Icons.book_rounded, color: Colors.teal, size: 32);
+  }
+}
+
+Color _getCategoryColor(SearchBook book) {
+  switch (book.mediaCategory) {
+    case 'AudioBooks':
+      return Colors.pinkAccent;
+    case 'Musicology':
+      return Colors.blueAccent;
+    case 'Radio':
+      return Colors.redAccent;
+    case 'EBooks':
+    default:
+      return Colors.teal;
   }
 }
 
 class CategoryChip extends StatelessWidget {
   const CategoryChip({required this.book, super.key});
 
-  final Book book;
+  final SearchBook book;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +224,7 @@ class CategoryChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
-        _getCategoryName(book.category),
+        book.tags,
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
@@ -137,32 +232,6 @@ class CategoryChip extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getCategoryName(int category) {
-    switch (category) {
-      case 13:
-        return 'Audiobook';
-      case 15:
-        return 'Music';
-      case 16:
-        return 'Radio';
-      default:
-        return 'eBook';
-    }
-  }
-}
-
-Color _getCategoryColor(Book book) {
-  switch (book.category) {
-    case 13:
-      return Colors.pinkAccent;
-    case 15:
-      return Colors.blueAccent;
-    case 16:
-      return Colors.redAccent;
-    default:
-      return Colors.teal;
   }
 }
 
@@ -246,7 +315,7 @@ class InfoRow extends StatelessWidget {
 class SeedersInfo extends StatelessWidget {
   const SeedersInfo({required this.book, super.key});
 
-  final Book book;
+  final SearchBook book;
 
   @override
   Widget build(BuildContext context) {
@@ -350,23 +419,62 @@ class TagsWidget extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatelessWidget {
-  const ActionButtons({required this.book, super.key});
+class ActionButtons extends HookConsumerWidget {
+  const ActionButtons({
+    required this.book,
+    super.key,
+  });
 
-  final Book book;
+  final SearchBook book;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final hasTorrentLink = book.torrentLink.isNotEmpty;
+    final history = ref.watch(historyApiProvider);
+    final cats = ref.watch(categoryListProvider).value ?? [];
+    final selectedCat = useState('');
+
+    final allowDownload = selectedCat.value.isNotEmpty && hasTorrentLink;
+    // final isFreeleechAble = book.
 
     return Row(
       spacing: 30,
       children: [
+        // Category Dropdown
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DropdownButton<String>(
+            value: selectedCat.value.isEmpty ? null : selectedCat.value,
+            hint: const Text('Select Category'),
+            underline: const SizedBox(),
+            items: cats.map<DropdownMenuItem<String>>((category) {
+              return DropdownMenuItem<String>(
+                value: category.category,
+                child: Text(category.category),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              selectedCat.value = newValue ?? '';
+            },
+          ),
+        ),
+
         ElevatedButton.icon(
-          onPressed: hasTorrentLink
+          onPressed: allowDownload
               ? () {
                   if (!context.mounted) return;
-                  _downloadTorrent(context);
+                  history.download(book, selectedCat.value);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Downloading ${book.title}...'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                 }
               : null,
           icon: const Icon(Icons.download, size: 18),
@@ -377,10 +485,19 @@ class ActionButtons extends StatelessWidget {
           ),
         ),
         ElevatedButton.icon(
-          onPressed: hasTorrentLink
+          onPressed: allowDownload
               ? () {
                   if (!context.mounted) return;
-                  _downloadTorrent(context);
+                  history.download(book, selectedCat.value, useFreeleech: true);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Downloading ${book.title} with freeleech...',
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                 }
               : null,
           icon: const Icon(LineAwesomeIcons.cheese_solid, size: 18),
@@ -393,23 +510,41 @@ class ActionButtons extends StatelessWidget {
       ],
     );
   }
+}
 
-  void _downloadTorrent(BuildContext context) {
-    // Implement torrent download logic
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Downloading ${book.title}...'),
-        backgroundColor: Colors.green,
+class ChipDropdown extends ConsumerWidget {
+  const ChipDropdown({
+    required this.items,
+    required this.selectedItem,
+    this.hint = 'Select items',
+    super.key,
+  });
+
+  final ValueNotifier<String> selectedItem;
+  final List<String> items;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8),
       ),
-    );
-  }
-
-  void _downloadTorrentWithFreeleech(BuildContext context) {
-    // Implement torrent download logic
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Downloading ${book.title}...'),
-        backgroundColor: Colors.green,
+      child: DropdownButton<String>(
+        value: selectedItem.value.isEmpty ? null : selectedItem.value,
+        hint: Text(hint),
+        underline: const SizedBox(),
+        items: items.map<DropdownMenuItem<String>>((category) {
+          return DropdownMenuItem<String>(
+            value: category,
+            child: Text(category),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          selectedItem.value = newValue ?? '';
+        },
       ),
     );
   }

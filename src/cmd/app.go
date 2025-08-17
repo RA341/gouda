@@ -48,11 +48,10 @@ func NewApp(conf *config.GoudaConfig) *App {
 	}
 
 	// todo client loading is wrong
-	client := initDownloadClient()
-
+	client := initDownloadClient(&conf.TorrentClient)
 	catSrv := category.NewCategoryService(db)
 	mamSrv := mam.NewService(conf.MamToken)
-	downloadSrv := downloads.NewDownloadService(conf, db, client)
+	downloadSrv := downloads.NewDownloadService(conf, db, &conf.TorrentClient, client)
 	mediaSrv := media.NewMediaManagerService(db, downloadSrv, mamSrv)
 	authSrv := auth.NewService(conf)
 
@@ -103,18 +102,19 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 	}
 }
 
-func initDownloadClient() clients.DownloadClient {
-	return nil
-	// todo
+func initDownloadClient(conf *config.TorrentClient) clients.DownloadClient {
 	// load torrent client if previously exists
-	//if config.TorrentType.GetStr() != "" {
-	//	client, err := clients.InitializeTorrentClient()
-	//	if err != nil {
-	//		log.Error().Err(err).Msg("Failed to initialize torrent client")
-	//		return nil
-	//	} else {
-	//		log.Info().Str("client", config.TorrentType.GetStr()).Msg("Loaded torrent client")
-	//		return client
-	//	}
-	//}
+	if conf.ClientType == "" {
+		log.Fatal().Msg("client type is required")
+	}
+
+	client, err := clients.InitializeTorrentClient(conf)
+	if err != nil {
+		// todo dont fatal
+		log.Fatal().Err(err).Msg("Failed to initialize torrent client")
+		return nil
+	}
+
+	log.Info().Str("client", conf.ClientType).Msg("Loaded torrent client")
+	return client
 }

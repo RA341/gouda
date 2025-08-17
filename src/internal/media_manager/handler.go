@@ -1,8 +1,9 @@
 package media_manager
 
 import (
-	"connectrpc.com/connect"
 	"context"
+
+	"connectrpc.com/connect"
 	v1 "github.com/RA341/gouda/generated/media_requests/v1"
 	"github.com/RA341/gouda/internal/downloads"
 	"github.com/rs/zerolog/log"
@@ -21,7 +22,7 @@ func (handler *MediaManagerHandler) AddMedia(_ context.Context, req *connect.Req
 	mediaRequest.FromProto(req.Msg.GetMedia())
 	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
 
-	err := handler.mr.AddMedia(&mediaRequest)
+	err := handler.mr.AddMedia(&mediaRequest, false)
 	if err != nil {
 		return nil, err
 	}
@@ -29,9 +30,17 @@ func (handler *MediaManagerHandler) AddMedia(_ context.Context, req *connect.Req
 	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
 
-func (handler *MediaManagerHandler) AddMediaWithFreeleech(ctx context.Context, c *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
-	//TODO implement me
-	panic("implement me")
+func (handler *MediaManagerHandler) AddMediaWithFreeleech(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
+	var mediaRequest downloads.Media
+	mediaRequest.FromProto(req.Msg.GetMedia())
+	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request with freeleech")
+
+	err := handler.mr.AddMedia(&mediaRequest, true)
+	if err != nil {
+		return nil, err
+	}
+
+	return connect.NewResponse(&v1.AddMediaResponse{}), nil
 }
 
 func (handler *MediaManagerHandler) Search(_ context.Context, req *connect.Request[v1.SearchRequest]) (*connect.Response[v1.SearchResponse], error) {

@@ -32,7 +32,7 @@ final settingsProvider = FutureProvider<Settings>((ref) async {
   await ref.watch(supportedClientsProvider.future);
   await ref.watch(metadataProvider.future);
 
-  return await settingsApi.list();
+  return settingsApi.list();
 });
 
 final isSetupCompleteProvider = FutureProvider<bool>((ref) async {
@@ -55,8 +55,8 @@ final categoryListProvider = FutureProvider<List<Category>>((ref) async {
 
 final requestHistoryProvider =
     AsyncNotifierProvider<RequestHistoryNotifier, List<Media>>(() {
-  return RequestHistoryNotifier();
-});
+      return RequestHistoryNotifier();
+    });
 
 final searchProvider = StateProvider<String>((ref) {
   return '';
@@ -81,17 +81,21 @@ class PageNotifier extends Notifier<int> {
 
 // The public methods on this class will be what allow the UI to modify the state.
 class RequestHistoryNotifier extends AsyncNotifier<List<Media>> {
-  var limit = 20;
-  var offset = 0;
-  var totalRecords = 0;
+  int limit = 20;
+  int offset = 0;
+  int totalRecords = 0;
+
+  bool firstLoad = false;
 
   @override
   Future<List<Media>> build() async {
+    firstLoad = true;
     final histApi = ref.watch(historyApiProvider);
     final (records, count) = await histApi.getTorrentHistory(
       offset: offset,
       limit: limit,
     );
+    firstLoad = false;
 
     totalRecords = count.toInt();
     return records;
@@ -114,7 +118,7 @@ class RequestHistoryNotifier extends AsyncNotifier<List<Media>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       if (query.isNotEmpty) {
-        return await histApi.searchMedia(query);
+        return histApi.searchMedia(query);
       }
 
       final (books, count) = await histApi.getTorrentHistory(

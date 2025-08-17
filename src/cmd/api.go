@@ -61,7 +61,7 @@ func registerFrontend(mux *http.ServeMux, conf *config.GoudaConfig, uifs fs.FS) 
 func getFrontendDir(config *config.GoudaConfig, uifs fs.FS) (http.HandlerFunc, error) {
 	if uifs == nil {
 		if !file_utils.FileExists(config.UIPath) {
-			log.Warn().Str("path", config.UIPath).Msg("no ui files found, setting default page")
+			log.Warn().Str("path_checked", config.UIPath).Msg("no ui files found, setting default page")
 			// Return a fallback handler
 			return func(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Type", "text/html; charset=utf-8")

@@ -1,29 +1,47 @@
 package mam
 
 import (
-	"github.com/joho/godotenv"
 	"os"
 	"testing"
+
+	"github.com/joho/godotenv"
+	"github.com/stretchr/testify/require"
 )
 
-func TestService_Search(t *testing.T) {
-	//cookie := getMamCookie(t)
-	//srv := NewService(cookie)
+func TestService_GetProfile(t *testing.T) {
+	srv := setup(t)
+	_, err := srv.GetBonusProfile()
+	require.NoError(t, err)
+}
 
-	//err := srv.BuyVault(30)
+func TestService_BuyVault(t *testing.T) {
+	//srv := setup(t)
+	//err := srv.BuyVault(srv.cookie, 1000)
 	//require.NoError(t, err)
+}
 
-	//_, _, _, err := srv.Search("hitchhikers")
-	//require.NoError(t, err)
-	//freeleech, err := srv.UseFreelech("", "")
-	//if err != nil {
-	//	return
-	//}
-	//t.Log(search)
+func TestService_SearchRaw(t *testing.T) {
+	srv := setup(t)
 
-	//bonus, err := srv.BuyBonus(1)
-	//require.NoError(t, err)
-	//t.Log(bonus)
+	query := map[string]any{
+		"tor": map[string]any{
+			"text": "hitchhikers",
+			"srchIn": []string{
+				"title",
+			},
+		},
+	}
+
+	results, _, _, err := srv.SearchRaw(query)
+	require.NoError(t, err)
+
+	t.Log(results)
+}
+
+func setup(t *testing.T) *Service {
+	cookie := getMamCookie(t)
+	srv := NewService(cookie)
+	return srv
 }
 
 func getMamCookie(t *testing.T) string {

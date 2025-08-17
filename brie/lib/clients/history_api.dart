@@ -1,4 +1,5 @@
 import 'package:brie/clients/settings_api.dart';
+import 'package:brie/gen/mam/v1/mam.pb.dart';
 import 'package:brie/gen/media_requests/v1/media_requests.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:fixnum/fixnum.dart';
@@ -46,8 +47,29 @@ class HistoryApi {
       () => apiClient.search(
         SearchRequest(mediaQuery: query),
       ),
-    ))
-        .results;
+    )).results;
+  }
+
+  Future<AddMediaResponse> download(
+    SearchBook book,
+    String cat, {
+    bool useFreeleech = false,
+  }) async {
+    final req = AddMediaRequest(
+      media: Media(
+        author: book.author[0].name,
+        book: book.title,
+        category: cat,
+        mamBookId: Int64(book.mamId),
+        fileLink: book.torrentLink,
+      ),
+    );
+
+    return mustRunGrpcRequest(
+      () => useFreeleech
+          ? apiClient.addMediaWithFreeleech(req)
+          : apiClient.addMedia(req),
+    );
   }
 
   Future<void> deleteBookRequest(Int64 reqId) async {

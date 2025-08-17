@@ -2,12 +2,21 @@ package media_manager
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/RA341/gouda/internal/downloads"
 	"github.com/RA341/gouda/internal/info"
 	"github.com/RA341/gouda/internal/mam"
 	"github.com/rs/zerolog/log"
-	"strconv"
+	"gorm.io/gorm"
 )
+
+type Services interface {
+	GetDB() *gorm.DB
+	GetMAM() *mam.Service
+	GetStore() Store
+	GetDownloads() *downloads.DownloadService
+}
 
 type MediaManagerService struct {
 	db  Store
@@ -19,8 +28,17 @@ func NewMediaManagerService(db Store, ds *downloads.DownloadService, mam *mam.Se
 	return &MediaManagerService{db: db, ds: ds, mam: mam}
 }
 
-func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
+func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media, withFreeleech bool) error {
 	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
+
+	if withFreeleech {
+		freeleech, err := srv.mam.UseFreeleech(strconv.Itoa(int(mediaRequest.MAMBookID)), mam.FreeLeechPersonal)
+		if err != nil {
+			return fmt.Errorf("failed to buy free leech to media manager: %v", err)
+		}
+
+		log.Debug().Any("leech-response", freeleech).Msg("Adding download with free leech to downloader")
+	}
 
 	err := srv.ds.DownloadMedia(mediaRequest)
 	if err != nil {
@@ -36,19 +54,9 @@ func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media) error {
 	return nil
 }
 
-func (srv *MediaManagerService) AddMediaWithFreeleech(mediaRequest *downloads.Media) error {
-	freeleech, err := srv.mam.UseFreeleech(strconv.Itoa(int(mediaRequest.ID)), mam.FreeLeechPersonal)
-	if err != nil {
-		return fmt.Errorf("failed to buy free leech to media manager: %v", err)
-	}
-	log.Info().Any("leech-response", freeleech).Msg("Adding free leech to media manager")
-
-	return srv.AddMedia(mediaRequest)
-}
-
 func (srv *MediaManagerService) List(limit, offset int) (int64, []downloads.Media, error) {
 	if info.IsDev() {
-		log.Debug().Int("limit", limit).Int("offset", offset).Msg("history query limits")
+		//log.Debug().Int("limit", limit).Int("offset", offset).Msg("history query limits")
 	}
 
 	torrents, err := srv.db.ListMedia(offset, limit)

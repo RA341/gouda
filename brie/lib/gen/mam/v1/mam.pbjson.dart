@@ -117,7 +117,7 @@ const SearchResults$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.mam.v1.Book',
+      '6': '.mam.v1.SearchBook',
       '10': 'results'
     },
     {'1': 'found', '3': 2, '4': 1, '5': 5, '10': 'found'},
@@ -127,39 +127,101 @@ const SearchResults$json = {
 
 /// Descriptor for `SearchResults`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List searchResultsDescriptor = $convert.base64Decode(
-    'Cg1TZWFyY2hSZXN1bHRzEiYKB3Jlc3VsdHMYASADKAsyDC5tYW0udjEuQm9va1IHcmVzdWx0cx'
-    'IUCgVmb3VuZBgCIAEoBVIFZm91bmQSFAoFdG90YWwYAyABKAVSBXRvdGFs');
+    'Cg1TZWFyY2hSZXN1bHRzEiwKB3Jlc3VsdHMYASADKAsyEi5tYW0udjEuU2VhcmNoQm9va1IHcm'
+    'VzdWx0cxIUCgVmb3VuZBgCIAEoBVIFZm91bmQSFAoFdG90YWwYAyABKAVSBXRvdGFs');
 
-@$core.Deprecated('Use bookDescriptor instead')
-const Book$json = {
-  '1': 'Book',
+@$core.Deprecated('Use searchBookDescriptor instead')
+const SearchBook$json = {
+  '1': 'SearchBook',
   '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'mam_id', '3': 1, '4': 1, '5': 5, '10': 'mamId'},
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
-    {'1': 'author', '3': 3, '4': 1, '5': 9, '10': 'author'},
-    {'1': 'format', '3': 4, '4': 1, '5': 9, '10': 'format'},
-    {'1': 'length', '3': 5, '4': 1, '5': 9, '10': 'length'},
-    {'1': 'torrent_link', '3': 6, '4': 1, '5': 9, '10': 'torrentLink'},
-    {'1': 'category', '3': 7, '4': 1, '5': 5, '10': 'category'},
-    {'1': 'thumbnail', '3': 8, '4': 1, '5': 9, '10': 'thumbnail'},
-    {'1': 'size', '3': 9, '4': 1, '5': 9, '10': 'size'},
-    {'1': 'seeders', '3': 10, '4': 1, '5': 5, '10': 'seeders'},
-    {'1': 'leechers', '3': 11, '4': 1, '5': 5, '10': 'leechers'},
-    {'1': 'added', '3': 12, '4': 1, '5': 9, '10': 'added'},
-    {'1': 'tags', '3': 13, '4': 1, '5': 9, '10': 'tags'},
-    {'1': 'completed', '3': 14, '4': 1, '5': 5, '10': 'completed'},
+    {'1': 'thumbnail', '3': 3, '4': 1, '5': 9, '10': 'thumbnail'},
+    {
+      '1': 'author',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.mam.v1.Author',
+      '10': 'author'
+    },
+    {
+      '1': 'narrator',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.mam.v1.Author',
+      '10': 'narrator'
+    },
+    {'1': 'uploader_name', '3': 6, '4': 1, '5': 9, '10': 'uploaderName'},
+    {
+      '1': 'series',
+      '3': 7,
+      '4': 3,
+      '5': 11,
+      '6': '.mam.v1.Series',
+      '10': 'series'
+    },
+    {'1': 'description', '3': 21, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'tags', '3': 8, '4': 1, '5': 9, '10': 'tags'},
+    {'1': 'date_added_iso', '3': 9, '4': 1, '5': 9, '10': 'dateAddedIso'},
+    {'1': 'snatched', '3': 10, '4': 1, '5': 8, '10': 'snatched'},
+    {'1': 'language_code', '3': 11, '4': 1, '5': 9, '10': 'languageCode'},
+    {'1': 'media_category', '3': 12, '4': 1, '5': 9, '10': 'mediaCategory'},
+    {'1': 'category_id', '3': 13, '4': 1, '5': 5, '10': 'categoryId'},
+    {'1': 'category_name', '3': 14, '4': 1, '5': 9, '10': 'categoryName'},
+    {'1': 'media_format', '3': 15, '4': 1, '5': 9, '10': 'mediaFormat'},
+    {'1': 'media_size', '3': 16, '4': 1, '5': 9, '10': 'mediaSize'},
+    {'1': 'seeders', '3': 17, '4': 1, '5': 5, '10': 'seeders'},
+    {'1': 'leechers', '3': 18, '4': 1, '5': 5, '10': 'leechers'},
+    {'1': 'completed', '3': 19, '4': 1, '5': 5, '10': 'completed'},
+    {'1': 'torrent_link', '3': 20, '4': 1, '5': 9, '10': 'torrentLink'},
   ],
 };
 
-/// Descriptor for `Book`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List bookDescriptor = $convert.base64Decode(
-    'CgRCb29rEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSFgoGYXV0aG9yGA'
-    'MgASgJUgZhdXRob3ISFgoGZm9ybWF0GAQgASgJUgZmb3JtYXQSFgoGbGVuZ3RoGAUgASgJUgZs'
-    'ZW5ndGgSIQoMdG9ycmVudF9saW5rGAYgASgJUgt0b3JyZW50TGluaxIaCghjYXRlZ29yeRgHIA'
-    'EoBVIIY2F0ZWdvcnkSHAoJdGh1bWJuYWlsGAggASgJUgl0aHVtYm5haWwSEgoEc2l6ZRgJIAEo'
-    'CVIEc2l6ZRIYCgdzZWVkZXJzGAogASgFUgdzZWVkZXJzEhoKCGxlZWNoZXJzGAsgASgFUghsZW'
-    'VjaGVycxIUCgVhZGRlZBgMIAEoCVIFYWRkZWQSEgoEdGFncxgNIAEoCVIEdGFncxIcCgljb21w'
-    'bGV0ZWQYDiABKAVSCWNvbXBsZXRlZA==');
+/// Descriptor for `SearchBook`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List searchBookDescriptor = $convert.base64Decode(
+    'CgpTZWFyY2hCb29rEhUKBm1hbV9pZBgBIAEoBVIFbWFtSWQSFAoFdGl0bGUYAiABKAlSBXRpdG'
+    'xlEhwKCXRodW1ibmFpbBgDIAEoCVIJdGh1bWJuYWlsEiYKBmF1dGhvchgEIAMoCzIOLm1hbS52'
+    'MS5BdXRob3JSBmF1dGhvchIqCghuYXJyYXRvchgFIAMoCzIOLm1hbS52MS5BdXRob3JSCG5hcn'
+    'JhdG9yEiMKDXVwbG9hZGVyX25hbWUYBiABKAlSDHVwbG9hZGVyTmFtZRImCgZzZXJpZXMYByAD'
+    'KAsyDi5tYW0udjEuU2VyaWVzUgZzZXJpZXMSIAoLZGVzY3JpcHRpb24YFSABKAlSC2Rlc2NyaX'
+    'B0aW9uEhIKBHRhZ3MYCCABKAlSBHRhZ3MSJAoOZGF0ZV9hZGRlZF9pc28YCSABKAlSDGRhdGVB'
+    'ZGRlZElzbxIaCghzbmF0Y2hlZBgKIAEoCFIIc25hdGNoZWQSIwoNbGFuZ3VhZ2VfY29kZRgLIA'
+    'EoCVIMbGFuZ3VhZ2VDb2RlEiUKDm1lZGlhX2NhdGVnb3J5GAwgASgJUg1tZWRpYUNhdGVnb3J5'
+    'Eh8KC2NhdGVnb3J5X2lkGA0gASgFUgpjYXRlZ29yeUlkEiMKDWNhdGVnb3J5X25hbWUYDiABKA'
+    'lSDGNhdGVnb3J5TmFtZRIhCgxtZWRpYV9mb3JtYXQYDyABKAlSC21lZGlhRm9ybWF0Eh0KCm1l'
+    'ZGlhX3NpemUYECABKAlSCW1lZGlhU2l6ZRIYCgdzZWVkZXJzGBEgASgFUgdzZWVkZXJzEhoKCG'
+    'xlZWNoZXJzGBIgASgFUghsZWVjaGVycxIcCgljb21wbGV0ZWQYEyABKAVSCWNvbXBsZXRlZBIh'
+    'Cgx0b3JyZW50X2xpbmsYFCABKAlSC3RvcnJlbnRMaW5r');
+
+@$core.Deprecated('Use authorDescriptor instead')
+const Author$json = {
+  '1': 'Author',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `Author`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List authorDescriptor = $convert.base64Decode(
+    'CgZBdXRob3ISDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWU=');
+
+@$core.Deprecated('Use seriesDescriptor instead')
+const Series$json = {
+  '1': 'Series',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'sequence_number', '3': 3, '4': 1, '5': 9, '10': 'sequenceNumber'},
+  ],
+};
+
+/// Descriptor for `Series`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List seriesDescriptor = $convert.base64Decode(
+    'CgZTZXJpZXMSDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSJwoPc2VxdWVuY2'
+    'VfbnVtYmVyGAMgASgJUg5zZXF1ZW5jZU51bWJlcg==');
 
 @$core.Deprecated('Use freeLeechInfoDescriptor instead')
 const FreeLeechInfo$json = {

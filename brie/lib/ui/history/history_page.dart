@@ -5,7 +5,6 @@ import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/providers.dart';
 import 'package:brie/ui/shared/error_dialog.dart';
 import 'package:brie/ui/shared/page_header.dart';
-import 'package:brie/ui/shared/utils.dart';
 import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,14 +26,14 @@ class HistoryPage extends HookConsumerWidget {
               spacing: 10,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: pageHeaderBuilder(
-                header: "Media",
-                subHeading: "List of media downloaded by gouda",
+                header: 'Media',
+                subHeading: 'List of media downloaded by gouda',
               ),
             ),
-            Expanded(child: Center(child: MediaActionBar())),
+            const Expanded(child: Center(child: MediaActionBar())),
           ],
         ),
-        Expanded(child: ResultViewPage()),
+        const Expanded(child: ResultViewPage()),
       ],
     );
   }
@@ -64,26 +63,28 @@ class MediaActionBar extends HookConsumerWidget {
                 ref.read(searchProvider.notifier).state = search.text;
                 ref.read(requestHistoryProvider.notifier).fetchData();
               },
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
             ),
-            ref.watch(searchProvider).isNotEmpty
-                ? IconButton(
-                    onPressed: () {
-                      search.clear();
-                      ref.invalidate(searchProvider);
-                      ref.read(requestHistoryProvider.notifier).fetchData();
-                    },
-                    icon: Icon(Icons.clear),
-                  )
-                : SizedBox(),
+            if (ref.watch(searchProvider).isNotEmpty)
+              IconButton(
+                onPressed: () {
+                  search.clear();
+                  ref.invalidate(searchProvider);
+                  ref.read(requestHistoryProvider.notifier).fetchData();
+                },
+                icon: const Icon(Icons.clear),
+              ),
           ],
         ),
         ElevatedButton(
-          onPressed: () => showDialog(
+          onPressed: () => showDialog<void>(
             context: context,
-            builder: (context) => AddMediaPopup(),
+            builder: (context) => const AddMediaPopup(),
           ),
-          child: Row(spacing: 10, children: [Icon(Icons.add), Text("Add")]),
+          child: const Row(
+            spacing: 10,
+            children: [Icon(Icons.add), Text('Add')],
+          ),
         ),
       ],
     );
@@ -96,10 +97,10 @@ class AddMediaPopup extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookData = useState(Media());
-    final formKey = useMemoized(() => GlobalKey<FormState>());
+    final formKey = useMemoized(GlobalKey<FormState>.new);
 
     return AlertDialog(
-      title: Text("Add book"),
+      title: const Text('Add book'),
       content: SizedBox(
         height: 400,
         width: 500,
@@ -122,21 +123,21 @@ class AddMediaPopup extends HookConsumerWidget {
                   }
                   return null;
                 },
-                onSaved: (value) => bookData.value.book = value ?? "",
+                onSaved: (value) => bookData.value.book = value ?? '',
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Author',
-                  hintText: 'Enter the author\'s name',
+                  hintText: "Enter the author's name",
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the author\'s name';
+                    return "Please enter the author's name";
                   }
                   return null;
                 },
-                onSaved: (value) => bookData.value.author = value ?? "",
+                onSaved: (value) => bookData.value.author = value ?? '',
               ),
 
               Row(
@@ -150,22 +151,21 @@ class AddMediaPopup extends HookConsumerWidget {
                         hintText: 'Enter the series name if applicable',
                         border: OutlineInputBorder(),
                       ),
-                      onSaved: (value) => bookData.value.series = value ?? "",
+                      onSaved: (value) => bookData.value.series = value ?? '',
                     ),
                   ),
                   Flexible(
-                    flex: 1,
                     child: TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Number',
                         hintText: '1, 2.5',
                         border: OutlineInputBorder(),
                       ),
-                      keyboardType: TextInputType.numberWithOptions(
+                      keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
                       validator: (value) {
-                        if (double.tryParse(value ?? "0") == null) {
+                        if (double.tryParse(value ?? '0') == null) {
                           return 'Enter a valid number (e.g., 1 or 2.5)';
                         }
                         return null;
@@ -193,7 +193,7 @@ class AddMediaPopup extends HookConsumerWidget {
                   }
                   return null;
                 },
-                onSaved: (value) => bookData.value.fileLink = value ?? "",
+                onSaved: (value) => bookData.value.fileLink = value ?? '',
               ),
             ],
           ),
@@ -206,18 +206,17 @@ class AddMediaPopup extends HookConsumerWidget {
               return;
             }
 
-
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(const SnackBar(content: Text('Processing Data...')));
           },
-          child: Text("Add"),
+          child: const Text('Add'),
         ),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Close'),
+          child: const Text('Close'),
         ),
       ],
     );
@@ -236,6 +235,8 @@ class _ResultViewPageState extends ConsumerState<ResultViewPage> {
 
   @override
   void initState() {
+    // initial page load
+    ref.read(requestHistoryProvider.notifier).fetchData();
     timer = createTimer();
     super.initState();
   }
@@ -248,41 +249,44 @@ class _ResultViewPageState extends ConsumerState<ResultViewPage> {
 
   Timer createTimer() {
     return Timer.periodic(const Duration(seconds: 1), (_) async {
-      ref.read(requestHistoryProvider.notifier).fetchData();
+      await ref.read(requestHistoryProvider.notifier).fetchData();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final history = ref.watch(requestHistoryProvider);
+    final firstLoad = ref.read(requestHistoryProvider.notifier).firstLoad;
 
     return history.when(
       data: (data) => HistoryView(requestHistory: history.value ?? []),
+      loading: () => firstLoad
+          ? const Center(child: CircularProgressIndicator())
+          : HistoryView(requestHistory: history.value ?? []),
       error: (error, st) {
         timer?.cancel();
         return Center(
           child: Column(
             children: [
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Unable to get request history',
                 style: TextStyle(fontSize: 30),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(error.toString()),
               Text(st.toString()),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   timer = createTimer();
                 },
-                child: Text('Retry', style: TextStyle(fontSize: 20)),
+                child: const Text('Retry', style: TextStyle(fontSize: 20)),
               ),
             ],
           ),
         );
       },
-      loading: () => HistoryView(requestHistory: history.value ?? []),
     );
   }
 }
@@ -297,7 +301,7 @@ class HistoryView extends HookConsumerWidget {
     final settings = ref.watch(settingsProvider).value;
 
     return requestHistory.isEmpty
-        ? Center(child: Text('No previous history found'))
+        ? const Center(child: Text('No previous history found'))
         : Column(
             children: [
               Expanded(
@@ -378,7 +382,7 @@ class HistoryView extends HookConsumerWidget {
                                   );
                                 }
                               },
-                              icon: Icon(Icons.refresh),
+                              icon: const Icon(Icons.refresh),
                               tooltip: 'Retry download',
                             ),
                             IconButton(
@@ -398,7 +402,7 @@ class HistoryView extends HookConsumerWidget {
                                   );
                                 }
                               },
-                              icon: Icon(Icons.delete),
+                              icon: const Icon(Icons.delete),
                               tooltip: 'Delete from history',
                             ),
                           ],
@@ -408,8 +412,8 @@ class HistoryView extends HookConsumerWidget {
                   },
                 ),
               ),
-              SizedBox(height: 20),
-              if (ref.watch(searchProvider).isEmpty) PaginationActions(),
+              const SizedBox(height: 20),
+              if (ref.watch(searchProvider).isEmpty) const PaginationActions(),
             ],
           );
   }
@@ -447,15 +451,15 @@ class PaginationActions extends HookConsumerWidget {
                     }
                     isLoading.value = false;
                   },
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Text('Page: ${controls.offset + 1}', style: getStyle()),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Text('On this page: $bookCount', style: getStyle()),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Text('Total: ${controls.totalRecords}', style: getStyle()),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           IconButton(
             onPressed: controls.lastPage() || isLoading.value
                 ? null
@@ -474,14 +478,14 @@ class PaginationActions extends HookConsumerWidget {
                     }
                     isLoading.value = false;
                   },
-            icon: Icon(Icons.arrow_forward),
+            icon: const Icon(Icons.arrow_forward),
           ),
         ],
       ),
     );
   }
 
-  TextStyle getStyle() => TextStyle(fontSize: 15);
+  TextStyle getStyle() => const TextStyle(fontSize: 15);
 }
 
 Color? statusColor(String text) {

@@ -2,6 +2,7 @@ package clients
 
 import (
 	"fmt"
+	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/pkg/magnet"
 	"github.com/hekmon/transmissionrpc/v3"
 	"net/http"
@@ -23,7 +24,7 @@ type APIVersion struct {
 	Version string `json:"version"`
 }
 
-func NewQbitClient(client *TorrentClient) (DownloadClient, error) {
+func NewQbitClient(client *config.TorrentClient) (DownloadClient, error) {
 	clientStr := fmt.Sprintf("%s://%s", client.Protocol, client.Host)
 	qbit := &QbitClient{
 		BaseURL: clientStr,

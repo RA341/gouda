@@ -14,14 +14,6 @@ type DownloadClient interface {
 	Test() (string, string, error)
 }
 
-type TorrentClient struct {
-	User     string
-	Password string
-	Protocol string
-	Host     string
-	Type     string
-}
-
 type TorrentStatus struct {
 	ID           string
 	Name         string

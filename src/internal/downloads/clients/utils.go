@@ -2,9 +2,10 @@ package clients
 
 import (
 	"fmt"
+	"github.com/RA341/gouda/internal/config"
 )
 
-type ClientInit func(info *TorrentClient) (DownloadClient, error)
+type ClientInit func(info *config.TorrentClient) (DownloadClient, error)
 
 var supportedClients = map[string]ClientInit{
 	"transmission": NewTransmissionClient,
@@ -20,15 +21,14 @@ func GetSupportedClients() []string {
 	return clientList
 }
 
-func InitializeTorrentClient() (DownloadClient, error) {
-	details := getTorrentClientFromConfig()
-	return TestTorrentClient(details)
+func InitializeTorrentClient(conf *config.TorrentClient) (DownloadClient, error) {
+	return TestTorrentClient(conf)
 }
 
-func TestTorrentClient(details *TorrentClient) (DownloadClient, error) {
-	initFn, exists := supportedClients[details.Type]
+func TestTorrentClient(details *config.TorrentClient) (DownloadClient, error) {
+	initFn, exists := supportedClients[details.ClientType]
 	if !exists {
-		return nil, fmt.Errorf("unsupported torrent client: %s", details.Type)
+		return nil, fmt.Errorf("unsupported torrent client: %s", details.ClientType)
 	}
 
 	client, err := initFn(details)
@@ -37,14 +37,4 @@ func TestTorrentClient(details *TorrentClient) (DownloadClient, error) {
 	}
 
 	return client, nil
-}
-
-func getTorrentClientFromConfig() *TorrentClient {
-	return &TorrentClient{
-		//User:     config.TorrentUser.GetStr(),
-		//Password: config.TorrentPassword.GetStr(),
-		//Protocol: config.TorrentProtocol.GetStr(),
-		//Host:     config.TorrentHost.GetStr(),
-		//Type:     config.TorrentType.GetStr(),
-	}
 }

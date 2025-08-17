@@ -1,21 +1,18 @@
 package mam
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/RA341/gouda/internal/info"
-	fu "github.com/RA341/gouda/pkg/file_utils"
-	"github.com/rs/zerolog/log"
 	"io"
-	"maps"
 	"net/http"
-	"regexp"
-	"resty.dev/v3"
-	"slices"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/RA341/gouda/internal/info"
+	fu "github.com/RA341/gouda/pkg/file_utils"
+	"github.com/rs/zerolog/log"
+	"resty.dev/v3"
 )
 
 const IDCookieKey = "mam_id"
@@ -84,6 +81,45 @@ func (s *Service) BuyBonus(amountInGB uint) (*BuyBonusResponse, error) {
 	return &result, nil
 }
 
+func (s *Service) GetProfile() (*UserData, error) {
+	resp, err := s.client.R().Post("/jsonLoad.php")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, fmt.Errorf("error occured while making request: %s\nBody:\n%s", resp.Status(), resp.String())
+	}
+
+	var userResp UserData
+	if err = json.Unmarshal(resp.Bytes(), &userResp); err != nil {
+		return nil, fmt.Errorf("failed to decode JSON response: %w", err)
+	}
+
+	return &userResp, nil
+}
+
+func (s *Service) GetBonusProfile() (*UserData, error) {
+	resp, err := s.client.R().Post("/json/userBonusHistory.php")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, fmt.Errorf("error occured while making request: %s\nBody:\n%s", resp.Status(), resp.String())
+	}
+
+	sd := resp.String()
+	fmt.Println(sd)
+
+	//var userResp UserData
+	//if err = json.Unmarshal(resp.Bytes(), &userResp); err != nil {
+	//	return nil, fmt.Errorf("failed to decode JSON response: %w", err)
+	//}
+
+	return nil, nil
+}
+
 func (s *Service) UseFreeleech(torrentID string, leechType LeechType) (*BuyFLResponse, error) {
 	timestamp := time.Now().Unix()
 	urlPath := fmt.Sprintf(
@@ -110,7 +146,7 @@ func (s *Service) UseFreeleech(torrentID string, leechType LeechType) (*BuyFLRes
 }
 
 // BuyVault todo borken do not use
-func (s *Service) BuyVault(amount uint) error {
+func (s *Service) BuyVault(apiKey string, amount uint) error {
 	if amount > 2000 {
 		amount = 2000
 	}
@@ -118,33 +154,61 @@ func (s *Service) BuyVault(amount uint) error {
 		return fmt.Errorf("amount must be greater than zero")
 	}
 
+	// todo
+	uid := ""
+
 	now := time.Now()
 	timestamp := fmt.Sprintf("%.5f", float64(now.UnixNano())/1e9)
 
-	resp, err := s.client.R().
+	resp, err := resty.New().R().
 		SetDebug(true).
 		SetHeaders(map[string]string{
-			"User-Agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
-			"Content-Type":    "application/x-www-form-urlencoded",
-			"Referer":         "https://www.myanonamouse.net/millionaires/donate.php?",
-			"Origin":          "https://www.myanonamouse.net",
-			"Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-			"Accept-Encoding": "gzip, deflate",
-			"Accept-Language": "en-US,en;q=0.9",
+			"Content-Type": "application/x-www-form-urlencoded",
+			"Origin":       "https://www.myanonamouse.net",
+			"Referer":      "https://www.myanonamouse.net/millionaires/donate.php",
+			"User-Agent":   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+		}).
+		SetCookie(&http.Cookie{Name: "uid", Value: uid}).
+		SetCookie(&http.Cookie{
+			Name:  IDCookieKey,
+			Value: apiKey,
 		}).
 		SetFormData(map[string]string{
 			"Donation": strconv.Itoa(int(amount)),
 			"time":     timestamp,
 			"submit":   "Donate Points",
 		}).
-		Post("/millionaires/donate.php")
-
+		Post("https://www.myanonamouse.net/millionaires/donate.php")
 	if err != nil {
 		return fmt.Errorf("could not buy vault: %w", err)
 	}
 
+	st := resp.String()
+
 	fmt.Println("Status:", resp.Status())
-	fmt.Println("Body:", resp.String())
+	fmt.Println("Body:", st)
+
+	//resp, err := s.client.R().
+	//	SetDebug(true).
+	//	SetHeaders(map[string]string{
+	//		"User-Agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
+	//		"Content-Type":    "application/x-www-form-urlencoded",
+	//		"Referer":         "https://www.myanonamouse.net/millionaires/donate.php?",
+	//		"Origin":          "https://www.myanonamouse.net",
+	//		"Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+	//		"Accept-Encoding": "gzip, deflate",
+	//		"Accept-Language": "en-US,en;q=0.9",
+	//	}).
+	//	SetFormData(map[string]string{
+	//		"Donation": strconv.Itoa(int(amount)),
+	//		"time":     timestamp,
+	//		"submit":   "Donate Points",
+	//	}).
+	//	Post("/millionaires/donate.php")
+	//
+	//if err != nil {
+	//	return fmt.Errorf("could not buy vault: %w", err)
+	//}
 
 	return nil
 }
@@ -211,35 +275,46 @@ func (s *Service) BuyVault(amount uint) error {
 //		},
 //		"thumbnail": "true"
 //	}
-func (s *Service) SearchRaw(payload []byte) (books []Book, found int, total int, err error) {
+func (s *Service) SearchRaw(payload map[string]any) (books []SearchBook, found int, total int, err error) {
+	// always get description and dl-links
+	payload["description"] = ""
+	payload["dlLink"] = ""
+	payload["thumbnail"] = "true"
+
 	resp, err := s.client.R().
-		SetBody(bytes.NewBuffer(payload)).
+		SetBody(payload).
 		Post("/tor/js/loadSearchJSONbasic.php")
 	if err != nil {
-		return nil, 0, 0, fmt.Errorf("error sending search request: %w", err)
+		return nil, found, total, fmt.Errorf("error sending search request: %w", err)
 	}
 	defer fu.Close(resp.Body)
 
 	if resp.StatusCode() != http.StatusOK {
-		return nil, 0, 0, fmt.Errorf("failed to fetch from MAM: %d", resp.StatusCode())
+		return nil, found, total, fmt.Errorf("failed to fetch from MAM: %d", resp.StatusCode())
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, 0, 0, fmt.Errorf("failed to read response body: %w", err)
-	}
+	body := resp.Bytes()
 
-	var apiResponse SearchResponse
+	var apiResponse SearchResult
 	if err = json.Unmarshal(body, &apiResponse); err != nil {
-		return nil, 0, 0, fmt.Errorf("failed to decode JSON response: %w", err)
+		return nil, found, total, fmt.Errorf("failed to decode JSON response: %w", err)
 	}
 
-	books, _ = processResponseItems(apiResponse.Data)
-	return books, apiResponse.Total, apiResponse.TotalFound, nil
+	books, err = processResponseItems(apiResponse.Data)
+	if err != nil {
+		return nil, found, total, fmt.Errorf("failed to clean response: %w", err)
+	}
+
+	return books, apiResponse.Found, apiResponse.Total, nil
 }
 
-func (s *Service) runGet(fullpath string) ([]byte, error) {
-	resp, err := s.client.R().Get(fullpath)
+// todo
+func (s *Service) getThumbnail(partialLink string) ([]byte, error) {
+	return nil, fmt.Errorf("not yet implemented")
+}
+
+func (s *Service) runGet(path string) ([]byte, error) {
+	resp, err := s.client.R().Get(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make get request: %w", err)
 	}
@@ -255,6 +330,19 @@ func (s *Service) runGet(fullpath string) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func (s *Service) DownloadTorrentFile(link string) (io.ReadCloser, error) {
+	resp, err := s.client.R().Get(link)
+	if err != nil {
+		return nil, fmt.Errorf("unable to download torrent file: %w", err)
+	}
+
+	if resp.StatusCode() != http.StatusOK {
+		return nil, fmt.Errorf("invalid status code: %d, message: %s", resp.StatusCode(), string(resp.Bytes()))
+	}
+
+	return resp.Body, nil
 }
 
 // Buy endpoints return a true or false, parse that first
@@ -279,73 +367,173 @@ func parseBuyResponse(data []byte, result any) error {
 	return nil
 }
 
+/*
+{
+	"id" : 1173876,
+
+	"title" : "When We Meet Again",
+	"series_info" : ""{\"126732\": [\"Rainey Paxton\", \"3\"]}"",
+	"author_info" : "{\"325312\": \"Hayden Hall\"}",
+	"narrator_info" : "{\"44239\": \"Curtis Michael Holland\"}",
+	"thumbnail": ""
+	"tags" : "96Kb 2 channel Stereo",
+	"owner_name" : "",
+	"owner" : 0,
+	"added" : "2025-08-17 04:03:33",
+	"bookmarked" : null,
+    "my_snatched" : 0,
+
+	"language" : 1,
+	"lang_code" : "ENG",
+
+	"main_cat" : 13, <- audiobook/ebooks/etc
+	"category" : 46,
+	"catname" : "Audiobooks - Romance",
+
+	"size" : "296.0 MiB",
+	"filetype" : "m4b",
+	"numfiles" : 1,
+	"seeders" : 26,
+	"leechers" : 0,
+    "times_completed" : 28,
+
+	"vip" : 1,
+	"free" : 0,
+	"personal_freeleech" : 0,
+	"fl_vip" : 1,
+
+	"w" : 1,
+	"browseflags" : 64,
+	"comments" : 0,
+	"cat" : "<div class=\"cat46\">&nbsp;</div>"
+}
+*/
 // processResponseItems iterates over raw API data and converts it into a slice of Book structs.
-func processResponseItems(items []SearchResultItem) ([]Book, error) {
+func processResponseItems(items []SearchBookRaw) ([]SearchBook, error) {
 	if len(items) == 0 {
-		return []Book{}, nil
+		return []SearchBook{}, nil
 	}
 
-	books := make([]Book, 0, len(items))
-	lengthRegex := regexp.MustCompile(`(?i)(\d+h\d+m|\d+:\d+:\d+|\d+\s?hrs?(\s\d+\s?mins?)?)`)
-
+	books := make([]SearchBook, 0, len(items))
 	for _, item := range items {
-		// Parse author info from its JSON string
-		author := "Unknown Author"
-		if item.AuthorInfo != "" {
-			var authorMap map[string]string
-			if err := json.Unmarshal([]byte(item.AuthorInfo), &authorMap); err == nil {
-				author = strings.Join(slices.Collect(maps.Values(authorMap)), ", ")
-			} else {
-				log.Printf("Error parsing author info for item %s: %v", item.ID, err)
-			}
+		authors, err := parseAuthorInfo(item.AuthorInfo)
+		if err != nil {
+			log.Warn().Err(err).
+				Str("authorInfoRaw", item.AuthorInfo).
+				Msg("failed to parse author info")
+			continue
+		}
+		narrators, err := parseAuthorInfo(item.NarratorInfo)
+		if err != nil {
+			log.Warn().Err(err).
+				Str("narratorInfoRaw", item.AuthorInfo).
+				Msg("failed to parse narrator info")
+			continue
 		}
 
-		// Extract format from filetype or tags
-		format := item.Filetype
-		if format == "" {
-			format = extractFormatFromTags(item.Tags)
-		}
-		if format == "" {
-			format = "Unknown"
-		}
-
-		// Fix thumbnail URL to be absolute
-		thumbnail := item.Thumbnail
-		if thumbnail != "" && !strings.HasPrefix(thumbnail, "http") {
-			thumbnail = addBaseUrl(thumbnail)
+		series, err := parseSeriesInfo(item.SeriesInfo)
+		if err != nil {
+			log.Warn().Err(err).
+				Str("seriesInfoRaw", item.SeriesInfo).
+				Msg("failed to parse series info")
+			continue
 		}
 
-		// Extract length for audiobooks
-		var length string
-		if item.MainCat == 13 && item.Description != "" {
-			match := lengthRegex.FindStringSubmatch(item.Description)
-			if len(match) > 1 {
-				length = strings.TrimSpace(match[1])
-			}
-		}
-
-		baseUrl := addBaseUrl("/tor/download.php")
-		downloadURL := fmt.Sprintf("%s%s", baseUrl, item.DL)
-
-		books = append(books, Book{
-			ID:          strconv.Itoa(item.ID),
-			Title:       item.Title,
-			Author:      author,
-			Format:      format,
-			Length:      length,
-			TorrentLink: downloadURL,
-			Category:    item.MainCat,
-			Thumbnail:   thumbnail,
-			Size:        item.Size,
-			Seeders:     item.Seeders,
-			Leechers:    item.Leechers,
-			Added:       item.Added,
-			Tags:        item.Tags,
-			Completed:   item.TimesCompleted,
+		books = append(books, SearchBook{
+			MamID: item.Id,
+			Title: item.Title,
+			// todo thumbnail are protected, make a proxy endpoint
+			//Thumbnail:     item.Thumbnail,
+			Description:   item.Description,
+			Author:        authors,
+			Narrator:      narrators,
+			UploaderName:  item.OwnerName,
+			Series:        series,
+			Tags:          item.Tags,
+			DateAddedIso:  item.Added,
+			Snatched:      item.MySnatched != 0,
+			LanguageCode:  item.LangCode,
+			MediaCategory: getMediaCategory(item.MainCat),
+			CategoryID:    item.Category,
+			CategoryName:  item.Catname,
+			MediaFormat:   item.Filetype,
+			MediaSize:     item.Size,
+			Seeders:       item.Seeders,
+			Leechers:      item.Leechers,
+			Completed:     item.TimesCompleted,
+			TorrentLink:   appendMamDownloadBase(item.Dl),
 		})
 	}
 
 	return books, nil
+}
+
+func appendMamDownloadBase(dl string) string {
+	const mamDownloadBase = "https://www.myanonamouse.net/tor/download.php/"
+	return fmt.Sprintf("%s%s", mamDownloadBase, dl)
+}
+
+func getMediaCategory(cat int) string {
+	switch cat {
+	case 13:
+		return "AudioBooks"
+	case 14:
+		return "EBooks"
+	case 15:
+		return "Musicology"
+	case 16:
+		return "Radio"
+	default:
+		return "Unknown"
+	}
+}
+
+// expected format
+// "series_info" : "{\"4364\": [\"The Hitchhiker&#039;s Guide to the Galaxy\", \"1 - 5\"]}",
+func parseSeriesInfo(seriesInfo string) ([]Series, error) {
+	if seriesInfo == "" {
+		return []Series{}, nil
+	}
+
+	var data map[string][]string
+	err := json.Unmarshal([]byte(seriesInfo), &data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse author info: %w", err)
+	}
+
+	var result []Series
+	for k, v := range data {
+		result = append(result, Series{
+			ID:             k,
+			Name:           v[0],
+			SequenceNumber: v[1],
+		})
+	}
+	return result, nil
+}
+
+// expected format
+// "{\"3481\": \"Martin Freeman\", \"18954\": \"Stephen Fry\"}",
+func parseAuthorInfo(authorRaw string) ([]Author, error) {
+	if authorRaw == "" {
+		return []Author{}, nil
+	}
+
+	var authorInfo map[string]string
+	err := json.Unmarshal([]byte(authorRaw), &authorInfo)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse author info: %w", err)
+	}
+
+	var authors []Author
+	for id, name := range authorInfo {
+		authors = append(authors, Author{
+			ID:   id,
+			Name: name,
+		})
+	}
+
+	return authors, nil
 }
 
 // extractFormatFromTags finds a common format from a string of tags.

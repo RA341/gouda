@@ -54,28 +54,54 @@ message BonusResponse {
 }
 
 message SearchResults {
-  repeated Book results = 1;
+  repeated SearchBook results = 1;
   // total found
   int32 found = 2;
   // total results
   int32 total = 3;
 }
 
-message Book {
-  string id = 1;
+message SearchBook {
+  int32 mam_id = 1;
+
   string title = 2;
-  string author = 3;
-  string format = 4;
-  string length = 5;
-  string torrent_link = 6;
-  int32 category = 7;
-  string thumbnail = 8;
-  string size = 9;
-  int32 seeders = 10;
-  int32 leechers = 11;
-  string added = 12;
-  string tags = 13;
-  int32 completed = 14;
+  string thumbnail = 3;
+  repeated Author author = 4;
+  repeated Author narrator = 5;
+  string uploader_name = 6;
+  repeated Series series = 7;
+  string description = 21;
+
+  string tags = 8;
+  string date_added_iso = 9;
+  bool snatched = 10;
+  string language_code = 11;
+
+  string media_category = 12;
+  // genre
+  int32 category_id = 13;
+  string category_name = 14;
+
+  // files extensions
+  string media_format = 15;
+  // size in [k/m/g]ib
+  string media_size = 16;
+  int32 seeders = 17;
+  int32 leechers = 18;
+  int32 completed = 19;
+
+  string torrent_link = 20;
+}
+
+message Author {
+  string id = 1;
+  string name = 2;
+}
+
+message Series {
+  string id = 1;
+  string name = 2;
+  string sequence_number = 3;
 }
 
 message FreeLeechInfo {

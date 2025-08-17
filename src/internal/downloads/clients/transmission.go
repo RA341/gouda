@@ -3,6 +3,7 @@ package clients
 import (
 	"context"
 	"fmt"
+	"github.com/RA341/gouda/internal/config"
 	"github.com/hekmon/transmissionrpc/v3"
 	"github.com/rs/zerolog/log"
 	"net/url"
@@ -13,7 +14,7 @@ type TransmissionClient struct {
 	Client *transmissionrpc.Client
 }
 
-func NewTransmissionClient(client *TorrentClient) (DownloadClient, error) {
+func NewTransmissionClient(client *config.TorrentClient) (DownloadClient, error) {
 	clientStr := ""
 	if client.User != "" && client.Password != "" {
 		clientStr = fmt.Sprintf("%s://%s:%s@%s/transmission/rpc", client.Protocol, client.User, client.Password, client.Host)

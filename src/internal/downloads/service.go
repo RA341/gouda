@@ -2,21 +2,24 @@ package downloads
 
 import (
 	"fmt"
+	"io"
+	"path/filepath"
+	"sync"
+	"time"
+
 	"github.com/RA341/gouda/internal/config"
 	dc "github.com/RA341/gouda/internal/downloads/clients"
 	fu "github.com/RA341/gouda/pkg/file_utils"
 	"github.com/RA341/gouda/pkg/magnet"
 	"github.com/rs/zerolog/log"
-	"path/filepath"
 	"resty.dev/v3"
-	"sync"
-	"time"
 )
 
 type DownloadService struct {
 	db     Store
 	client dc.DownloadClient
 
+	torrentCli    *config.TorrentClient
 	perms         *config.UserPermissions
 	dirs          *config.Directories
 	checkInterval time.Duration
@@ -26,7 +29,7 @@ type DownloadService struct {
 	workerChan chan interface{}
 }
 
-func NewDownloadService(conf *config.GoudaConfig, db Store, client dc.DownloadClient) *DownloadService {
+func NewDownloadService(conf *config.GoudaConfig, db Store, tor *config.TorrentClient, client dc.DownloadClient) *DownloadService {
 	limit, err := conf.Downloader.GetLimit()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Invalid time string")
@@ -49,7 +52,7 @@ func NewDownloadService(conf *config.GoudaConfig, db Store, client dc.DownloadCl
 }
 
 // TestAndUpdateClient tests the client first then updates the torrent client if successful
-func (d *DownloadService) TestAndUpdateClient(client *dc.TorrentClient) error {
+func (d *DownloadService) TestAndUpdateClient(client *config.TorrentClient) error {
 	newClient, err := d.TestClient(client)
 	if err != nil {
 		return err
@@ -59,7 +62,7 @@ func (d *DownloadService) TestAndUpdateClient(client *dc.TorrentClient) error {
 	return nil
 }
 
-func (d *DownloadService) TestClient(client *dc.TorrentClient) (dc.DownloadClient, error) {
+func (d *DownloadService) TestClient(client *config.TorrentClient) (dc.DownloadClient, error) {
 	newClient, err := dc.TestTorrentClient(client)
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect torrent client: %v", err)
@@ -292,7 +295,7 @@ func (d *DownloadService) getDownloadingMedia() (map[string]Media, error) {
 // verifyClient ensures a valid torrent client is available
 func (d *DownloadService) verifyClient() error {
 	if d.client == nil {
-		client, err := dc.InitializeTorrentClient()
+		client, err := dc.InitializeTorrentClient(d.torrentCli)
 		if err != nil {
 			return fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
 		}
@@ -312,6 +315,19 @@ func getMagnetLink(media *Media) (string, error) {
 	}
 
 	return magnetLink, nil
+}
+
+func getMagnetLinkDirect(media *Media, torrentFileBytes io.ReadCloser) (string, error) {
+	if media.TorrentMagentLink != "" {
+		return media.TorrentMagentLink, nil
+	}
+
+	toMagnet, err := magnet.TorrentFileToMagnet(torrentFileBytes)
+	if err != nil {
+		return "", fmt.Errorf("unable to convert to magnet: %v", err)
+	}
+
+	return toMagnet, nil
 }
 
 // downloadLink must be a download url to a torrent file,

@@ -7,6 +7,21 @@ var (
 	FreeLeechPersonal LeechType = "personalFL"
 )
 
+type UserData struct {
+	Uid             int     `json:"uid"`
+	Username        string  `json:"username"`
+	Classname       string  `json:"classname"`
+	VipUntil        string  `json:"vip_until"`
+	Seedbonus       int     `json:"seedbonus"`
+	Ratio           float64 `json:"ratio"`
+	Downloaded      string  `json:"downloaded"`
+	DownloadedBytes int64   `json:"downloaded_bytes"`
+	Uploaded        string  `json:"uploaded"`
+	UploadedBytes   int64   `json:"uploaded_bytes"`
+	CountryCode     string  `json:"country_code"`
+	CountryName     string  `json:"country_name"`
+}
+
 type BuyFLResponse struct {
 	Success   bool   `json:"success"`
 	Type      string `json:"type"`
@@ -33,48 +48,93 @@ type BuyVIPResponse struct {
 	SeedBonus float64 `json:"seedbonus"`
 }
 
-// Book represents the final, cleaned-up book data.
-type Book struct {
-	ID          string `json:"id"`
-	Title       string `json:"title"`
-	Author      string `json:"author"`
-	Format      string `json:"format"`
-	Length      string `json:"length,omitempty"`
-	TorrentLink string `json:"torrentLink"`
-	Category    int    `json:"category"`
-	Thumbnail   string `json:"thumbnail"`
-	Size        string `json:"size"`
-	Seeders     int    `json:"seeders"`
-	Leechers    int    `json:"leechers"`
-	Added       string `json:"added"`
-	Tags        string `json:"tags"`
-	Completed   int    `json:"completed"`
+type SearchResult struct {
+	Perpage int             `json:"perpage"`
+	Start   int             `json:"start"`
+	Total   int             `json:"total"`
+	Found   int             `json:"found"`
+	Data    []SearchBookRaw `json:"data"`
 }
 
-// SearchResponse defines the structure of the JSON response from the server.
-type SearchResponse struct {
-	Data []SearchResultItem `json:"data"`
-	//the number of results the server loaded for your search.
-	Total int `json:"total"`
-	//int	Total results found
-	TotalFound int `json:"found"`
+type Author struct {
+	ID   string
+	Name string
 }
 
-// SearchResultItem represents a single item in the "data" array from the API response.
-// It uses json.Number to handle fields that can be strings or numbers.
-type SearchResultItem struct {
-	ID             int    `json:"id"`
-	Title          string `json:"title"`
-	AuthorInfo     string `json:"author_info"`
-	Filetype       string `json:"filetype"`
-	DL             string `json:"dl"`
-	MainCat        int    `json:"main_cat"`
-	Thumbnail      string `json:"thumbnail"`
-	Size           string `json:"size"`
-	Seeders        int    `json:"seeders"`
-	Leechers       int    `json:"leechers"`
-	Added          string `json:"added"`
-	Tags           string `json:"tags"`
-	TimesCompleted int    `json:"times_completed"`
-	Description    string `json:"description"`
+type Series struct {
+	ID             string
+	Name           string
+	SequenceNumber string
+}
+
+// SearchBook represents the final, cleaned-up book data.
+type SearchBook struct {
+	MamID int
+
+	Title        string
+	Thumbnail    string
+	Author       []Author
+	Narrator     []Author
+	UploaderName string
+	Series       []Series
+	Description  string
+
+	Tags         string
+	DateAddedIso string
+	Snatched     bool
+	LanguageCode string
+
+	MediaCategory string
+	// genre
+	CategoryID   int
+	CategoryName string
+
+	// files extensions
+	MediaFormat string
+	// size in [k/m/g]ib
+	MediaSize string
+	Seeders   int
+	Leechers  int
+	Completed int
+
+	TorrentLink string
+}
+
+// SearchBookRaw raw api response
+// docs: https://www.myanonamouse.net/api/endpoint.php/1/tor/js/loadSearchJSONbasic.php
+type SearchBookRaw struct {
+	Id                int         `json:"id"`
+	Language          int         `json:"language"`
+	LangCode          string      `json:"lang_code"`
+	MainCat           int         `json:"main_cat"`
+	Category          int         `json:"category"`
+	Catname           string      `json:"catname"`
+	Size              string      `json:"size"`
+	Numfiles          int         `json:"numfiles"`
+	Vip               int         `json:"vip"`
+	Free              int         `json:"free"`
+	PersonalFreeleech int         `json:"personal_freeleech"`
+	FlVip             int         `json:"fl_vip"`
+	Title             string      `json:"title"`
+	W                 int         `json:"w"`
+	Tags              string      `json:"tags"`
+	AuthorInfo        string      `json:"author_info"`
+	NarratorInfo      string      `json:"narrator_info"`
+	SeriesInfo        string      `json:"series_info"`
+	Filetype          string      `json:"filetype"`
+	Seeders           int         `json:"seeders"`
+	Leechers          int         `json:"leechers"`
+	Added             string      `json:"added"`
+	Browseflags       int         `json:"browseflags"`
+	TimesCompleted    int         `json:"times_completed"`
+	Comments          int         `json:"comments"`
+	OwnerName         string      `json:"owner_name"`
+	Owner             int         `json:"owner"`
+	Bookmarked        interface{} `json:"bookmarked"`
+	MySnatched        int         `json:"my_snatched"`
+	Description       string      `json:"description"`
+	PosterType        string      `json:"poster_type"`
+	Cat               string      `json:"cat"`
+	Thumbnail         string      `json:"thumbnail"`
+	Dl                string      `json:"dl"`
 }

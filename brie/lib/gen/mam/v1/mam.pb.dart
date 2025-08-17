@@ -566,7 +566,7 @@ class BonusResponse extends $pb.GeneratedMessage {
 
 class SearchResults extends $pb.GeneratedMessage {
   factory SearchResults({
-    $core.Iterable<Book>? results,
+    $core.Iterable<SearchBook>? results,
     $core.int? found,
     $core.int? total,
   }) {
@@ -590,8 +590,8 @@ class SearchResults extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'SearchResults',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
       createEmptyInstance: create)
-    ..pc<Book>(1, _omitFieldNames ? '' : 'results', $pb.PbFieldType.PM,
-        subBuilder: Book.create)
+    ..pc<SearchBook>(1, _omitFieldNames ? '' : 'results', $pb.PbFieldType.PM,
+        subBuilder: SearchBook.create)
     ..a<$core.int>(2, _omitFieldNames ? '' : 'found', $pb.PbFieldType.O3)
     ..a<$core.int>(3, _omitFieldNames ? '' : 'total', $pb.PbFieldType.O3)
     ..hasRequiredFields = false;
@@ -618,7 +618,7 @@ class SearchResults extends $pb.GeneratedMessage {
   static SearchResults? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $pb.PbList<Book> get results => $_getList(0);
+  $pb.PbList<SearchBook> get results => $_getList(0);
 
   /// total found
   @$pb.TagNumber(2)
@@ -641,97 +641,121 @@ class SearchResults extends $pb.GeneratedMessage {
   void clearTotal() => $_clearField(3);
 }
 
-class Book extends $pb.GeneratedMessage {
-  factory Book({
-    $core.String? id,
+class SearchBook extends $pb.GeneratedMessage {
+  factory SearchBook({
+    $core.int? mamId,
     $core.String? title,
-    $core.String? author,
-    $core.String? format,
-    $core.String? length,
-    $core.String? torrentLink,
-    $core.int? category,
     $core.String? thumbnail,
-    $core.String? size,
+    $core.Iterable<Author>? author,
+    $core.Iterable<Author>? narrator,
+    $core.String? uploaderName,
+    $core.Iterable<Series>? series,
+    $core.String? tags,
+    $core.String? dateAddedIso,
+    $core.bool? snatched,
+    $core.String? languageCode,
+    $core.String? mediaCategory,
+    $core.int? categoryId,
+    $core.String? categoryName,
+    $core.String? mediaFormat,
+    $core.String? mediaSize,
     $core.int? seeders,
     $core.int? leechers,
-    $core.String? added,
-    $core.String? tags,
     $core.int? completed,
+    $core.String? torrentLink,
+    $core.String? description,
   }) {
     final result = create();
-    if (id != null) result.id = id;
+    if (mamId != null) result.mamId = mamId;
     if (title != null) result.title = title;
-    if (author != null) result.author = author;
-    if (format != null) result.format = format;
-    if (length != null) result.length = length;
-    if (torrentLink != null) result.torrentLink = torrentLink;
-    if (category != null) result.category = category;
     if (thumbnail != null) result.thumbnail = thumbnail;
-    if (size != null) result.size = size;
+    if (author != null) result.author.addAll(author);
+    if (narrator != null) result.narrator.addAll(narrator);
+    if (uploaderName != null) result.uploaderName = uploaderName;
+    if (series != null) result.series.addAll(series);
+    if (tags != null) result.tags = tags;
+    if (dateAddedIso != null) result.dateAddedIso = dateAddedIso;
+    if (snatched != null) result.snatched = snatched;
+    if (languageCode != null) result.languageCode = languageCode;
+    if (mediaCategory != null) result.mediaCategory = mediaCategory;
+    if (categoryId != null) result.categoryId = categoryId;
+    if (categoryName != null) result.categoryName = categoryName;
+    if (mediaFormat != null) result.mediaFormat = mediaFormat;
+    if (mediaSize != null) result.mediaSize = mediaSize;
     if (seeders != null) result.seeders = seeders;
     if (leechers != null) result.leechers = leechers;
-    if (added != null) result.added = added;
-    if (tags != null) result.tags = tags;
     if (completed != null) result.completed = completed;
+    if (torrentLink != null) result.torrentLink = torrentLink;
+    if (description != null) result.description = description;
     return result;
   }
 
-  Book._();
+  SearchBook._();
 
-  factory Book.fromBuffer($core.List<$core.int> data,
+  factory SearchBook.fromBuffer($core.List<$core.int> data,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(data, registry);
-  factory Book.fromJson($core.String json,
+  factory SearchBook.fromJson($core.String json,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'Book',
+      _omitMessageNames ? '' : 'SearchBook',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
       createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'mamId', $pb.PbFieldType.O3)
     ..aOS(2, _omitFieldNames ? '' : 'title')
-    ..aOS(3, _omitFieldNames ? '' : 'author')
-    ..aOS(4, _omitFieldNames ? '' : 'format')
-    ..aOS(5, _omitFieldNames ? '' : 'length')
-    ..aOS(6, _omitFieldNames ? '' : 'torrentLink')
-    ..a<$core.int>(7, _omitFieldNames ? '' : 'category', $pb.PbFieldType.O3)
-    ..aOS(8, _omitFieldNames ? '' : 'thumbnail')
-    ..aOS(9, _omitFieldNames ? '' : 'size')
-    ..a<$core.int>(10, _omitFieldNames ? '' : 'seeders', $pb.PbFieldType.O3)
-    ..a<$core.int>(11, _omitFieldNames ? '' : 'leechers', $pb.PbFieldType.O3)
-    ..aOS(12, _omitFieldNames ? '' : 'added')
-    ..aOS(13, _omitFieldNames ? '' : 'tags')
-    ..a<$core.int>(14, _omitFieldNames ? '' : 'completed', $pb.PbFieldType.O3)
+    ..aOS(3, _omitFieldNames ? '' : 'thumbnail')
+    ..pc<Author>(4, _omitFieldNames ? '' : 'author', $pb.PbFieldType.PM,
+        subBuilder: Author.create)
+    ..pc<Author>(5, _omitFieldNames ? '' : 'narrator', $pb.PbFieldType.PM,
+        subBuilder: Author.create)
+    ..aOS(6, _omitFieldNames ? '' : 'uploaderName')
+    ..pc<Series>(7, _omitFieldNames ? '' : 'series', $pb.PbFieldType.PM,
+        subBuilder: Series.create)
+    ..aOS(8, _omitFieldNames ? '' : 'tags')
+    ..aOS(9, _omitFieldNames ? '' : 'dateAddedIso')
+    ..aOB(10, _omitFieldNames ? '' : 'snatched')
+    ..aOS(11, _omitFieldNames ? '' : 'languageCode')
+    ..aOS(12, _omitFieldNames ? '' : 'mediaCategory')
+    ..a<$core.int>(13, _omitFieldNames ? '' : 'categoryId', $pb.PbFieldType.O3)
+    ..aOS(14, _omitFieldNames ? '' : 'categoryName')
+    ..aOS(15, _omitFieldNames ? '' : 'mediaFormat')
+    ..aOS(16, _omitFieldNames ? '' : 'mediaSize')
+    ..a<$core.int>(17, _omitFieldNames ? '' : 'seeders', $pb.PbFieldType.O3)
+    ..a<$core.int>(18, _omitFieldNames ? '' : 'leechers', $pb.PbFieldType.O3)
+    ..a<$core.int>(19, _omitFieldNames ? '' : 'completed', $pb.PbFieldType.O3)
+    ..aOS(20, _omitFieldNames ? '' : 'torrentLink')
+    ..aOS(21, _omitFieldNames ? '' : 'description')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  Book clone() => Book()..mergeFromMessage(this);
+  SearchBook clone() => SearchBook()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  Book copyWith(void Function(Book) updates) =>
-      super.copyWith((message) => updates(message as Book)) as Book;
+  SearchBook copyWith(void Function(SearchBook) updates) =>
+      super.copyWith((message) => updates(message as SearchBook)) as SearchBook;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static Book create() => Book._();
+  static SearchBook create() => SearchBook._();
   @$core.override
-  Book createEmptyInstance() => create();
-  static $pb.PbList<Book> createRepeated() => $pb.PbList<Book>();
+  SearchBook createEmptyInstance() => create();
+  static $pb.PbList<SearchBook> createRepeated() => $pb.PbList<SearchBook>();
   @$core.pragma('dart2js:noInline')
-  static Book getDefault() =>
-      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Book>(create);
-  static Book? _defaultInstance;
+  static SearchBook getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SearchBook>(create);
+  static SearchBook? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.int get mamId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set id($core.String value) => $_setString(0, value);
+  set mamId($core.int value) => $_setSignedInt32(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasMamId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => $_clearField(1);
+  void clearMamId() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
@@ -743,112 +767,304 @@ class Book extends $pb.GeneratedMessage {
   void clearTitle() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get author => $_getSZ(2);
+  $core.String get thumbnail => $_getSZ(2);
   @$pb.TagNumber(3)
-  set author($core.String value) => $_setString(2, value);
+  set thumbnail($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasAuthor() => $_has(2);
+  $core.bool hasThumbnail() => $_has(2);
   @$pb.TagNumber(3)
-  void clearAuthor() => $_clearField(3);
+  void clearThumbnail() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get format => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set format($core.String value) => $_setString(3, value);
-  @$pb.TagNumber(4)
-  $core.bool hasFormat() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearFormat() => $_clearField(4);
+  $pb.PbList<Author> get author => $_getList(3);
 
   @$pb.TagNumber(5)
-  $core.String get length => $_getSZ(4);
-  @$pb.TagNumber(5)
-  set length($core.String value) => $_setString(4, value);
-  @$pb.TagNumber(5)
-  $core.bool hasLength() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearLength() => $_clearField(5);
+  $pb.PbList<Author> get narrator => $_getList(4);
 
   @$pb.TagNumber(6)
-  $core.String get torrentLink => $_getSZ(5);
+  $core.String get uploaderName => $_getSZ(5);
   @$pb.TagNumber(6)
-  set torrentLink($core.String value) => $_setString(5, value);
+  set uploaderName($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasTorrentLink() => $_has(5);
+  $core.bool hasUploaderName() => $_has(5);
   @$pb.TagNumber(6)
-  void clearTorrentLink() => $_clearField(6);
+  void clearUploaderName() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.int get category => $_getIZ(6);
-  @$pb.TagNumber(7)
-  set category($core.int value) => $_setSignedInt32(6, value);
-  @$pb.TagNumber(7)
-  $core.bool hasCategory() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearCategory() => $_clearField(7);
+  $pb.PbList<Series> get series => $_getList(6);
 
   @$pb.TagNumber(8)
-  $core.String get thumbnail => $_getSZ(7);
+  $core.String get tags => $_getSZ(7);
   @$pb.TagNumber(8)
-  set thumbnail($core.String value) => $_setString(7, value);
+  set tags($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasThumbnail() => $_has(7);
+  $core.bool hasTags() => $_has(7);
   @$pb.TagNumber(8)
-  void clearThumbnail() => $_clearField(8);
+  void clearTags() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get size => $_getSZ(8);
+  $core.String get dateAddedIso => $_getSZ(8);
   @$pb.TagNumber(9)
-  set size($core.String value) => $_setString(8, value);
+  set dateAddedIso($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasSize() => $_has(8);
+  $core.bool hasDateAddedIso() => $_has(8);
   @$pb.TagNumber(9)
-  void clearSize() => $_clearField(9);
+  void clearDateAddedIso() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $core.int get seeders => $_getIZ(9);
+  $core.bool get snatched => $_getBF(9);
   @$pb.TagNumber(10)
-  set seeders($core.int value) => $_setSignedInt32(9, value);
+  set snatched($core.bool value) => $_setBool(9, value);
   @$pb.TagNumber(10)
-  $core.bool hasSeeders() => $_has(9);
+  $core.bool hasSnatched() => $_has(9);
   @$pb.TagNumber(10)
-  void clearSeeders() => $_clearField(10);
+  void clearSnatched() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $core.int get leechers => $_getIZ(10);
+  $core.String get languageCode => $_getSZ(10);
   @$pb.TagNumber(11)
-  set leechers($core.int value) => $_setSignedInt32(10, value);
+  set languageCode($core.String value) => $_setString(10, value);
   @$pb.TagNumber(11)
-  $core.bool hasLeechers() => $_has(10);
+  $core.bool hasLanguageCode() => $_has(10);
   @$pb.TagNumber(11)
-  void clearLeechers() => $_clearField(11);
+  void clearLanguageCode() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get added => $_getSZ(11);
+  $core.String get mediaCategory => $_getSZ(11);
   @$pb.TagNumber(12)
-  set added($core.String value) => $_setString(11, value);
+  set mediaCategory($core.String value) => $_setString(11, value);
   @$pb.TagNumber(12)
-  $core.bool hasAdded() => $_has(11);
+  $core.bool hasMediaCategory() => $_has(11);
   @$pb.TagNumber(12)
-  void clearAdded() => $_clearField(12);
+  void clearMediaCategory() => $_clearField(12);
 
+  /// genre
   @$pb.TagNumber(13)
-  $core.String get tags => $_getSZ(12);
+  $core.int get categoryId => $_getIZ(12);
   @$pb.TagNumber(13)
-  set tags($core.String value) => $_setString(12, value);
+  set categoryId($core.int value) => $_setSignedInt32(12, value);
   @$pb.TagNumber(13)
-  $core.bool hasTags() => $_has(12);
+  $core.bool hasCategoryId() => $_has(12);
   @$pb.TagNumber(13)
-  void clearTags() => $_clearField(13);
+  void clearCategoryId() => $_clearField(13);
 
   @$pb.TagNumber(14)
-  $core.int get completed => $_getIZ(13);
+  $core.String get categoryName => $_getSZ(13);
   @$pb.TagNumber(14)
-  set completed($core.int value) => $_setSignedInt32(13, value);
+  set categoryName($core.String value) => $_setString(13, value);
   @$pb.TagNumber(14)
-  $core.bool hasCompleted() => $_has(13);
+  $core.bool hasCategoryName() => $_has(13);
   @$pb.TagNumber(14)
-  void clearCompleted() => $_clearField(14);
+  void clearCategoryName() => $_clearField(14);
+
+  /// files extensions
+  @$pb.TagNumber(15)
+  $core.String get mediaFormat => $_getSZ(14);
+  @$pb.TagNumber(15)
+  set mediaFormat($core.String value) => $_setString(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasMediaFormat() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearMediaFormat() => $_clearField(15);
+
+  /// size in [k/m/g]ib
+  @$pb.TagNumber(16)
+  $core.String get mediaSize => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set mediaSize($core.String value) => $_setString(15, value);
+  @$pb.TagNumber(16)
+  $core.bool hasMediaSize() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearMediaSize() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.int get seeders => $_getIZ(16);
+  @$pb.TagNumber(17)
+  set seeders($core.int value) => $_setSignedInt32(16, value);
+  @$pb.TagNumber(17)
+  $core.bool hasSeeders() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearSeeders() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $core.int get leechers => $_getIZ(17);
+  @$pb.TagNumber(18)
+  set leechers($core.int value) => $_setSignedInt32(17, value);
+  @$pb.TagNumber(18)
+  $core.bool hasLeechers() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearLeechers() => $_clearField(18);
+
+  @$pb.TagNumber(19)
+  $core.int get completed => $_getIZ(18);
+  @$pb.TagNumber(19)
+  set completed($core.int value) => $_setSignedInt32(18, value);
+  @$pb.TagNumber(19)
+  $core.bool hasCompleted() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearCompleted() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get torrentLink => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set torrentLink($core.String value) => $_setString(19, value);
+  @$pb.TagNumber(20)
+  $core.bool hasTorrentLink() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearTorrentLink() => $_clearField(20);
+
+  @$pb.TagNumber(21)
+  $core.String get description => $_getSZ(20);
+  @$pb.TagNumber(21)
+  set description($core.String value) => $_setString(20, value);
+  @$pb.TagNumber(21)
+  $core.bool hasDescription() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearDescription() => $_clearField(21);
+}
+
+class Author extends $pb.GeneratedMessage {
+  factory Author({
+    $core.String? id,
+    $core.String? name,
+  }) {
+    final result = create();
+    if (id != null) result.id = id;
+    if (name != null) result.name = name;
+    return result;
+  }
+
+  Author._();
+
+  factory Author.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Author.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Author',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Author clone() => Author()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Author copyWith(void Function(Author) updates) =>
+      super.copyWith((message) => updates(message as Author)) as Author;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Author create() => Author._();
+  @$core.override
+  Author createEmptyInstance() => create();
+  static $pb.PbList<Author> createRepeated() => $pb.PbList<Author>();
+  @$core.pragma('dart2js:noInline')
+  static Author getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Author>(create);
+  static Author? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+}
+
+class Series extends $pb.GeneratedMessage {
+  factory Series({
+    $core.String? id,
+    $core.String? name,
+    $core.String? sequenceNumber,
+  }) {
+    final result = create();
+    if (id != null) result.id = id;
+    if (name != null) result.name = name;
+    if (sequenceNumber != null) result.sequenceNumber = sequenceNumber;
+    return result;
+  }
+
+  Series._();
+
+  factory Series.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Series.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Series',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..aOS(3, _omitFieldNames ? '' : 'sequenceNumber')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Series clone() => Series()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Series copyWith(void Function(Series) updates) =>
+      super.copyWith((message) => updates(message as Series)) as Series;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Series create() => Series._();
+  @$core.override
+  Series createEmptyInstance() => create();
+  static $pb.PbList<Series> createRepeated() => $pb.PbList<Series>();
+  @$core.pragma('dart2js:noInline')
+  static Series getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Series>(create);
+  static Series? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get sequenceNumber => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set sequenceNumber($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSequenceNumber() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSequenceNumber() => $_clearField(3);
 }
 
 class FreeLeechInfo extends $pb.GeneratedMessage {
