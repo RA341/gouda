@@ -13,14 +13,14 @@ dependencies:
   # state management
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
-  flutter_hooks: ^0.21.2
+  flutter_hooks: ^0.21.3+1
   hooks_riverpod: ^2.6.1
 
   # networking
   universal_html: ^2.2.4
-  http: ^1.4.0
+  http: ^1.5.0
   grpc: ^4.1.0
-  protobuf: ^4.1.1
+  protobuf: ^4.2.0
 
   # ui
   flutter_animate: ^4.5.2
