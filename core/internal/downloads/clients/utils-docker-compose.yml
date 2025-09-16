@@ -1,0 +1,60 @@
+# compose file to test various torrent clients
+
+services:
+  # docker compose -f utils-docker-compose.yml --profile tor up
+  tprv:
+    container_name: transmissionpriv
+    image: lscr.io/linuxserver/transmission:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - USER=admin
+      - PASS=admin
+      - PEERPORT=9161
+    volumes:
+      - ./test_clients/transmission/config:/config
+      - ./test_clients/transmission/download:/downloads
+    ports:
+      - "9092:9091"
+      - "9161:9161"
+    restart: unless-stopped
+    profiles:
+      - tor
+
+  # docker compose -f utils-docker-compose.yml --profile qbit up
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - WEBUI_PORT=8722
+      - TORRENTING_PORT=17693
+    volumes:
+      - ./test_clients/qbit/config:/config
+    ports:
+      - "8722:8722"
+      - "17693:17693"
+      - "17693:17693/udp"
+    restart: unless-stopped
+    profiles:
+      - qbit
+
+  # start test deluge
+  # docker compose -f utils-docker-compose.yml --profile delug up
+  deluge:
+    image: linuxserver/deluge:latest
+    container_name: deluge
+    ports:
+      - "8112:8112"
+      - "17693:17693"
+      - "17693:17693/udp"
+      - "58846:58846" #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    restart: unless-stopped
+    profiles:
+      - delug
+
