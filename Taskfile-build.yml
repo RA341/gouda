@@ -1,0 +1,158 @@
+version: '3'
+
+vars:
+  cu: '{{ if eq .OS "Windows_NT" }}coreutils{{ else }}{{ end }}'
+  EXE: '{{ if eq .OS "Windows_NT" }}.exe{{ else }}{{ end }}'
+
+  ARCH:
+    sh: go env GOARCH
+
+  CORE_DIR: core
+  BRIE_DIR: brie
+  BUILD_DIR: .build
+  GO_OUT: .build
+
+tasks:
+  build-out:
+    desc: creates the dir for build output
+    cmds:
+      - '{{ .cu }} mkdir -p {{ .BUILD_DIR }}'
+    status:
+      - test -d {{ .BUILD_DIR }}
+
+  brie:*:
+    dir: '{{ .BRIE_DIR }}'
+    label: 'brie-build-{{index .MATCH 0}}'
+    vars:
+      TARGET: '{{index .MATCH 0}}'
+
+    requires: # validate TARGET
+      vars:
+        - name: TARGET
+          enum: [ windows, macos, linux, apk, ios, web ]
+    sources:
+      - lib/**/*.dart
+    cmds:
+      - flutter build {{ .TARGET }}
+
+  go:*:
+    label: 'go-build-{{index .MATCH 0}}'
+    desc: builds the go binary depending on the target, usage gouda:<target>
+    dir: '{{ .CORE_DIR }}'
+    vars:
+      TARGET: '{{index .MATCH 0}}'
+      BIN: 'cmd/{{ .TARGET }}'
+      MAIN: '{{ .BIN }}/main.go'
+
+      # strip out terminal on windows build
+      FLAVOUR: '{{ .TARGET }}'
+      INFO_PACKAGE: 'github.com/RA341/gouda/internal/info'
+
+      STRIP_TERM: '{{ if and (eq .OS "Windows_NT") (eq .TARGET "desktop") }}-H=windowsgui{{ else }}{{ end }}'
+
+      BRANCH:
+        sh: git branch --show-current 2>/dev/null || echo "unknown"
+      VERSION:
+        sh: |
+          if [ "{{ .BRANCH }}" = "release" ]; then
+            # for release, use git describe
+            git describe --tags --always --dirty 2>/dev/null || echo "dev"
+          else
+            # For any other branch, use commit hash or date-based versioning
+            echo "dev"
+          fi
+
+      COMMIT_INFO:
+        sh: git rev-parse --short HEAD 2>/dev/null || echo "unknown"
+
+      BUILD_DATE:
+        sh: "{{ .cu }} date -u +'%Y-%m-%dT%H:%M:%SZ'"
+
+      LDFLAGS: >-
+        -s -w {{ .STRIP_TERM }}
+        -X {{ .INFO_PACKAGE }}.Flavour={{ .FLAVOUR }}
+        -X {{ .INFO_PACKAGE }}.Version={{ .VERSION }}
+        -X {{ .INFO_PACKAGE }}.CommitInfo={{ .COMMIT_INFO }}
+        -X {{ .INFO_PACKAGE }}.BuildDate={{ .BUILD_DATE }}
+        -X {{ .INFO_PACKAGE }}.Branch={{ .BRANCH }}
+
+    sources:
+      - /**/*.go
+    deps:
+      - brie:web
+      - go:build-out
+    cmds:
+      - '{{ .cu }} cp -r ../{{ .BRIE_DIR }}/build/web {{ .BIN }}/web'
+      - 'go build -ldflags "{{ .LDFLAGS }}" -o {{ .GO_OUT }}/gouda-{{ .TARGET }}{{ .EXE }} {{ .MAIN }}'
+
+  go:build-out:
+    internal: true
+    dir: '{{ .CORE_DIR }}'
+    desc: creates the build output dir for go binaries
+    cmds:
+      - '{{ .cu }} mkdir -p {{.GO_OUT}}'
+    status:
+      - 'test -d {{.GO_OUT}}'
+
+  build:*:
+    desc: builds server and desktop variants
+    requires: # validate TARGET
+      vars:
+        - name: OS
+          enum: [ windows, macos, linux ]
+    vars:
+      OS: '{{index .MATCH 0}}'
+    cmds:
+      - task: brie:web
+      - task: bd:parallel:{{ .OS }}
+
+  bd:parallel:*:
+    desc: "Internal task to run desktop and server builds in parallel"
+    internal: true
+    vars:
+      OS: '{{index .MATCH 0}}'
+    deps:
+      - bd:srv:{{ .OS }}
+      - bd:desk:{{ .OS }}
+
+  bd:srv:*:
+    desc: builds the go server binary
+    vars:
+      OS: '{{index .MATCH 0}}'
+      TARGET: server
+    deps:
+      - go:{{ .TARGET }}
+      - build-out
+    cmds:
+      - '{{ .cu }} cp -r 
+            {{ .CORE_DIR }}/{{ .GO_OUT }}/gouda-{{ .TARGET }}{{ .EXE }} 
+            {{ .BUILD_DIR }}/gouda-{{ .TARGET }}-{{ .OS }}-{{ .ARCH }}{{ .EXE }}'
+
+  bd:desk:*:
+    desc: builds the go desktop binary
+    vars:
+      OS: '{{index .MATCH 0}}'
+      BASE: 'gouda-desktop-{{ .OS }}-{{ .ARCH }}'
+      OUT: '{{ .BUILD_DIR}}/{{ .BASE }}'
+
+      DESK_OUT:
+        # Flutter's default output paths
+        map:
+          linux: 'build/linux/x64/bundle'
+          macos: 'build/macos/Build/Products/Release'
+          windows: 'build/windows/x64/runner/Release'
+      FLUT: '{{ .BRIE_DIR }}/{{ index .DESK_OUT .OS }}'
+
+      TARGET: desktop
+    deps:
+      - go:{{ .TARGET }}
+      - brie:{{ .OS }}
+      - build-out
+    cmds:
+      - '{{ .cu }} mkdir -p {{ .OUT }}/frontend/'
+      - '{{ .cu }} cp -r {{ .FLUT }}/* {{ .OUT }}/frontend/'
+      - '{{ .cu }} cp -r 
+              {{ .CORE_DIR }}/{{ .GO_OUT }}/gouda-{{ .TARGET }}{{ .EXE }} 
+              {{ .OUT }}/gouda-{{ .TARGET }}{{ .EXE }}'
+      - 'cd {{ .OUT }} && 7z a ../{{ .BASE }}.zip ./*'
+      - '{{ .cu }} rm -r {{ .OUT }}'
