@@ -3,15 +3,15 @@ package tray
 import (
 	_ "embed"
 	"fmt"
-	"github.com/RA341/gouda/internal/config"
-	"github.com/RA341/gouda/pkg/logger"
-	"github.com/getlantern/systray"
-	"github.com/pkg/browser"
-	"github.com/rs/zerolog/log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+
+	"github.com/RA341/gouda/pkg/logger"
+	"github.com/getlantern/systray"
+	"github.com/pkg/browser"
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -94,7 +94,9 @@ func launchFrontend() {
 	} else {
 		log.Info().Msgf("%s is starting", frontendExecutable)
 
-		flutterLogFile := logger.GetFileLogger(fmt.Sprintf("%s/flutter.log", config.GetConfigDir()))
+		// todo desktop config
+		flutterLogFile := logger.GetFileLogger(fmt.Sprintf("flutter.log"))
+		//flutterLogFile := logger.GetFileLogger(fmt.Sprintf("%s/flutter.log", config.GetConfigDir()))
 
 		// Flutter frontend
 		flutterApp := exec.Command(filepath.Join(fullFrontendPath))
@@ -108,11 +110,12 @@ func launchFrontend() {
 			}
 			log.Info().Msg("Frontend exited normally")
 
+			// todo desktop config
 			// close main app if set by user
-			if config.ExitOnClose.GetBool() == true {
-				log.Info().Msg("exiting main gouda process since exit_on_close is set")
-				os.Exit(0)
-			}
+			//if config.ExitOnClose.GetBool() == true {
+			//	log.Info().Msg("exiting main gouda process since exit_on_close is set")
+			//	os.Exit(0)
+			//}
 
 			log.Info().Msg("Exiting frontend process only")
 		}()

@@ -1,6 +1,7 @@
 package mam
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -308,11 +309,6 @@ func (s *Service) SearchRaw(payload map[string]any) (books []SearchBook, found i
 	return books, apiResponse.Found, apiResponse.Total, nil
 }
 
-// todo
-func (s *Service) getThumbnail(partialLink string) ([]byte, error) {
-	return nil, fmt.Errorf("not yet implemented")
-}
-
 func (s *Service) runGet(path string) ([]byte, error) {
 	resp, err := s.client.R().Get(path)
 	if err != nil {
@@ -443,7 +439,7 @@ func processResponseItems(items []SearchBookRaw) ([]SearchBook, error) {
 			MamID: item.Id,
 			Title: item.Title,
 			// todo thumbnail are protected, make a proxy endpoint
-			//Thumbnail:     item.Thumbnail,
+			Thumbnail:     processThumbnails(&item),
 			Description:   item.Description,
 			Author:        authors,
 			Narrator:      narrators,
@@ -466,6 +462,35 @@ func processResponseItems(items []SearchBookRaw) ([]SearchBook, error) {
 	}
 
 	return books, nil
+}
+
+const cdnPrefix = "https://cdn.myanonamouse.net"
+
+func (s *Service) getThumbnail(encodedLink string) ([]byte, error) {
+	decoded, err := base64.StdEncoding.DecodeString(encodedLink)
+	if err != nil {
+		return nil, fmt.Errorf("failed to base64 decode thumbnail: %w", err)
+	}
+
+	r := s.client.R()
+	resp, err := r.SetCookies(s.client.Cookies()).Get(cdnPrefix + string(decoded))
+	if err != nil {
+		return nil, err
+	}
+
+	if !resp.IsSuccess() {
+		return nil, fmt.Errorf("invalid status code: %d, message: %s", resp.StatusCode(), resp.String())
+	}
+
+	return resp.Bytes(), nil
+}
+
+func processThumbnails(item *SearchBookRaw) string {
+	// encode this string
+	// /tor/poster_mini.php/321883/jpeg
+	clean := strings.TrimPrefix(item.Thumbnail, cdnPrefix)
+	encoded := base64.StdEncoding.EncodeToString([]byte(clean))
+	return encoded
 }
 
 func appendMamDownloadBase(dl string) string {

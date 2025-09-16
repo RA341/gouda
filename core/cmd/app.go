@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"net/http"
+	"strings"
+
 	"connectrpc.com/connect"
 	authrpc "github.com/RA341/gouda/generated/auth/v1/v1connect"
 	categoryrpc "github.com/RA341/gouda/generated/category/v1/v1connect"
@@ -19,7 +22,6 @@ import (
 	media "github.com/RA341/gouda/internal/media_manager"
 	"github.com/RA341/gouda/pkg/logger"
 	"github.com/rs/zerolog/log"
-	"net/http"
 )
 
 func Setup(mode info.BinaryType) {
@@ -55,7 +57,7 @@ func NewApp(conf *config.GoudaConfig) *App {
 	mediaSrv := media.NewMediaManagerService(db, downloadSrv, mamSrv)
 	authSrv := auth.NewService(conf)
 
-	return &App{
+	a := &App{
 		categorySrv: catSrv,
 		downloadSrv: downloadSrv,
 		mediaSrv:    mediaSrv,
@@ -63,12 +65,17 @@ func NewApp(conf *config.GoudaConfig) *App {
 		authSrv:     authSrv,
 		conf:        conf,
 	}
+
+	if a.useAuth() {
+		a.authSrv = authSrv
+	}
+	return a
 }
 
 func (a *App) registerEndpoints(mux *http.ServeMux) {
-	authInterceptor := connect.WithInterceptors()
-	if !info.IsDev() && a.conf.Auth {
-		authInterceptor = connect.WithInterceptors(auth.NewAuthInterceptor(a.authSrv))
+	interceptors := connect.WithInterceptors()
+	if a.useAuth() {
+		interceptors = connect.WithInterceptors(auth.NewAuthInterceptor(a.authSrv))
 	} else {
 		log.Info().Msg("Auth middleware is disabled")
 	}
@@ -80,19 +87,22 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 		},
 		// category
 		func() (string, http.Handler) {
-			return categoryrpc.NewCategoryServiceHandler(category.NewCategoryHandler(a.categorySrv), authInterceptor)
+			return categoryrpc.NewCategoryServiceHandler(category.NewCategoryHandler(a.categorySrv), interceptors)
 		},
 		// mam
 		func() (string, http.Handler) {
 			return mamrpc.NewMamServiceHandler(mam.NewHandler(a.mamSrv))
 		},
+		func() (string, http.Handler) {
+			return a.registerHttpHandler("/api/mam", mam.NewHttpHandler(a.mamSrv))
+		},
 		// settings
 		func() (string, http.Handler) {
-			return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(a.downloadSrv), authInterceptor)
+			return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(a.downloadSrv), interceptors)
 		},
 		// media requests
 		func() (string, http.Handler) {
-			return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(a.mediaSrv), authInterceptor)
+			return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(a.mediaSrv), interceptors)
 		},
 	}
 
@@ -100,6 +110,24 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 		path, handler := svc()
 		mux.Handle(path, handler)
 	}
+}
+
+func (a *App) useAuth() bool {
+	return !info.IsDev() && a.conf.Auth
+}
+
+func (a *App) registerHttpHandler(basePath string, subMux http.Handler) (string, http.Handler) {
+	if !strings.HasSuffix(basePath, "/") {
+		basePath = basePath + "/"
+	}
+
+	baseHandler := http.StripPrefix(strings.TrimSuffix(basePath, "/"), subMux)
+	if a.useAuth() {
+		//httpAuth := auth.NewHttpAuthMiddleware(a.Auth)
+		//baseHandler = httpAuth(baseHandler)
+	}
+
+	return basePath, baseHandler
 }
 
 func initDownloadClient(conf *config.TorrentClient) clients.DownloadClient {
