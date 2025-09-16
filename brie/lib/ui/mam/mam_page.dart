@@ -1,7 +1,7 @@
 import 'package:brie/clients/mam_api.dart';
 import 'package:brie/gen/mam/v1/mam.pb.dart';
 import 'package:brie/ui/mam/search_bar.dart';
-import 'package:brie/ui/mam/search_result.dart';
+import 'package:brie/ui/mam/search_book_result.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;

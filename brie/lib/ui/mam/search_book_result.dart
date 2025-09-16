@@ -1,9 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:brie/clients/history_api.dart';
 import 'package:brie/gen/mam/v1/mam.pb.dart';
+import 'package:brie/grpc/api.dart';
 import 'package:brie/providers.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class BookItem extends StatelessWidget {
@@ -157,27 +162,50 @@ class StringLink extends ConsumerWidget {
   }
 }
 
-class ThumbnailWidget extends StatelessWidget {
+final AutoDisposeFutureProviderFamily<Uint8List, String>
+thumbnailBytesProvider = FutureProvider.autoDispose.family<Uint8List, String>((
+  ref,
+  input,
+) async {
+  final baseUrl = ref.watch(basePathProvider);
+
+  final uri = '$baseUrl/api/mam/thumb/$input';
+  final url = Uri.parse(uri);
+  final response = await http.get(url);
+  if (response.statusCode != 200) {
+    logger.w('unable to get status code');
+    throw Exception('invalid status code');
+  }
+
+  return response.bodyBytes;
+});
+
+class ThumbnailWidget extends ConsumerWidget {
   const ThumbnailWidget({required this.book, super.key});
 
   final SearchBook book;
 
   @override
-  Widget build(BuildContext context) {
-    if (book.thumbnail.isNotEmpty) {
-      return ClipRRect(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bytes = ref.watch(thumbnailBytesProvider(book.thumbnail));
+
+    return bytes.when(
+      data: (data) => ClipRRect(
         borderRadius: BorderRadius.circular(4),
-        child: Image.network(
-          book.thumbnail,
+        child: Image.memory(
+          data,
           width: 50,
           height: 70,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) =>
-              _loadMediaCategoryIcon(book.mediaCategory),
+          errorBuilder: (context, error, stackTrace) {
+            logger.e('unable to load kk', error: error);
+            return _loadMediaCategoryIcon(book.mediaCategory);
+          },
         ),
-      );
-    }
-    return _loadMediaCategoryIcon(book.mediaCategory);
+      ),
+      error: (error, stackTrace) => _loadMediaCategoryIcon(book.mediaCategory),
+      loading: () => _loadMediaCategoryIcon(book.mediaCategory),
+    );
   }
 }
 
