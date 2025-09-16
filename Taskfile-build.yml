@@ -106,6 +106,13 @@ tasks:
       - task: brie:web
       - task: bd:parallel:{{ .OS }}
 
+  bd:dk:*:
+    desc: "task to create docker image"
+    vars:
+      TAG: '{{index .MATCH 0 | default "dev"}}'
+    cmds:
+      - 'docker build . -t {{ .TAG }}'
+
   bd:parallel:*:
     desc: "Internal task to run desktop and server builds in parallel"
     internal: true

@@ -21,32 +21,34 @@ RUN apk update && apk add --no-cache gcc musl-dev
 
 WORKDIR /app
 
-COPY ./src/go.* .
+COPY ./core/go.* .
 
 RUN go mod download
 
-COPY ./src .
+COPY ./core .
 
 ARG VERSION=dev
 ARG COMMIT_INFO=unknown
 ARG BRANCH=unknown
 ARG INFO_PACKAGE=github.com/RA341/gouda/internal/info
 
+ENV TARGET=docker
+
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags "-s -w \
-             -X ${INFO_PACKAGE}.Flavour=Docker \
+             -X ${INFO_PACKAGE}.Flavour=${TARGET} \
              -X ${INFO_PACKAGE}.Version=${VERSION} \
              -X ${INFO_PACKAGE}.CommitInfo=${COMMIT_INFO} \
              -X ${INFO_PACKAGE}.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
              -X ${INFO_PACKAGE}.Branch=${BRANCH}" \
-    -o gouda "./cmd/docker"
+    -o gouda "./cmd/${TARGET}"
 
 FROM alpine:latest AS main
 
 ENV GOUDA_LOG_LEVEL=info
 ENV GOUDA_CONFIG=/config
 ENV GOUDA_DOWNLOAD=/downloads
-Env GOUDA_COMPLETE=/complete
-Env GOUDA_TORRENT=/torrents
+ENV GOUDA_COMPLETE=/complete
+ENV GOUDA_TORRENT=/torrents
 
 WORKDIR /app/
 
