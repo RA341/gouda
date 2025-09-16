@@ -1,17 +1,10 @@
 {
-  "name": "gouda-docs",
-  "type": "module",
-  "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
-  "dependencies": {
-    "@astrojs/starlight": "^0.34.3",
-    "astro": "^5.6.1",
-    "sharp": "^0.32.5"
+  "devDependencies": {
+    "vitepress": "^2.0.0-alpha.12"
   }
 }

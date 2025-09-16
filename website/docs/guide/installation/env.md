@@ -1,9 +1,8 @@
 ---
-# make this page always last
-title: Env vars
+title: Environment Variables
+sidebar:
+    order: 999
 ---
-
-# Environment Variables
 
 You can set the following environment variables for gouda
 

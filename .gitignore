@@ -16,3 +16,6 @@ scripts_*/**/test
 /**/gouda-*
 /**/.task
 /**/.build/
+website/.vitepress/dist
+website/.vitepress/cache
+/website/docs/.vitepress/cache/
