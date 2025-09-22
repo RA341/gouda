@@ -35,8 +35,7 @@ class SettingsApi {
       () => apiClient.listSupportedClients(
         ListSupportedClientsRequest(),
       ),
-    ))
-        .clients;
+    )).clients;
   }
 
   Future<GetMetadataResponse> getMetadata() =>
@@ -62,12 +61,12 @@ Future<T> mustRunGrpcRequest<T>(Future<T> Function() request) async {
 Future<(T?, String)> runGrpcRequest<T>(Future<T> Function() request) async {
   try {
     final res = await request();
-    return (res, "");
+    return (res, '');
   } on GrpcError catch (e) {
-    logger.e("Grpc error, ${e.toString()}");
-    return (null, e.message ?? "Empty error details in grpc error");
+    logger.e('Grpc error, $e');
+    return (null, e.message ?? 'Empty error details in grpc error');
   } catch (e) {
-    logger.e("Failed to run GRPC request\nUnknown error: ${e.toString()}");
-    return (null, "Unknown Error: ${e.toString()}");
+    logger.e('Failed to run GRPC request\nUnknown error: $e');
+    return (null, 'Unknown Error: $e');
   }
 }

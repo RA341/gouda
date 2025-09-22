@@ -14,9 +14,9 @@ final authApiProvider = Provider<AuthApi>((ref) {
 });
 
 class AuthApi {
-  final AuthServiceClient apiClient;
-
   AuthApi(this.apiClient);
+
+  final AuthServiceClient apiClient;
 
   Future<void> login({
     required String user,
@@ -30,7 +30,8 @@ class AuthApi {
         ),
       ),
     );
-    await prefs.setString('apikey', token.authToken);
+
+    await prefs.setString(prefsAuthorizationKey, token.authToken);
   }
 
   Future<bool> testToken({required String token}) async {

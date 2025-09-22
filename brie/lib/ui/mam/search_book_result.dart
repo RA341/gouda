@@ -10,6 +10,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:riverpod/src/providers/future_provider.dart';
 
 class BookItem extends StatelessWidget {
   const BookItem({required this.book, super.key});
@@ -162,23 +163,23 @@ class StringLink extends ConsumerWidget {
   }
 }
 
-final AutoDisposeFutureProviderFamily<Uint8List, String>
-thumbnailBytesProvider = FutureProvider.autoDispose.family<Uint8List, String>((
-  ref,
-  input,
-) async {
-  final baseUrl = ref.watch(basePathProvider);
+final FutureProviderFamily<Uint8List, String> thumbnailBytesProvider =
+    FutureProvider.autoDispose.family<Uint8List, String>((
+      ref,
+      input,
+    ) async {
+      final baseUrl = ref.watch(basePathProvider);
 
-  final uri = '$baseUrl/api/mam/thumb/$input';
-  final url = Uri.parse(uri);
-  final response = await http.get(url);
-  if (response.statusCode != 200) {
-    logger.w('unable to get status code');
-    throw Exception('invalid status code');
-  }
+      final uri = '$baseUrl/api/mam/thumb/$input';
+      final url = Uri.parse(uri);
+      final response = await http.get(url);
+      if (response.statusCode != 200) {
+        logger.w('unable to get status code');
+        throw Exception('invalid status code');
+      }
 
-  return response.bodyBytes;
-});
+      return response.bodyBytes;
+    });
 
 class ThumbnailWidget extends ConsumerWidget {
   const ThumbnailWidget({required this.book, super.key});
@@ -187,25 +188,27 @@ class ThumbnailWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bytes = ref.watch(thumbnailBytesProvider(book.thumbnail));
+    return Placeholder();
 
-    return bytes.when(
-      data: (data) => ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Image.memory(
-          data,
-          width: 50,
-          height: 70,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            logger.e('unable to load kk', error: error);
-            return _loadMediaCategoryIcon(book.mediaCategory);
-          },
-        ),
-      ),
-      error: (error, stackTrace) => _loadMediaCategoryIcon(book.mediaCategory),
-      loading: () => _loadMediaCategoryIcon(book.mediaCategory),
-    );
+    // final bytes = ref.watch(thumbnailBytesProvider(book.thumbnail));
+    //
+    // return bytes.when(
+    //   data: (data) => ClipRRect(
+    //     borderRadius: BorderRadius.circular(4),
+    //     child: Image.memory(
+    //       data,
+    //       width: 50,
+    //       height: 70,
+    //       fit: BoxFit.cover,
+    //       errorBuilder: (context, error, stackTrace) {
+    //         logger.e('unable to load kk', error: error);
+    //         return _loadMediaCategoryIcon(book.mediaCategory);
+    //       },
+    //     ),
+    //   ),
+    //   error: (error, stackTrace) => _loadMediaCategoryIcon(book.mediaCategory),
+    //   loading: () => _loadMediaCategoryIcon(book.mediaCategory),
+    // );
   }
 }
 

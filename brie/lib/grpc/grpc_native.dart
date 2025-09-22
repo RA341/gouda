@@ -9,8 +9,8 @@ Channel setupClientChannel(String basePath) {
     port: split.port,
     options: ChannelOptions(
       credentials: split.scheme == 'https'
-          ? ChannelCredentials.secure()
-          : ChannelCredentials.insecure(),
+          ? const ChannelCredentials.secure()
+          : const ChannelCredentials.insecure(),
     ),
   );
 }

@@ -10,6 +10,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await PreferencesService.init();
 
   runApp(const ProviderScope(child: MyApp()));
@@ -44,17 +46,16 @@ class RootView extends ConsumerWidget {
 
     return Scaffold(
       body: testToken.when(
-        data: (data) => data ? const MainView() : const LoginPage(),
-        error: (error, stackTrace) =>
-            Center(
-              child: Column(
-                children: [
-                  const Text('An error occurred'),
-                  Text(error.toString()),
-                  Text(stackTrace.toString()),
-                ],
-              ),
-            ),
+        data: (data) => data ? const MainView() : const LoginView(),
+        error: (error, stackTrace) => Center(
+          child: Column(
+            children: [
+              const Text('An error occurred'),
+              Text(error.toString()),
+              Text(stackTrace.toString()),
+            ],
+          ),
+        ),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
@@ -69,28 +70,28 @@ class MainView extends ConsumerWidget {
   static final List<(NavigationRailDestination destination, Widget page)>
   navItems = [
     (
-    const NavigationRailDestination(
-      icon: Icon(Icons.home_outlined, size: iconsSize),
-      selectedIcon: Icon(Icons.home_filled, size: iconsSize),
-      label: Text('Home'),
-    ),
-    const HistoryPage(),
-    ),
-    (
-    const NavigationRailDestination(
-      icon: Icon(Icons.book_outlined, size: iconsSize),
-      selectedIcon: Icon(Icons.book, size: iconsSize),
-      label: Text('Categories'),
-    ),
-    const CategoryPage(),
+      const NavigationRailDestination(
+        icon: Icon(Icons.home_outlined, size: iconsSize),
+        selectedIcon: Icon(Icons.home_filled, size: iconsSize),
+        label: Text('Home'),
+      ),
+      const HistoryPage(),
     ),
     (
-    const NavigationRailDestination(
-      icon: Icon(Icons.mouse, size: iconsSize),
-      selectedIcon: Icon(Icons.mouse, size: iconsSize),
-      label: Text('Mam'),
+      const NavigationRailDestination(
+        icon: Icon(Icons.book_outlined, size: iconsSize),
+        selectedIcon: Icon(Icons.book, size: iconsSize),
+        label: Text('Categories'),
+      ),
+      const CategoryPage(),
     ),
-    const MamPage(),
+    (
+      const NavigationRailDestination(
+        icon: Icon(Icons.mouse, size: iconsSize),
+        selectedIcon: Icon(Icons.mouse, size: iconsSize),
+        label: Text('Mam'),
+      ),
+      const MamPage(),
     ),
     // TODO: settings is borken
     // (
@@ -108,7 +109,7 @@ class MainView extends ConsumerWidget {
     return Row(
       children: [
         VerticalNavBar(destinations: navItems.map((item) => item.$1).toList()),
-        PageView(routeList: navItems.map((item) => item.$2).toList()),
+        MainPage(routeList: navItems.map((item) => item.$2).toList()),
       ],
     );
 
@@ -131,8 +132,8 @@ class MainView extends ConsumerWidget {
   }
 }
 
-class PageView extends ConsumerWidget {
-  const PageView({required this.routeList, super.key});
+class MainPage extends ConsumerWidget {
+  const MainPage({required this.routeList, super.key});
 
   final List<Widget> routeList;
 

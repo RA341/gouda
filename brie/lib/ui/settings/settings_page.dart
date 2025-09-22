@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/providers.dart';
-import 'package:brie/ui/shared/error_dialog.dart';
 import 'package:brie/ui/settings/settings_widgets.dart';
+import 'package:brie/ui/shared/error_dialog.dart';
 import 'package:brie/ui/shared/page_header.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 const headerStyle = TextStyle(fontSize: 28);
 const maxSettingsWidth = 300.0;
@@ -29,12 +29,12 @@ class SettingsPage extends ConsumerWidget {
       error: (error, stackTrace) => Center(
         child: Column(
           children: [
-            Text('Error', style: TextStyle(fontSize: 30)),
+            const Text('Error', style: TextStyle(fontSize: 30)),
             Text(error.toString()),
           ],
         ),
       ),
-      loading: () => Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
@@ -66,7 +66,7 @@ class SettingsContainer extends HookConsumerWidget {
             subHeading:
                 'Configure your application settings. Changes will be applied after saving.',
           ),
-          SizedBox(height: 35),
+          const SizedBox(height: 35),
           SettingsTabs(
             tabs: tabs.keys
                 .map(
@@ -81,18 +81,18 @@ class SettingsContainer extends HookConsumerWidget {
                                     .client
                                     .torrentPassword
                                     .isEmpty)
-                        ? Icon(Icons.error, color: Colors.red)
+                        ? const Icon(Icons.error, color: Colors.red)
                         : null,
                   ),
                 )
                 .toList(),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           SettingsDisplay(
             settings: settingsObj,
             settingsGroup: tabs.values.toList(),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30),
             child: ElevatedButton(
@@ -114,7 +114,7 @@ class SettingsContainer extends HookConsumerWidget {
                   );
                 }
               },
-              child: Text('Update Settings'),
+              child: const Text('Update Settings'),
             ),
           ),
         ],
@@ -141,7 +141,7 @@ class SettingsTabs extends HookConsumerWidget {
       indicator: BoxDecoration(
         color: Theme.of(context).focusColor,
         // backgroundBlendMode: BlendMode.darken,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       labelColor: Colors.white,
       unselectedLabelColor: Colors.white,
@@ -180,7 +180,7 @@ class ApiCopyField extends StatelessWidget {
         IntrinsicWidth(
           child: TextField(
             readOnly: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey, width: 1.0),
               ),
@@ -194,7 +194,7 @@ class ApiCopyField extends StatelessWidget {
             if (!context.mounted) return;
             showSnackBar(context, 'copied API key');
           },
-          icon: Icon(Icons.copy, color: Colors.white),
+          icon: const Icon(Icons.copy, color: Colors.white),
         ),
       ],
     );
@@ -203,6 +203,6 @@ class ApiCopyField extends StatelessWidget {
 
 void showSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message), duration: Duration(seconds: 3)),
+    SnackBar(content: Text(message), duration: const Duration(seconds: 3)),
   );
 }

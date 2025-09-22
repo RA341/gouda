@@ -26,7 +26,7 @@ class CategoryPage extends HookConsumerWidget {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: pageHeaderBuilder(
-                  header: "Category",
+                  header: 'Category',
                   subHeading: 'Each category is the root folder for your media',
                 ),
               ),
@@ -39,7 +39,7 @@ class CategoryPage extends HookConsumerWidget {
                         width: 400,
                         child: TextField(
                           controller: addCategories,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Add new category',
                           ),
@@ -51,7 +51,7 @@ class CategoryPage extends HookConsumerWidget {
                           onPressed: () async {
                             try {
                               if (addCategories.text.isEmpty) {
-                                throw ('Empty category');
+                                throw Exception('Empty category');
                               }
 
                               await ref
@@ -72,7 +72,7 @@ class CategoryPage extends HookConsumerWidget {
                             }
                             ref.invalidate(categoryListProvider);
                           },
-                          child: Text('Add'),
+                          child: const Text('Add'),
                         ),
                       ),
                     ],
@@ -81,19 +81,19 @@ class CategoryPage extends HookConsumerWidget {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           CategoriesView(data),
         ],
       ),
       error: (error, stackTrace) => Center(
         child: Column(
           children: [
-            Text('Error', style: TextStyle(fontSize: 30)),
+            const Text('Error', style: TextStyle(fontSize: 30)),
             Text(error.toString()),
           ],
         ),
       ),
-      loading: () => Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
@@ -105,7 +105,7 @@ class CategoriesView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider).valueOrNull;
+    final settings = ref.watch(settingsProvider).value;
     final downloadPath = settings?.completeFolder;
 
     return Expanded(
@@ -132,12 +132,12 @@ class CategoriesView extends ConsumerWidget {
                       children: [
                         Text(cat.category),
                         Padding(
-                          padding: EdgeInsets.only(right: 40),
+                          padding: const EdgeInsets.only(right: 40),
                           child: Text(
                             downloadPath == null
-                                ? ""
+                                ? ''
                                 : 'Complete path:  $downloadPath/${cat.category}',
-                            style: TextStyle(color: Colors.green),
+                            style: const TextStyle(color: Colors.green),
                           ),
                         ),
                       ],

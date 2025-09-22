@@ -7,6 +7,7 @@ import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 final checkTokenProvider = FutureProvider<bool>((ref) async {
   final token = ref.watch(apiTokenProvider);
@@ -18,7 +19,6 @@ final checkTokenProvider = FutureProvider<bool>((ref) async {
     await ref.watch(settingsProvider.future);
   }
 
-  // fetch settings
   return status;
 });
 

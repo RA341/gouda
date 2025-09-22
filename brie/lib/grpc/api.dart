@@ -1,28 +1,35 @@
 import 'package:brie/config.dart';
+import 'package:brie/grpc/grpc_native.dart'
+    if (dart.library.html) 'package:brie/grpc/grpc_web.dart';
 import 'package:brie/utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/grpc.dart';
-import 'package:universal_html/html.dart' as html;
 
-import 'grpc_native.dart' if (dart.library.html) 'grpc_web.dart';
+const prefsAuthorizationKey = 'AuthToken';
+const prefsBaseUrl = 'BaseUrl';
 
 final apiTokenProvider = Provider<String>((ref) {
-  return prefs.getString('apikey') ?? '';
+  return prefs.getString(prefsAuthorizationKey) ?? '';
 });
+
+Future<void> updateBasepath(WidgetRef ref, String baseurl) async {
+  await prefs.setString(prefsBaseUrl, baseurl);
+  ref.invalidate(basePathProvider);
+}
 
 final basePathProvider = Provider<String>((ref) {
   // setup for future feature to modify base path from within the client
-  final basePath = prefs.getString('basePath');
+  var basePath = prefs.getString(prefsBaseUrl) ?? '';
 
-  final finalPath = basePath ??
-      (kIsWeb ? html.window.location.toString() : 'http://localhost:9862');
+  // final finalPath = basePath ?? devUrl;
 
-  logger.i('Base path is: $finalPath');
+  basePath = basePath.endsWith('/')
+      ? basePath.substring(0, basePath.length - 1)
+      : basePath;
 
-  return finalPath.endsWith('/')
-      ? finalPath.substring(0, finalPath.length - 1)
-      : finalPath;
+  logger.i('Base path is: $basePath');
+
+  return basePath;
 });
 
 final grpcChannelProvider = Provider<Channel>((ref) {
@@ -38,9 +45,9 @@ final authInterceptorProvider = Provider<AuthInterceptor>((ref) {
 });
 
 class AuthInterceptor implements ClientInterceptor {
-  final String authToken;
-
   AuthInterceptor(this.authToken);
+
+  final String authToken;
 
   @override
   ResponseStream<R> interceptStreaming<Q, R>(
@@ -53,8 +60,12 @@ class AuthInterceptor implements ClientInterceptor {
   }
 
   @override
-  ResponseFuture<R> interceptUnary<Q, R>(ClientMethod<Q, R> method, Q request,
-      CallOptions options, ClientUnaryInvoker<Q, R> invoker) {
+  ResponseFuture<R> interceptUnary<Q, R>(
+    ClientMethod<Q, R> method,
+    Q request,
+    CallOptions options,
+    ClientUnaryInvoker<Q, R> invoker,
+  ) {
     final metadata = Map<String, String>.from(options.metadata);
     metadata['Authorization'] = authToken;
 
