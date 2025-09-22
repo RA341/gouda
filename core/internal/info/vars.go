@@ -12,14 +12,14 @@ const (
 	Desktop BinaryType = "desktop"
 	Server  BinaryType = "server"
 	Docker  BinaryType = "docker"
+	Develop BinaryType = "develop"
 )
 
 const Unknown = "unknown"
-const DevMode = "dev"
 
 var (
-	Flavour    = string(Server)
-	Version    = DevMode
+	Flavour    = string(Develop)
+	Version    = "dev"
 	CommitInfo = Unknown
 	BuildDate  = Unknown
 	Branch     = Unknown
@@ -27,7 +27,7 @@ var (
 )
 
 func IsDev() bool {
-	return Version == DevMode
+	return Flavour == string(Develop)
 }
 
 func IsDocker() bool {
