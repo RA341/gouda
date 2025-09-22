@@ -1,21 +1,31 @@
 package cmd
 
 import (
-	connectcors "connectrpc.com/cors"
 	"embed"
 	"fmt"
+	"io/fs"
+	"net/http"
+	"os"
+
+	connectcors "connectrpc.com/cors"
 	"github.com/RA341/gouda/internal/config"
+	"github.com/RA341/gouda/internal/info"
 	"github.com/RA341/gouda/pkg/file_utils"
+	"github.com/RA341/gouda/pkg/logger"
 	"github.com/rs/cors"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
-	"io/fs"
-	"net/http"
-	"os"
 )
 
+func setup() {
+	logger.ConsoleLogger()
+	info.PrintInfo()
+}
+
 func StartServer(UIFS fs.FS) {
+	setup()
+
 	conf, err := config.LoadConf()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to parse config")

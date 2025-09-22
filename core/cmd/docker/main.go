@@ -2,10 +2,14 @@ package main
 
 import (
 	"github.com/RA341/gouda/cmd"
-	"github.com/RA341/gouda/internal/info"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	cmd.Setup(info.Server)
-	cmd.StartServer(nil)
+	fs, err := cmd.WithUIFromFile("web")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Unable to find web ui")
+	}
+
+	cmd.StartServer(fs)
 }
