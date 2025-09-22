@@ -134,7 +134,7 @@ func flattenStruct(v reflect.Value, prefix, baseEnv string) []KeyValue {
 			continue // Important: move to the next field after handling the struct
 		}
 
-		configTags := parseTag(configTag)
+		configTags := ParseTag(configTag)
 		usage := configTags["usage"]
 		hide := configTags["hide"]
 		envName := colorize(prefixer(configTags["env"]), ColorCyan)

@@ -54,7 +54,7 @@ func Scan(s interface{}, envPrefix string) error {
 			continue
 		}
 
-		tags := parseTag(tag)
+		tags := ParseTag(tag)
 
 		fieldName := fieldType.Name
 		var defaultValue string
@@ -134,9 +134,9 @@ func loadDefault(tags map[string]string) (string, error) {
 	return defaultValue, nil
 }
 
-// parseTag splits a struct tag into a key-value map.
+// ParseTag splits a struct tag into a key-value map.
 // e.g., `flag=port,env=PORT` becomes `map[string]string{"flag": "port", "env": "PORT"}`
-func parseTag(tag string) map[string]string {
+func ParseTag(tag string) map[string]string {
 	result := make(map[string]string)
 	parts := strings.Split(tag, ",")
 	for _, part := range parts {
