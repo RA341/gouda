@@ -1,13 +1,18 @@
 version: '3'
 
 vars:
-  CORE_DIR: src
-  UI_DIR: brie
-  DOCKMAN_IMAGE_BASE: gouda
+  cu: '{{ if eq .OS "Windows_NT" }}coreutils{{ else }}{{ end }}'
+  EXE: '{{ if eq .OS "Windows_NT" }}.exe{{ else }}{{ end }}'
+
+  CORE_DIR: core
   # Directory for Go source commands
   GO_CMD_DIR: cmd
-  # Directory for build output
-  BUILD_DIR: build
+  # Directory for dev builds
+  DEV_BUILD: .dev
+
+  UI_DIR: brie
+  DOCKMAN_IMAGE_BASE: gouda
+
 
 tasks:
   default:
@@ -18,93 +23,52 @@ tasks:
   init:
     desc: "Setup dockman dev environment should be run only once after cloning the project."
     deps:
-      - init:build
-      - tidy
-
-  init:build:
-    desc: "Creates the build dir"
-    cmd: coreutils mkdir -p {{.BUILD_DIR}}
-    status:
-      # This command checks if the directory exists. If it does, the task is considered "up-to-date" and won't run.
-      - test -d {{.BUILD_DIR}}
-
-  ui:b:*:
-    dir: "{{ .UI_DIR }}"
-    desc: "build gouda UI for target, usage task ui:b:android"
-    vars:
-      TARGET: "{{index .MATCH 0}}"
-    cmds:
-      - flutter build {{ .TARGET }}
-
-  ui:web:
-    dir: "{{ .UI_DIR }}"
-    desc: "build gouda UI"
-    cmds:
-      - task ui:b:web
-
-  ui:win:
-    dir: "{{ .UI_DIR }}"
-    desc: "build gouda exe"
-    vars:
-      EXE: "build/windows/x64/runner/Release"
-    cmds:
-      - task ui:b:windows
-
-  ui:apk:
-    dir: "{{ .UI_DIR }}"
-    desc: "build gouda apk"
-    cmds:
-      - task ui:b:apk
-
-  ui:w:*:
-    desc: "build gouda Web UI and transfer to a specific build target in {{ .FULL_PATH }}"
-    vars:
-      CMD_NAME: "{{index .MATCH 0}}"
-      FULL_PATH: "{{ .CORE_DIR }}/{{ .GO_CMD_DIR }}/{{ .CMD_NAME }}/web"
-    deps: [ ui:web ]
-    cmds:
-      - coreutils cp -r {{ .UI_DIR }}/build/web {{ .FULL_PATH }}
+      - go:tidy
+      - ui:tidy
 
   clean:
-    desc: "Removes all files in {{.BUILD_DIR}}"
+    desc: "Removes all files in {{.DEV_BUILD }}"
     cmds:
-      - coreutils rm -rf {{.BUILD_DIR}}/*
+      - coreutils rm -rf {{.DEV_BUILD }}/*
 
-  tidy:
+  ui:tidy:
+    desc: "Cleans up and initializes the flutter app dir"
+    dir: "{{ .UI_DIR }}"
+    cmds:
+      - flutter clean
+      - flutter pub get
+
+  go:tidy:
     desc: "Calls go mod tidy in {{.CORE_DIR}}"
     dir: "{{.CORE_DIR}}"
     cmds:
       - go mod tidy -v -x
 
   go:b:*:
-    dir: "{{.CORE_DIR}}"
+    label: "go:b:{{ .CMD_NAME }}"
+    dir: "{{ .CORE_DIR }}"
     desc: "Builds a Go target. Usage: task go:<target>"
     vars:
       CMD_NAME: "{{index .MATCH 0}}"
-      EXE_EXT: '{{if eq OS "windows"}}.exe{{end}}'
-    deps:
-      - task: init:build
-    sources:
-      - "**/*.go"
-    generates:
-      - "{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}}"
+      OUT_PATH: "../{{ .DEV_BUILD }}/{{ .CMD_NAME }}"
+      BIN_OUT: "{{ .OUT_PATH }}/{{ .CMD_NAME }}{{ .EXE }}"
     cmds:
-      - go build -v -o ../{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}} ./{{.GO_CMD_DIR}}/{{.CMD_NAME}}
+      - '{{ .cu }} mkdir -p {{ .OUT_PATH }}'
+      - go build -v -o {{ .OUT_PATH }} ./{{.GO_CMD_DIR}}/{{.CMD_NAME}}
     summary: |
       Builds the '{{.CMD_NAME}}' Go command.
       Source: '{{.GO_CMD_DIR}}/{{.CMD_NAME}}'
-      Output: '{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}}'
+      Output: '{{.DEV_BUILD }}/{{.CMD_NAME}}{{.EXE}}'
 
   go:*:
-    dir: "{{.BUILD_DIR}}"
     desc: "Builds and runs a Go target. Usage: task go:r:<target>"
     vars:
       CMD_NAME: "{{index .MATCH 0}}"
-      EXE_EXT: '{{if eq OS "windows"}}.exe{{end}}'
-      ARGS: '{{if eq .CMD_NAME "updater"}} -cr={{.CMD_NAME}}/compose {{else}} -conf={{.CMD_NAME}}/config -cr={{.CMD_NAME}}/compose{{end}}'
+      EXE: '{{if eq OS "windows"}}.exe{{end}}'
+    dir: "{{ .DEV_BUILD }}/{{ .CMD_NAME }}"
     cmds:
       - task: go:b:{{.CMD_NAME}}
-      - ../{{.BUILD_DIR}}/{{.CMD_NAME}}{{.EXE_EXT}}{{.ARGS}}
+      - ./{{.CMD_NAME}}{{.EXE}}
 
   dk:b:*:
     desc: "Builds the main dockman image for a specific target. Usage: task dk:<target>"
@@ -132,24 +96,23 @@ tasks:
     cmds:
       - docker image prune -f
 
-
-  tr:
+  c:tr:
     desc: "start a temp transmission client"
     vars:
       SAVE_DIR: "build/transmission"
     cmds:
       - coreutils mkdir -p {{ .SAVE_DIR }}
       - docker run --rm
-        -e PUID=1000 
+        -e PUID=1000
         -e PGID=1000
-        -e USER=admin 
+        -e USER=admin
         -e PASS=admin
         -e PEERPORT=9161
         -v "./{{ .SAVE_DIR }}:/media"
         -p 9092:9091
         lscr.io/linuxserver/transmission:latest
 
-  qb:
+  c:qb:
     desc: "start a temp qbittorrent client"
     vars:
       SAVE_DIR: "build/qbittorrent"
@@ -168,7 +131,7 @@ tasks:
         -p 17693:17693/udp
         lscr.io/linuxserver/qbittorrent:latest
 
-  dg:
+  c:dg:
     desc: "start a temp deluge client"
     vars:
       SAVE_DIR: "build/deluge"

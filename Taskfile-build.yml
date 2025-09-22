@@ -111,7 +111,8 @@ tasks:
     vars:
       TAG: '{{index .MATCH 0 | default "dev"}}'
     cmds:
-      - 'docker build . -t {{ .TAG }}'
+      - 'docker build . -t gouda:{{ .TAG }}'
+      - 'docker run --rm gouda:{{ .TAG }}'
 
   bd:parallel:*:
     desc: "Internal task to run desktop and server builds in parallel"
