@@ -11,9 +11,9 @@ func NewAuthInterceptor(a *Service) connect.UnaryInterceptorFunc {
 	return func(next connect.UnaryFunc) connect.UnaryFunc {
 		return func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
 			clientToken := req.Header().Get(TokenHeader)
-			result, err := a.VerifyToken(clientToken)
+			err := a.VerifySessionToken(clientToken)
 
-			if err != nil || !result {
+			if err != nil {
 				return nil, connect.NewError(
 					connect.CodeUnauthenticated,
 					fmt.Errorf("invalid token %v", err),
@@ -64,7 +64,7 @@ func NewAuthInterceptor(a *Service) connect.UnaryInterceptorFunc {
 //	}
 //
 //	token := cookie.Value
-//	userInfo, err := srv.VerifyToken(token)
+//	userInfo, err := srv.VerifySessionToken(token)
 //	if err != nil {
 //		log.Error().Err(err).Msg("Unable to verify token")
 //		return nil, fmt.Errorf("unable to verify token")
