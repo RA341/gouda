@@ -22,7 +22,7 @@ func (s *Service) saveConfigFromRPC(rpcConfig *v1.GoudaConfig) error {
 	defer s.conf.RW.Unlock()
 
 	FromProto(rpcConfig, s.conf)
-	return s.conf.DumpToJSON()
+	return s.conf.DumpToYaml()
 }
 
 func ToProto(cfg *config.GoudaConfig) *v1.GoudaConfig {

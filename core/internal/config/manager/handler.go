@@ -1,8 +1,9 @@
 package manager
 
 import (
-	"connectrpc.com/connect"
 	"context"
+
+	"connectrpc.com/connect"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
 	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
