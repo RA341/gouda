@@ -22,7 +22,7 @@ func (a *AuthSessionGorm) GetSessionToken(token string) (*auth.Session, error) {
 		Where("session_token = ?", token).
 		First(&session).Error
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", auth.ErrInvalidSessionToken, err)
+		return nil, err
 	}
 
 	return &session, nil

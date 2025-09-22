@@ -2,16 +2,27 @@ package auth_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/stretchr/testify/require"
 )
 
-func Test_SessionDelete(t *testing.T) {
-	srv, closer := setup(t)
-	t.Cleanup(func() {
-		TearDown(closer)
-	})
+func Test_SessionExpiry(t *testing.T) {
+	_ = setup(t)
+
+	tokenDuration := time.Second * 1
+
+	customSession := auth.NewSessionServiceWithCustomDuration(
+		sessionStore,
+		tokenDuration,
+		tokenDuration,
+	)
+
+	srv := &auth.Service{
+		SessionService: customSession,
+		User:           userStore,
+	}
 
 	user := "test"
 	pass := "test"
@@ -22,21 +33,39 @@ func Test_SessionDelete(t *testing.T) {
 	ses, err := srv.Login(user, pass)
 	require.NoError(t, err)
 
-	err = srv.VerifySessionToken(ses.SessionToken)
+	err = srv.SessionVerifySessionToken(ses.SessionToken)
 	require.NoError(t, err)
 
-	err = srv.DeleteSession(ses.ID)
+	time.Sleep(tokenDuration)
+
+	err = srv.SessionVerifySessionToken(ses.SessionToken)
+	require.ErrorIs(t, err, auth.ErrInvalidSessionTokenExpired)
+}
+
+func Test_SessionDelete(t *testing.T) {
+	srv := setup(t)
+
+	user := "test"
+	pass := "test"
+
+	err := srv.Register(user, pass, auth.RoleAdmin)
 	require.NoError(t, err)
 
-	err = srv.VerifySessionToken(ses.SessionToken)
+	ses, err := srv.Login(user, pass)
+	require.NoError(t, err)
+
+	err = srv.SessionVerifySessionToken(ses.SessionToken)
+	require.NoError(t, err)
+
+	err = srv.SessionDelete(ses.ID)
+	require.NoError(t, err)
+
+	err = srv.SessionVerifySessionToken(ses.SessionToken)
 	require.ErrorIs(t, err, auth.ErrInvalidSessionToken)
 }
 
 func Test_SessionLimit(t *testing.T) {
-	srv, closer := setup(t)
-	t.Cleanup(func() {
-		TearDown(closer)
-	})
+	srv := setup(t)
 
 	user := "test"
 	pass := "test"
@@ -61,10 +90,10 @@ func Test_SessionLimit(t *testing.T) {
 	}
 
 	for _, s := range loopSession {
-		err = srv.VerifySessionToken(s.SessionToken)
+		err = srv.SessionVerifySessionToken(s.SessionToken)
 		require.NoError(t, err)
 	}
 
-	err = srv.VerifySessionToken(initialSession.SessionToken)
+	err = srv.SessionVerifySessionToken(initialSession.SessionToken)
 	require.Error(t, err)
 }

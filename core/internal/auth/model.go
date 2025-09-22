@@ -11,9 +11,11 @@ var ErrUserExists = errors.New("username already exists, choose a different user
 var ErrInvalidCredentials = errors.New("invalid username/password")
 
 var ErrInvalidSessionToken = errors.New("invalid session token")
-var ErrInvalidSessionTokenExpired = errors.New("invalid session token")
+var ErrInvalidSessionTokenExpired = errors.New("invalid session, token has expired")
 
 var ErrInvalidRefreshToken = errors.New("invalid refresh token")
+
+var ErrNoAuthHeader = errors.New("empty auth header")
 
 type UserStore interface {
 	CreateUser(model *User) error

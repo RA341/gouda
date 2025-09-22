@@ -8,31 +8,43 @@ import (
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/RA341/gouda/internal/database"
 	"github.com/stretchr/testify/require"
+	"gorm.io/gorm"
 )
 
 const testDir = "./test"
 
-func setup(t *testing.T) (*auth.Service, io.Closer) {
+var (
+	db           *gorm.DB
+	userStore    auth.UserStore
+	sessionStore auth.SessionStore
+)
+
+func setup(t *testing.T) *auth.Service {
 	err := os.MkdirAll(testDir, 0770)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	db, err := database.ConnectToDB(testDir, &auth.User{}, &auth.Session{})
+	db, err = database.ConnectToDB(testDir, &auth.User{}, &auth.Session{})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	as := database.NewAuthSessionGorm(db)
-	us := database.NewAuthStoreGorm(db)
-	service := auth.NewService(as, us)
+	sessionStore = database.NewAuthSessionGorm(db)
+	userStore = database.NewAuthStoreGorm(db)
+
+	service := auth.NewService(sessionStore, userStore)
 
 	d, err := db.DB()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return service, d
+	t.Cleanup(func() {
+		TearDown(d)
+	})
+
+	return service
 }
 
 func TearDown(closer io.Closer) {
@@ -41,10 +53,7 @@ func TearDown(closer io.Closer) {
 }
 
 func Test_Register(t *testing.T) {
-	srv, closer := setup(t)
-	t.Cleanup(func() {
-		TearDown(closer)
-	})
+	srv := setup(t)
 
 	user := "test"
 	pass := "test"
@@ -60,10 +69,7 @@ func Test_Register(t *testing.T) {
 }
 
 func Test_Admin_Existence(t *testing.T) {
-	srv, closer := setup(t)
-	t.Cleanup(func() {
-		TearDown(closer)
-	})
+	srv := setup(t)
 
 	_, err := srv.Login(auth.DefaultAdminUsername, auth.DefaultAdminPassword)
 	require.NoError(t, err)
@@ -74,10 +80,7 @@ func Test_Admin_Existence(t *testing.T) {
 }
 
 func Test_Login(t *testing.T) {
-	srv, closer := setup(t)
-	t.Cleanup(func() {
-		TearDown(closer)
-	})
+	srv := setup(t)
 
 	user := "test"
 	pass := "test"
@@ -94,6 +97,6 @@ func Test_Login(t *testing.T) {
 	sess, err := srv.Login(user, pass)
 	require.NoError(t, err)
 
-	err = srv.VerifySessionToken(sess.SessionToken)
+	err = srv.SessionVerifySessionToken(sess.SessionToken)
 	require.NoError(t, err)
 }

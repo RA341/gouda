@@ -8,8 +8,6 @@ import (
 	v1 "github.com/RA341/gouda/generated/auth/v1"
 )
 
-const TokenHeader = "Authorization"
-
 type Handler struct {
 	srv *Service
 }
@@ -34,7 +32,7 @@ func (a *Handler) Authenticate(_ context.Context, req *connect.Request[v1.AuthRe
 func (a *Handler) Test(_ context.Context, req *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error) {
 	clientToken := req.Msg.GetAuthToken()
 
-	err := a.srv.VerifySessionToken(clientToken)
+	err := a.srv.SessionVerifySessionToken(clientToken)
 	if err != nil {
 		return nil, err
 	}

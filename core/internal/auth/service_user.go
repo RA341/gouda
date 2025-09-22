@@ -6,20 +6,29 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const (
+	DefaultAdminUsername = "admin"
+	DefaultAdminPassword = "gouda"
+	// DefaultAdminID 1 should always be the admin
+	DefaultAdminID = 1
+)
+
 type Service struct {
-	sessions SessionStore
-	user     UserStore
+	*SessionService
+	User UserStore
 }
 
-func NewService(session SessionStore, user UserStore) *Service {
+func NewService(sessionStore SessionStore, user UserStore) *Service {
 	// todo
 	//if info.IsDev() {
 	//	log.Info().Msg("Dev mode, auth is disabled")
 	//}
 
+	session := NewSessionService(sessionStore)
+
 	s := &Service{
-		sessions: session,
-		user:     user,
+		SessionService: session,
+		User:           user,
 	}
 
 	err := s.CreateInitialAdmin()
@@ -30,16 +39,9 @@ func NewService(session SessionStore, user UserStore) *Service {
 	return s
 }
 
-const (
-	DefaultAdminUsername = "admin"
-	DefaultAdminPassword = "gouda"
-	// DefaultAdminID 1 should always be the admin
-	DefaultAdminID = 1
-)
-
 // CreateInitialAdmin creates an admin account if there are no previous users
 func (s *Service) CreateInitialAdmin() error {
-	_, err := s.user.GetUserById(DefaultAdminID)
+	_, err := s.User.GetUserById(DefaultAdminID)
 	if err == nil {
 		return nil
 	}
@@ -53,7 +55,7 @@ func (s *Service) CreateInitialAdmin() error {
 }
 
 func (s *Service) Login(user, pass string) (*Session, error) {
-	dbUser, err := s.user.GetUser(user)
+	dbUser, err := s.User.GetUser(user)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +65,7 @@ func (s *Service) Login(user, pass string) (*Session, error) {
 		return nil, ErrInvalidCredentials
 	}
 
-	session, err := s.createSession(dbUser)
+	session, err := s.sessionCreate(dbUser)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +84,7 @@ func (s *Service) Register(user, pass string, role Role) error {
 		HashedPassword: pass,
 		Role:           role,
 	}
-	err = s.user.CreateUser(u)
+	err = s.User.CreateUser(u)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w", err)
 	}
@@ -91,7 +93,7 @@ func (s *Service) Register(user, pass string, role Role) error {
 }
 
 func (s *Service) UpdateUserSessionLimit(userID, limit uint) error {
-	err := s.user.UpdateMaxSessions(userID, limit)
+	err := s.User.UpdateMaxSessions(userID, limit)
 	if err != nil {
 		return err
 	}
