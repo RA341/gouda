@@ -1,4 +1,3 @@
-# Flutter build
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
 WORKDIR /app/
@@ -11,7 +10,6 @@ COPY ./brie .
 
 RUN flutter build web
 
-# Stage Go build
 FROM golang:1-alpine AS go_builder
 
 # for sqlite
@@ -32,7 +30,7 @@ ARG COMMIT_INFO=unknown
 ARG BRANCH=unknown
 ARG INFO_PACKAGE=github.com/RA341/gouda/internal/info
 
-ENV TARGET=docker
+ARG TARGET=docker
 
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags "-s -w \
              -X ${INFO_PACKAGE}.Flavour=${TARGET} \
