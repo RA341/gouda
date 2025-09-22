@@ -20,15 +20,8 @@ import (
 	"github.com/RA341/gouda/internal/info"
 	"github.com/RA341/gouda/internal/mam"
 	media "github.com/RA341/gouda/internal/media_manager"
-	"github.com/RA341/gouda/pkg/logger"
 	"github.com/rs/zerolog/log"
 )
-
-func Setup(mode info.BinaryType) {
-	logger.ConsoleLogger()
-	info.SetMode(mode)
-	info.PrintInfo()
-}
 
 type App struct {
 	categorySrv *category.Service
@@ -40,7 +33,7 @@ type App struct {
 }
 
 func NewApp(conf *config.GoudaConfig) *App {
-	if conf.MamToken == "" {
+	if conf.MamToken == "" && !info.IsDev() {
 		log.Fatal().Msg("mam token is required, ensure it is set")
 	}
 
@@ -132,14 +125,16 @@ func (a *App) registerHttpHandler(basePath string, subMux http.Handler) (string,
 
 func initDownloadClient(conf *config.TorrentClient) clients.DownloadClient {
 	// load torrent client if previously exists
-	if conf.ClientType == "" {
+	if conf.ClientType == "" && !info.IsDev() {
 		log.Fatal().Msg("client type is required")
 	}
 
 	client, err := clients.InitializeTorrentClient(conf)
 	if err != nil {
-		// todo dont fatal
-		log.Fatal().Err(err).Msg("Failed to initialize torrent client")
+		if !info.IsDev() {
+			// todo dont fatal
+			log.Fatal().Err(err).Msg("Failed to initialize torrent client")
+		}
 		return nil
 	}
 
