@@ -11,10 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   # state management
-  flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
+  flutter_riverpod: ^3.0.0
+  riverpod_annotation: ^3.0.0
   flutter_hooks: ^0.21.3+1
-  hooks_riverpod: ^2.6.1
+  hooks_riverpod: ^3.0.0
 
   # networking
   universal_html: ^2.2.4
@@ -35,9 +35,9 @@ dependencies:
 
 dev_dependencies:
   custom_lint:
-  riverpod_lint: ^2.6.5
+  riverpod_lint: ^3.0.0
   flutter_lints: ^6.0.0
-  very_good_analysis: ^9.0.0
+  very_good_analysis: ^10.0.0
 
 flutter:
   uses-material-design: true
