@@ -19,3 +19,6 @@ scripts_*/**/test
 website/.vitepress/dist
 website/.vitepress/cache
 /website/docs/.vitepress/cache/
+.bin
+.dev
+/core/internal/config/gouda.yml
