@@ -17,7 +17,7 @@ func TestDownloadService(t *testing.T) {
 	config.Load()
 	tdc := TestDownloadClient{torrentList: pkg.Map[string, tor]{}}
 	ts := TestDownloadStore{store: pkg.Map[string, *Media]{}}
-	srv := NewDownloadService(&ts, &con, &tdc)
+	srv := NewService(&ts, &con, &tdc)
 	srv.checkInterval = 10 * time.Second
 
 	numMedia := 100

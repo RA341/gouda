@@ -19,13 +19,15 @@ func NewAuthHandler(srv *Service) *Handler {
 func (a *Handler) Authenticate(_ context.Context, req *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error) {
 	//username := req.Msg.GetUsername()
 	//password := req.Msg.GetPassword()
-
+	//
 	//token, err := a.srv.Login(username, password)
 	//if err != nil {
 	//	return nil, err
 	//}
 
 	//res := connect.NewResponse(&v1.AuthResponse{AuthToken: token})
+	//res.Header().Add(AuthSessionHeader, token.SessionToken)
+
 	return nil, fmt.Errorf("todo not implemented Authenticate")
 }
 

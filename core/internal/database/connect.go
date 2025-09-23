@@ -39,13 +39,13 @@ func ConnectToDB(dbPath string, models ...interface{}) (*gorm.DB, error) {
 	return db, nil
 }
 
-func connect(goudaConf *config.GoudaConfig) (*gorm.DB, error) {
+func connect(goudaConf *config.GoudaConfig, models ...interface{}) (*gorm.DB, error) {
 	dbPath := goudaConf.Dir.ConfigDir
 	if dbPath == "" {
 		log.Fatal().Msgf("db path is empty")
 	}
 
-	db, err := ConnectToDB(dbPath)
+	db, err := ConnectToDB(dbPath, models...)
 	if err != nil {
 		return nil, err
 	}

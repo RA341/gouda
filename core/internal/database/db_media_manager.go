@@ -2,16 +2,17 @@ package database
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/RA341/gouda/internal/downloads"
 	"gorm.io/gorm"
-	"strconv"
 )
 
-type MediaManagerDB struct {
+type MediaManagerStore struct {
 	db *gorm.DB
 }
 
-func (m *MediaManagerDB) Get(id uint) (*downloads.Media, error) {
+func (m *MediaManagerStore) Get(id uint) (*downloads.Media, error) {
 	var media downloads.Media
 	result := m.db.First(&media, id)
 	if result.Error != nil {
@@ -20,7 +21,7 @@ func (m *MediaManagerDB) Get(id uint) (*downloads.Media, error) {
 	return &media, nil
 }
 
-func (m *MediaManagerDB) Search(query string) ([]downloads.Media, error) {
+func (m *MediaManagerStore) Search(query string) ([]downloads.Media, error) {
 	var results []downloads.Media
 	dbQuery := m.db.
 		Order("updated_at desc").
@@ -36,7 +37,7 @@ func (m *MediaManagerDB) Search(query string) ([]downloads.Media, error) {
 	return results, nil
 }
 
-func (m *MediaManagerDB) ListMedia(offset int, limit int) ([]downloads.Media, error) {
+func (m *MediaManagerStore) ListMedia(offset int, limit int) ([]downloads.Media, error) {
 	var results []downloads.Media
 
 	resp := m.db.
@@ -51,7 +52,7 @@ func (m *MediaManagerDB) ListMedia(offset int, limit int) ([]downloads.Media, er
 	return results, nil
 }
 
-func (m *MediaManagerDB) Exists(mamId uint64) (*downloads.Media, bool, error) {
+func (m *MediaManagerStore) Exists(mamId uint64) (*downloads.Media, bool, error) {
 	var media downloads.Media
 	resp := m.db.Where("mam_book_id = ?", mamId).First(&media)
 	if resp.Error != nil {
@@ -60,7 +61,7 @@ func (m *MediaManagerDB) Exists(mamId uint64) (*downloads.Media, bool, error) {
 	return &media, true, nil
 }
 
-func (m *MediaManagerDB) DeleteMedia(id uint) error {
+func (m *MediaManagerStore) DeleteMedia(id uint) error {
 	resp := m.db.Unscoped().Delete(downloads.Media{}, id)
 	if resp.Error != nil {
 		return resp.Error
@@ -69,7 +70,7 @@ func (m *MediaManagerDB) DeleteMedia(id uint) error {
 	return nil
 }
 
-func (m *MediaManagerDB) Edit(media *downloads.Media) error {
+func (m *MediaManagerStore) Edit(media *downloads.Media) error {
 	result := m.db.Save(media)
 	if result.Error != nil {
 		return fmt.Errorf("error editing torrent %v", result.Error.Error())
@@ -77,11 +78,11 @@ func (m *MediaManagerDB) Edit(media *downloads.Media) error {
 	return nil
 }
 
-func (m *MediaManagerDB) Add(media *downloads.Media) error {
+func (m *MediaManagerStore) Add(media *downloads.Media) error {
 	panic("unused method")
 }
 
-func (m *MediaManagerDB) CountAllMedia() (int64, error) {
+func (m *MediaManagerStore) CountAllMedia() (int64, error) {
 	var count int64 = 0
 	resp := m.db.Model(&downloads.Media{}).Count(&count)
 	if resp.Error != nil {

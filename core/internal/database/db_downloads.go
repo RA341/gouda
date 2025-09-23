@@ -5,11 +5,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type DownloadsDB struct {
+type DownloadsStore struct {
 	db *gorm.DB
 }
 
-func (d DownloadsDB) Save(media *downloads.Media) error {
+func (d DownloadsStore) Save(media *downloads.Media) error {
 	res := d.db.Save(&media)
 	if res.Error != nil {
 		return res.Error
@@ -18,7 +18,7 @@ func (d DownloadsDB) Save(media *downloads.Media) error {
 	return nil
 }
 
-func (d DownloadsDB) GetMediaByTorrentId(torrentId string) (*downloads.Media, error) {
+func (d DownloadsStore) GetMediaByTorrentId(torrentId string) (*downloads.Media, error) {
 	var media downloads.Media
 	resp := d.db.
 		Where("torrent_id = ?", torrentId).
@@ -32,7 +32,7 @@ func (d DownloadsDB) GetMediaByTorrentId(torrentId string) (*downloads.Media, er
 	return &media, nil
 }
 
-func (d DownloadsDB) GetDownloadingMedia() ([]downloads.Media, error) {
+func (d DownloadsStore) GetDownloadingMedia() ([]downloads.Media, error) {
 	var results []downloads.Media
 	result := d.db.
 		Model(&downloads.Media{}).

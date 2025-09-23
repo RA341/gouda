@@ -1,0 +1,10 @@
+dir: "./lib"
+
+cmds:
+  windows:
+    startCmd: [ "flutter", "run", "-d", "windows" ]
+    onRefreshInput: "r"
+
+  android:
+    startCmd: [ "flutter", "run", "-d", "emulator-5554" ]
+    onRefreshInput: "r"

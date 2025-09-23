@@ -8,7 +8,7 @@ type Service struct {
 	db Store
 }
 
-func NewCategoryService(db Store) *Service {
+func NewService(db Store) *Service {
 	return &Service{db: db}
 }
 
@@ -18,7 +18,7 @@ func (srv *Service) CreateCategory(category string) error {
 		return err
 	}
 
-	log.Debug().Msgf("Category %s created at index: %d", input.Category, input.ID)
+	log.Debug().Msgf("CategoryStore %s created at index: %d", input.Category, input.ID)
 	return nil
 }
 
@@ -27,7 +27,7 @@ func (srv *Service) DeleteCategory(input *Categories) error {
 		return err
 	}
 
-	log.Debug().Msgf("Category %s deleted at index: %d", input.Category, input.ID)
+	log.Debug().Msgf("CategoryStore %s deleted at index: %d", input.Category, input.ID)
 	return nil
 }
 

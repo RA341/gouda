@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type AuthSessionGorm struct {
+type AuthSessionStore struct {
 	db *gorm.DB
 }
 
-func (a *AuthSessionGorm) DeleteSessionByID(id uint) error {
+func (a *AuthSessionStore) DeleteSessionByID(id uint) error {
 	return a.db.Unscoped().Delete(&auth.Session{}, id).Error
 }
 
-func (a *AuthSessionGorm) GetSessionToken(token string) (*auth.Session, error) {
+func (a *AuthSessionStore) GetSessionToken(token string) (*auth.Session, error) {
 	var session auth.Session
 
 	err := a.db.
@@ -28,11 +28,11 @@ func (a *AuthSessionGorm) GetSessionToken(token string) (*auth.Session, error) {
 	return &session, nil
 }
 
-func NewAuthSessionGorm(db *gorm.DB) *AuthSessionGorm {
-	return &AuthSessionGorm{db: db}
+func NewAuthSessionGorm(db *gorm.DB) *AuthSessionStore {
+	return &AuthSessionStore{db: db}
 }
 
-func (a *AuthSessionGorm) NewSession(newSession *auth.Session, maxSessions uint) error {
+func (a *AuthSessionStore) NewSession(newSession *auth.Session, maxSessions uint) error {
 	return a.db.Transaction(func(tx *gorm.DB) error {
 		// If maxSessions > 0, enforce limit by removing oldest sessions
 		if maxSessions > 0 {
@@ -69,6 +69,6 @@ func (a *AuthSessionGorm) NewSession(newSession *auth.Session, maxSessions uint)
 	})
 }
 
-func (a *AuthSessionGorm) GetRefreshToken(refreshToken string) (*auth.Session, error) {
+func (a *AuthSessionStore) GetRefreshToken(refreshToken string) (*auth.Session, error) {
 	return nil, fmt.Errorf("GetRefreshToken implement me")
 }

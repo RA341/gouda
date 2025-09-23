@@ -1,4 +1,4 @@
-package cmd
+package app
 
 import (
 	"net/http"
@@ -33,6 +33,7 @@ type App struct {
 }
 
 func NewApp(conf *config.GoudaConfig) *App {
+	// todo remove this
 	if conf.MamToken == "" && !info.IsDev() {
 		log.Fatal().Msg("mam token is required, ensure it is set")
 	}
@@ -42,13 +43,14 @@ func NewApp(conf *config.GoudaConfig) *App {
 		log.Fatal().Err(err).Msgf("Failed to connect to database")
 	}
 
-	// todo client loading is wrong
+	// todo client loading is wrong, remove this
 	client := initDownloadClient(&conf.TorrentClient)
-	catSrv := category.NewCategoryService(db)
+
+	authSrv := auth.NewService(db, db)
+	catSrv := category.NewService(db)
 	mamSrv := mam.NewService(conf.MamToken)
-	downloadSrv := downloads.NewDownloadService(conf, db, &conf.TorrentClient, client)
-	mediaSrv := media.NewMediaManagerService(db, downloadSrv, mamSrv)
-	authSrv := auth.NewService(conf)
+	downloadSrv := downloads.NewService(conf, db, &conf.TorrentClient, client)
+	mediaSrv := media.NewService(db, downloadSrv, mamSrv)
 
 	a := &App{
 		categorySrv: catSrv,
@@ -59,19 +61,16 @@ func NewApp(conf *config.GoudaConfig) *App {
 		conf:        conf,
 	}
 
-	if a.useAuth() {
-		a.authSrv = authSrv
-	}
 	return a
 }
 
 func (a *App) registerEndpoints(mux *http.ServeMux) {
 	interceptors := connect.WithInterceptors()
-	if a.useAuth() {
-		interceptors = connect.WithInterceptors(auth.NewAuthInterceptor(a.authSrv))
-	} else {
-		log.Info().Msg("Auth middleware is disabled")
-	}
+	interceptors = connect.WithInterceptors(auth.NewAuthInterceptor(a.authSrv))
+	//if a.useAuth() {
+	//} else {
+	//	log.Info().Msg("Auth middleware is disabled")
+	//}
 
 	endpoints := []func() (string, http.Handler){
 		// auth
@@ -86,9 +85,9 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 		func() (string, http.Handler) {
 			return mamrpc.NewMamServiceHandler(mam.NewHandler(a.mamSrv))
 		},
-		func() (string, http.Handler) {
-			return a.registerHttpHandler("/api/mam", mam.NewHttpHandler(a.mamSrv))
-		},
+		//func() (string, http.Handler) {
+		//	return a.registerHttpHandler("/api/mam", mam.NewHttpHandler(a.mamSrv))
+		//},
 		// settings
 		func() (string, http.Handler) {
 			return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(a.downloadSrv), interceptors)
@@ -103,10 +102,6 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 		path, handler := svc()
 		mux.Handle(path, handler)
 	}
-}
-
-func (a *App) useAuth() bool {
-	return !info.IsDev() && a.conf.Auth
 }
 
 func (a *App) registerHttpHandler(basePath string, subMux http.Handler) (string, http.Handler) {
@@ -140,4 +135,8 @@ func initDownloadClient(conf *config.TorrentClient) clients.DownloadClient {
 
 	log.Info().Str("client", conf.ClientType).Msg("Loaded torrent client")
 	return client
+}
+
+func (a *App) useAuth() bool {
+	return !info.IsDev() && a.conf.Auth
 }

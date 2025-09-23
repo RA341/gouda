@@ -29,7 +29,7 @@ type DownloadService struct {
 	workerChan chan interface{}
 }
 
-func NewDownloadService(conf *config.GoudaConfig, db Store, tor *config.TorrentClient, client dc.DownloadClient) *DownloadService {
+func NewService(conf *config.GoudaConfig, db Store, tor *config.TorrentClient, client dc.DownloadClient) *DownloadService {
 	limit, err := conf.Downloader.GetLimit()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Invalid time string")

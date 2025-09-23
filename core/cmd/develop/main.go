@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/RA341/gouda/cmd"
+	"github.com/RA341/gouda/internal/app"
 )
 
 // for development enables extra stuff via env,
@@ -13,7 +13,7 @@ func main() {
 	Must(os.Setenv("GOUDA_LOG_LEVEL", "debug"))
 	Must(os.Setenv("GOUDA_AUTH_ENABLE", "false"))
 
-	cmd.StartServer(nil)
+	app.StartServer(nil)
 }
 
 func Must(err error) {

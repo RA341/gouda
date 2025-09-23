@@ -3,7 +3,7 @@ package main
 import (
 	"embed"
 
-	"github.com/RA341/gouda/cmd"
+	"github.com/RA341/gouda/internal/app"
 	"github.com/RA341/gouda/internal/tray"
 )
 
@@ -12,6 +12,6 @@ var frontendDir embed.FS
 
 func main() {
 	// server in background
-	go cmd.StartServer(cmd.WithUIFromEmbed(frontendDir))
+	go app.StartServer(app.WithUIFromEmbed(frontendDir))
 	tray.Run()
 }

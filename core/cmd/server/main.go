@@ -3,14 +3,14 @@ package main
 import (
 	"embed"
 
-	"github.com/RA341/gouda/cmd"
+	"github.com/RA341/gouda/internal/app"
 )
 
 //go:embed web
 var frontendDir embed.FS
 
 func main() {
-	cmd.StartServer(
-		cmd.WithUIFromEmbed(frontendDir),
+	app.StartServer(
+		app.WithUIFromEmbed(frontendDir),
 	)
 }

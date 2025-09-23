@@ -24,7 +24,7 @@ type MediaManagerService struct {
 	mam *mam.Service
 }
 
-func NewMediaManagerService(db Store, ds *downloads.DownloadService, mam *mam.Service) *MediaManagerService {
+func NewService(db Store, ds *downloads.DownloadService, mam *mam.Service) *MediaManagerService {
 	return &MediaManagerService{db: db, ds: ds, mam: mam}
 }
 

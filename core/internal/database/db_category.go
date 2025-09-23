@@ -5,11 +5,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type CategoryDB struct {
+type CategoryStore struct {
 	db *gorm.DB
 }
 
-func (c *CategoryDB) Create(category *category.Categories) error {
+func (c *CategoryStore) Create(category *category.Categories) error {
 	result := c.db.Create(category)
 	if result.Error != nil {
 		return result.Error
@@ -17,7 +17,7 @@ func (c *CategoryDB) Create(category *category.Categories) error {
 	return nil
 }
 
-func (c *CategoryDB) DeleteCategory(categoryId uint) error {
+func (c *CategoryStore) DeleteCategory(categoryId uint) error {
 	// perma delete, due to unique constraints
 	// normal db.Delete soft deletes https://gorm.io/docs/delete.html
 	result := c.db.Unscoped().Delete(category.Categories{}, categoryId)
@@ -27,7 +27,7 @@ func (c *CategoryDB) DeleteCategory(categoryId uint) error {
 	return nil
 }
 
-func (c *CategoryDB) ListCategories() ([]category.Categories, error) {
+func (c *CategoryStore) ListCategories() ([]category.Categories, error) {
 	var result []category.Categories
 	res := c.db.Find(&result)
 	if res.Error != nil {

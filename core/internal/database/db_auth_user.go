@@ -8,16 +8,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type AuthStoreGorm struct {
+type AuthStore struct {
 	db *gorm.DB
 }
 
-func NewAuthStoreGorm(db *gorm.DB) *AuthStoreGorm {
-	return &AuthStoreGorm{db: db}
+func NewAuthStoreGorm(db *gorm.DB) *AuthStore {
+	return &AuthStore{db: db}
 }
 
 // CreateUser creates a new user in the database
-func (a *AuthStoreGorm) CreateUser(user *auth.User) error {
+func (a *AuthStore) CreateUser(user *auth.User) error {
 	err := a.db.Create(user).Error
 	if err != nil {
 		if err.Error() == "UNIQUE constraint failed: users.username" {
@@ -30,7 +30,7 @@ func (a *AuthStoreGorm) CreateUser(user *auth.User) error {
 }
 
 // DeleteUser deletes a user from the database
-func (a *AuthStoreGorm) DeleteUser(user *auth.User) error {
+func (a *AuthStore) DeleteUser(user *auth.User) error {
 	// Delete by ID if provided, otherwise by username
 	var result *gorm.DB
 	if user.ID != 0 {
@@ -50,7 +50,7 @@ func (a *AuthStoreGorm) DeleteUser(user *auth.User) error {
 	return nil
 }
 
-func (a *AuthStoreGorm) GetUserById(id uint) (*auth.User, error) {
+func (a *AuthStore) GetUserById(id uint) (*auth.User, error) {
 	user := &auth.User{}
 	err := a.db.
 		First(&user, id).Error
@@ -61,7 +61,7 @@ func (a *AuthStoreGorm) GetUserById(id uint) (*auth.User, error) {
 	return user, nil
 }
 
-func (a *AuthStoreGorm) UpdateMaxSessions(userid uint, count uint) error {
+func (a *AuthStore) UpdateMaxSessions(userid uint, count uint) error {
 	return a.db.Model(auth.User{}).
 		Where("id = ?", userid).
 		Update("max_sessions", count).
@@ -69,7 +69,7 @@ func (a *AuthStoreGorm) UpdateMaxSessions(userid uint, count uint) error {
 }
 
 // GetUser retrieves a user from the database
-func (a *AuthStoreGorm) GetUser(username string) (*auth.User, error) {
+func (a *AuthStore) GetUser(username string) (*auth.User, error) {
 	var user auth.User
 
 	err := a.db.
@@ -86,7 +86,7 @@ func (a *AuthStoreGorm) GetUser(username string) (*auth.User, error) {
 }
 
 // UpdateRole updates a user's role by their ID
-func (a *AuthStoreGorm) UpdateRole(uid uint, role auth.Role) error {
+func (a *AuthStore) UpdateRole(uid uint, role auth.Role) error {
 	if uid == 0 {
 		return fmt.Errorf("user ID cannot be zero")
 	}
@@ -109,7 +109,7 @@ func (a *AuthStoreGorm) UpdateRole(uid uint, role auth.Role) error {
 }
 
 // UpdatePassword updates a user's hashed password by their ID
-func (a *AuthStoreGorm) UpdatePassword(uid uint, hashedPassword string) error {
+func (a *AuthStore) UpdatePassword(uid uint, hashedPassword string) error {
 	if uid == 0 {
 		return fmt.Errorf("user ID cannot be zero")
 	}
