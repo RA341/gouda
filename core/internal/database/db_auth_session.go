@@ -1,8 +1,6 @@
 package database
 
 import (
-	"fmt"
-
 	"github.com/RA341/gouda/internal/auth"
 	"gorm.io/gorm"
 )
@@ -11,28 +9,15 @@ type AuthSessionStore struct {
 	db *gorm.DB
 }
 
-func (a *AuthSessionStore) DeleteSessionByID(id uint) error {
-	return a.db.Unscoped().Delete(&auth.Session{}, id).Error
-}
-
-func (a *AuthSessionStore) GetSessionToken(token string) (*auth.Session, error) {
-	var session auth.Session
-
-	err := a.db.
-		Where("session_token = ?", token).
-		First(&session).Error
-	if err != nil {
-		return nil, err
-	}
-
-	return &session, nil
-}
-
 func NewAuthSessionGorm(db *gorm.DB) *AuthSessionStore {
 	return &AuthSessionStore{db: db}
 }
 
-func (a *AuthSessionStore) NewSession(newSession *auth.Session, maxSessions uint) error {
+func (a *AuthSessionStore) NewSession(session *auth.Session) error {
+	return a.db.Create(session).Error
+}
+
+func (a *AuthSessionStore) NewSessionAutoRotating(newSession *auth.Session, maxSessions uint) error {
 	return a.db.Transaction(func(tx *gorm.DB) error {
 		// If maxSessions > 0, enforce limit by removing oldest sessions
 		if maxSessions > 0 {
@@ -69,6 +54,34 @@ func (a *AuthSessionStore) NewSession(newSession *auth.Session, maxSessions uint
 	})
 }
 
-func (a *AuthSessionStore) GetRefreshToken(refreshToken string) (*auth.Session, error) {
-	return nil, fmt.Errorf("GetRefreshToken implement me")
+func (a *AuthSessionStore) GetSessionFromSessionToken(token string) (*auth.Session, error) {
+	var session auth.Session
+
+	err := a.db.
+		Preload("User").
+		Where("session_token = ?", token).
+		First(&session).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &session, nil
+}
+
+func (a *AuthSessionStore) GetSessionFromRefreshToken(refreshToken string) (*auth.Session, error) {
+	var session auth.Session
+
+	err := a.db.
+		Preload("User").
+		Where("refresh_token = ?", refreshToken).
+		First(&session).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &session, nil
+}
+
+func (a *AuthSessionStore) DeleteSessionByID(id uint) error {
+	return a.db.Unscoped().Delete(&auth.Session{}, id).Error
 }

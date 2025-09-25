@@ -58,7 +58,7 @@ func (s *SessionService) sessionCreate(user *User) (*Session, error) {
 		ExpiryRefreshToken: now.Add(s.refreshDuration),
 	}
 
-	err := s.store.NewSession(ses, user.MaxSessions)
+	err := s.store.NewSessionAutoRotating(ses, user.MaxSessions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create session: %v", err)
 	}
@@ -66,19 +66,53 @@ func (s *SessionService) sessionCreate(user *User) (*Session, error) {
 	return ses, nil
 }
 
-func (s *SessionService) SessionVerifySessionToken(token string) error {
+func (s *SessionService) SessionVerifyToken(token string) error {
+	// todo enable/disable auth
 	//if info.IsDev() {
 	//	return true, nil
 	//}
 
-	session, err := s.store.GetSessionToken(token)
+	session, err := s.store.GetSessionFromSessionToken(token)
 	if err != nil {
 		return fmt.Errorf("failed to get session token %w: %w", ErrInvalidSessionToken, err)
 	}
 
-	if session.ExpirySessionToken.Compare(time.Now()) == -1 {
-		return ErrInvalidSessionTokenExpired
+	return s.checkExpiry(session.ExpirySessionToken)
+}
+
+// SessionRefresh refresh a user session token
+func (s *SessionService) SessionRefresh(refreshToken string) (*Session, error) {
+	// todo enable/disable auth
+	//if info.IsDev() {
+	//	return true, nil
+	//}
+
+	currentSession, err := s.store.GetSessionFromRefreshToken(refreshToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get session %w: %w", ErrInvalidRefreshToken, err)
 	}
 
+	err = s.checkExpiry(currentSession.ExpiryRefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	newSession, err := s.sessionCreate(&currentSession.User)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.SessionDelete(currentSession.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return newSession, nil
+}
+
+func (s *SessionService) checkExpiry(tokenExpiry time.Time) error {
+	if time.Now().After(tokenExpiry) {
+		return ErrInvalidSessionTokenExpired
+	}
 	return nil
 }

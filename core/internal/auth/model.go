@@ -11,7 +11,7 @@ var ErrUserExists = errors.New("username already exists, choose a different user
 var ErrInvalidCredentials = errors.New("invalid username/password")
 
 var ErrInvalidSessionToken = errors.New("invalid session token")
-var ErrInvalidSessionTokenExpired = errors.New("invalid session, token has expired")
+var ErrInvalidSessionTokenExpired = errors.New("token has expired")
 
 var ErrInvalidRefreshToken = errors.New("invalid refresh token")
 
@@ -57,8 +57,13 @@ type Session struct {
 }
 
 type SessionStore interface {
-	NewSession(session *Session, maxSessions uint) error
-	GetRefreshToken(refreshToken string) (*Session, error)
-	GetSessionToken(token string) (*Session, error)
+	// NewSession only creates a new session
+	NewSession(session *Session) error
+	// NewSessionAutoRotating automatically removes the oldest session and creates a new one
+	NewSessionAutoRotating(session *Session, maxSessions uint) error
+
+	GetSessionFromRefreshToken(refreshToken string) (*Session, error)
+	GetSessionFromSessionToken(token string) (*Session, error)
+
 	DeleteSessionByID(id uint) error
 }

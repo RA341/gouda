@@ -7,7 +7,7 @@ import (
 	"connectrpc.com/connect"
 )
 
-const AuthSessionHeader = "Authorization"
+const SessionHeader = "Authorization"
 
 func NewAuthInterceptor(a *Service) connect.UnaryInterceptorFunc {
 	return func(next connect.UnaryFunc) connect.UnaryFunc {
@@ -17,7 +17,7 @@ func NewAuthInterceptor(a *Service) connect.UnaryInterceptorFunc {
 				return nil, err
 			}
 
-			err = a.SessionVerifySessionToken(authToken)
+			err = a.SessionVerifyToken(authToken)
 			if err != nil {
 				return nil, connect.NewError(
 					connect.CodeUnauthenticated,
@@ -31,7 +31,7 @@ func NewAuthInterceptor(a *Service) connect.UnaryInterceptorFunc {
 }
 
 func ExtractTokenFromHeaders(header http.Header) (string, error) {
-	key := header.Get(AuthSessionHeader)
+	key := header.Get(SessionHeader)
 	if key == "" {
 		return "", ErrNoAuthHeader
 	}

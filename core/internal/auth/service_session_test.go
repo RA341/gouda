@@ -33,12 +33,12 @@ func Test_SessionExpiry(t *testing.T) {
 	ses, err := srv.Login(user, pass)
 	require.NoError(t, err)
 
-	err = srv.SessionVerifySessionToken(ses.SessionToken)
+	err = srv.SessionVerifyToken(ses.SessionToken)
 	require.NoError(t, err)
 
 	time.Sleep(tokenDuration)
 
-	err = srv.SessionVerifySessionToken(ses.SessionToken)
+	err = srv.SessionVerifyToken(ses.SessionToken)
 	require.ErrorIs(t, err, auth.ErrInvalidSessionTokenExpired)
 }
 
@@ -54,13 +54,13 @@ func Test_SessionDelete(t *testing.T) {
 	ses, err := srv.Login(user, pass)
 	require.NoError(t, err)
 
-	err = srv.SessionVerifySessionToken(ses.SessionToken)
+	err = srv.SessionVerifyToken(ses.SessionToken)
 	require.NoError(t, err)
 
 	err = srv.SessionDelete(ses.ID)
 	require.NoError(t, err)
 
-	err = srv.SessionVerifySessionToken(ses.SessionToken)
+	err = srv.SessionVerifyToken(ses.SessionToken)
 	require.ErrorIs(t, err, auth.ErrInvalidSessionToken)
 }
 
@@ -90,10 +90,32 @@ func Test_SessionLimit(t *testing.T) {
 	}
 
 	for _, s := range loopSession {
-		err = srv.SessionVerifySessionToken(s.SessionToken)
+		err = srv.SessionVerifyToken(s.SessionToken)
 		require.NoError(t, err)
 	}
 
-	err = srv.SessionVerifySessionToken(initialSession.SessionToken)
+	err = srv.SessionVerifyToken(initialSession.SessionToken)
 	require.Error(t, err)
+}
+
+func Test_SessionRefresh(t *testing.T) {
+	srv := setup(t)
+
+	user := "test"
+	pass := "test"
+
+	err := srv.Register(user, pass, auth.RoleAdmin)
+	require.NoError(t, err)
+
+	initialSession, err := srv.Login(user, pass)
+	require.NoError(t, err)
+
+	refreshSession, err := srv.SessionRefresh(initialSession.RefreshToken)
+	require.NoError(t, err)
+
+	err = srv.SessionVerifyToken(refreshSession.SessionToken)
+	require.NoError(t, err)
+
+	err = srv.SessionVerifyToken(initialSession.SessionToken)
+	require.ErrorIs(t, err, auth.ErrInvalidSessionToken)
 }
