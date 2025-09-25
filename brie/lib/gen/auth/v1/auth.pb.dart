@@ -16,8 +16,8 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
-class AuthRequest extends $pb.GeneratedMessage {
-  factory AuthRequest({
+class LoginRequest extends $pb.GeneratedMessage {
+  factory LoginRequest({
     $core.String? username,
     $core.String? password,
   }) {
@@ -27,17 +27,17 @@ class AuthRequest extends $pb.GeneratedMessage {
     return result;
   }
 
-  AuthRequest._();
+  LoginRequest._();
 
-  factory AuthRequest.fromBuffer($core.List<$core.int> data,
+  factory LoginRequest.fromBuffer($core.List<$core.int> data,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(data, registry);
-  factory AuthRequest.fromJson($core.String json,
+  factory LoginRequest.fromJson($core.String json,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'AuthRequest',
+      _omitMessageNames ? '' : 'LoginRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'username')
@@ -45,24 +45,25 @@ class AuthRequest extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  AuthRequest clone() => AuthRequest()..mergeFromMessage(this);
+  LoginRequest clone() => LoginRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  AuthRequest copyWith(void Function(AuthRequest) updates) =>
-      super.copyWith((message) => updates(message as AuthRequest))
-          as AuthRequest;
+  LoginRequest copyWith(void Function(LoginRequest) updates) =>
+      super.copyWith((message) => updates(message as LoginRequest))
+          as LoginRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static AuthRequest create() => AuthRequest._();
+  static LoginRequest create() => LoginRequest._();
   @$core.override
-  AuthRequest createEmptyInstance() => create();
-  static $pb.PbList<AuthRequest> createRepeated() => $pb.PbList<AuthRequest>();
+  LoginRequest createEmptyInstance() => create();
+  static $pb.PbList<LoginRequest> createRepeated() =>
+      $pb.PbList<LoginRequest>();
   @$core.pragma('dart2js:noInline')
-  static AuthRequest getDefault() => _defaultInstance ??=
-      $pb.GeneratedMessage.$_defaultFor<AuthRequest>(create);
-  static AuthRequest? _defaultInstance;
+  static LoginRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<LoginRequest>(create);
+  static LoginRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get username => $_getSZ(0);
@@ -83,100 +84,449 @@ class AuthRequest extends $pb.GeneratedMessage {
   void clearPassword() => $_clearField(2);
 }
 
-class AuthResponse extends $pb.GeneratedMessage {
-  factory AuthResponse({
-    $core.String? authToken,
+class LoginResponse extends $pb.GeneratedMessage {
+  factory LoginResponse({
+    Session? session,
   }) {
     final result = create();
-    if (authToken != null) result.authToken = authToken;
+    if (session != null) result.session = session;
     return result;
   }
 
-  AuthResponse._();
+  LoginResponse._();
 
-  factory AuthResponse.fromBuffer($core.List<$core.int> data,
+  factory LoginResponse.fromBuffer($core.List<$core.int> data,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(data, registry);
-  factory AuthResponse.fromJson($core.String json,
+  factory LoginResponse.fromJson($core.String json,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'AuthResponse',
+      _omitMessageNames ? '' : 'LoginResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
       createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'authToken', protoName: 'authToken')
+    ..aOM<Session>(1, _omitFieldNames ? '' : 'session',
+        subBuilder: Session.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  AuthResponse clone() => AuthResponse()..mergeFromMessage(this);
+  LoginResponse clone() => LoginResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  AuthResponse copyWith(void Function(AuthResponse) updates) =>
-      super.copyWith((message) => updates(message as AuthResponse))
-          as AuthResponse;
+  LoginResponse copyWith(void Function(LoginResponse) updates) =>
+      super.copyWith((message) => updates(message as LoginResponse))
+          as LoginResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static AuthResponse create() => AuthResponse._();
+  static LoginResponse create() => LoginResponse._();
   @$core.override
-  AuthResponse createEmptyInstance() => create();
-  static $pb.PbList<AuthResponse> createRepeated() =>
-      $pb.PbList<AuthResponse>();
+  LoginResponse createEmptyInstance() => create();
+  static $pb.PbList<LoginResponse> createRepeated() =>
+      $pb.PbList<LoginResponse>();
   @$core.pragma('dart2js:noInline')
-  static AuthResponse getDefault() => _defaultInstance ??=
-      $pb.GeneratedMessage.$_defaultFor<AuthResponse>(create);
-  static AuthResponse? _defaultInstance;
+  static LoginResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<LoginResponse>(create);
+  static LoginResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get authToken => $_getSZ(0);
+  Session get session => $_getN(0);
   @$pb.TagNumber(1)
-  set authToken($core.String value) => $_setString(0, value);
+  set session(Session value) => $_setField(1, value);
   @$pb.TagNumber(1)
-  $core.bool hasAuthToken() => $_has(0);
+  $core.bool hasSession() => $_has(0);
   @$pb.TagNumber(1)
-  void clearAuthToken() => $_clearField(1);
+  void clearSession() => $_clearField(1);
+  @$pb.TagNumber(1)
+  Session ensureSession() => $_ensure(0);
 }
 
-class TestResponse extends $pb.GeneratedMessage {
-  factory TestResponse() => create();
+class RegisterRequest extends $pb.GeneratedMessage {
+  factory RegisterRequest({
+    $core.String? username,
+    $core.String? password,
+    $core.String? passwordVerify,
+  }) {
+    final result = create();
+    if (username != null) result.username = username;
+    if (password != null) result.password = password;
+    if (passwordVerify != null) result.passwordVerify = passwordVerify;
+    return result;
+  }
 
-  TestResponse._();
+  RegisterRequest._();
 
-  factory TestResponse.fromBuffer($core.List<$core.int> data,
+  factory RegisterRequest.fromBuffer($core.List<$core.int> data,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromBuffer(data, registry);
-  factory TestResponse.fromJson($core.String json,
+  factory RegisterRequest.fromJson($core.String json,
           [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'TestResponse',
+      _omitMessageNames ? '' : 'RegisterRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
       createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'username')
+    ..aOS(2, _omitFieldNames ? '' : 'password')
+    ..aOS(3, _omitFieldNames ? '' : 'passwordVerify',
+        protoName: 'passwordVerify')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  TestResponse clone() => TestResponse()..mergeFromMessage(this);
+  RegisterRequest clone() => RegisterRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  TestResponse copyWith(void Function(TestResponse) updates) =>
-      super.copyWith((message) => updates(message as TestResponse))
-          as TestResponse;
+  RegisterRequest copyWith(void Function(RegisterRequest) updates) =>
+      super.copyWith((message) => updates(message as RegisterRequest))
+          as RegisterRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static TestResponse create() => TestResponse._();
+  static RegisterRequest create() => RegisterRequest._();
   @$core.override
-  TestResponse createEmptyInstance() => create();
-  static $pb.PbList<TestResponse> createRepeated() =>
-      $pb.PbList<TestResponse>();
+  RegisterRequest createEmptyInstance() => create();
+  static $pb.PbList<RegisterRequest> createRepeated() =>
+      $pb.PbList<RegisterRequest>();
   @$core.pragma('dart2js:noInline')
-  static TestResponse getDefault() => _defaultInstance ??=
-      $pb.GeneratedMessage.$_defaultFor<TestResponse>(create);
-  static TestResponse? _defaultInstance;
+  static RegisterRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<RegisterRequest>(create);
+  static RegisterRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get username => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set username($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasUsername() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUsername() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get password => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set password($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasPassword() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPassword() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get passwordVerify => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set passwordVerify($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasPasswordVerify() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPasswordVerify() => $_clearField(3);
+}
+
+class RegisterResponse extends $pb.GeneratedMessage {
+  factory RegisterResponse() => create();
+
+  RegisterResponse._();
+
+  factory RegisterResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory RegisterResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RegisterResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RegisterResponse clone() => RegisterResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RegisterResponse copyWith(void Function(RegisterResponse) updates) =>
+      super.copyWith((message) => updates(message as RegisterResponse))
+          as RegisterResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RegisterResponse create() => RegisterResponse._();
+  @$core.override
+  RegisterResponse createEmptyInstance() => create();
+  static $pb.PbList<RegisterResponse> createRepeated() =>
+      $pb.PbList<RegisterResponse>();
+  @$core.pragma('dart2js:noInline')
+  static RegisterResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<RegisterResponse>(create);
+  static RegisterResponse? _defaultInstance;
+}
+
+class VerifySessionRequest extends $pb.GeneratedMessage {
+  factory VerifySessionRequest({
+    $core.String? sessionToken,
+  }) {
+    final result = create();
+    if (sessionToken != null) result.sessionToken = sessionToken;
+    return result;
+  }
+
+  VerifySessionRequest._();
+
+  factory VerifySessionRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory VerifySessionRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'VerifySessionRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'sessionToken', protoName: 'sessionToken')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  VerifySessionRequest clone() =>
+      VerifySessionRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  VerifySessionRequest copyWith(void Function(VerifySessionRequest) updates) =>
+      super.copyWith((message) => updates(message as VerifySessionRequest))
+          as VerifySessionRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static VerifySessionRequest create() => VerifySessionRequest._();
+  @$core.override
+  VerifySessionRequest createEmptyInstance() => create();
+  static $pb.PbList<VerifySessionRequest> createRepeated() =>
+      $pb.PbList<VerifySessionRequest>();
+  @$core.pragma('dart2js:noInline')
+  static VerifySessionRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<VerifySessionRequest>(create);
+  static VerifySessionRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get sessionToken => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set sessionToken($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSessionToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSessionToken() => $_clearField(1);
+}
+
+class VerifySessionResponse extends $pb.GeneratedMessage {
+  factory VerifySessionResponse() => create();
+
+  VerifySessionResponse._();
+
+  factory VerifySessionResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory VerifySessionResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'VerifySessionResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  VerifySessionResponse clone() =>
+      VerifySessionResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  VerifySessionResponse copyWith(
+          void Function(VerifySessionResponse) updates) =>
+      super.copyWith((message) => updates(message as VerifySessionResponse))
+          as VerifySessionResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static VerifySessionResponse create() => VerifySessionResponse._();
+  @$core.override
+  VerifySessionResponse createEmptyInstance() => create();
+  static $pb.PbList<VerifySessionResponse> createRepeated() =>
+      $pb.PbList<VerifySessionResponse>();
+  @$core.pragma('dart2js:noInline')
+  static VerifySessionResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<VerifySessionResponse>(create);
+  static VerifySessionResponse? _defaultInstance;
+}
+
+class RefreshSessionRequest extends $pb.GeneratedMessage {
+  factory RefreshSessionRequest({
+    $core.String? refreshToken,
+  }) {
+    final result = create();
+    if (refreshToken != null) result.refreshToken = refreshToken;
+    return result;
+  }
+
+  RefreshSessionRequest._();
+
+  factory RefreshSessionRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory RefreshSessionRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RefreshSessionRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'refreshToken', protoName: 'refreshToken')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RefreshSessionRequest clone() =>
+      RefreshSessionRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RefreshSessionRequest copyWith(
+          void Function(RefreshSessionRequest) updates) =>
+      super.copyWith((message) => updates(message as RefreshSessionRequest))
+          as RefreshSessionRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RefreshSessionRequest create() => RefreshSessionRequest._();
+  @$core.override
+  RefreshSessionRequest createEmptyInstance() => create();
+  static $pb.PbList<RefreshSessionRequest> createRepeated() =>
+      $pb.PbList<RefreshSessionRequest>();
+  @$core.pragma('dart2js:noInline')
+  static RefreshSessionRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<RefreshSessionRequest>(create);
+  static RefreshSessionRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get refreshToken => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set refreshToken($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasRefreshToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRefreshToken() => $_clearField(1);
+}
+
+class RefreshSessionResponse extends $pb.GeneratedMessage {
+  factory RefreshSessionResponse() => create();
+
+  RefreshSessionResponse._();
+
+  factory RefreshSessionResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory RefreshSessionResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'RefreshSessionResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RefreshSessionResponse clone() =>
+      RefreshSessionResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  RefreshSessionResponse copyWith(
+          void Function(RefreshSessionResponse) updates) =>
+      super.copyWith((message) => updates(message as RefreshSessionResponse))
+          as RefreshSessionResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RefreshSessionResponse create() => RefreshSessionResponse._();
+  @$core.override
+  RefreshSessionResponse createEmptyInstance() => create();
+  static $pb.PbList<RefreshSessionResponse> createRepeated() =>
+      $pb.PbList<RefreshSessionResponse>();
+  @$core.pragma('dart2js:noInline')
+  static RefreshSessionResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<RefreshSessionResponse>(create);
+  static RefreshSessionResponse? _defaultInstance;
+}
+
+class Session extends $pb.GeneratedMessage {
+  factory Session({
+    $core.String? refreshToken,
+    $core.String? sessionToken,
+  }) {
+    final result = create();
+    if (refreshToken != null) result.refreshToken = refreshToken;
+    if (sessionToken != null) result.sessionToken = sessionToken;
+    return result;
+  }
+
+  Session._();
+
+  factory Session.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Session.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'Session',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'refreshToken', protoName: 'refreshToken')
+    ..aOS(2, _omitFieldNames ? '' : 'sessionToken', protoName: 'sessionToken')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Session clone() => Session()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  Session copyWith(void Function(Session) updates) =>
+      super.copyWith((message) => updates(message as Session)) as Session;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Session create() => Session._();
+  @$core.override
+  Session createEmptyInstance() => create();
+  static $pb.PbList<Session> createRepeated() => $pb.PbList<Session>();
+  @$core.pragma('dart2js:noInline')
+  static Session getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Session>(create);
+  static Session? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get refreshToken => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set refreshToken($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasRefreshToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRefreshToken() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get sessionToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set sessionToken($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSessionToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSessionToken() => $_clearField(2);
 }
 
 const $core.bool _omitFieldNames =

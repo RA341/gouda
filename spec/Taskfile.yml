@@ -6,7 +6,7 @@ vars:
     sh: pwd
 
   IMAGE_NAME: protobuilder/gouda
-  CORE_DIR: ../src/generated
+  CORE_DIR: ../core/generated
   UI_DIR: ../brie/lib/gen
   WEB_DIR: ../parmesan/source/gen
   GENERATED_DIR: generated

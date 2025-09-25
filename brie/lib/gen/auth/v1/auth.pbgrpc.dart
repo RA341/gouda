@@ -32,31 +32,55 @@ class AuthServiceClient extends $grpc.Client {
 
   AuthServiceClient(super.channel, {super.options, super.interceptors});
 
-  $grpc.ResponseFuture<$0.AuthResponse> authenticate(
-    $0.AuthRequest request, {
+  $grpc.ResponseFuture<$0.LoginResponse> login(
+    $0.LoginRequest request, {
     $grpc.CallOptions? options,
   }) {
-    return $createUnaryCall(_$authenticate, request, options: options);
+    return $createUnaryCall(_$login, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.TestResponse> test(
-    $0.AuthResponse request, {
+  $grpc.ResponseFuture<$0.RegisterResponse> register(
+    $0.RegisterRequest request, {
     $grpc.CallOptions? options,
   }) {
-    return $createUnaryCall(_$test, request, options: options);
+    return $createUnaryCall(_$register, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.VerifySessionResponse> verifySession(
+    $0.VerifySessionRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$verifySession, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.RefreshSessionResponse> refreshSession(
+    $0.RefreshSessionRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$refreshSession, request, options: options);
   }
 
   // method descriptors
 
-  static final _$authenticate =
-      $grpc.ClientMethod<$0.AuthRequest, $0.AuthResponse>(
-          '/auth.v1.AuthService/Authenticate',
-          ($0.AuthRequest value) => value.writeToBuffer(),
-          $0.AuthResponse.fromBuffer);
-  static final _$test = $grpc.ClientMethod<$0.AuthResponse, $0.TestResponse>(
-      '/auth.v1.AuthService/Test',
-      ($0.AuthResponse value) => value.writeToBuffer(),
-      $0.TestResponse.fromBuffer);
+  static final _$login = $grpc.ClientMethod<$0.LoginRequest, $0.LoginResponse>(
+      '/auth.v1.AuthService/Login',
+      ($0.LoginRequest value) => value.writeToBuffer(),
+      $0.LoginResponse.fromBuffer);
+  static final _$register =
+      $grpc.ClientMethod<$0.RegisterRequest, $0.RegisterResponse>(
+          '/auth.v1.AuthService/Register',
+          ($0.RegisterRequest value) => value.writeToBuffer(),
+          $0.RegisterResponse.fromBuffer);
+  static final _$verifySession =
+      $grpc.ClientMethod<$0.VerifySessionRequest, $0.VerifySessionResponse>(
+          '/auth.v1.AuthService/VerifySession',
+          ($0.VerifySessionRequest value) => value.writeToBuffer(),
+          $0.VerifySessionResponse.fromBuffer);
+  static final _$refreshSession =
+      $grpc.ClientMethod<$0.RefreshSessionRequest, $0.RefreshSessionResponse>(
+          '/auth.v1.AuthService/RefreshSession',
+          ($0.RefreshSessionRequest value) => value.writeToBuffer(),
+          $0.RefreshSessionResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('auth.v1.AuthService')
@@ -64,35 +88,71 @@ abstract class AuthServiceBase extends $grpc.Service {
   $core.String get $name => 'auth.v1.AuthService';
 
   AuthServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.AuthRequest, $0.AuthResponse>(
-        'Authenticate',
-        authenticate_Pre,
+    $addMethod($grpc.ServiceMethod<$0.LoginRequest, $0.LoginResponse>(
+        'Login',
+        login_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.AuthRequest.fromBuffer(value),
-        ($0.AuthResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.AuthResponse, $0.TestResponse>(
-        'Test',
-        test_Pre,
+        ($core.List<$core.int> value) => $0.LoginRequest.fromBuffer(value),
+        ($0.LoginResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RegisterRequest, $0.RegisterResponse>(
+        'Register',
+        register_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.AuthResponse.fromBuffer(value),
-        ($0.TestResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $0.RegisterRequest.fromBuffer(value),
+        ($0.RegisterResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.VerifySessionRequest, $0.VerifySessionResponse>(
+            'VerifySession',
+            verifySession_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.VerifySessionRequest.fromBuffer(value),
+            ($0.VerifySessionResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RefreshSessionRequest,
+            $0.RefreshSessionResponse>(
+        'RefreshSession',
+        refreshSession_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.RefreshSessionRequest.fromBuffer(value),
+        ($0.RefreshSessionResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.AuthResponse> authenticate_Pre(
-      $grpc.ServiceCall $call, $async.Future<$0.AuthRequest> $request) async {
-    return authenticate($call, await $request);
+  $async.Future<$0.LoginResponse> login_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.LoginRequest> $request) async {
+    return login($call, await $request);
   }
 
-  $async.Future<$0.AuthResponse> authenticate(
-      $grpc.ServiceCall call, $0.AuthRequest request);
+  $async.Future<$0.LoginResponse> login(
+      $grpc.ServiceCall call, $0.LoginRequest request);
 
-  $async.Future<$0.TestResponse> test_Pre(
-      $grpc.ServiceCall $call, $async.Future<$0.AuthResponse> $request) async {
-    return test($call, await $request);
+  $async.Future<$0.RegisterResponse> register_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.RegisterRequest> $request) async {
+    return register($call, await $request);
   }
 
-  $async.Future<$0.TestResponse> test(
-      $grpc.ServiceCall call, $0.AuthResponse request);
+  $async.Future<$0.RegisterResponse> register(
+      $grpc.ServiceCall call, $0.RegisterRequest request);
+
+  $async.Future<$0.VerifySessionResponse> verifySession_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.VerifySessionRequest> $request) async {
+    return verifySession($call, await $request);
+  }
+
+  $async.Future<$0.VerifySessionResponse> verifySession(
+      $grpc.ServiceCall call, $0.VerifySessionRequest request);
+
+  $async.Future<$0.RefreshSessionResponse> refreshSession_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.RefreshSessionRequest> $request) async {
+    return refreshSession($call, await $request);
+  }
+
+  $async.Future<$0.RefreshSessionResponse> refreshSession(
+      $grpc.ServiceCall call, $0.RefreshSessionRequest request);
 }

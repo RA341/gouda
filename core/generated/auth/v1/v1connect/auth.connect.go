@@ -33,17 +33,24 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// AuthServiceAuthenticateProcedure is the fully-qualified name of the AuthService's Authenticate
+	// AuthServiceLoginProcedure is the fully-qualified name of the AuthService's Login RPC.
+	AuthServiceLoginProcedure = "/auth.v1.AuthService/Login"
+	// AuthServiceRegisterProcedure is the fully-qualified name of the AuthService's Register RPC.
+	AuthServiceRegisterProcedure = "/auth.v1.AuthService/Register"
+	// AuthServiceVerifySessionProcedure is the fully-qualified name of the AuthService's VerifySession
 	// RPC.
-	AuthServiceAuthenticateProcedure = "/auth.v1.AuthService/Authenticate"
-	// AuthServiceTestProcedure is the fully-qualified name of the AuthService's Test RPC.
-	AuthServiceTestProcedure = "/auth.v1.AuthService/Test"
+	AuthServiceVerifySessionProcedure = "/auth.v1.AuthService/VerifySession"
+	// AuthServiceRefreshSessionProcedure is the fully-qualified name of the AuthService's
+	// RefreshSession RPC.
+	AuthServiceRefreshSessionProcedure = "/auth.v1.AuthService/RefreshSession"
 )
 
 // AuthServiceClient is a client for the auth.v1.AuthService service.
 type AuthServiceClient interface {
-	Authenticate(context.Context, *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error)
-	Test(context.Context, *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error)
+	Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error)
+	Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error)
+	VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error)
+	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
 }
 
 // NewAuthServiceClient constructs a client for the auth.v1.AuthService service. By default, it uses
@@ -57,16 +64,28 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 	baseURL = strings.TrimRight(baseURL, "/")
 	authServiceMethods := v1.File_auth_v1_auth_proto.Services().ByName("AuthService").Methods()
 	return &authServiceClient{
-		authenticate: connect.NewClient[v1.AuthRequest, v1.AuthResponse](
+		login: connect.NewClient[v1.LoginRequest, v1.LoginResponse](
 			httpClient,
-			baseURL+AuthServiceAuthenticateProcedure,
-			connect.WithSchema(authServiceMethods.ByName("Authenticate")),
+			baseURL+AuthServiceLoginProcedure,
+			connect.WithSchema(authServiceMethods.ByName("Login")),
 			connect.WithClientOptions(opts...),
 		),
-		test: connect.NewClient[v1.AuthResponse, v1.TestResponse](
+		register: connect.NewClient[v1.RegisterRequest, v1.RegisterResponse](
 			httpClient,
-			baseURL+AuthServiceTestProcedure,
-			connect.WithSchema(authServiceMethods.ByName("Test")),
+			baseURL+AuthServiceRegisterProcedure,
+			connect.WithSchema(authServiceMethods.ByName("Register")),
+			connect.WithClientOptions(opts...),
+		),
+		verifySession: connect.NewClient[v1.VerifySessionRequest, v1.VerifySessionResponse](
+			httpClient,
+			baseURL+AuthServiceVerifySessionProcedure,
+			connect.WithSchema(authServiceMethods.ByName("VerifySession")),
+			connect.WithClientOptions(opts...),
+		),
+		refreshSession: connect.NewClient[v1.RefreshSessionRequest, v1.RefreshSessionResponse](
+			httpClient,
+			baseURL+AuthServiceRefreshSessionProcedure,
+			connect.WithSchema(authServiceMethods.ByName("RefreshSession")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -74,24 +93,38 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 
 // authServiceClient implements AuthServiceClient.
 type authServiceClient struct {
-	authenticate *connect.Client[v1.AuthRequest, v1.AuthResponse]
-	test         *connect.Client[v1.AuthResponse, v1.TestResponse]
+	login          *connect.Client[v1.LoginRequest, v1.LoginResponse]
+	register       *connect.Client[v1.RegisterRequest, v1.RegisterResponse]
+	verifySession  *connect.Client[v1.VerifySessionRequest, v1.VerifySessionResponse]
+	refreshSession *connect.Client[v1.RefreshSessionRequest, v1.RefreshSessionResponse]
 }
 
-// Authenticate calls auth.v1.AuthService.Authenticate.
-func (c *authServiceClient) Authenticate(ctx context.Context, req *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error) {
-	return c.authenticate.CallUnary(ctx, req)
+// Login calls auth.v1.AuthService.Login.
+func (c *authServiceClient) Login(ctx context.Context, req *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
+	return c.login.CallUnary(ctx, req)
 }
 
-// Test calls auth.v1.AuthService.Test.
-func (c *authServiceClient) Test(ctx context.Context, req *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error) {
-	return c.test.CallUnary(ctx, req)
+// Register calls auth.v1.AuthService.Register.
+func (c *authServiceClient) Register(ctx context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
+	return c.register.CallUnary(ctx, req)
+}
+
+// VerifySession calls auth.v1.AuthService.VerifySession.
+func (c *authServiceClient) VerifySession(ctx context.Context, req *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {
+	return c.verifySession.CallUnary(ctx, req)
+}
+
+// RefreshSession calls auth.v1.AuthService.RefreshSession.
+func (c *authServiceClient) RefreshSession(ctx context.Context, req *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error) {
+	return c.refreshSession.CallUnary(ctx, req)
 }
 
 // AuthServiceHandler is an implementation of the auth.v1.AuthService service.
 type AuthServiceHandler interface {
-	Authenticate(context.Context, *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error)
-	Test(context.Context, *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error)
+	Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error)
+	Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error)
+	VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error)
+	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
 }
 
 // NewAuthServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -101,24 +134,40 @@ type AuthServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	authServiceMethods := v1.File_auth_v1_auth_proto.Services().ByName("AuthService").Methods()
-	authServiceAuthenticateHandler := connect.NewUnaryHandler(
-		AuthServiceAuthenticateProcedure,
-		svc.Authenticate,
-		connect.WithSchema(authServiceMethods.ByName("Authenticate")),
+	authServiceLoginHandler := connect.NewUnaryHandler(
+		AuthServiceLoginProcedure,
+		svc.Login,
+		connect.WithSchema(authServiceMethods.ByName("Login")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authServiceTestHandler := connect.NewUnaryHandler(
-		AuthServiceTestProcedure,
-		svc.Test,
-		connect.WithSchema(authServiceMethods.ByName("Test")),
+	authServiceRegisterHandler := connect.NewUnaryHandler(
+		AuthServiceRegisterProcedure,
+		svc.Register,
+		connect.WithSchema(authServiceMethods.ByName("Register")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authServiceVerifySessionHandler := connect.NewUnaryHandler(
+		AuthServiceVerifySessionProcedure,
+		svc.VerifySession,
+		connect.WithSchema(authServiceMethods.ByName("VerifySession")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authServiceRefreshSessionHandler := connect.NewUnaryHandler(
+		AuthServiceRefreshSessionProcedure,
+		svc.RefreshSession,
+		connect.WithSchema(authServiceMethods.ByName("RefreshSession")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/auth.v1.AuthService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case AuthServiceAuthenticateProcedure:
-			authServiceAuthenticateHandler.ServeHTTP(w, r)
-		case AuthServiceTestProcedure:
-			authServiceTestHandler.ServeHTTP(w, r)
+		case AuthServiceLoginProcedure:
+			authServiceLoginHandler.ServeHTTP(w, r)
+		case AuthServiceRegisterProcedure:
+			authServiceRegisterHandler.ServeHTTP(w, r)
+		case AuthServiceVerifySessionProcedure:
+			authServiceVerifySessionHandler.ServeHTTP(w, r)
+		case AuthServiceRefreshSessionProcedure:
+			authServiceRefreshSessionHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -128,10 +177,18 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 // UnimplementedAuthServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedAuthServiceHandler struct{}
 
-func (UnimplementedAuthServiceHandler) Authenticate(context.Context, *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.Authenticate is not implemented"))
+func (UnimplementedAuthServiceHandler) Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.Login is not implemented"))
 }
 
-func (UnimplementedAuthServiceHandler) Test(context.Context, *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.Test is not implemented"))
+func (UnimplementedAuthServiceHandler) Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.Register is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.VerifySession is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.RefreshSession is not implemented"))
 }

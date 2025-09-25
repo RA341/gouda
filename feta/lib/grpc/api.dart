@@ -1,36 +1,8 @@
 import 'package:feta/config.dart';
 import 'package:feta/grpc/grpc_native.dart'
     if (dart.library.html) 'package:feta/grpc/grpc_web.dart';
-import 'package:feta/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/grpc.dart';
-
-const prefsAuthorizationKey = 'AuthToken';
-const prefsBaseUrl = 'BaseUrl';
-
-final apiTokenProvider = Provider<String>((ref) {
-  return prefs.getString(prefsAuthorizationKey) ?? '';
-});
-
-Future<void> updateBasepath(WidgetRef ref, String baseurl) async {
-  await prefs.setString(prefsBaseUrl, baseurl);
-  ref.invalidate(basePathProvider);
-}
-
-final basePathProvider = Provider<String>((ref) {
-  // setup for future feature to modify base path from within the client
-  var basePath = prefs.getString(prefsBaseUrl) ?? '';
-
-  // final finalPath = basePath ?? devUrl;
-
-  basePath = basePath.endsWith('/')
-      ? basePath.substring(0, basePath.length - 1)
-      : basePath;
-
-  logger.i('Base path is: $basePath');
-
-  return basePath;
-});
 
 final grpcChannelProvider = Provider<Channel>((ref) {
   final apiBasePath = ref.watch(basePathProvider);
@@ -40,8 +12,8 @@ final grpcChannelProvider = Provider<Channel>((ref) {
 });
 
 final authInterceptorProvider = Provider<AuthInterceptor>((ref) {
-  final token = ref.watch(apiTokenProvider);
-  return AuthInterceptor(token);
+  // final token = ref.watch(apiTokenProvider);
+  return AuthInterceptor('');
 });
 
 class AuthInterceptor implements ClientInterceptor {

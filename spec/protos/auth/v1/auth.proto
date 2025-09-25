@@ -5,18 +5,45 @@ package auth.v1;
 option go_package = "github.com/RA341/gouda/generated/auth/v1";
 
 service AuthService {
-  rpc Authenticate(AuthRequest) returns (AuthResponse) {}
-  rpc Test(AuthResponse) returns (TestResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
 
+  rpc VerifySession(VerifySessionRequest) returns (VerifySessionResponse) {}
+  rpc RefreshSession(RefreshSessionRequest) returns (RefreshSessionResponse) {}
 }
 
-message AuthRequest {
+message LoginRequest {
   string username = 1;
   string password = 2;
 }
 
-message AuthResponse {
-  string authToken = 1;
+message LoginResponse {
+    Session session = 1;
 }
 
-message TestResponse {}
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string passwordVerify = 3;
+}
+
+message RegisterResponse {}
+
+message VerifySessionRequest {
+  string sessionToken = 1;
+}
+
+message VerifySessionResponse {}
+
+message RefreshSessionRequest {
+  string refreshToken = 1;
+}
+
+message RefreshSessionResponse {
+  Session session = 1;
+}
+
+message Session {
+  string refreshToken = 1;
+  string sessionToken = 2;
+}

@@ -10,12 +10,12 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file auth/v1/auth.proto.
  */
 export const file_auth_v1_auth: GenFile = /*@__PURE__*/
-  fileDesc("ChJhdXRoL3YxL2F1dGgucHJvdG8SB2F1dGgudjEiMQoLQXV0aFJlcXVlc3QSEAoIdXNlcm5hbWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiIQoMQXV0aFJlc3BvbnNlEhEKCWF1dGhUb2tlbhgBIAEoCSIOCgxUZXN0UmVzcG9uc2UyhAEKC0F1dGhTZXJ2aWNlEj0KDEF1dGhlbnRpY2F0ZRIULmF1dGgudjEuQXV0aFJlcXVlc3QaFS5hdXRoLnYxLkF1dGhSZXNwb25zZSIAEjYKBFRlc3QSFS5hdXRoLnYxLkF1dGhSZXNwb25zZRoVLmF1dGgudjEuVGVzdFJlc3BvbnNlIgBCfwoLY29tLmF1dGgudjFCCUF1dGhQcm90b1ABWihnaXRodWIuY29tL1JBMzQxL2dvdWRhL2dlbmVyYXRlZC9hdXRoL3YxogIDQVhYqgIHQXV0aC5WMcoCB0F1dGhcVjHiAhNBdXRoXFYxXEdQQk1ldGFkYXRh6gIIQXV0aDo6VjFiBnByb3RvMw");
+  fileDesc("ChJhdXRoL3YxL2F1dGgucHJvdG8SB2F1dGgudjEiMgoMTG9naW5SZXF1ZXN0EhAKCHVzZXJuYW1lGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJIjIKDUxvZ2luUmVzcG9uc2USIQoHc2Vzc2lvbhgBIAEoCzIQLmF1dGgudjEuU2Vzc2lvbiJNCg9SZWdpc3RlclJlcXVlc3QSEAoIdXNlcm5hbWUYASABKAkSEAoIcGFzc3dvcmQYAiABKAkSFgoOcGFzc3dvcmRWZXJpZnkYAyABKAkiEgoQUmVnaXN0ZXJSZXNwb25zZSIsChRWZXJpZnlTZXNzaW9uUmVxdWVzdBIUCgxzZXNzaW9uVG9rZW4YASABKAkiFwoVVmVyaWZ5U2Vzc2lvblJlc3BvbnNlIi0KFVJlZnJlc2hTZXNzaW9uUmVxdWVzdBIUCgxyZWZyZXNoVG9rZW4YASABKAkiGAoWUmVmcmVzaFNlc3Npb25SZXNwb25zZSI1CgdTZXNzaW9uEhQKDHJlZnJlc2hUb2tlbhgBIAEoCRIUCgxzZXNzaW9uVG9rZW4YAiABKAkysQIKC0F1dGhTZXJ2aWNlEjgKBUxvZ2luEhUuYXV0aC52MS5Mb2dpblJlcXVlc3QaFi5hdXRoLnYxLkxvZ2luUmVzcG9uc2UiABJBCghSZWdpc3RlchIYLmF1dGgudjEuUmVnaXN0ZXJSZXF1ZXN0GhkuYXV0aC52MS5SZWdpc3RlclJlc3BvbnNlIgASUAoNVmVyaWZ5U2Vzc2lvbhIdLmF1dGgudjEuVmVyaWZ5U2Vzc2lvblJlcXVlc3QaHi5hdXRoLnYxLlZlcmlmeVNlc3Npb25SZXNwb25zZSIAElMKDlJlZnJlc2hTZXNzaW9uEh4uYXV0aC52MS5SZWZyZXNoU2Vzc2lvblJlcXVlc3QaHy5hdXRoLnYxLlJlZnJlc2hTZXNzaW9uUmVzcG9uc2UiAEJ/Cgtjb20uYXV0aC52MUIJQXV0aFByb3RvUAFaKGdpdGh1Yi5jb20vUkEzNDEvZ291ZGEvZ2VuZXJhdGVkL2F1dGgvdjGiAgNBWFiqAgdBdXRoLlYxygIHQXV0aFxWMeICE0F1dGhcVjFcR1BCTWV0YWRhdGHqAghBdXRoOjpWMWIGcHJvdG8z");
 
 /**
- * @generated from message auth.v1.AuthRequest
+ * @generated from message auth.v1.LoginRequest
  */
-export type AuthRequest = Message<"auth.v1.AuthRequest"> & {
+export type LoginRequest = Message<"auth.v1.LoginRequest"> & {
   /**
    * @generated from field: string username = 1;
    */
@@ -28,61 +28,186 @@ export type AuthRequest = Message<"auth.v1.AuthRequest"> & {
 };
 
 /**
- * Describes the message auth.v1.AuthRequest.
- * Use `create(AuthRequestSchema)` to create a new message.
+ * Describes the message auth.v1.LoginRequest.
+ * Use `create(LoginRequestSchema)` to create a new message.
  */
-export const AuthRequestSchema: GenMessage<AuthRequest> = /*@__PURE__*/
+export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
   messageDesc(file_auth_v1_auth, 0);
 
 /**
- * @generated from message auth.v1.AuthResponse
+ * @generated from message auth.v1.LoginResponse
  */
-export type AuthResponse = Message<"auth.v1.AuthResponse"> & {
+export type LoginResponse = Message<"auth.v1.LoginResponse"> & {
   /**
-   * @generated from field: string authToken = 1;
+   * @generated from field: auth.v1.Session session = 1;
    */
-  authToken: string;
+  session?: Session;
 };
 
 /**
- * Describes the message auth.v1.AuthResponse.
- * Use `create(AuthResponseSchema)` to create a new message.
+ * Describes the message auth.v1.LoginResponse.
+ * Use `create(LoginResponseSchema)` to create a new message.
  */
-export const AuthResponseSchema: GenMessage<AuthResponse> = /*@__PURE__*/
+export const LoginResponseSchema: GenMessage<LoginResponse> = /*@__PURE__*/
   messageDesc(file_auth_v1_auth, 1);
 
 /**
- * @generated from message auth.v1.TestResponse
+ * @generated from message auth.v1.RegisterRequest
  */
-export type TestResponse = Message<"auth.v1.TestResponse"> & {
+export type RegisterRequest = Message<"auth.v1.RegisterRequest"> & {
+  /**
+   * @generated from field: string username = 1;
+   */
+  username: string;
+
+  /**
+   * @generated from field: string password = 2;
+   */
+  password: string;
+
+  /**
+   * @generated from field: string passwordVerify = 3;
+   */
+  passwordVerify: string;
 };
 
 /**
- * Describes the message auth.v1.TestResponse.
- * Use `create(TestResponseSchema)` to create a new message.
+ * Describes the message auth.v1.RegisterRequest.
+ * Use `create(RegisterRequestSchema)` to create a new message.
  */
-export const TestResponseSchema: GenMessage<TestResponse> = /*@__PURE__*/
+export const RegisterRequestSchema: GenMessage<RegisterRequest> = /*@__PURE__*/
   messageDesc(file_auth_v1_auth, 2);
+
+/**
+ * @generated from message auth.v1.RegisterResponse
+ */
+export type RegisterResponse = Message<"auth.v1.RegisterResponse"> & {
+};
+
+/**
+ * Describes the message auth.v1.RegisterResponse.
+ * Use `create(RegisterResponseSchema)` to create a new message.
+ */
+export const RegisterResponseSchema: GenMessage<RegisterResponse> = /*@__PURE__*/
+  messageDesc(file_auth_v1_auth, 3);
+
+/**
+ * @generated from message auth.v1.VerifySessionRequest
+ */
+export type VerifySessionRequest = Message<"auth.v1.VerifySessionRequest"> & {
+  /**
+   * @generated from field: string sessionToken = 1;
+   */
+  sessionToken: string;
+};
+
+/**
+ * Describes the message auth.v1.VerifySessionRequest.
+ * Use `create(VerifySessionRequestSchema)` to create a new message.
+ */
+export const VerifySessionRequestSchema: GenMessage<VerifySessionRequest> = /*@__PURE__*/
+  messageDesc(file_auth_v1_auth, 4);
+
+/**
+ * @generated from message auth.v1.VerifySessionResponse
+ */
+export type VerifySessionResponse = Message<"auth.v1.VerifySessionResponse"> & {
+};
+
+/**
+ * Describes the message auth.v1.VerifySessionResponse.
+ * Use `create(VerifySessionResponseSchema)` to create a new message.
+ */
+export const VerifySessionResponseSchema: GenMessage<VerifySessionResponse> = /*@__PURE__*/
+  messageDesc(file_auth_v1_auth, 5);
+
+/**
+ * @generated from message auth.v1.RefreshSessionRequest
+ */
+export type RefreshSessionRequest = Message<"auth.v1.RefreshSessionRequest"> & {
+  /**
+   * @generated from field: string refreshToken = 1;
+   */
+  refreshToken: string;
+};
+
+/**
+ * Describes the message auth.v1.RefreshSessionRequest.
+ * Use `create(RefreshSessionRequestSchema)` to create a new message.
+ */
+export const RefreshSessionRequestSchema: GenMessage<RefreshSessionRequest> = /*@__PURE__*/
+  messageDesc(file_auth_v1_auth, 6);
+
+/**
+ * @generated from message auth.v1.RefreshSessionResponse
+ */
+export type RefreshSessionResponse = Message<"auth.v1.RefreshSessionResponse"> & {
+};
+
+/**
+ * Describes the message auth.v1.RefreshSessionResponse.
+ * Use `create(RefreshSessionResponseSchema)` to create a new message.
+ */
+export const RefreshSessionResponseSchema: GenMessage<RefreshSessionResponse> = /*@__PURE__*/
+  messageDesc(file_auth_v1_auth, 7);
+
+/**
+ * @generated from message auth.v1.Session
+ */
+export type Session = Message<"auth.v1.Session"> & {
+  /**
+   * @generated from field: string refreshToken = 1;
+   */
+  refreshToken: string;
+
+  /**
+   * @generated from field: string sessionToken = 2;
+   */
+  sessionToken: string;
+};
+
+/**
+ * Describes the message auth.v1.Session.
+ * Use `create(SessionSchema)` to create a new message.
+ */
+export const SessionSchema: GenMessage<Session> = /*@__PURE__*/
+  messageDesc(file_auth_v1_auth, 8);
 
 /**
  * @generated from service auth.v1.AuthService
  */
 export const AuthService: GenService<{
   /**
-   * @generated from rpc auth.v1.AuthService.Authenticate
+   * @generated from rpc auth.v1.AuthService.Login
    */
-  authenticate: {
+  login: {
     methodKind: "unary";
-    input: typeof AuthRequestSchema;
-    output: typeof AuthResponseSchema;
+    input: typeof LoginRequestSchema;
+    output: typeof LoginResponseSchema;
   },
   /**
-   * @generated from rpc auth.v1.AuthService.Test
+   * @generated from rpc auth.v1.AuthService.Register
    */
-  test: {
+  register: {
     methodKind: "unary";
-    input: typeof AuthResponseSchema;
-    output: typeof TestResponseSchema;
+    input: typeof RegisterRequestSchema;
+    output: typeof RegisterResponseSchema;
+  },
+  /**
+   * @generated from rpc auth.v1.AuthService.VerifySession
+   */
+  verifySession: {
+    methodKind: "unary";
+    input: typeof VerifySessionRequestSchema;
+    output: typeof VerifySessionResponseSchema;
+  },
+  /**
+   * @generated from rpc auth.v1.AuthService.RefreshSession
+   */
+  refreshSession: {
+    methodKind: "unary";
+    input: typeof RefreshSessionRequestSchema;
+    output: typeof RefreshSessionResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_auth_v1_auth, 0);
