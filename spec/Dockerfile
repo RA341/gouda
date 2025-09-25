@@ -1,5 +1,4 @@
-# Use Ubuntu as base image
-FROM ubuntu:24.10
+FROM ubuntu:latest
 
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
