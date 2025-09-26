@@ -6,7 +6,7 @@ appdata
 sample
 build_script/build_output
 /install_scripts/parmesan_extension/
-/**/web
+core/**/web
 src/downloads/clients/test/downloads
 scripts_*/**/test
 /install_scripts/**/parmesan_extension.zip

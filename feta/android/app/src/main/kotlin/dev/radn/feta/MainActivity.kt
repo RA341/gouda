@@ -1,4 +1,4 @@
-package com.example.feta
+package dev.radn.feta
 
 import io.flutter.embedding.android.FlutterActivity
 
