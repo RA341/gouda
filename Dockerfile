@@ -8,7 +8,7 @@ RUN flutter pub get
 
 COPY ./feta .
 
-RUN flutter build web
+RUN flutter build web --wasm
 
 FROM golang:1-alpine AS go_builder
 
@@ -32,7 +32,7 @@ ARG INFO_PACKAGE=github.com/RA341/gouda/internal/info
 
 ARG TARGET=docker
 
-RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags "-s -w \
+RUN go build -ldflags "-s -w \
              -X ${INFO_PACKAGE}.Flavour=${TARGET} \
              -X ${INFO_PACKAGE}.Version=${VERSION} \
              -X ${INFO_PACKAGE}.CommitInfo=${COMMIT_INFO} \

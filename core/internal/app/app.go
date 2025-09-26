@@ -4,16 +4,10 @@ import (
 	"net/http"
 	"strings"
 
-	"connectrpc.com/connect"
 	authrpc "github.com/RA341/gouda/generated/auth/v1/v1connect"
-	categoryrpc "github.com/RA341/gouda/generated/category/v1/v1connect"
-	mamrpc "github.com/RA341/gouda/generated/mam/v1/v1connect"
-	mediarpc "github.com/RA341/gouda/generated/media_requests/v1/v1connect"
-	settingsrpc "github.com/RA341/gouda/generated/settings/v1/v1connect"
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/RA341/gouda/internal/category"
 	"github.com/RA341/gouda/internal/config"
-	settings "github.com/RA341/gouda/internal/config/manager"
 	"github.com/RA341/gouda/internal/database"
 	"github.com/RA341/gouda/internal/downloads"
 	"github.com/RA341/gouda/internal/downloads/clients"
@@ -34,9 +28,9 @@ type App struct {
 
 func NewApp(conf *config.GoudaConfig) *App {
 	// todo remove this
-	if conf.MamToken == "" && !info.IsDev() {
-		log.Fatal().Msg("mam token is required, ensure it is set")
-	}
+	//if conf.MamToken == "" && !info.IsDev() {
+	//	log.Fatal().Msg("mam token is required, ensure it is set")
+	//}
 
 	db, err := database.NewDBService(conf)
 	if err != nil {
@@ -44,29 +38,29 @@ func NewApp(conf *config.GoudaConfig) *App {
 	}
 
 	// todo client loading is wrong, remove this
-	client := initDownloadClient(&conf.TorrentClient)
+	//client := initDownloadClient(&conf.TorrentClient)
 
 	authSrv := auth.NewService(db, db)
 	catSrv := category.NewService(db)
 	mamSrv := mam.NewService(conf.MamToken)
-	downloadSrv := downloads.NewService(conf, db, &conf.TorrentClient, client)
-	mediaSrv := media.NewService(db, downloadSrv, mamSrv)
+	//downloadSrv := downloads.NewService(conf, db, &conf.TorrentClient, client)
+	//mediaSrv := media.NewService(db, downloadSrv, mamSrv)
 
 	a := &App{
 		categorySrv: catSrv,
-		downloadSrv: downloadSrv,
-		mediaSrv:    mediaSrv,
-		mamSrv:      mamSrv,
-		authSrv:     authSrv,
-		conf:        conf,
+		//downloadSrv: downloadSrv,
+		//mediaSrv:    mediaSrv,
+		mamSrv:  mamSrv,
+		authSrv: authSrv,
+		conf:    conf,
 	}
 
 	return a
 }
 
 func (a *App) registerEndpoints(mux *http.ServeMux) {
-	interceptors := connect.WithInterceptors()
-	interceptors = connect.WithInterceptors(auth.NewAuthInterceptor(a.authSrv))
+	//interceptors := connect.WithInterceptors()
+	//interceptors = connect.WithInterceptors(auth.NewAuthInterceptor(a.authSrv))
 	//if a.useAuth() {
 	//} else {
 	//	log.Info().Msg("Auth middleware is disabled")
@@ -78,24 +72,24 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 			return authrpc.NewAuthServiceHandler(auth.NewAuthHandler(a.authSrv))
 		},
 		// category
-		func() (string, http.Handler) {
-			return categoryrpc.NewCategoryServiceHandler(category.NewCategoryHandler(a.categorySrv), interceptors)
-		},
+		//func() (string, http.Handler) {
+		//	return categoryrpc.NewCategoryServiceHandler(category.NewCategoryHandler(a.categorySrv), interceptors)
+		//},
 		// mam
-		func() (string, http.Handler) {
-			return mamrpc.NewMamServiceHandler(mam.NewHandler(a.mamSrv))
-		},
+		//func() (string, http.Handler) {
+		//	return mamrpc.NewMamServiceHandler(mam.NewHandler(a.mamSrv))
+		//},
 		//func() (string, http.Handler) {
 		//	return a.registerHttpHandler("/api/mam", mam.NewHttpHandler(a.mamSrv))
 		//},
 		// settings
-		func() (string, http.Handler) {
-			return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(a.downloadSrv), interceptors)
-		},
+		//func() (string, http.Handler) {
+		//	return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(a.downloadSrv), interceptors)
+		//},
 		// media requests
-		func() (string, http.Handler) {
-			return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(a.mediaSrv), interceptors)
-		},
+		//func() (string, http.Handler) {
+		//	return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(a.mediaSrv), interceptors)
+		//},
 	}
 
 	for _, svc := range endpoints {
