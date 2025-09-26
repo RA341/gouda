@@ -1,0 +1,68 @@
+name: Dev Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - brie/**
+      - .github/workflows/dev-android.yml
+
+permissions:
+  contents: write   # To checkout the repository
+  packages: write  # To push Docker images to GHCR
+
+jobs:
+  build-android:
+    name: Build and Release Dev Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        working-directory: brie
+        run: flutter pub get
+
+      - name: Build Android APK
+        working-directory: brie
+        run: flutter build apk --release
+
+      - name: Rename APK
+        working-directory: brie
+        run: |
+          mkdir -p build/outputs
+          cp build/app/outputs/flutter-apk/app-release.apk build/outputs/brie-dev.apk
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            brie/build/outputs/brie-dev.apk
+          tag_name: dev
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+#  build_and_release_linux:
+#    name: Build and Release for Linux
+#    uses: ./.github/workflows/action-gouda-native.yml
+#    with:
+#      os: ubuntu-latest
+#      flutter_version: '3.27.1'
+#      go_version: '1.24'
+#      tag_name: dev
+#    secrets: inherit
