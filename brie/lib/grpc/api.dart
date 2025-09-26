@@ -1,6 +1,5 @@
 import 'package:brie/config.dart';
-import 'package:brie/grpc/grpc_native.dart'
-if (dart.library.html) 'package:brie/grpc/grpc_web.dart';
+import 'package:brie/grpc/grpc_channel_shared.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/grpc.dart';
 

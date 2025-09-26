@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:brie/clients/auth_api.dart';
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
@@ -18,9 +16,10 @@ class LoginView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final baseurl = useTextEditingController(
       text: kDebugMode
-          ? Platform.isAndroid
-                ? 'http://10.0.2.2:9862'
-                : 'http://localhost:9862'
+          ? 'http://localhost:9862'
+          // ? Platform.isAndroid
+          //       ? 'http://10.0.2.2:9862'
+          //       : 'http://localhost:9862'
           : '',
     );
 
@@ -103,10 +102,9 @@ class LoginView extends HookConsumerWidget {
                     await localSettings.updateBasePath(baseurl.text);
 
                     final (session, err) = await runGrpcRequest(
-                          () =>
-                          ref
-                              .read(authApiProvider)
-                              .login(
+                      () => ref
+                          .read(authApiProvider)
+                          .login(
                             LoginRequest(
                               username: user.text,
                               password: pass.text,
