@@ -3,20 +3,20 @@ import 'package:feta/clients/settings_api.dart';
 import 'package:feta/config.dart';
 import 'package:feta/gen/auth/v1/auth.pb.dart';
 import 'package:feta/ui/auth/auth_page.dart';
+import 'package:feta/ui/layout/layout_page.dart';
 import 'package:feta/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await PreferencesService.init();
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: App()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const MainView(),
+      home: const AppView(),
     );
   }
 }
@@ -81,25 +81,27 @@ final sessionProvider = FutureProvider<bool>((ref) async {
   return true;
 });
 
-class MainView extends ConsumerWidget {
-  const MainView({super.key});
+class AppView extends ConsumerWidget {
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authStatus = ref.watch(sessionProvider);
-
-    return Scaffold(
-      body: authStatus.when(
-        data: (data) {
-          return data ? const HomeView() : const LoginView();
-        },
-        error: (error, stackTrace) => Center(
+    return authStatus.when(
+      data: (data) {
+        return data ? const LayoutView() : const LoginView();
+      },
+      error: (error, stackTrace) => Scaffold(
+        body: Center(
           child: Text(
             'Error occurred while verifying authentication: $error',
           ),
         ),
-        loading: () => const Center(
+      ),
+      loading: () => const Scaffold(
+        body: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(),
               Text('Verifying Authentication'),
@@ -107,17 +109,6 @@ class MainView extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class HomeView extends ConsumerWidget {
-  const HomeView({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const Center(
-      child: Text('Main view'),
     );
   }
 }
