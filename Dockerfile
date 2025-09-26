@@ -2,11 +2,11 @@ FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
 WORKDIR /web/
 
-COPY ./feta/pubspec.* .
+COPY ./brie/pubspec.* .
 
 RUN flutter pub get
 
-COPY ./feta .
+COPY ./brie .
 
 RUN flutter build web --wasm
 

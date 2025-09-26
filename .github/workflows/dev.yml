@@ -12,7 +12,7 @@ on:
       - .github/workflows/action-gouda-docker.yml
 
 permissions:
-  contents: read   # To checkout the repository
+  contents: write   # To checkout the repository
   packages: write  # To push Docker images to GHCR
 
 jobs:
