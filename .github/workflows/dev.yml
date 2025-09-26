@@ -3,16 +3,13 @@ name: Release Pipeline
 on:
   push:
     branches:
-      - main # publish a dev build on main
-    paths: # trigger only when source code changes
+      - main
+    paths:
+      - Dockerfile
+      - feta/**
+      - core/**
       - .github/workflows/dev.yml
       - .github/workflows/action-gouda-docker.yml
-      - Dockerfile
-      - .dockerignore
-      - goub/**
-      - brie/**
-      - parmesan/**
-      - src/**
 
 permissions:
   contents: read   # To checkout the repository
