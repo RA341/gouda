@@ -4,13 +4,10 @@
     <!--
       If you are serving your web app in a path other than the root, change the
       href value below to reflect the base path you are serving from.
-
       The path provided below has to start and end with a slash "/" in order for
       it to work correctly.
-
       For more details:
       * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
       This is a placeholder for base href that will be replaced by the value of
       the `--base-href` argument provided to `flutter build`.
     -->
@@ -18,12 +15,12 @@
 
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-    <meta name="description" content="A new Flutter project.">
+    <meta content="UI for Gouda" name="description">
 
     <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="yes" name="mobile-web-app-capable">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="brie">
+    <meta content="brie" name="apple-mobile-web-app-title">
     <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
     <!-- Favicon -->
@@ -33,26 +30,26 @@
     <link rel="manifest" href="manifest.json">
     <style>
         body {
-          background-color: #010001;
-          height: 100vh;
-          width: 100vw;
-          margin: 0;
+            background-color: #010001;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
         }
 
         #loading {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100%;
-          width: 100%;
-          position: relative;
-          opacity: 1;
-          transition: opacity .5s ease-out, visibility 0.5s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            opacity: 1;
+            transition: opacity .5s ease-out, visibility 0.5s ease-out;
         }
 
         #loading.fade-out {
-          opacity: 0;
-          visibility: hidden;
+            opacity: 0;
+            visibility: hidden;
         }
     </style>
 </head>
@@ -65,17 +62,17 @@
     var loadingElement = document.getElementById('loading');
 
     function hideLoading() {
-      loadingElement.classList.add('fade-out');
-      // Remove the loading element from the DOM after the transition
-      setTimeout(() => {
-        loadingElement.style.display = 'none';
-      }, 400); // This should match the transition duration in CSS
+        loadingElement.classList.add('fade-out');
+        // Remove the loading element from the DOM after the transition
+        setTimeout(() => {
+            loadingElement.style.display = 'none';
+        }, 400); // This should match the transition duration in CSS
     }
 
     // Add class to body when Flutter is loaded
     window.addEventListener('flutter-first-frame', function() {
-      var element = document.getElementsByClassName("loading");
-      hideLoading();
+        var element = document.getElementsByClassName("loading");
+        hideLoading();
     });
 </script>
 

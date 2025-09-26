@@ -6,7 +6,7 @@ import 'package:brie/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/grpc.dart';
 
-final settingsApiProvider = Provider<SettingsApi>((ref) {
+final settingsApiProvider = Provider<SettingsServiceClient>((ref) {
   final channel = ref.watch(grpcChannelProvider);
   final authInterceptor = ref.watch(authInterceptorProvider);
 
@@ -15,39 +15,8 @@ final settingsApiProvider = Provider<SettingsApi>((ref) {
     interceptors: [authInterceptor],
   );
 
-  return SettingsApi(client);
+  return client;
 });
-
-class SettingsApi {
-  final SettingsServiceClient apiClient;
-
-  SettingsApi(this.apiClient);
-
-  Future<void> update(Settings config) async {
-    mustRunGrpcRequest(() => apiClient.updateSettings(config));
-  }
-
-  Future<Settings> list() async =>
-      mustRunGrpcRequest(() => apiClient.listSettings(ListSettingsResponse()));
-
-  Future<List<String>> listClients() async {
-    return (await mustRunGrpcRequest(
-      () => apiClient.listSupportedClients(
-        ListSupportedClientsRequest(),
-      ),
-    )).clients;
-  }
-
-  Future<GetMetadataResponse> getMetadata() =>
-      mustRunGrpcRequest(() => apiClient.getMetadata(GetMetadataRequest()));
-
-  Future<String> testClient(TorrentClient client) async {
-    final (_, error) = await runGrpcRequest<TestTorrentResponse>(
-      () => apiClient.testClient(client),
-    );
-    return error;
-  }
-}
 
 /// throws if error occurs
 Future<T> mustRunGrpcRequest<T>(Future<T> Function() request) async {

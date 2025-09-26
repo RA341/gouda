@@ -1,4 +1,4 @@
-name: Release Pipeline
+name: Dev Build
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - Dockerfile
-      - feta/**
+      - brie/**
       - core/**
       - .github/workflows/dev.yml
       - .github/workflows/action-gouda-docker.yml
@@ -15,7 +15,6 @@ permissions:
   contents: read   # To checkout the repository
   packages: write  # To push Docker images to GHCR
 
-
 jobs:
   build-docker:
     name: Build docker dev build
@@ -23,6 +22,66 @@ jobs:
     with:
       source_branch: ${{ github.ref_name }}
     secrets: inherit
+
+  build-android:
+    name: Build and Release Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.1'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Build Android App Bundle (AAB)
+        run: flutter build appbundle --release
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: dev-${{ github.run_number }}
+          release_name: Dev Release ${{ github.run_number }}
+          body: |
+            Development build from commit ${{ github.sha }}
+            
+            **Changes:**
+            - Auto-generated dev build
+            
+            **Build Info:**
+            - Commit: ${{ github.sha }}
+            - Branch: ${{ github.ref_name }}
+            - Run Number: ${{ github.run_number }}
+          draft: false
+          prerelease: true
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
+          tag_name: ${{ inputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
 #  build_and_release_linux:
 #    name: Build and Release for Linux

@@ -13,6 +13,7 @@ linter:
     sort_pub_dependencies: false
     library_private_types_in_public_api: false
     flutter_style_todos: false
+    use_setters_to_change_properties: false
 
 
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule

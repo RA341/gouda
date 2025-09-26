@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-void showErrorDialog(
+Future<void> showErrorDialog(
   BuildContext context,
   String title,
   String message, {
-  String errorMessage = "",
-}) {
-  showDialog(
+      String errorMessage = '',
+    }) async {
+  await showDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
@@ -14,7 +14,6 @@ void showErrorDialog(
         title: Text(
           title,
           style: const TextStyle(
-            color: Colors.green,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -28,12 +27,12 @@ void showErrorDialog(
             ),
             if (errorMessage.isNotEmpty)
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 16),
-                  Text(
+                  const Text(
                     'The following was the error message',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
                     ),
@@ -45,11 +44,11 @@ void showErrorDialog(
                     decoration: BoxDecoration(
                       color: Colors.grey[900],
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.black, width: 1),
+                      border: Border.all(),
                     ),
                     child: SelectableText(
                       errorMessage,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'monospace',
                         fontSize: 14,
                         color: Colors.white,

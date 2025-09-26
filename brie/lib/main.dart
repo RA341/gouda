@@ -1,157 +1,115 @@
+import 'package:brie/clients/auth_api.dart';
+import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
-import 'package:brie/providers.dart';
+import 'package:brie/gen/auth/v1/auth.pb.dart';
 import 'package:brie/ui/auth/auth_page.dart';
-import 'package:brie/ui/category/category_page.dart';
-import 'package:brie/ui/history/history_page.dart';
-import 'package:brie/ui/mam/mam_page.dart';
-import 'package:brie/ui/nav/sidebar.dart';
+import 'package:brie/ui/layout/layout_page.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await PreferencesService.init();
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: App()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Gouda',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.cyanAccent,
+          seedColor: Colors.blue,
+          secondary: Colors.yellow,
           brightness: Brightness.dark,
         ),
-        useMaterial3: true,
       ),
-      home: const RootView(),
-    ).animate().fadeIn(duration: 400.ms);
+      home: const AppView(),
+    );
   }
 }
 
-class RootView extends ConsumerWidget {
-  const RootView({super.key});
+final sessionProvider = FutureProvider<bool>((ref) async {
+  final localSettings = ref.watch(appSettingsProvider);
+  final refreshToken = localSettings.refreshToken;
+  final sessionToken = localSettings.sessionToken;
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final testToken = ref.watch(checkTokenProvider);
+  if (sessionToken.isEmpty || refreshToken.isEmpty) {
+    logger.w('Empty refresh:$refreshToken or session: $refreshToken tokens');
+    return false;
+  }
 
-    return Scaffold(
-      body: testToken.when(
-        data: (data) => data ? const MainView() : const LoginView(),
-        error: (error, stackTrace) => Center(
-          child: Column(
-            children: [
-              const Text('An error occurred'),
-              Text(error.toString()),
-              Text(stackTrace.toString()),
-            ],
+  final authApi = ref.watch(authApiProvider);
+
+  // check for session if expired
+  final (_, err) = await runGrpcRequest(
+        () =>
+        authApi.verifySession(
+          VerifySessionRequest(
+            sessionToken: sessionToken,
           ),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-      ),
-    );
+  );
+  if (err.isEmpty) {
+    logger.i('Session verified, auth is complete');
+    return true;
   }
-}
 
-class MainView extends ConsumerWidget {
-  const MainView({super.key});
-
-  static const iconsSize = 30.0;
-
-  static final List<(NavigationRailDestination destination, Widget page)>
-  navItems = [
-    (
-      const NavigationRailDestination(
-        icon: Icon(Icons.home_outlined, size: iconsSize),
-        selectedIcon: Icon(Icons.home_filled, size: iconsSize),
-        label: Text('Home'),
-      ),
-      const HistoryPage(),
-    ),
-    (
-      const NavigationRailDestination(
-        icon: Icon(Icons.book_outlined, size: iconsSize),
-        selectedIcon: Icon(Icons.book, size: iconsSize),
-        label: Text('Categories'),
-      ),
-      const CategoryPage(),
-    ),
-    (
-      const NavigationRailDestination(
-        icon: Icon(Icons.mouse, size: iconsSize),
-        selectedIcon: Icon(Icons.mouse, size: iconsSize),
-        label: Text('Mam'),
-      ),
-      const MamPage(),
-    ),
-    // TODO: settings is borken
-    // (
-    //   const NavigationRailDestination(
-    //     icon: Icon(Icons.settings_outlined, size: iconsSize),
-    //     selectedIcon: Icon(Icons.settings, size: iconsSize),
-    //     label: Text('Settings'),
-    //   ),
-    //   const SettingsPage(),
-    // ),
-  ];
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      children: [
-        VerticalNavBar(destinations: navItems.map((item) => item.$1).toList()),
-        MainPage(routeList: navItems.map((item) => item.$2).toList()),
-      ],
-    );
-
-    // final setup = ref.watch(isSetupCompleteProvider);
-    // return setup.when(
-    //   data: (setupComplete) => setupComplete
-    //       ? Row(children: [VerticalNavBar(), PageView()])
-    //       : SetupPage(),
-    //   error: (error, stackTrace) => Center(
-    //     child: Column(
-    //       children: [
-    //         Text('An error occurred'),
-    //         Text(error.toString()),
-    //         Text(stackTrace.toString()),
-    //       ],
-    //     ),
-    //   ),
-    //   loading: () => Center(child: CircularProgressIndicator()),
-    // );
-  }
-}
-
-class MainPage extends ConsumerWidget {
-  const MainPage({required this.routeList, super.key});
-
-  final List<Widget> routeList;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pageIndex = ref.watch(pageIndexListProvider);
-
-    return Flexible(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 5, color: Colors.transparent),
-            borderRadius: BorderRadius.circular(20),
+  final (refreshedSession, err2) = await runGrpcRequest(
+        () =>
+        authApi.refreshSession(
+          RefreshSessionRequest(
+            refreshToken: refreshToken,
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: routeList[pageIndex].animate().fadeIn(duration: 200.ms),
+        ),
+  );
+  if (err2.isNotEmpty) {
+    logger.w('unable to refresh token: $err2');
+    return false;
+  }
+
+  await ref
+      .read(appSettingsProvider.notifier)
+      .updateTokens(
+    sessionToken: refreshedSession?.session.sessionToken ?? '',
+    refreshToken: refreshedSession?.session.refreshToken ?? '',
+  );
+
+  return true;
+});
+
+class AppView extends ConsumerWidget {
+  const AppView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authStatus = ref.watch(sessionProvider);
+    return authStatus.when(
+      data: (data) {
+        return data ? const LayoutView() : const LoginView();
+      },
+      error: (error, stackTrace) =>
+          Scaffold(
+            body: Center(
+              child: Text(
+                'Error occurred while verifying authentication: $error',
+              ),
+            ),
+          ),
+      loading: () =>
+      const Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              Text('Verifying Authentication'),
+            ],
           ),
         ),
       ),

@@ -31,6 +31,12 @@ tasks:
     cmds:
       - coreutils rm -rf {{.DEV_BUILD }}/*
 
+  ui:img:
+    desc: "Calls the image generator for flutter"
+    dir: "{{ .UI_DIR }}"
+    cmds:
+      - flutter pub run flutter_launcher_icons
+
   ui:tidy:
     desc: "Cleans up and initializes the flutter app dir"
     dir: "{{ .UI_DIR }}"

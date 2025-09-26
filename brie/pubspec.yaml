@@ -1,7 +1,6 @@
 name: brie
-description: "Gouda UI"
+description: "UI for the gouda project"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
 version: 1.0.0+1
 
 environment:
@@ -38,9 +37,34 @@ dev_dependencies:
   riverpod_lint: ^3.0.0
   flutter_lints: ^6.0.0
   very_good_analysis: ^10.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  image_path: "assets/gouda.png"
+
+  android: "launcher_icon"
+  min_sdk_android: 21
+
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/gouda.png"
+  #    background_color: "#hexcode"
+  #    theme_color: "#hexcode"
+
+  windows:
+    generate: true
+    image_path: "assets/gouda.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/gouda.png"
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

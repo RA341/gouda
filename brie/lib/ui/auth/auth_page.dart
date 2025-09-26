@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:brie/clients/auth_api.dart';
 import 'package:brie/clients/settings_api.dart';
-import 'package:brie/grpc/api.dart';
+import 'package:brie/config.dart';
+import 'package:brie/gen/auth/v1/auth.pb.dart';
 import 'package:brie/ui/shared/error_dialog.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -25,80 +27,109 @@ class LoginView extends HookConsumerWidget {
     final user = useTextEditingController(
       text: kDebugMode ? 'admin' : '',
     );
-    final pass = useTextEditingController(text: kDebugMode ? 'admin' : '');
+    final pass = useTextEditingController(text: kDebugMode ? 'gouda' : '');
 
     const width = 300.0;
-    return Center(
-      child: Card(
-        elevation: 30,
-        child: Padding(
-          padding: const EdgeInsets.all(50),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Gouda', style: TextStyle(fontSize: 35)),
-              const SizedBox(height: 10),
 
-              const SizedBox(width: width, child: Divider()),
-              const Text('Login', style: TextStyle(fontSize: 30)),
-              const SizedBox(height: 20),
+    return Scaffold(
+      body: Center(
+        child: Card(
+          elevation: 30,
+          child: Padding(
+            padding: const EdgeInsets.all(50),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 10,
+                  children: [
+                    Image.asset(
+                      'assets/gouda.png',
+                      scale: 10,
+                    ),
+                    const Text('Gouda', style: TextStyle(fontSize: 35)),
+                  ],
+                ),
+                const SizedBox(height: 10),
 
-              AutofillGroup(
-                child: SizedBox(
-                  width: width,
-                  child: Column(
-                    children: [
-                      if (!kIsWeb)
+                const SizedBox(width: width, child: Divider()),
+                const Text('Login', style: TextStyle(fontSize: 30)),
+                const SizedBox(height: 20),
+
+                AutofillGroup(
+                  child: SizedBox(
+                    width: width,
+                    child: Column(
+                      children: [
+                        if (!kIsWeb)
+                          TextField(
+                            autofillHints: const [AutofillHints.url],
+                            controller: baseurl,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Server Address',
+                            ),
+                          ),
+                        const SizedBox(height: 20),
                         TextField(
-                          autofillHints: const [AutofillHints.url],
-                          controller: baseurl,
+                          autofillHints: const [AutofillHints.username],
+                          controller: user,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: 'Server Address',
+                            labelText: 'Username',
                           ),
                         ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        autofillHints: const [AutofillHints.username],
-                        controller: user,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Username',
+                        const SizedBox(height: 20),
+                        TextField(
+                          autofillHints: const [AutofillHints.password],
+                          controller: pass,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Password',
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        autofillHints: const [AutofillHints.password],
-                        controller: pass,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Password',
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  await updateBasepath(ref, baseurl.text);
-                  final (_, err) = await runGrpcRequest(
-                    () => ref
-                        .read(authApiProvider)
-                        .login(user: user.text, pass: pass.text),
-                  );
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    final localSettings = ref.read(
+                      appSettingsProvider.notifier,
+                    );
+                    await localSettings.updateBasePath(baseurl.text);
 
-                  if (err.isNotEmpty) {
-                    if (!context.mounted) return;
-                    showErrorDialog(context, 'Error Logging In', err);
-                  } else {
-                    ref.invalidate(apiTokenProvider);
-                  }
-                },
-                child: const Text('Submit'),
-              ),
-            ],
+                    final (session, err) = await runGrpcRequest(
+                          () =>
+                          ref
+                              .read(authApiProvider)
+                              .login(
+                            LoginRequest(
+                              username: user.text,
+                              password: pass.text,
+                            ),
+                          ),
+                    );
+
+                    if (err.isNotEmpty) {
+                      if (!context.mounted) return;
+                      logger.e('Error logging in $err');
+                      await showErrorDialog(context, 'Error Logging In', err);
+                      return;
+                    }
+
+                    await localSettings.updateTokens(
+                      sessionToken: session!.session.sessionToken,
+                      refreshToken: session.session.refreshToken,
+                    );
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
