@@ -43,6 +43,20 @@ func (s *SessionService) SessionDelete(session uint) error {
 	return s.store.DeleteSessionByID(session)
 }
 
+func (s *SessionService) Logout(refreshToken string) error {
+	session, err := s.store.GetSessionFromRefreshToken(refreshToken)
+	if err != nil {
+		return err
+	}
+
+	err = s.SessionDelete(session.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *SessionService) sessionCreate(user *User) (*Session, error) {
 	sessionToken := generateRandomToken(20)
 	refreshToken := generateRandomToken(20)

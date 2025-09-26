@@ -30,11 +30,20 @@ func (a *Handler) Login(_ context.Context, req *connect.Request[v1.LoginRequest]
 	}), err
 }
 
-func (a *Handler) Register(ctx context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
+func (a *Handler) Logout(_ context.Context, req *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error) {
+	err := a.srv.Logout(req.Msg.Refresh)
+	if err != nil {
+		return nil, err
+	}
+
+	return connect.NewResponse(&v1.LogoutResponse{}), nil
+}
+
+func (a *Handler) Register(_ context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
 	return nil, fmt.Errorf("implement Register")
 }
 
-func (a *Handler) VerifySession(ctx context.Context, req *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {
+func (a *Handler) VerifySession(_ context.Context, req *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {
 	token := req.Msg.SessionToken
 	if token == "" {
 		return nil, fmt.Errorf("session token is empty")

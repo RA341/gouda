@@ -14,6 +14,27 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use logoutRequestDescriptor instead')
+const LogoutRequest$json = {
+  '1': 'LogoutRequest',
+  '2': [
+    {'1': 'refresh', '3': 2, '4': 1, '5': 9, '10': 'refresh'},
+  ],
+};
+
+/// Descriptor for `LogoutRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List logoutRequestDescriptor = $convert
+    .base64Decode('Cg1Mb2dvdXRSZXF1ZXN0EhgKB3JlZnJlc2gYAiABKAlSB3JlZnJlc2g=');
+
+@$core.Deprecated('Use logoutResponseDescriptor instead')
+const LogoutResponse$json = {
+  '1': 'LogoutResponse',
+};
+
+/// Descriptor for `LogoutResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List logoutResponseDescriptor =
+$convert.base64Decode('Cg5Mb2dvdXRSZXNwb25zZQ==');
+
 @$core.Deprecated('Use loginRequestDescriptor instead')
 const LoginRequest$json = {
   '1': 'LoginRequest',

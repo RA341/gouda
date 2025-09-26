@@ -71,14 +71,7 @@ tasks:
 
   dart:
     desc: Move generated Dart files
-    vars:
-      feta: '../feta/lib/gen'
     cmds:
-      - task: _copy
-        vars:
-          TARGET_DIR: '{{.feta}}'
-          SOURCE_PATTERN: '{{.GENERATED_DIR}}/dart/*'
-
       - task: _copy
         vars:
           TARGET_DIR: '{{.UI_DIR}}'

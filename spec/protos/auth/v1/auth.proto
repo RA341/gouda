@@ -6,11 +6,19 @@ option go_package = "github.com/RA341/gouda/generated/auth/v1";
 
 service AuthService {
   rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
 
   rpc VerifySession(VerifySessionRequest) returns (VerifySessionResponse) {}
   rpc RefreshSession(RefreshSessionRequest) returns (RefreshSessionResponse) {}
 }
+
+message LogoutRequest {
+  string refresh = 2;
+}
+
+message LogoutResponse {}
 
 message LoginRequest {
   string username = 1;
@@ -18,7 +26,7 @@ message LoginRequest {
 }
 
 message LoginResponse {
-    Session session = 1;
+  Session session = 1;
 }
 
 message RegisterRequest {

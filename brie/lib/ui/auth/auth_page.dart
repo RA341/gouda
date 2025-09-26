@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brie/clients/auth_api.dart';
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
@@ -14,13 +16,16 @@ class LoginView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = useState(false);
+
+    final baseUrl = kDebugMode
+        ? (kIsWeb || !Platform.isAndroid)
+        ? 'http://localhost:9862'
+        : 'http://10.0.2.2:9862'
+        : '';
+
     final baseurl = useTextEditingController(
-      text: kDebugMode
-          ? 'http://localhost:9862'
-          // ? Platform.isAndroid
-          //       ? 'http://10.0.2.2:9862'
-          //       : 'http://localhost:9862'
-          : '',
+      text: baseUrl,
     );
 
     final user = useTextEditingController(
@@ -94,43 +99,66 @@ class LoginView extends HookConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    final localSettings = ref.read(
-                      appSettingsProvider.notifier,
-                    );
-                    await localSettings.updateBasePath(baseurl.text);
 
-                    final (session, err) = await runGrpcRequest(
-                      () => ref
-                          .read(authApiProvider)
-                          .login(
-                            LoginRequest(
-                              username: user.text,
-                              password: pass.text,
-                            ),
-                          ),
-                    );
+                if (isLoading.value)
+                  const CircularProgressIndicator()
+                else
+                  ElevatedButton(
+                    onPressed: () async {
+                      isLoading.value = true;
 
-                    if (err.isNotEmpty) {
-                      if (!context.mounted) return;
-                      logger.e('Error logging in $err');
-                      await showErrorDialog(context, 'Error Logging In', err);
-                      return;
-                    }
+                      await handleLogin(
+                        context,
+                        ref,
+                        baseurl.text,
+                        user.text,
+                        pass.text,
+                      );
 
-                    await localSettings.updateTokens(
-                      sessionToken: session!.session.sessionToken,
-                      refreshToken: session.session.refreshToken,
-                    );
-                  },
-                  child: const Text('Submit'),
-                ),
+                      isLoading.value = false;
+                    },
+                    child: const Text('Submit'),
+                  ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> handleLogin(BuildContext context,
+      WidgetRef ref,
+      String baseurl,
+      String username,
+      String password,) async {
+    final localSettings = ref.read(
+      appSettingsProvider.notifier,
+    );
+    await localSettings.updateBasePath(baseurl);
+
+    final (session, err) = await runGrpcRequest(
+          () =>
+          ref
+              .read(authApiProvider)
+              .login(
+            LoginRequest(
+              username: username,
+              password: password,
+            ),
+          ),
+    );
+
+    if (err.isNotEmpty) {
+      if (!context.mounted) return;
+      logger.e('Error logging in $err');
+      await showErrorDialog(context, 'Error Logging In', err);
+      return;
+    }
+
+    await localSettings.updateTokens(
+      sessionToken: session!.session.sessionToken,
+      refreshToken: session.session.refreshToken,
     );
   }
 }

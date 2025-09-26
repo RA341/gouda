@@ -1,4 +1,4 @@
-import 'package:brie/config.dart';
+import 'package:brie/clients/auth_api.dart';
 import 'package:brie/ui/layout/layout_page.dart';
 import 'package:brie/ui/layout/nav_model.dart';
 import 'package:flutter/material.dart';
@@ -45,9 +45,7 @@ class VerticalNavBar extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 50),
           child: IconButton(
-            onPressed: () async {
-              await ref.read(appSettingsProvider.notifier).clearTokens();
-            },
+            onPressed: () async => logout(ref),
             icon: const Tooltip(
               message: 'Logout',
               child: Icon(Icons.logout, semanticLabel: 'Logout'),
