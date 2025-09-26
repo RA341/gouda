@@ -24,9 +24,8 @@ jobs:
     secrets: inherit
 
   build-android:
-    name: Build and Release Android APK
+    name: Build and Release Dev Android APK
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,46 +39,31 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.1'
+          flutter-version: '3.35.4'
           channel: 'stable'
           cache: true
 
       - name: Install dependencies
+        working-directory: brie
         run: flutter pub get
 
       - name: Build Android APK
+        working-directory: brie
         run: flutter build apk --release
 
-      - name: Build Android App Bundle (AAB)
-        run: flutter build appbundle --release
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: dev-${{ github.run_number }}
-          release_name: Dev Release ${{ github.run_number }}
-          body: |
-            Development build from commit ${{ github.sha }}
-            
-            **Changes:**
-            - Auto-generated dev build
-            
-            **Build Info:**
-            - Commit: ${{ github.sha }}
-            - Branch: ${{ github.ref_name }}
-            - Run Number: ${{ github.run_number }}
-          draft: false
-          prerelease: true
+      - name: Rename APK
+        working-directory: brie
+        run: |
+          mkdir -p build/outputs
+          cp build/app/outputs/flutter-apk/app-release.apk build/outputs/brie-dev.apk
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/app/outputs/flutter-apk/app-release.apk
-          tag_name: ${{ inputs.tag_name }}
+            brie/build/outputs/brie-dev.apk
+          tag_name: dev
+          prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
