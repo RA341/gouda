@@ -8,9 +8,9 @@ src/web
 spec
 build_script/
 install_scripts
-brie/.dart_tool
-brie/build
-brie/.idea
+feta/.dart_tool
+feta/build
+feta/.idea
 
 ## extension
 
@@ -23,16 +23,16 @@ parmesan/dist
 ## frontend stuff
 
 # Miscellaneous
-brie/*.class
-brie/*.log
-brie/*.pyc
-brie/*.swp
-brie/.DS_Store
-brie/.atom/
-brie/.buildlog/
-brie/.history
-brie/.svn/
-brie/migrate_working_dir/
+feta/*.class
+feta/*.log
+feta/*.pyc
+feta/*.swp
+feta/.DS_Store
+feta/.atom/
+feta/.buildlog/
+feta/.history
+feta/.svn/
+feta/migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -46,25 +46,25 @@ brie/migrate_working_dir/
 #.vscode/
 
 # Flutter/Dart/Pub related
-brie/**/doc/api/
-brie/**/ios/Flutter/.last_build_id
-brie/.dart_tool/
-brie/.flutter-plugins
-brie/.flutter-plugins-dependencies
-brie/.pub-cache/
-brie/.pub/
-brie/build/
+feta/**/doc/api/
+feta/**/ios/Flutter/.last_build_id
+feta/.dart_tool/
+feta/.flutter-plugins
+feta/.flutter-plugins-dependencies
+feta/.pub-cache/
+feta/.pub/
+feta/build/
 
 # Symbolication related
-brie/app.*.symbols
+feta/app.*.symbols
 
 # Obfuscation related
-brie/app.*.map.json
+feta/app.*.map.json
 
 # Android Studio will place build artifacts here
-brie/android/app/debug
-brie/android/app/profile
-brie/android/app/release
+feta/android/app/debug
+feta/android/app/profile
+feta/android/app/release
 
 **/.build
 core/**/web

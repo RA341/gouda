@@ -1,12 +1,12 @@
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
 
-WORKDIR /app/
+WORKDIR /web/
 
-COPY ./brie/pubspec.* .
+COPY ./feta/pubspec.* .
 
 RUN flutter pub get
 
-COPY ./brie .
+COPY ./feta .
 
 RUN flutter build web
 
@@ -17,7 +17,7 @@ ENV CGO_ENABLED=1
 
 RUN apk update && apk add --no-cache gcc musl-dev
 
-WORKDIR /app
+WORKDIR /core
 
 COPY ./core/go.* .
 
@@ -50,7 +50,7 @@ ENV GOUDA_TORRENT=/torrents
 
 WORKDIR /app/
 
-COPY --from=go_builder /app/gouda gouda
-COPY --from=flutter_builder /app/build/web web
+COPY --from=go_builder /core/gouda gouda
+COPY --from=flutter_builder /web/build/web web
 
 ENTRYPOINT ["./gouda"]

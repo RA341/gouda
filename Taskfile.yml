@@ -70,26 +70,13 @@ tasks:
       - task: go:b:{{.CMD_NAME}}
       - ./{{.CMD_NAME}}{{.EXE}}
 
-  dk:b:*:
-    desc: "Builds the main dockman image for a specific target. Usage: task dk:<target>"
+  dk:
+    desc: "Builds and runs the main image"
     vars:
-      TARGET: "{{index .MATCH 0}}"
+      IMAGE: "{{ .DOCKMAN_IMAGE_BASE }}:dev"
     cmds:
-      - docker build . -t {{.DOCKMAN_IMAGE_BASE}}:{{.TARGET}} --target {{.TARGET}}
-    preconditions:
-      - sh: 'test -n "{{.TARGET}}"'
-        msg: "The 'target' variable must be provided. Usage: task dk.<target-name>"
-
-  dk:*:
-    desc: "Builds and runs the main dockman image for a specific target. Usage: task dk:r:<target>"
-    vars:
-      TARGET: "{{index .MATCH 0}}"
-    cmds:
-      - task dk:b:{{.TARGET}}
-      - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -p 8221:8866 {{.DOCKMAN_IMAGE_BASE}}:{{.TARGET}}
-    preconditions:
-      - sh: 'test -n "{{.TARGET}}"'
-        msg: "The 'target' variable must be provided. Usage: task dk:r.<target-name>"
+      - docker build . -t {{.IMAGE}}
+      - docker run --rm -p 9860:9862 {{.IMAGE}}
 
   dk:prune:
     desc: "Prune docker images."
