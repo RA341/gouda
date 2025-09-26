@@ -422,7 +422,13 @@ class RefreshSessionRequest extends $pb.GeneratedMessage {
 }
 
 class RefreshSessionResponse extends $pb.GeneratedMessage {
-  factory RefreshSessionResponse() => create();
+  factory RefreshSessionResponse({
+    Session? session,
+  }) {
+    final result = create();
+    if (session != null) result.session = session;
+    return result;
+  }
 
   RefreshSessionResponse._();
 
@@ -437,6 +443,8 @@ class RefreshSessionResponse extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'RefreshSessionResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
       createEmptyInstance: create)
+    ..aOM<Session>(1, _omitFieldNames ? '' : 'session',
+        subBuilder: Session.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -461,6 +469,17 @@ class RefreshSessionResponse extends $pb.GeneratedMessage {
   static RefreshSessionResponse getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<RefreshSessionResponse>(create);
   static RefreshSessionResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Session get session => $_getN(0);
+  @$pb.TagNumber(1)
+  set session(Session value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSession() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSession() => $_clearField(1);
+  @$pb.TagNumber(1)
+  Session ensureSession() => $_ensure(0);
 }
 
 class Session extends $pb.GeneratedMessage {

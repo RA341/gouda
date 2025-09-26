@@ -339,6 +339,7 @@ func (x *RefreshSessionRequest) GetRefreshToken() string {
 
 type RefreshSessionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Session       *Session               `protobuf:"bytes,1,opt,name=session,proto3" json:"session,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -371,6 +372,13 @@ func (x *RefreshSessionResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RefreshSessionResponse.ProtoReflect.Descriptor instead.
 func (*RefreshSessionResponse) Descriptor() ([]byte, []int) {
 	return file_auth_v1_auth_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *RefreshSessionResponse) GetSession() *Session {
+	if x != nil {
+		return x.Session
+	}
+	return nil
 }
 
 type Session struct {
@@ -444,8 +452,9 @@ const file_auth_v1_auth_proto_rawDesc = "" +
 	"\fsessionToken\x18\x01 \x01(\tR\fsessionToken\"\x17\n" +
 	"\x15VerifySessionResponse\";\n" +
 	"\x15RefreshSessionRequest\x12\"\n" +
-	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\"\x18\n" +
-	"\x16RefreshSessionResponse\"Q\n" +
+	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\"D\n" +
+	"\x16RefreshSessionResponse\x12*\n" +
+	"\asession\x18\x01 \x01(\v2\x10.auth.v1.SessionR\asession\"Q\n" +
 	"\aSession\x12\"\n" +
 	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\x12\"\n" +
 	"\fsessionToken\x18\x02 \x01(\tR\fsessionToken2\xb1\x02\n" +
@@ -482,19 +491,20 @@ var file_auth_v1_auth_proto_goTypes = []any{
 }
 var file_auth_v1_auth_proto_depIdxs = []int32{
 	8, // 0: auth.v1.LoginResponse.session:type_name -> auth.v1.Session
-	0, // 1: auth.v1.AuthService.Login:input_type -> auth.v1.LoginRequest
-	2, // 2: auth.v1.AuthService.Register:input_type -> auth.v1.RegisterRequest
-	4, // 3: auth.v1.AuthService.VerifySession:input_type -> auth.v1.VerifySessionRequest
-	6, // 4: auth.v1.AuthService.RefreshSession:input_type -> auth.v1.RefreshSessionRequest
-	1, // 5: auth.v1.AuthService.Login:output_type -> auth.v1.LoginResponse
-	3, // 6: auth.v1.AuthService.Register:output_type -> auth.v1.RegisterResponse
-	5, // 7: auth.v1.AuthService.VerifySession:output_type -> auth.v1.VerifySessionResponse
-	7, // 8: auth.v1.AuthService.RefreshSession:output_type -> auth.v1.RefreshSessionResponse
-	5, // [5:9] is the sub-list for method output_type
-	1, // [1:5] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	8, // 1: auth.v1.RefreshSessionResponse.session:type_name -> auth.v1.Session
+	0, // 2: auth.v1.AuthService.Login:input_type -> auth.v1.LoginRequest
+	2, // 3: auth.v1.AuthService.Register:input_type -> auth.v1.RegisterRequest
+	4, // 4: auth.v1.AuthService.VerifySession:input_type -> auth.v1.VerifySessionRequest
+	6, // 5: auth.v1.AuthService.RefreshSession:input_type -> auth.v1.RefreshSessionRequest
+	1, // 6: auth.v1.AuthService.Login:output_type -> auth.v1.LoginResponse
+	3, // 7: auth.v1.AuthService.Register:output_type -> auth.v1.RegisterResponse
+	5, // 8: auth.v1.AuthService.VerifySession:output_type -> auth.v1.VerifySessionResponse
+	7, // 9: auth.v1.AuthService.RefreshSession:output_type -> auth.v1.RefreshSessionResponse
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_auth_v1_auth_proto_init() }

@@ -111,11 +111,23 @@ final $typed_data.Uint8List refreshSessionRequestDescriptor = $convert.base64Dec
 @$core.Deprecated('Use refreshSessionResponseDescriptor instead')
 const RefreshSessionResponse$json = {
   '1': 'RefreshSessionResponse',
+  '2': [
+    {
+      '1': 'session',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.auth.v1.Session',
+      '10': 'session'
+    },
+  ],
 };
 
 /// Descriptor for `RefreshSessionResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List refreshSessionResponseDescriptor =
-    $convert.base64Decode('ChZSZWZyZXNoU2Vzc2lvblJlc3BvbnNl');
+    $convert.base64Decode(
+        'ChZSZWZyZXNoU2Vzc2lvblJlc3BvbnNlEioKB3Nlc3Npb24YASABKAsyEC5hdXRoLnYxLlNlc3'
+        'Npb25SB3Nlc3Npb24=');
 
 @$core.Deprecated('Use sessionDescriptor instead')
 const Session$json = {

@@ -1,0 +1,132 @@
+import 'dart:io';
+
+import 'package:feta/clients/auth_api.dart';
+import 'package:feta/clients/settings_api.dart';
+import 'package:feta/config.dart';
+import 'package:feta/gen/auth/v1/auth.pb.dart';
+import 'package:feta/ui/shared/error_dialog.dart';
+import 'package:feta/utils.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+class LoginView extends HookConsumerWidget {
+  const LoginView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final baseurl = useTextEditingController(
+      text: kDebugMode
+          ? Platform.isAndroid
+                ? 'http://10.0.2.2:9862'
+                : 'http://localhost:9862'
+          : '',
+    );
+
+    final user = useTextEditingController(
+      text: kDebugMode ? 'admin' : '',
+    );
+    final pass = useTextEditingController(text: kDebugMode ? 'gouda' : '');
+
+    const width = 300.0;
+    return Center(
+      child: Card(
+        elevation: 30,
+        child: Padding(
+          padding: const EdgeInsets.all(50),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                spacing: 10,
+                children: [
+                  Image.asset(
+                    'assets/gouda.png',
+                    scale: 10,
+                  ),
+                  const Text('Gouda', style: TextStyle(fontSize: 35)),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              const SizedBox(width: width, child: Divider()),
+              const Text('Login', style: TextStyle(fontSize: 30)),
+              const SizedBox(height: 20),
+
+              AutofillGroup(
+                child: SizedBox(
+                  width: width,
+                  child: Column(
+                    children: [
+                      if (!kIsWeb)
+                        TextField(
+                          autofillHints: const [AutofillHints.url],
+                          controller: baseurl,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Server Address',
+                          ),
+                        ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        autofillHints: const [AutofillHints.username],
+                        controller: user,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Username',
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        autofillHints: const [AutofillHints.password],
+                        controller: pass,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Password',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  final localSettings = ref.read(appSettingsProvider.notifier);
+                  await localSettings.updateBasePath(baseurl.text);
+
+                  final (session, err) = await runGrpcRequest(
+                    () => ref
+                        .read(authApiProvider)
+                        .login(
+                          LoginRequest(
+                            username: user.text,
+                            password: pass.text,
+                          ),
+                        ),
+                  );
+
+                  if (err.isNotEmpty) {
+                    if (!context.mounted) return;
+                    logger.e('Error logging in $err');
+                    await showErrorDialog(context, 'Error Logging In', err);
+                    return;
+                  }
+
+                  await localSettings.updateTokens(
+                    sessionToken: session!.session.sessionToken,
+                    refreshToken: session.session.refreshToken,
+                  );
+                },
+                child: const Text('Submit'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

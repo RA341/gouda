@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/grpc.dart';
 
 final grpcChannelProvider = Provider<Channel>((ref) {
-  final apiBasePath = ref.watch(basePathProvider);
-  final channel = setupClientChannel(apiBasePath);
+  final localConfig = ref.watch(appSettingsProvider);
+  final channel = setupClientChannel(localConfig.basePath);
 
   return channel;
 });

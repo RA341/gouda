@@ -16,29 +16,57 @@ func NewAuthHandler(srv *Service) *Handler {
 	return &Handler{srv: srv}
 }
 
-func (a *Handler) Authenticate(_ context.Context, req *connect.Request[v1.AuthRequest]) (*connect.Response[v1.AuthResponse], error) {
-	//username := req.Msg.GetUsername()
-	//password := req.Msg.GetPassword()
-	//
-	//token, err := a.srv.Login(username, password)
-	//if err != nil {
-	//	return nil, err
-	//}
+func (a *Handler) Login(_ context.Context, req *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
+	username := req.Msg.GetUsername()
+	password := req.Msg.GetPassword()
 
-	//res := connect.NewResponse(&v1.AuthResponse{AuthToken: token})
-	//res.Header().Add(AuthSessionHeader, token.SessionToken)
-
-	return nil, fmt.Errorf("todo not implemented Authenticate")
-}
-
-func (a *Handler) Test(_ context.Context, req *connect.Request[v1.AuthResponse]) (*connect.Response[v1.TestResponse], error) {
-	clientToken := req.Msg.GetAuthToken()
-
-	err := a.srv.SessionVerifySessionToken(clientToken)
+	loginSession, err := a.srv.Login(username, password)
 	if err != nil {
 		return nil, err
 	}
 
-	res := connect.NewResponse(&v1.TestResponse{})
-	return res, nil
+	return connect.NewResponse(&v1.LoginResponse{
+		Session: SessionToRPC(loginSession),
+	}), err
+}
+
+func (a *Handler) Register(ctx context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
+	return nil, fmt.Errorf("implement Register")
+}
+
+func (a *Handler) VerifySession(ctx context.Context, req *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {
+	token := req.Msg.SessionToken
+	if token == "" {
+		return nil, fmt.Errorf("session token is empty")
+	}
+
+	err := a.srv.SessionVerifyToken(token)
+	if err != nil {
+		return nil, err
+	}
+
+	return connect.NewResponse(&v1.VerifySessionResponse{}), nil
+}
+
+func (a *Handler) RefreshSession(ctx context.Context, req *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error) {
+	refreshToken := req.Msg.RefreshToken
+	if refreshToken == "" {
+		return nil, fmt.Errorf("empty refresh token")
+	}
+
+	newSession, err := a.srv.SessionRefresh(refreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	return connect.NewResponse(&v1.RefreshSessionResponse{
+		Session: SessionToRPC(newSession),
+	}), err
+}
+
+func SessionToRPC(ses *Session) *v1.Session {
+	return &v1.Session{
+		RefreshToken: ses.RefreshToken,
+		SessionToken: ses.SessionToken,
+	}
 }

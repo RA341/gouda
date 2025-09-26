@@ -1,7 +1,18 @@
+import 'package:feta/clients/auth_api.dart';
+import 'package:feta/clients/settings_api.dart';
+import 'package:feta/config.dart';
+import 'package:feta/gen/auth/v1/auth.pb.dart';
+import 'package:feta/ui/auth/auth_page.dart';
+import 'package:feta/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await PreferencesService.init();
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Gouda',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blueGrey,
+          seedColor: Colors.blue,
           secondary: Colors.yellow,
           brightness: Brightness.dark,
         ),
@@ -23,11 +34,90 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainView extends StatelessWidget {
+final sessionProvider = FutureProvider<bool>((ref) async {
+  final localSettings = ref.watch(appSettingsProvider);
+  final refreshToken = localSettings.refreshToken;
+  final sessionToken = localSettings.sessionToken;
+
+  if (sessionToken.isEmpty || refreshToken.isEmpty) {
+    logger.w('Empty refresh:$refreshToken or session: $refreshToken tokens');
+    return false;
+  }
+
+  final authApi = ref.watch(authApiProvider);
+
+  // check for session if expired
+  final (_, err) = await runGrpcRequest(
+    () => authApi.verifySession(
+      VerifySessionRequest(
+        sessionToken: sessionToken,
+      ),
+    ),
+  );
+  if (err.isEmpty) {
+    logger.i('Session verified, auth is complete');
+    return true;
+  }
+
+  final (refreshedSession, err2) = await runGrpcRequest(
+    () => authApi.refreshSession(
+      RefreshSessionRequest(
+        refreshToken: refreshToken,
+      ),
+    ),
+  );
+  if (err2.isNotEmpty) {
+    logger.w('unable to refresh token: $err2');
+    return false;
+  }
+
+  await ref
+      .read(appSettingsProvider.notifier)
+      .updateTokens(
+        sessionToken: refreshedSession?.session.sessionToken ?? '',
+        refreshToken: refreshedSession?.session.refreshToken ?? '',
+      );
+
+  return true;
+});
+
+class MainView extends ConsumerWidget {
   const MainView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("Hello world")));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authStatus = ref.watch(sessionProvider);
+
+    return Scaffold(
+      body: authStatus.when(
+        data: (data) {
+          return data ? const HomeView() : const LoginView();
+        },
+        error: (error, stackTrace) => Center(
+          child: Text(
+            'Error occurred while verifying authentication: $error',
+          ),
+        ),
+        loading: () => const Center(
+          child: Column(
+            children: [
+              CircularProgressIndicator(),
+              Text('Verifying Authentication'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeView extends ConsumerWidget {
+  const HomeView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return const Center(
+      child: Text('Main view'),
+    );
   }
 }
