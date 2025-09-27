@@ -22,3 +22,4 @@ website/.vitepress/cache
 .bin
 .dev
 /core/internal/config/gouda.yml
+/**/gouda.yml

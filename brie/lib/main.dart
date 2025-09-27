@@ -21,7 +21,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Gouda',
+      title: 'Brie - Gouda Client',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
@@ -48,12 +48,11 @@ final sessionProvider = FutureProvider<bool>((ref) async {
 
   // check for session if expired
   final (_, err) = await runGrpcRequest(
-        () =>
-        authApi.verifySession(
-          VerifySessionRequest(
-            sessionToken: sessionToken,
-          ),
-        ),
+    () => authApi.verifySession(
+      VerifySessionRequest(
+        sessionToken: sessionToken,
+      ),
+    ),
   );
   if (err.isEmpty) {
     logger.i('Session verified, auth is complete');
@@ -61,12 +60,11 @@ final sessionProvider = FutureProvider<bool>((ref) async {
   }
 
   final (refreshedSession, err2) = await runGrpcRequest(
-        () =>
-        authApi.refreshSession(
-          RefreshSessionRequest(
-            refreshToken: refreshToken,
-          ),
-        ),
+    () => authApi.refreshSession(
+      RefreshSessionRequest(
+        refreshToken: refreshToken,
+      ),
+    ),
   );
   if (err2.isNotEmpty) {
     logger.w('unable to refresh token: $err2');
@@ -76,9 +74,9 @@ final sessionProvider = FutureProvider<bool>((ref) async {
   await ref
       .read(appSettingsProvider.notifier)
       .updateTokens(
-    sessionToken: refreshedSession?.session.sessionToken ?? '',
-    refreshToken: refreshedSession?.session.refreshToken ?? '',
-  );
+        sessionToken: refreshedSession?.session.sessionToken ?? '',
+        refreshToken: refreshedSession?.session.refreshToken ?? '',
+      );
 
   return true;
 });
@@ -93,16 +91,14 @@ class AppView extends ConsumerWidget {
       data: (data) {
         return data ? const LayoutView() : const LoginView();
       },
-      error: (error, stackTrace) =>
-          Scaffold(
-            body: Center(
-              child: Text(
-                'Error occurred while verifying authentication: $error',
-              ),
-            ),
+      error: (error, stackTrace) => Scaffold(
+        body: Center(
+          child: Text(
+            'Error occurred while verifying authentication: $error',
           ),
-      loading: () =>
-      const Scaffold(
+        ),
+      ),
+      loading: () => const Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
