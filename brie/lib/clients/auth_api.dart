@@ -11,9 +11,7 @@ final authApiProvider = Provider<AuthServiceClient>((ref) {
 });
 
 Future<void> logout(WidgetRef ref) async {
-  final refresh = ref
-      .watch(appSettingsProvider)
-      .refreshToken;
+  final refresh = ref.watch(appSettingsProvider).refreshToken;
 
   await ref.read(authApiProvider).logout(LogoutRequest(refresh: refresh));
 

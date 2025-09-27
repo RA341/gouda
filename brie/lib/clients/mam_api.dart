@@ -1,35 +1,22 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:brie/clients/mam_search.dart';
-import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/mam/v1/mam.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final mamApiProvider = Provider<MamApi>((ref) {
+final mamApiProvider = Provider<MamServiceClient>((ref) {
   final channel = ref.watch(grpcChannelProvider);
   final authInterceptor = ref.watch(authInterceptorProvider);
 
   final client = MamServiceClient(channel, interceptors: [authInterceptor]);
-
-  return MamApi(client);
+  return client;
 });
 
 final mamProfileProvider = FutureProvider<UserData>((ref) async {
   final mam = ref.watch(mamApiProvider);
-  return mam.apiClient.getProfile(Empty());
+  return mam.getProfile(Empty());
 });
-
-class MamApi {
-  MamApi(this.apiClient);
-
-  final MamServiceClient apiClient;
-
-  Future<SearchResults> list(String search) async {
-    return mustRunGrpcRequest(() => apiClient.search(Query(query: search)));
-  }
-}
 
 final mamBooksSearchNotifier =
     AsyncNotifierProvider<MamBooksSearchNotifier, List<SearchBook>>(() {
@@ -51,17 +38,19 @@ class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
   }
 
   Future<List<SearchBook>> search() async {
-    final mam = ref.watch(mamApiProvider);
-    if ((query.text ?? '').isEmpty) {
-      return [];
-    }
-
-    final q = jsonEncode(query.toJson());
-    final results = await mam.list(q);
-
-    found = results.found;
-    total = results.total;
-    return results.results;
+    // todo
+    // final mam = ref.watch(mamApiProvider);
+    // if ((query.text ?? '').isEmpty) {
+    //   return [];
+    // }
+    //
+    // final q = jsonEncode(query.toJson());
+    // final results = await mam.search(q);
+    //
+    // found = results.found;
+    // total = results.total;
+    // return results.results;
+    return [];
   }
 
   Future<void> paginateForward() async {

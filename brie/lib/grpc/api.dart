@@ -11,8 +11,8 @@ final grpcChannelProvider = Provider<Channel>((ref) {
 });
 
 final authInterceptorProvider = Provider<AuthInterceptor>((ref) {
-  // final token = ref.watch(apiTokenProvider);
-  return AuthInterceptor('');
+  final localSettings = ref.watch(appSettingsProvider);
+  return AuthInterceptor(localSettings.sessionToken);
 });
 
 class AuthInterceptor implements ClientInterceptor {
