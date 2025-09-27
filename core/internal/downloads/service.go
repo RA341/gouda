@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/RA341/gouda/internal/config"
 	dc "github.com/RA341/gouda/internal/downloads/clients"
+	sc "github.com/RA341/gouda/internal/server_config"
 	fu "github.com/RA341/gouda/pkg/file_utils"
 	"github.com/RA341/gouda/pkg/magnet"
 	"github.com/rs/zerolog/log"
@@ -19,9 +19,9 @@ type DownloadService struct {
 	db     Store
 	client dc.DownloadClient
 
-	torrentCli    *config.TorrentClient
-	perms         *config.UserPermissions
-	dirs          *config.Directories
+	torrentCli    *sc.TorrentClient
+	perms         *sc.UserPermissions
+	dirs          *sc.Directories
 	checkInterval time.Duration
 	timout        time.Duration
 	ignoreTimeout bool
@@ -29,7 +29,7 @@ type DownloadService struct {
 	workerChan chan interface{}
 }
 
-func NewService(conf *config.GoudaConfig, db Store, tor *config.TorrentClient, client dc.DownloadClient) *DownloadService {
+func NewService(conf *sc.GoudaConfig, db Store, tor *sc.TorrentClient, client dc.DownloadClient) *DownloadService {
 	limit, err := conf.Downloader.GetLimit()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Invalid time string")
@@ -52,7 +52,7 @@ func NewService(conf *config.GoudaConfig, db Store, tor *config.TorrentClient, c
 }
 
 // TestAndUpdateClient tests the client first then updates the torrent client if successful
-func (d *DownloadService) TestAndUpdateClient(client *config.TorrentClient) error {
+func (d *DownloadService) TestAndUpdateClient(client *sc.TorrentClient) error {
 	newClient, err := d.TestClient(client)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (d *DownloadService) TestAndUpdateClient(client *config.TorrentClient) erro
 	return nil
 }
 
-func (d *DownloadService) TestClient(client *config.TorrentClient) (dc.DownloadClient, error) {
+func (d *DownloadService) TestClient(client *sc.TorrentClient) (dc.DownloadClient, error) {
 	newClient, err := dc.TestTorrentClient(client)
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect torrent client: %v", err)

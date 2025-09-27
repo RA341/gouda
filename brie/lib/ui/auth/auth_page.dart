@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:brie/clients/auth_api.dart';
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/config.dart';
+import 'package:brie/env.dart';
 import 'package:brie/gen/auth/v1/auth.pb.dart';
 import 'package:brie/ui/shared/error_dialog.dart';
 import 'package:brie/utils.dart';
@@ -20,9 +21,10 @@ class LoginView extends HookConsumerWidget {
 
     final baseUrl = kDebugMode
         ? (kIsWeb || !Platform.isAndroid)
-        ? 'http://localhost:9862'
-        : 'http://10.0.2.2:9862'
-        : '';
+        ? Env.baseUrl
+    // android emu has a different address
+        : Env.androidUrl
+        : Env.baseUrl;
 
     final baseurl = useTextEditingController(
       text: baseUrl,

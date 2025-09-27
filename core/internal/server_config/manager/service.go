@@ -2,13 +2,13 @@ package manager
 
 import (
 	v1 "github.com/RA341/gouda/generated/settings/v1"
-	"github.com/RA341/gouda/internal/config"
+	sc "github.com/RA341/gouda/internal/server_config"
 )
 
 // todo separate logic from handler
 
 type Service struct {
-	conf *config.GoudaConfig
+	conf *sc.GoudaConfig
 }
 
 func (s *Service) loadConfigToRPC() *v1.GoudaConfig {
@@ -25,15 +25,13 @@ func (s *Service) saveConfigFromRPC(rpcConfig *v1.GoudaConfig) error {
 	return s.conf.DumpToYaml()
 }
 
-func ToProto(cfg *config.GoudaConfig) *v1.GoudaConfig {
+func ToProto(cfg *sc.GoudaConfig) *v1.GoudaConfig {
 	return &v1.GoudaConfig{
 		Port:           int32(cfg.Port),
 		AllowedOrigins: cfg.AllowedOrigins,
 		UiPath:         cfg.UIPath,
-		Auth:           cfg.Auth,
 		MamToken:       cfg.MamToken,
 		Dir: &v1.Directories{
-			ConfigDir:   cfg.Dir.ConfigDir,
 			DownloadDir: cfg.Dir.DownloadDir,
 			CompleteDir: cfg.Dir.CompleteDir,
 			TorrentDir:  cfg.Dir.TorrentDir,
@@ -53,7 +51,7 @@ func ToProto(cfg *config.GoudaConfig) *v1.GoudaConfig {
 	}
 }
 
-func FromProto(pb *v1.GoudaConfig, conf *config.GoudaConfig) {
+func FromProto(pb *v1.GoudaConfig, conf *sc.GoudaConfig) {
 	if pb == nil || conf == nil {
 		return
 	}
@@ -61,12 +59,10 @@ func FromProto(pb *v1.GoudaConfig, conf *config.GoudaConfig) {
 	conf.Port = int(pb.Port)
 	conf.AllowedOrigins = pb.AllowedOrigins
 	conf.UIPath = pb.UiPath
-	conf.Auth = pb.Auth
 	conf.MamToken = pb.MamToken
 
 	if pb.Dir != nil {
-		conf.Dir = config.Directories{
-			ConfigDir:   pb.Dir.ConfigDir,
+		conf.Dir = sc.Directories{
 			DownloadDir: pb.Dir.DownloadDir,
 			CompleteDir: pb.Dir.CompleteDir,
 			TorrentDir:  pb.Dir.TorrentDir,
@@ -74,21 +70,21 @@ func FromProto(pb *v1.GoudaConfig, conf *config.GoudaConfig) {
 	}
 
 	if pb.Log != nil {
-		conf.Log = config.Logger{
+		conf.Log = sc.Logger{
 			Level:   pb.Log.Level,
 			Verbose: pb.Log.Verbose,
 		}
 	}
 
 	if pb.Downloader != nil {
-		conf.Downloader = config.Downloader{
+		conf.Downloader = sc.Downloader{
 			Timeout:       pb.Downloader.Timeout,
 			IgnoreTimeout: pb.Downloader.IgnoreTimeout,
 		}
 	}
 
 	if pb.Permissions != nil {
-		conf.Permissions = config.UserPermissions{
+		conf.Permissions = sc.UserPermissions{
 			UID: int(pb.Permissions.Uid),
 			GID: int(pb.Permissions.Gid),
 		}

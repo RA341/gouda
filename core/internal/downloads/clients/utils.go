@@ -2,10 +2,11 @@ package clients
 
 import (
 	"fmt"
-	"github.com/RA341/gouda/internal/config"
+
+	sc "github.com/RA341/gouda/internal/server_config"
 )
 
-type ClientInit func(info *config.TorrentClient) (DownloadClient, error)
+type ClientInit func(info *sc.TorrentClient) (DownloadClient, error)
 
 var supportedClients = map[string]ClientInit{
 	"transmission": NewTransmissionClient,
@@ -21,11 +22,11 @@ func GetSupportedClients() []string {
 	return clientList
 }
 
-func InitializeTorrentClient(conf *config.TorrentClient) (DownloadClient, error) {
+func InitializeTorrentClient(conf *sc.TorrentClient) (DownloadClient, error) {
 	return TestTorrentClient(conf)
 }
 
-func TestTorrentClient(details *config.TorrentClient) (DownloadClient, error) {
+func TestTorrentClient(details *sc.TorrentClient) (DownloadClient, error) {
 	initFn, exists := supportedClients[details.ClientType]
 	if !exists {
 		return nil, fmt.Errorf("unsupported torrent client: %s", details.ClientType)

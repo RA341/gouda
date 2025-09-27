@@ -1,3 +1,4 @@
+import 'package:brie/env.dart';
 import 'package:brie/ui/home/home_view.dart';
 import 'package:brie/ui/layout/nav_model.dart';
 import 'package:brie/ui/layout/navbar_mobile.dart';
@@ -7,13 +8,13 @@ import 'package:brie/ui/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final pageIndexProvider = NotifierProvider<PageIndexProvider, int>(
-  PageIndexProvider.new,
+final pageIndexProvider = NotifierProvider<PageIndexNotifier, int>(
+  PageIndexNotifier.new,
 );
 
-class PageIndexProvider extends Notifier<int> {
+class PageIndexNotifier extends Notifier<int> {
   @override
-  int build() => 0;
+  int build() => Env.initialPage;
 
   void switchPage(int index) {
     state = index;
@@ -25,10 +26,6 @@ const mobileWidth = 800;
 bool isMobileView(BuildContext context) {
   return MediaQuery.of(context).size.width < mobileWidth;
 }
-
-final isMobileViewProvider = NotifierProvider<IsMobileView, bool>(
-  IsMobileView.new,
-);
 
 class IsMobileView extends Notifier<bool> {
   @override
@@ -89,9 +86,11 @@ class LayoutView extends ConsumerWidget {
           );
         } else {
           // mobile view
-          return Scaffold(
-            body: pages[pageIndex].page,
-            bottomNavigationBar: MobileNavbar(pageData: pages),
+          return SafeArea(
+            child: Scaffold(
+              body: pages[pageIndex].page,
+              bottomNavigationBar: MobileNavbar(pageData: pages),
+            ),
           );
         }
       },

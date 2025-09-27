@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	DefaultAdminUsername = "admin"
+	DefaultAdminUsername = RoleAdmin
 	DefaultAdminPassword = "gouda"
-	// DefaultAdminID 1 should always be the admin
+	// DefaultAdminID ID 1 should always be the admin
 	DefaultAdminID = 1
 )
 

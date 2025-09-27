@@ -1,4 +1,4 @@
-package config
+package server_config
 
 import (
 	"sync"
@@ -11,7 +11,6 @@ type GoudaConfig struct {
 	Port           int             `yaml:"port" config:"flag=port,env=PORT,default=9862,usage=Port to run gouda on"`
 	AllowedOrigins string          `yaml:"allowedOrigins" config:"flag=origins,env=ORIGINS,default=*,usage=Allowed origins for the API (in CSV)"`
 	UIPath         string          `yaml:"uiPath" config:"flag=ui,env=UI_PATH,default=web,usage=Path to frontend files"`
-	Auth           bool            `yaml:"auth" config:"flag=auth,env=AUTH_ENABLE,default=true,usage=Enable gouda auth"`
 	MamToken       string          `yaml:"mamToken" config:"flag=mam,env=MAM_TOKEN,default=,usage=myanaonmouse token,hide=true"`
 	Dir            Directories     `yaml:"dir" config:""`
 	Log            Logger          `yaml:"log" config:""`
@@ -21,7 +20,6 @@ type GoudaConfig struct {
 }
 
 type Directories struct {
-	ConfigDir   string `yaml:"configDir" config:"flag=cf,env=CONFIG,default=./config,usage=Directory to store gouda config"`
 	DownloadDir string `yaml:"downloadDir" config:"flag=df,env=DOWNLOAD,default=./download,usage=Directory to store download files"`
 	CompleteDir string `yaml:"completeDir" config:"flag=cmf,env=COMPLETE,default=./complete,usage=Directory for completed files"`
 	TorrentDir  string `yaml:"torrentDir" config:"flag=tf,env=TORRENT,default=./torrent,usage=Directory for storing torrent files"`

@@ -49,7 +49,7 @@ func (a *Handler) VerifySession(_ context.Context, req *connect.Request[v1.Verif
 		return nil, fmt.Errorf("session token is empty")
 	}
 
-	err := a.srv.SessionVerifyToken(token)
+	_, err := a.srv.SessionVerifyToken(token)
 	if err != nil {
 		return nil, err
 	}

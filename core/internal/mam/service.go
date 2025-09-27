@@ -20,12 +20,13 @@ const IDCookieKey = "mam_id"
 
 // Service holds the necessary information to interact with the MAM API.
 type Service struct {
-	client *resty.Client
+	client func() *resty.Client
 }
+type ApiKeyProvider func() string
 
 // NewService creates a new instance of the MAM service.
-func NewService(apiKey string) *Service {
-	client := setupClient(apiKey)
+func NewService(provider ApiKeyProvider) *Service {
+	client := setupClient(provider)
 	return &Service{
 		client: client,
 	}
@@ -33,7 +34,6 @@ func NewService(apiKey string) *Service {
 
 // BuyVIP 0 for max
 func (s *Service) BuyVIP(durationInWeeks uint) (*BuyVIPResponse, error) {
-
 	dur := ""
 	if durationInWeeks == 0 {
 		dur = "max"
@@ -83,7 +83,7 @@ func (s *Service) BuyBonus(amountInGB uint) (*BuyBonusResponse, error) {
 }
 
 func (s *Service) GetProfile() (*UserData, error) {
-	resp, err := s.client.R().Post("/jsonLoad.php")
+	resp, err := s.client().R().Post("/jsonLoad.php")
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (s *Service) GetProfile() (*UserData, error) {
 }
 
 func (s *Service) GetBonusProfile() (*UserData, error) {
-	resp, err := s.client.R().Post("/json/userBonusHistory.php")
+	resp, err := s.client().R().Post("/json/userBonusHistory.php")
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +189,7 @@ func (s *Service) BuyVault(apiKey string, amount uint) error {
 	fmt.Println("Status:", resp.Status())
 	fmt.Println("Body:", st)
 
-	//resp, err := s.client.R().
+	//resp, err := s.client().R().
 	//	SetDebug(true).
 	//	SetHeaders(map[string]string{
 	//		"User-Agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
@@ -282,7 +282,7 @@ func (s *Service) SearchRaw(payload map[string]any) (books []SearchBook, found i
 	payload["dlLink"] = ""
 	payload["thumbnail"] = "true"
 
-	resp, err := s.client.R().
+	resp, err := s.client().R().
 		SetBody(payload).
 		Post("/tor/js/loadSearchJSONbasic.php")
 	if err != nil {
@@ -310,7 +310,7 @@ func (s *Service) SearchRaw(payload map[string]any) (books []SearchBook, found i
 }
 
 func (s *Service) runGet(path string) ([]byte, error) {
-	resp, err := s.client.R().Get(path)
+	resp, err := s.client().R().Get(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make get request: %w", err)
 	}
@@ -329,7 +329,7 @@ func (s *Service) runGet(path string) ([]byte, error) {
 }
 
 func (s *Service) DownloadTorrentFile(link string) (io.ReadCloser, error) {
-	resp, err := s.client.R().Get(link)
+	resp, err := s.client().R().Get(link)
 	if err != nil {
 		return nil, fmt.Errorf("unable to download torrent file: %w", err)
 	}
@@ -472,8 +472,8 @@ func (s *Service) getThumbnail(encodedLink string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to base64 decode thumbnail: %w", err)
 	}
 
-	r := s.client.R()
-	resp, err := r.SetCookies(s.client.Cookies()).Get(cdnPrefix + string(decoded))
+	r := s.client().R()
+	resp, err := r.SetCookies(s.client().Cookies()).Get(cdnPrefix + string(decoded))
 	if err != nil {
 		return nil, err
 	}
@@ -576,21 +576,22 @@ func extractFormatFromTags(tags string) string {
 
 const baseURL = "https://www.myanonamouse.net"
 
-func setupClient(apiKey string) *resty.Client {
-	authCookie := &http.Cookie{
-		Name:  IDCookieKey,
-		Value: apiKey,
+func setupClient(provider ApiKeyProvider) func() *resty.Client {
+	return func() *resty.Client {
+		authCookie := &http.Cookie{
+			Name:  IDCookieKey,
+			Value: provider(),
+		}
+		client := resty.New().
+			SetCookie(authCookie).
+			SetHeader(
+				"User-Agent",
+				fmt.Sprintf("gouda/%s (+https://github.com/RA341/gouda)", info.Version),
+			).
+			SetBaseURL(baseURL)
+
+		return client
 	}
-
-	client := resty.New().
-		SetCookie(authCookie).
-		SetHeader(
-			"User-Agent",
-			fmt.Sprintf("gouda/%s (+https://github.com/RA341/gouda)", info.Version),
-		).
-		SetBaseURL(baseURL)
-
-	return client
 }
 
 // adds https://www.myanonamouse.net, path must start with '/'

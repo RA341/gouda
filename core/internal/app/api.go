@@ -8,8 +8,8 @@ import (
 	"os"
 
 	connectcors "connectrpc.com/cors"
-	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/info"
+	sc "github.com/RA341/gouda/internal/server_config"
 	"github.com/RA341/gouda/pkg/file_utils"
 	"github.com/RA341/gouda/pkg/logger"
 	"github.com/rs/cors"
@@ -26,7 +26,7 @@ func setup() {
 func StartServer(UIFS fs.FS) {
 	setup()
 
-	conf, err := config.LoadConf()
+	conf, err := sc.LoadConf()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to parse config")
 	}
@@ -60,7 +60,7 @@ func StartServer(UIFS fs.FS) {
 	}
 }
 
-func registerFrontend(mux *http.ServeMux, conf *config.GoudaConfig, uifs fs.FS) {
+func registerFrontend(mux *http.ServeMux, conf *sc.GoudaConfig, uifs fs.FS) {
 	handler, err := getFrontendDir(conf, uifs)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to load frontend dir")
@@ -68,7 +68,7 @@ func registerFrontend(mux *http.ServeMux, conf *config.GoudaConfig, uifs fs.FS) 
 	mux.HandleFunc("/", handler)
 }
 
-func getFrontendDir(config *config.GoudaConfig, uifs fs.FS) (http.HandlerFunc, error) {
+func getFrontendDir(config *sc.GoudaConfig, uifs fs.FS) (http.HandlerFunc, error) {
 	if uifs == nil {
 		if !file_utils.FileExists(config.UIPath) {
 			log.Warn().Str("path_checked", config.UIPath).Msg("no ui files found, setting default page")

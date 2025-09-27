@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/RA341/gouda/internal/config"
+	sc "github.com/RA341/gouda/internal/server_config"
 	"github.com/rs/zerolog/log"
 	"resty.dev/v3"
 )
@@ -37,7 +37,7 @@ type DelugeClient struct {
 	userId    int
 }
 
-func NewDelugeClient(client *config.TorrentClient) (DownloadClient, error) {
+func NewDelugeClient(client *sc.TorrentClient) (DownloadClient, error) {
 	deluge := &DelugeClient{
 		client:    resty.New().SetTimeout(time.Second * 5),
 		jsonURL:   fmt.Sprintf("%s://%s/json", client.Protocol, client.Host),

@@ -2,16 +2,18 @@ package manager
 
 import (
 	"context"
+	"fmt"
 
 	"connectrpc.com/connect"
 	v1 "github.com/RA341/gouda/generated/settings/v1"
-	"github.com/RA341/gouda/internal/config"
 	"github.com/RA341/gouda/internal/downloads"
 	"github.com/RA341/gouda/internal/downloads/clients"
 	"github.com/RA341/gouda/internal/info"
+	"github.com/RA341/gouda/internal/server_config"
 )
 
 type Handler struct {
+	// todo interface
 	downloadSrv *downloads.DownloadService
 }
 
@@ -22,14 +24,14 @@ func NewSettingsHandler(downloadService *downloads.DownloadService) *Handler {
 func (srv *Handler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return connect.NewResponse(&v1.GetMetadataResponse{
 		Version:    info.Version,
-		BinaryType: string(info.Flavour),
+		BinaryType: info.Flavour,
 	}), nil
 }
 
 func (srv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	settings := req.Msg
 
-	err := srv.downloadSrv.TestAndUpdateClient(&config.TorrentClient{
+	err := srv.downloadSrv.TestAndUpdateClient(&server_config.TorrentClient{
 		ClientType: settings.Client.TorrentName,
 		User:       settings.Client.TorrentUser,
 		Password:   settings.Client.TorrentPassword,
@@ -49,7 +51,7 @@ func (srv *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Se
 
 func (srv *Handler) TestClient(_ context.Context, c *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error) {
 	rpcClient := c.Msg
-	_, err := srv.downloadSrv.TestClient(&config.TorrentClient{
+	_, err := srv.downloadSrv.TestClient(&server_config.TorrentClient{
 		ClientType: rpcClient.TorrentName,
 		User:       rpcClient.TorrentUser,
 		Password:   rpcClient.TorrentPassword,
@@ -79,4 +81,8 @@ func (srv *Handler) ListSupportedClients(_ context.Context, _ *connect.Request[v
 	})
 
 	return res, nil
+}
+
+func (srv *Handler) UpdateMamToken(ctx context.Context, c *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error) {
+	return nil, fmt.Errorf("implement me UpdateMamToken")
 }

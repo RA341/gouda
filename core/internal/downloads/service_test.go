@@ -3,18 +3,18 @@ package downloads
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/RA341/gouda/internal/config"
-	"github.com/RA341/gouda/internal/downloads/clients"
-	"github.com/RA341/gouda/pkg"
-	"github.com/stretchr/testify/assert"
 	"hash/fnv"
 	"math/rand/v2"
 	"testing"
 	"time"
+
+	"github.com/RA341/gouda/internal/downloads/clients"
+	"github.com/RA341/gouda/pkg"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDownloadService(t *testing.T) {
-	config.Load()
+	server_config.Load()
 	tdc := TestDownloadClient{torrentList: pkg.Map[string, tor]{}}
 	ts := TestDownloadStore{store: pkg.Map[string, *Media]{}}
 	srv := NewService(&ts, &con, &tdc)

@@ -29,30 +29,57 @@ class VerticalNavBar extends ConsumerWidget {
         )
         .toList();
 
-    return Column(
-      children: [
-        Expanded(
-          child: NavigationRail(
-            selectedIndex: pageIndex,
-            groupAlignment: -0.955,
-            onDestinationSelected: (int index) =>
-                ref.read(pageIndexProvider.notifier).switchPage(index),
-            labelType: labelType,
-            // leading: GoudaHeader(),
-            destinations: navItems,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50),
-          child: IconButton(
-            onPressed: () async => logout(ref),
-            icon: const Tooltip(
-              message: 'Logout',
-              child: Icon(Icons.logout, semanticLabel: 'Logout'),
+    return ColoredBox(
+      color: Theme
+          .of(context)
+          .hoverColor,
+      child: Column(
+        children: [
+          Expanded(
+            child: NavigationRail(
+              backgroundColor: Colors.transparent,
+              selectedIndex: pageIndex,
+              groupAlignment: -0.955,
+              onDestinationSelected: (int index) =>
+                  ref.read(pageIndexProvider.notifier).switchPage(index),
+              labelType: labelType,
+              leading: const GoudaHeader(),
+              destinations: navItems,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 50),
+            child: IconButton(
+              onPressed: () async => logout(ref),
+              icon: const Tooltip(
+                message: 'Logout',
+                child: Icon(Icons.logout, semanticLabel: 'Logout'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GoudaHeader extends ConsumerWidget {
+  const GoudaHeader({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      child: IconButton(
+        highlightColor: Colors.transparent,
+        onPressed: () {
+          ref.read(pageIndexProvider.notifier).switchPage(0);
+        },
+        icon: Image.asset(
+          'assets/gouda.png',
+          scale: 11,
         ),
-      ],
+      ),
     );
   }
 }

@@ -97,6 +97,6 @@ func Test_Login(t *testing.T) {
 	sess, err := srv.Login(user, pass)
 	require.NoError(t, err)
 
-	err = srv.SessionVerifyToken(sess.SessionToken)
+	_, err = srv.SessionVerifyToken(sess.SessionToken)
 	require.NoError(t, err)
 }

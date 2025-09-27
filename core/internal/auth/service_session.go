@@ -80,7 +80,7 @@ func (s *SessionService) sessionCreate(user *User) (*Session, error) {
 	return ses, nil
 }
 
-func (s *SessionService) SessionVerifyToken(token string) error {
+func (s *SessionService) SessionVerifyToken(token string) (*Session, error) {
 	// todo enable/disable auth
 	//if info.IsDev() {
 	//	return true, nil
@@ -88,10 +88,15 @@ func (s *SessionService) SessionVerifyToken(token string) error {
 
 	session, err := s.store.GetSessionFromSessionToken(token)
 	if err != nil {
-		return fmt.Errorf("failed to get session token %w: %w", ErrInvalidSessionToken, err)
+		return nil, fmt.Errorf("failed to get session token %w: %w", ErrInvalidSessionToken, err)
 	}
 
-	return s.checkExpiry(session.ExpirySessionToken)
+	err = s.checkExpiry(session.ExpirySessionToken)
+	if err != nil {
+		return nil, err
+	}
+
+	return session, nil
 }
 
 // SessionRefresh refresh a user session token
