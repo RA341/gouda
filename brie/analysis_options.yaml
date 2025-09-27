@@ -14,7 +14,7 @@ linter:
     library_private_types_in_public_api: false
     flutter_style_todos: false
     use_setters_to_change_properties: false
-
+    prefer_single_quotes: false
 
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule

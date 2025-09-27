@@ -2,9 +2,9 @@ dir: "./lib"
 
 cmds:
   windows:
-    startCmd: [ "flutter", "run", "-d", "windows" ]
+    startCmd: [ "flutter", "run", "-d", "windows", "--dart-define-from-file=env.dev.json" ]
     onRefreshInput: "r"
 
   android:
-    startCmd: [ "flutter", "run", "-d", "emulator-5554" ]
+    startCmd: [ "flutter", "run", "-d", "emulator-5554", "--dart-define-from-file=env.dev.json" ]
     onRefreshInput: "r"
