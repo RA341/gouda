@@ -46,13 +46,6 @@ class SettingsServiceClient extends $grpc.Client {
     return $createUnaryCall(_$listSettings, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.ListSupportedClientsResponse> listSupportedClients(
-    $0.ListSupportedClientsRequest request, {
-    $grpc.CallOptions? options,
-  }) {
-    return $createUnaryCall(_$listSupportedClients, request, options: options);
-  }
-
   $grpc.ResponseFuture<$0.GetMetadataResponse> getMetadata(
     $0.GetMetadataRequest request, {
     $grpc.CallOptions? options,
@@ -60,11 +53,25 @@ class SettingsServiceClient extends $grpc.Client {
     return $createUnaryCall(_$getMetadata, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.ListSupportedClientsResponse> listSupportedClients(
+    $0.ListSupportedClientsRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listSupportedClients, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.TestTorrentResponse> testClient(
     $0.TorrentClient request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$testClient, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.UpdateMamTokenResponse> updateMamToken(
+    $0.UpdateMamTokenRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$updateMamToken, request, options: options);
   }
 
   // method descriptors
@@ -79,21 +86,26 @@ class SettingsServiceClient extends $grpc.Client {
           '/settings.v1.SettingsService/ListSettings',
           ($0.ListSettingsResponse value) => value.writeToBuffer(),
           $0.Settings.fromBuffer);
-  static final _$listSupportedClients = $grpc.ClientMethod<
-          $0.ListSupportedClientsRequest, $0.ListSupportedClientsResponse>(
-      '/settings.v1.SettingsService/ListSupportedClients',
-      ($0.ListSupportedClientsRequest value) => value.writeToBuffer(),
-      $0.ListSupportedClientsResponse.fromBuffer);
   static final _$getMetadata =
       $grpc.ClientMethod<$0.GetMetadataRequest, $0.GetMetadataResponse>(
           '/settings.v1.SettingsService/GetMetadata',
           ($0.GetMetadataRequest value) => value.writeToBuffer(),
           $0.GetMetadataResponse.fromBuffer);
+  static final _$listSupportedClients = $grpc.ClientMethod<
+          $0.ListSupportedClientsRequest, $0.ListSupportedClientsResponse>(
+      '/settings.v1.SettingsService/ListSupportedClients',
+      ($0.ListSupportedClientsRequest value) => value.writeToBuffer(),
+      $0.ListSupportedClientsResponse.fromBuffer);
   static final _$testClient =
       $grpc.ClientMethod<$0.TorrentClient, $0.TestTorrentResponse>(
           '/settings.v1.SettingsService/TestClient',
           ($0.TorrentClient value) => value.writeToBuffer(),
           $0.TestTorrentResponse.fromBuffer);
+  static final _$updateMamToken =
+      $grpc.ClientMethod<$0.UpdateMamTokenRequest, $0.UpdateMamTokenResponse>(
+          '/settings.v1.SettingsService/UpdateMamToken',
+          ($0.UpdateMamTokenRequest value) => value.writeToBuffer(),
+          $0.UpdateMamTokenResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('settings.v1.SettingsService')
@@ -116,15 +128,6 @@ abstract class SettingsServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.ListSettingsResponse.fromBuffer(value),
         ($0.Settings value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ListSupportedClientsRequest,
-            $0.ListSupportedClientsResponse>(
-        'ListSupportedClients',
-        listSupportedClients_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) =>
-            $0.ListSupportedClientsRequest.fromBuffer(value),
-        ($0.ListSupportedClientsResponse value) => value.writeToBuffer()));
     $addMethod(
         $grpc.ServiceMethod<$0.GetMetadataRequest, $0.GetMetadataResponse>(
             'GetMetadata',
@@ -134,6 +137,15 @@ abstract class SettingsServiceBase extends $grpc.Service {
             ($core.List<$core.int> value) =>
                 $0.GetMetadataRequest.fromBuffer(value),
             ($0.GetMetadataResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ListSupportedClientsRequest,
+            $0.ListSupportedClientsResponse>(
+        'ListSupportedClients',
+        listSupportedClients_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.ListSupportedClientsRequest.fromBuffer(value),
+        ($0.ListSupportedClientsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.TorrentClient, $0.TestTorrentResponse>(
         'TestClient',
         testClient_Pre,
@@ -141,6 +153,15 @@ abstract class SettingsServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.TorrentClient.fromBuffer(value),
         ($0.TestTorrentResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateMamTokenRequest,
+            $0.UpdateMamTokenResponse>(
+        'UpdateMamToken',
+        updateMamToken_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.UpdateMamTokenRequest.fromBuffer(value),
+        ($0.UpdateMamTokenResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.UpdateSettingsResponse> updateSettings_Pre(
@@ -159,6 +180,14 @@ abstract class SettingsServiceBase extends $grpc.Service {
   $async.Future<$0.Settings> listSettings(
       $grpc.ServiceCall call, $0.ListSettingsResponse request);
 
+  $async.Future<$0.GetMetadataResponse> getMetadata_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.GetMetadataRequest> $request) async {
+    return getMetadata($call, await $request);
+  }
+
+  $async.Future<$0.GetMetadataResponse> getMetadata(
+      $grpc.ServiceCall call, $0.GetMetadataRequest request);
+
   $async.Future<$0.ListSupportedClientsResponse> listSupportedClients_Pre(
       $grpc.ServiceCall $call,
       $async.Future<$0.ListSupportedClientsRequest> $request) async {
@@ -168,14 +197,6 @@ abstract class SettingsServiceBase extends $grpc.Service {
   $async.Future<$0.ListSupportedClientsResponse> listSupportedClients(
       $grpc.ServiceCall call, $0.ListSupportedClientsRequest request);
 
-  $async.Future<$0.GetMetadataResponse> getMetadata_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.GetMetadataRequest> $request) async {
-    return getMetadata($call, await $request);
-  }
-
-  $async.Future<$0.GetMetadataResponse> getMetadata(
-      $grpc.ServiceCall call, $0.GetMetadataRequest request);
-
   $async.Future<$0.TestTorrentResponse> testClient_Pre(
       $grpc.ServiceCall $call, $async.Future<$0.TorrentClient> $request) async {
     return testClient($call, await $request);
@@ -183,4 +204,13 @@ abstract class SettingsServiceBase extends $grpc.Service {
 
   $async.Future<$0.TestTorrentResponse> testClient(
       $grpc.ServiceCall call, $0.TorrentClient request);
+
+  $async.Future<$0.UpdateMamTokenResponse> updateMamToken_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UpdateMamTokenRequest> $request) async {
+    return updateMamToken($call, await $request);
+  }
+
+  $async.Future<$0.UpdateMamTokenResponse> updateMamToken(
+      $grpc.ServiceCall call, $0.UpdateMamTokenRequest request);
 }

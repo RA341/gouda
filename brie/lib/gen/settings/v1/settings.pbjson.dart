@@ -14,6 +14,24 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use updateMamTokenRequestDescriptor instead')
+const UpdateMamTokenRequest$json = {
+  '1': 'UpdateMamTokenRequest',
+};
+
+/// Descriptor for `UpdateMamTokenRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateMamTokenRequestDescriptor =
+    $convert.base64Decode('ChVVcGRhdGVNYW1Ub2tlblJlcXVlc3Q=');
+
+@$core.Deprecated('Use updateMamTokenResponseDescriptor instead')
+const UpdateMamTokenResponse$json = {
+  '1': 'UpdateMamTokenResponse',
+};
+
+/// Descriptor for `UpdateMamTokenResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateMamTokenResponseDescriptor =
+    $convert.base64Decode('ChZVcGRhdGVNYW1Ub2tlblJlc3BvbnNl');
+
 @$core.Deprecated('Use getMetadataRequestDescriptor instead')
 const GetMetadataRequest$json = {
   '1': 'GetMetadataRequest',

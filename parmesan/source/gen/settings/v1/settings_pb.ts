@@ -10,7 +10,33 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file settings/v1/settings.proto.
  */
 export const file_settings_v1_settings: GenFile = /*@__PURE__*/
-  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiFAoSR2V0TWV0YWRhdGFSZXF1ZXN0IhUKE1Rlc3RUb3JyZW50UmVzcG9uc2UiOgoTR2V0TWV0YWRhdGFSZXNwb25zZRIPCgd2ZXJzaW9uGAEgASgJEhIKCmJpbmFyeVR5cGUYAiABKAkiHQobTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Ii8KHExpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2USDwoHY2xpZW50cxgBIAMoCSIYChZVcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIhYKFExpc3RTZXR0aW5nc1Jlc3BvbnNlIo8CCgtHb3VkYUNvbmZpZxIMCgRwb3J0GAEgASgFEhcKD2FsbG93ZWRfb3JpZ2lucxgCIAEoCRIPCgd1aV9wYXRoGAMgASgJEgwKBGF1dGgYBCABKAgSEQoJbWFtX3Rva2VuGAUgASgJEiUKA2RpchgGIAEoCzIYLnNldHRpbmdzLnYxLkRpcmVjdG9yaWVzEiAKA2xvZxgHIAEoCzITLnNldHRpbmdzLnYxLkxvZ2dlchIrCgpkb3dubG9hZGVyGAggASgLMhcuc2V0dGluZ3MudjEuRG93bmxvYWRlchIxCgtwZXJtaXNzaW9ucxgJIAEoCzIcLnNldHRpbmdzLnYxLlVzZXJQZXJtaXNzaW9ucyJiCgtEaXJlY3RvcmllcxISCgpjb25maWdfZGlyGAEgASgJEhQKDGRvd25sb2FkX2RpchgCIAEoCRIUCgxjb21wbGV0ZV9kaXIYAyABKAkSEwoLdG9ycmVudF9kaXIYBCABKAkiKAoGTG9nZ2VyEg0KBWxldmVsGAEgASgJEg8KB3ZlcmJvc2UYAiABKAgiNQoKRG93bmxvYWRlchIPCgd0aW1lb3V0GAEgASgJEhYKDmlnbm9yZV90aW1lb3V0GAIgASgIIisKD1VzZXJQZXJtaXNzaW9ucxILCgN1aWQYASABKAUSCwoDZ2lkGAIgASgFItcCCghTZXR0aW5ncxIPCgdhcGlfa2V5GAEgASgJEhMKC3NlcnZlcl9wb3J0GAIgASgJEh4KFmRvd25sb2FkX2NoZWNrX3RpbWVvdXQYAyABKAQSFwoPY29tcGxldGVfZm9sZGVyGAQgASgJEhcKD2Rvd25sb2FkX2ZvbGRlchgFIAEoCRIXCg90b3JyZW50c19mb2xkZXIYBiABKAkSEAoIdXNlcm5hbWUYByABKAkSEAoIcGFzc3dvcmQYCCABKAkSEAoIdXNlcl91aWQYCSABKAQSEQoJZ3JvdXBfdWlkGAogASgEEioKBmNsaWVudBgLIAEoCzIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQSFQoNZXhpdF9vbl9jbG9zZRgMIAEoCBIWCg5pZ25vcmVfdGltZW91dBgNIAEoCBIWCg5zZXR1cF9jb21wbGV0ZRgOIAEoCCKFAQoNVG9ycmVudENsaWVudBIUCgx0b3JyZW50X2hvc3QYASABKAkSFAoMdG9ycmVudF9uYW1lGAIgASgJEhgKEHRvcnJlbnRfcGFzc3dvcmQYAyABKAkSGAoQdG9ycmVudF9wcm90b2NvbBgEIAEoCRIUCgx0b3JyZW50X3VzZXIYBSABKAkyvgMKD1NldHRpbmdzU2VydmljZRJOCg5VcGRhdGVTZXR0aW5ncxIVLnNldHRpbmdzLnYxLlNldHRpbmdzGiMuc2V0dGluZ3MudjEuVXBkYXRlU2V0dGluZ3NSZXNwb25zZSIAEkoKDExpc3RTZXR0aW5ncxIhLnNldHRpbmdzLnYxLkxpc3RTZXR0aW5nc1Jlc3BvbnNlGhUuc2V0dGluZ3MudjEuU2V0dGluZ3MiABJtChRMaXN0U3VwcG9ydGVkQ2xpZW50cxIoLnNldHRpbmdzLnYxLkxpc3RTdXBwb3J0ZWRDbGllbnRzUmVxdWVzdBopLnNldHRpbmdzLnYxLkxpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2UiABJSCgtHZXRNZXRhZGF0YRIfLnNldHRpbmdzLnYxLkdldE1ldGFkYXRhUmVxdWVzdBogLnNldHRpbmdzLnYxLkdldE1ldGFkYXRhUmVzcG9uc2UiABJMCgpUZXN0Q2xpZW50Ehouc2V0dGluZ3MudjEuVG9ycmVudENsaWVudBogLnNldHRpbmdzLnYxLlRlc3RUb3JyZW50UmVzcG9uc2UiAEKbAQoPY29tLnNldHRpbmdzLnYxQg1TZXR0aW5nc1Byb3RvUAFaLGdpdGh1Yi5jb20vUkEzNDEvZ291ZGEvZ2VuZXJhdGVkL3NldHRpbmdzL3YxogIDU1hYqgILU2V0dGluZ3MuVjHKAgtTZXR0aW5nc1xWMeICF1NldHRpbmdzXFYxXEdQQk1ldGFkYXRh6gIMU2V0dGluZ3M6OlYxYgZwcm90bzM");
+  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiFwoVVXBkYXRlTWFtVG9rZW5SZXF1ZXN0IhgKFlVwZGF0ZU1hbVRva2VuUmVzcG9uc2UiFAoSR2V0TWV0YWRhdGFSZXF1ZXN0IhUKE1Rlc3RUb3JyZW50UmVzcG9uc2UiOgoTR2V0TWV0YWRhdGFSZXNwb25zZRIPCgd2ZXJzaW9uGAEgASgJEhIKCmJpbmFyeVR5cGUYAiABKAkiHQobTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Ii8KHExpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2USDwoHY2xpZW50cxgBIAMoCSIYChZVcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIhYKFExpc3RTZXR0aW5nc1Jlc3BvbnNlIo8CCgtHb3VkYUNvbmZpZxIMCgRwb3J0GAEgASgFEhcKD2FsbG93ZWRfb3JpZ2lucxgCIAEoCRIPCgd1aV9wYXRoGAMgASgJEgwKBGF1dGgYBCABKAgSEQoJbWFtX3Rva2VuGAUgASgJEiUKA2RpchgGIAEoCzIYLnNldHRpbmdzLnYxLkRpcmVjdG9yaWVzEiAKA2xvZxgHIAEoCzITLnNldHRpbmdzLnYxLkxvZ2dlchIrCgpkb3dubG9hZGVyGAggASgLMhcuc2V0dGluZ3MudjEuRG93bmxvYWRlchIxCgtwZXJtaXNzaW9ucxgJIAEoCzIcLnNldHRpbmdzLnYxLlVzZXJQZXJtaXNzaW9ucyJiCgtEaXJlY3RvcmllcxISCgpjb25maWdfZGlyGAEgASgJEhQKDGRvd25sb2FkX2RpchgCIAEoCRIUCgxjb21wbGV0ZV9kaXIYAyABKAkSEwoLdG9ycmVudF9kaXIYBCABKAkiKAoGTG9nZ2VyEg0KBWxldmVsGAEgASgJEg8KB3ZlcmJvc2UYAiABKAgiNQoKRG93bmxvYWRlchIPCgd0aW1lb3V0GAEgASgJEhYKDmlnbm9yZV90aW1lb3V0GAIgASgIIisKD1VzZXJQZXJtaXNzaW9ucxILCgN1aWQYASABKAUSCwoDZ2lkGAIgASgFItcCCghTZXR0aW5ncxIPCgdhcGlfa2V5GAEgASgJEhMKC3NlcnZlcl9wb3J0GAIgASgJEh4KFmRvd25sb2FkX2NoZWNrX3RpbWVvdXQYAyABKAQSFwoPY29tcGxldGVfZm9sZGVyGAQgASgJEhcKD2Rvd25sb2FkX2ZvbGRlchgFIAEoCRIXCg90b3JyZW50c19mb2xkZXIYBiABKAkSEAoIdXNlcm5hbWUYByABKAkSEAoIcGFzc3dvcmQYCCABKAkSEAoIdXNlcl91aWQYCSABKAQSEQoJZ3JvdXBfdWlkGAogASgEEioKBmNsaWVudBgLIAEoCzIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQSFQoNZXhpdF9vbl9jbG9zZRgMIAEoCBIWCg5pZ25vcmVfdGltZW91dBgNIAEoCBIWCg5zZXR1cF9jb21wbGV0ZRgOIAEoCCKFAQoNVG9ycmVudENsaWVudBIUCgx0b3JyZW50X2hvc3QYASABKAkSFAoMdG9ycmVudF9uYW1lGAIgASgJEhgKEHRvcnJlbnRfcGFzc3dvcmQYAyABKAkSGAoQdG9ycmVudF9wcm90b2NvbBgEIAEoCRIUCgx0b3JyZW50X3VzZXIYBSABKAkymwQKD1NldHRpbmdzU2VydmljZRJOCg5VcGRhdGVTZXR0aW5ncxIVLnNldHRpbmdzLnYxLlNldHRpbmdzGiMuc2V0dGluZ3MudjEuVXBkYXRlU2V0dGluZ3NSZXNwb25zZSIAEkoKDExpc3RTZXR0aW5ncxIhLnNldHRpbmdzLnYxLkxpc3RTZXR0aW5nc1Jlc3BvbnNlGhUuc2V0dGluZ3MudjEuU2V0dGluZ3MiABJSCgtHZXRNZXRhZGF0YRIfLnNldHRpbmdzLnYxLkdldE1ldGFkYXRhUmVxdWVzdBogLnNldHRpbmdzLnYxLkdldE1ldGFkYXRhUmVzcG9uc2UiABJtChRMaXN0U3VwcG9ydGVkQ2xpZW50cxIoLnNldHRpbmdzLnYxLkxpc3RTdXBwb3J0ZWRDbGllbnRzUmVxdWVzdBopLnNldHRpbmdzLnYxLkxpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2UiABJMCgpUZXN0Q2xpZW50Ehouc2V0dGluZ3MudjEuVG9ycmVudENsaWVudBogLnNldHRpbmdzLnYxLlRlc3RUb3JyZW50UmVzcG9uc2UiABJbCg5VcGRhdGVNYW1Ub2tlbhIiLnNldHRpbmdzLnYxLlVwZGF0ZU1hbVRva2VuUmVxdWVzdBojLnNldHRpbmdzLnYxLlVwZGF0ZU1hbVRva2VuUmVzcG9uc2UiAEKbAQoPY29tLnNldHRpbmdzLnYxQg1TZXR0aW5nc1Byb3RvUAFaLGdpdGh1Yi5jb20vUkEzNDEvZ291ZGEvZ2VuZXJhdGVkL3NldHRpbmdzL3YxogIDU1hYqgILU2V0dGluZ3MuVjHKAgtTZXR0aW5nc1xWMeICF1NldHRpbmdzXFYxXEdQQk1ldGFkYXRh6gIMU2V0dGluZ3M6OlYxYgZwcm90bzM");
+
+/**
+ * @generated from message settings.v1.UpdateMamTokenRequest
+ */
+export type UpdateMamTokenRequest = Message<"settings.v1.UpdateMamTokenRequest"> & {
+};
+
+/**
+ * Describes the message settings.v1.UpdateMamTokenRequest.
+ * Use `create(UpdateMamTokenRequestSchema)` to create a new message.
+ */
+export const UpdateMamTokenRequestSchema: GenMessage<UpdateMamTokenRequest> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 0);
+
+/**
+ * @generated from message settings.v1.UpdateMamTokenResponse
+ */
+export type UpdateMamTokenResponse = Message<"settings.v1.UpdateMamTokenResponse"> & {
+};
+
+/**
+ * Describes the message settings.v1.UpdateMamTokenResponse.
+ * Use `create(UpdateMamTokenResponseSchema)` to create a new message.
+ */
+export const UpdateMamTokenResponseSchema: GenMessage<UpdateMamTokenResponse> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 1);
 
 /**
  * @generated from message settings.v1.GetMetadataRequest
@@ -23,7 +49,7 @@ export type GetMetadataRequest = Message<"settings.v1.GetMetadataRequest"> & {
  * Use `create(GetMetadataRequestSchema)` to create a new message.
  */
 export const GetMetadataRequestSchema: GenMessage<GetMetadataRequest> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 0);
+  messageDesc(file_settings_v1_settings, 2);
 
 /**
  * @generated from message settings.v1.TestTorrentResponse
@@ -36,7 +62,7 @@ export type TestTorrentResponse = Message<"settings.v1.TestTorrentResponse"> & {
  * Use `create(TestTorrentResponseSchema)` to create a new message.
  */
 export const TestTorrentResponseSchema: GenMessage<TestTorrentResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 1);
+  messageDesc(file_settings_v1_settings, 3);
 
 /**
  * @generated from message settings.v1.GetMetadataResponse
@@ -58,7 +84,7 @@ export type GetMetadataResponse = Message<"settings.v1.GetMetadataResponse"> & {
  * Use `create(GetMetadataResponseSchema)` to create a new message.
  */
 export const GetMetadataResponseSchema: GenMessage<GetMetadataResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 2);
+  messageDesc(file_settings_v1_settings, 4);
 
 /**
  * @generated from message settings.v1.ListSupportedClientsRequest
@@ -71,7 +97,7 @@ export type ListSupportedClientsRequest = Message<"settings.v1.ListSupportedClie
  * Use `create(ListSupportedClientsRequestSchema)` to create a new message.
  */
 export const ListSupportedClientsRequestSchema: GenMessage<ListSupportedClientsRequest> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 3);
+  messageDesc(file_settings_v1_settings, 5);
 
 /**
  * @generated from message settings.v1.ListSupportedClientsResponse
@@ -88,7 +114,7 @@ export type ListSupportedClientsResponse = Message<"settings.v1.ListSupportedCli
  * Use `create(ListSupportedClientsResponseSchema)` to create a new message.
  */
 export const ListSupportedClientsResponseSchema: GenMessage<ListSupportedClientsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 4);
+  messageDesc(file_settings_v1_settings, 6);
 
 /**
  * @generated from message settings.v1.UpdateSettingsResponse
@@ -101,7 +127,7 @@ export type UpdateSettingsResponse = Message<"settings.v1.UpdateSettingsResponse
  * Use `create(UpdateSettingsResponseSchema)` to create a new message.
  */
 export const UpdateSettingsResponseSchema: GenMessage<UpdateSettingsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 5);
+  messageDesc(file_settings_v1_settings, 7);
 
 /**
  * @generated from message settings.v1.ListSettingsResponse
@@ -114,7 +140,7 @@ export type ListSettingsResponse = Message<"settings.v1.ListSettingsResponse"> &
  * Use `create(ListSettingsResponseSchema)` to create a new message.
  */
 export const ListSettingsResponseSchema: GenMessage<ListSettingsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 6);
+  messageDesc(file_settings_v1_settings, 8);
 
 /**
  * Top-level Gouda configuration
@@ -173,7 +199,7 @@ export type GoudaConfig = Message<"settings.v1.GoudaConfig"> & {
  * Use `create(GoudaConfigSchema)` to create a new message.
  */
 export const GoudaConfigSchema: GenMessage<GoudaConfig> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 7);
+  messageDesc(file_settings_v1_settings, 9);
 
 /**
  * @generated from message settings.v1.Directories
@@ -205,7 +231,7 @@ export type Directories = Message<"settings.v1.Directories"> & {
  * Use `create(DirectoriesSchema)` to create a new message.
  */
 export const DirectoriesSchema: GenMessage<Directories> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 8);
+  messageDesc(file_settings_v1_settings, 10);
 
 /**
  * @generated from message settings.v1.Logger
@@ -227,7 +253,7 @@ export type Logger = Message<"settings.v1.Logger"> & {
  * Use `create(LoggerSchema)` to create a new message.
  */
 export const LoggerSchema: GenMessage<Logger> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 9);
+  messageDesc(file_settings_v1_settings, 11);
 
 /**
  * @generated from message settings.v1.Downloader
@@ -249,7 +275,7 @@ export type Downloader = Message<"settings.v1.Downloader"> & {
  * Use `create(DownloaderSchema)` to create a new message.
  */
 export const DownloaderSchema: GenMessage<Downloader> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 10);
+  messageDesc(file_settings_v1_settings, 12);
 
 /**
  * @generated from message settings.v1.UserPermissions
@@ -271,7 +297,7 @@ export type UserPermissions = Message<"settings.v1.UserPermissions"> & {
  * Use `create(UserPermissionsSchema)` to create a new message.
  */
 export const UserPermissionsSchema: GenMessage<UserPermissions> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 11);
+  messageDesc(file_settings_v1_settings, 13);
 
 /**
  * @generated from message settings.v1.Settings
@@ -361,7 +387,7 @@ export type Settings = Message<"settings.v1.Settings"> & {
  * Use `create(SettingsSchema)` to create a new message.
  */
 export const SettingsSchema: GenMessage<Settings> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 12);
+  messageDesc(file_settings_v1_settings, 14);
 
 /**
  * @generated from message settings.v1.TorrentClient
@@ -398,7 +424,7 @@ export type TorrentClient = Message<"settings.v1.TorrentClient"> & {
  * Use `create(TorrentClientSchema)` to create a new message.
  */
 export const TorrentClientSchema: GenMessage<TorrentClient> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 13);
+  messageDesc(file_settings_v1_settings, 15);
 
 /**
  * @generated from service settings.v1.SettingsService
@@ -421,14 +447,6 @@ export const SettingsService: GenService<{
     output: typeof SettingsSchema;
   },
   /**
-   * @generated from rpc settings.v1.SettingsService.ListSupportedClients
-   */
-  listSupportedClients: {
-    methodKind: "unary";
-    input: typeof ListSupportedClientsRequestSchema;
-    output: typeof ListSupportedClientsResponseSchema;
-  },
-  /**
    * @generated from rpc settings.v1.SettingsService.GetMetadata
    */
   getMetadata: {
@@ -437,12 +455,28 @@ export const SettingsService: GenService<{
     output: typeof GetMetadataResponseSchema;
   },
   /**
+   * @generated from rpc settings.v1.SettingsService.ListSupportedClients
+   */
+  listSupportedClients: {
+    methodKind: "unary";
+    input: typeof ListSupportedClientsRequestSchema;
+    output: typeof ListSupportedClientsResponseSchema;
+  },
+  /**
    * @generated from rpc settings.v1.SettingsService.TestClient
    */
   testClient: {
     methodKind: "unary";
     input: typeof TorrentClientSchema;
     output: typeof TestTorrentResponseSchema;
+  },
+  /**
+   * @generated from rpc settings.v1.SettingsService.UpdateMamToken
+   */
+  updateMamToken: {
+    methodKind: "unary";
+    input: typeof UpdateMamTokenRequestSchema;
+    output: typeof UpdateMamTokenResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_settings_v1_settings, 0);

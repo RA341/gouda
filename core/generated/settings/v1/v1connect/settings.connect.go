@@ -39,24 +39,28 @@ const (
 	// SettingsServiceListSettingsProcedure is the fully-qualified name of the SettingsService's
 	// ListSettings RPC.
 	SettingsServiceListSettingsProcedure = "/settings.v1.SettingsService/ListSettings"
-	// SettingsServiceListSupportedClientsProcedure is the fully-qualified name of the SettingsService's
-	// ListSupportedClients RPC.
-	SettingsServiceListSupportedClientsProcedure = "/settings.v1.SettingsService/ListSupportedClients"
 	// SettingsServiceGetMetadataProcedure is the fully-qualified name of the SettingsService's
 	// GetMetadata RPC.
 	SettingsServiceGetMetadataProcedure = "/settings.v1.SettingsService/GetMetadata"
+	// SettingsServiceListSupportedClientsProcedure is the fully-qualified name of the SettingsService's
+	// ListSupportedClients RPC.
+	SettingsServiceListSupportedClientsProcedure = "/settings.v1.SettingsService/ListSupportedClients"
 	// SettingsServiceTestClientProcedure is the fully-qualified name of the SettingsService's
 	// TestClient RPC.
 	SettingsServiceTestClientProcedure = "/settings.v1.SettingsService/TestClient"
+	// SettingsServiceUpdateMamTokenProcedure is the fully-qualified name of the SettingsService's
+	// UpdateMamToken RPC.
+	SettingsServiceUpdateMamTokenProcedure = "/settings.v1.SettingsService/UpdateMamToken"
 )
 
 // SettingsServiceClient is a client for the settings.v1.SettingsService service.
 type SettingsServiceClient interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
-	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
+	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
+	UpdateMamToken(context.Context, *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error)
 }
 
 // NewSettingsServiceClient constructs a client for the settings.v1.SettingsService service. By
@@ -82,22 +86,28 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(settingsServiceMethods.ByName("ListSettings")),
 			connect.WithClientOptions(opts...),
 		),
-		listSupportedClients: connect.NewClient[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse](
-			httpClient,
-			baseURL+SettingsServiceListSupportedClientsProcedure,
-			connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
-			connect.WithClientOptions(opts...),
-		),
 		getMetadata: connect.NewClient[v1.GetMetadataRequest, v1.GetMetadataResponse](
 			httpClient,
 			baseURL+SettingsServiceGetMetadataProcedure,
 			connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
 			connect.WithClientOptions(opts...),
 		),
+		listSupportedClients: connect.NewClient[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse](
+			httpClient,
+			baseURL+SettingsServiceListSupportedClientsProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
+			connect.WithClientOptions(opts...),
+		),
 		testClient: connect.NewClient[v1.TorrentClient, v1.TestTorrentResponse](
 			httpClient,
 			baseURL+SettingsServiceTestClientProcedure,
 			connect.WithSchema(settingsServiceMethods.ByName("TestClient")),
+			connect.WithClientOptions(opts...),
+		),
+		updateMamToken: connect.NewClient[v1.UpdateMamTokenRequest, v1.UpdateMamTokenResponse](
+			httpClient,
+			baseURL+SettingsServiceUpdateMamTokenProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateMamToken")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -107,9 +117,10 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 type settingsServiceClient struct {
 	updateSettings       *connect.Client[v1.Settings, v1.UpdateSettingsResponse]
 	listSettings         *connect.Client[v1.ListSettingsResponse, v1.Settings]
-	listSupportedClients *connect.Client[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse]
 	getMetadata          *connect.Client[v1.GetMetadataRequest, v1.GetMetadataResponse]
+	listSupportedClients *connect.Client[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse]
 	testClient           *connect.Client[v1.TorrentClient, v1.TestTorrentResponse]
+	updateMamToken       *connect.Client[v1.UpdateMamTokenRequest, v1.UpdateMamTokenResponse]
 }
 
 // UpdateSettings calls settings.v1.SettingsService.UpdateSettings.
@@ -122,14 +133,14 @@ func (c *settingsServiceClient) ListSettings(ctx context.Context, req *connect.R
 	return c.listSettings.CallUnary(ctx, req)
 }
 
-// ListSupportedClients calls settings.v1.SettingsService.ListSupportedClients.
-func (c *settingsServiceClient) ListSupportedClients(ctx context.Context, req *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
-	return c.listSupportedClients.CallUnary(ctx, req)
-}
-
 // GetMetadata calls settings.v1.SettingsService.GetMetadata.
 func (c *settingsServiceClient) GetMetadata(ctx context.Context, req *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return c.getMetadata.CallUnary(ctx, req)
+}
+
+// ListSupportedClients calls settings.v1.SettingsService.ListSupportedClients.
+func (c *settingsServiceClient) ListSupportedClients(ctx context.Context, req *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+	return c.listSupportedClients.CallUnary(ctx, req)
 }
 
 // TestClient calls settings.v1.SettingsService.TestClient.
@@ -137,13 +148,19 @@ func (c *settingsServiceClient) TestClient(ctx context.Context, req *connect.Req
 	return c.testClient.CallUnary(ctx, req)
 }
 
+// UpdateMamToken calls settings.v1.SettingsService.UpdateMamToken.
+func (c *settingsServiceClient) UpdateMamToken(ctx context.Context, req *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error) {
+	return c.updateMamToken.CallUnary(ctx, req)
+}
+
 // SettingsServiceHandler is an implementation of the settings.v1.SettingsService service.
 type SettingsServiceHandler interface {
 	UpdateSettings(context.Context, *connect.Request[v1.Settings]) (*connect.Response[v1.UpdateSettingsResponse], error)
 	ListSettings(context.Context, *connect.Request[v1.ListSettingsResponse]) (*connect.Response[v1.Settings], error)
-	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
+	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
+	UpdateMamToken(context.Context, *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error)
 }
 
 // NewSettingsServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -165,16 +182,16 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(settingsServiceMethods.ByName("ListSettings")),
 		connect.WithHandlerOptions(opts...),
 	)
-	settingsServiceListSupportedClientsHandler := connect.NewUnaryHandler(
-		SettingsServiceListSupportedClientsProcedure,
-		svc.ListSupportedClients,
-		connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
-		connect.WithHandlerOptions(opts...),
-	)
 	settingsServiceGetMetadataHandler := connect.NewUnaryHandler(
 		SettingsServiceGetMetadataProcedure,
 		svc.GetMetadata,
 		connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
+		connect.WithHandlerOptions(opts...),
+	)
+	settingsServiceListSupportedClientsHandler := connect.NewUnaryHandler(
+		SettingsServiceListSupportedClientsProcedure,
+		svc.ListSupportedClients,
+		connect.WithSchema(settingsServiceMethods.ByName("ListSupportedClients")),
 		connect.WithHandlerOptions(opts...),
 	)
 	settingsServiceTestClientHandler := connect.NewUnaryHandler(
@@ -183,18 +200,26 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(settingsServiceMethods.ByName("TestClient")),
 		connect.WithHandlerOptions(opts...),
 	)
+	settingsServiceUpdateMamTokenHandler := connect.NewUnaryHandler(
+		SettingsServiceUpdateMamTokenProcedure,
+		svc.UpdateMamToken,
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateMamToken")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/settings.v1.SettingsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case SettingsServiceUpdateSettingsProcedure:
 			settingsServiceUpdateSettingsHandler.ServeHTTP(w, r)
 		case SettingsServiceListSettingsProcedure:
 			settingsServiceListSettingsHandler.ServeHTTP(w, r)
-		case SettingsServiceListSupportedClientsProcedure:
-			settingsServiceListSupportedClientsHandler.ServeHTTP(w, r)
 		case SettingsServiceGetMetadataProcedure:
 			settingsServiceGetMetadataHandler.ServeHTTP(w, r)
+		case SettingsServiceListSupportedClientsProcedure:
+			settingsServiceListSupportedClientsHandler.ServeHTTP(w, r)
 		case SettingsServiceTestClientProcedure:
 			settingsServiceTestClientHandler.ServeHTTP(w, r)
+		case SettingsServiceUpdateMamTokenProcedure:
+			settingsServiceUpdateMamTokenHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -212,14 +237,18 @@ func (UnimplementedSettingsServiceHandler) ListSettings(context.Context, *connec
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListSettings is not implemented"))
 }
 
-func (UnimplementedSettingsServiceHandler) ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListSupportedClients is not implemented"))
-}
-
 func (UnimplementedSettingsServiceHandler) GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.GetMetadata is not implemented"))
 }
 
+func (UnimplementedSettingsServiceHandler) ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListSupportedClients is not implemented"))
+}
+
 func (UnimplementedSettingsServiceHandler) TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.TestClient is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) UpdateMamToken(context.Context, *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateMamToken is not implemented"))
 }

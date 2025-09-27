@@ -33,7 +33,7 @@ const LogoutResponse$json = {
 
 /// Descriptor for `LogoutResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List logoutResponseDescriptor =
-$convert.base64Decode('Cg5Mb2dvdXRSZXNwb25zZQ==');
+    $convert.base64Decode('Cg5Mb2dvdXRSZXNwb25zZQ==');
 
 @$core.Deprecated('Use loginRequestDescriptor instead')
 const LoginRequest$json = {

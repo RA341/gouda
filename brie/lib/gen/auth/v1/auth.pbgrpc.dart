@@ -39,7 +39,8 @@ class AuthServiceClient extends $grpc.Client {
     return $createUnaryCall(_$login, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.LogoutResponse> logout($0.LogoutRequest request, {
+  $grpc.ResponseFuture<$0.LogoutResponse> logout(
+    $0.LogoutRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$logout, request, options: options);
@@ -73,10 +74,10 @@ class AuthServiceClient extends $grpc.Client {
       ($0.LoginRequest value) => value.writeToBuffer(),
       $0.LoginResponse.fromBuffer);
   static final _$logout =
-  $grpc.ClientMethod<$0.LogoutRequest, $0.LogoutResponse>(
-      '/auth.v1.AuthService/Logout',
+      $grpc.ClientMethod<$0.LogoutRequest, $0.LogoutResponse>(
+          '/auth.v1.AuthService/Logout',
           ($0.LogoutRequest value) => value.writeToBuffer(),
-      $0.LogoutResponse.fromBuffer);
+          $0.LogoutResponse.fromBuffer);
   static final _$register =
       $grpc.ClientMethod<$0.RegisterRequest, $0.RegisterResponse>(
           '/auth.v1.AuthService/Register',
@@ -111,8 +112,8 @@ abstract class AuthServiceBase extends $grpc.Service {
         logout_Pre,
         false,
         false,
-            ($core.List<$core.int> value) => $0.LogoutRequest.fromBuffer(value),
-            ($0.LogoutResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $0.LogoutRequest.fromBuffer(value),
+        ($0.LogoutResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.RegisterRequest, $0.RegisterResponse>(
         'Register',
         register_Pre,
@@ -148,13 +149,13 @@ abstract class AuthServiceBase extends $grpc.Service {
   $async.Future<$0.LoginResponse> login(
       $grpc.ServiceCall call, $0.LoginRequest request);
 
-  $async.Future<$0.LogoutResponse> logout_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.LogoutRequest> $request) async {
+  $async.Future<$0.LogoutResponse> logout_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.LogoutRequest> $request) async {
     return logout($call, await $request);
   }
 
-  $async.Future<$0.LogoutResponse> logout($grpc.ServiceCall call,
-      $0.LogoutRequest request);
+  $async.Future<$0.LogoutResponse> logout(
+      $grpc.ServiceCall call, $0.LogoutRequest request);
 
   $async.Future<$0.RegisterResponse> register_Pre($grpc.ServiceCall $call,
       $async.Future<$0.RegisterRequest> $request) async {

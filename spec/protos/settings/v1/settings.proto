@@ -7,10 +7,18 @@ option go_package = "github.com/RA341/gouda/generated/settings/v1";
 service SettingsService {
   rpc UpdateSettings(Settings) returns (UpdateSettingsResponse) {}
   rpc ListSettings(ListSettingsResponse) returns (Settings) {}
-  rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
+
   rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
+
+  rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
   rpc TestClient(TorrentClient) returns (TestTorrentResponse) {}
+
+  rpc UpdateMamToken(UpdateMamTokenRequest) returns (UpdateMamTokenResponse) {}
 }
+
+message UpdateMamTokenRequest {}
+
+message UpdateMamTokenResponse {}
 
 message GetMetadataRequest {}
 

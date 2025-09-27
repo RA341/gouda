@@ -17,6 +17,90 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class UpdateMamTokenRequest extends $pb.GeneratedMessage {
+  factory UpdateMamTokenRequest() => create();
+
+  UpdateMamTokenRequest._();
+
+  factory UpdateMamTokenRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateMamTokenRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateMamTokenRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamTokenRequest clone() =>
+      UpdateMamTokenRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamTokenRequest copyWith(
+          void Function(UpdateMamTokenRequest) updates) =>
+      super.copyWith((message) => updates(message as UpdateMamTokenRequest))
+          as UpdateMamTokenRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamTokenRequest create() => UpdateMamTokenRequest._();
+  @$core.override
+  UpdateMamTokenRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateMamTokenRequest> createRepeated() =>
+      $pb.PbList<UpdateMamTokenRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamTokenRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateMamTokenRequest>(create);
+  static UpdateMamTokenRequest? _defaultInstance;
+}
+
+class UpdateMamTokenResponse extends $pb.GeneratedMessage {
+  factory UpdateMamTokenResponse() => create();
+
+  UpdateMamTokenResponse._();
+
+  factory UpdateMamTokenResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateMamTokenResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateMamTokenResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamTokenResponse clone() =>
+      UpdateMamTokenResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamTokenResponse copyWith(
+          void Function(UpdateMamTokenResponse) updates) =>
+      super.copyWith((message) => updates(message as UpdateMamTokenResponse))
+          as UpdateMamTokenResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamTokenResponse create() => UpdateMamTokenResponse._();
+  @$core.override
+  UpdateMamTokenResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateMamTokenResponse> createRepeated() =>
+      $pb.PbList<UpdateMamTokenResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamTokenResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateMamTokenResponse>(create);
+  static UpdateMamTokenResponse? _defaultInstance;
+}
+
 class GetMetadataRequest extends $pb.GeneratedMessage {
   factory GetMetadataRequest() => create();
 
