@@ -2,7 +2,7 @@ import 'package:brie/clients/mam_api.dart';
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/mam/v1/mam.pb.dart';
 import 'package:brie/ui/layout/layout_page.dart';
-import 'package:brie/ui/settings/settings_view.dart';
+import 'package:brie/ui/settings/provider.dart';
 import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,20 +11,21 @@ const errMamNotSetupUser =
     "Administrator has not setup search functionality yet";
 const errMamNotSetupAdmin = "MAM setup is not complete";
 
-final isMamSetupProvider = FutureProvider.autoDispose<String>((ref) async {
-  final (_, err) = await runGrpcRequest(
-    () => ref.watch(mamApiProvider).isMamSetup(IsMamSetupRequest()),
-  );
-  if (err.isEmpty) {
-    // mam is setup
-    return "";
-  }
+final FutureProvider<String> isMamSetupProvider =
+    FutureProvider.autoDispose<String>((ref) async {
+      final (_, err) = await runGrpcRequest(
+        () => ref.watch(mamApiProvider).isMamSetup(IsMamSetupRequest()),
+      );
+      if (err.isEmpty) {
+        // mam is setup
+        return "";
+      }
 
-  final isAdmin = await ref.watch(isAdminProvider.future);
-  logger.w("Mam is not setup $err");
+      final isAdmin = await ref.watch(isAdminProvider.future);
+      logger.w("Mam is not setup $err");
 
-  return isAdmin ? errMamNotSetupAdmin : errMamNotSetupUser;
-});
+      return isAdmin ? errMamNotSetupAdmin : errMamNotSetupUser;
+    });
 
 class MamView extends ConsumerWidget {
   const MamView({super.key});
