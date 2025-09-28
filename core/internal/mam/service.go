@@ -20,7 +20,8 @@ const IDCookieKey = "mam_id"
 
 // Service holds the necessary information to interact with the MAM API.
 type Service struct {
-	client func() *resty.Client
+	client   func() *resty.Client
+	provider ApiKeyProvider
 }
 type ApiKeyProvider func() string
 
@@ -28,8 +29,21 @@ type ApiKeyProvider func() string
 func NewService(provider ApiKeyProvider) *Service {
 	client := setupClient(provider)
 	return &Service{
-		client: client,
+		client:   client,
+		provider: provider,
 	}
+}
+
+func NewMamValidator(token string) error {
+	provider := func() string {
+		return token
+	}
+	client := setupClient(provider)
+	service := Service{
+		client:   client,
+		provider: provider,
+	}
+	return service.IsMamSetup()
 }
 
 // BuyVIP 0 for max
@@ -80,6 +94,16 @@ func (s *Service) BuyBonus(amountInGB uint) (*BuyBonusResponse, error) {
 	}
 
 	return &result, nil
+}
+
+func (s *Service) IsMamSetup() error {
+	key := s.provider()
+	if key == "" {
+		return fmt.Errorf("mam api key is empty")
+	}
+
+	_, err := s.GetProfile()
+	return err
 }
 
 func (s *Service) GetProfile() (*UserData, error) {

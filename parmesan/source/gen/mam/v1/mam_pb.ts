@@ -10,7 +10,33 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file mam/v1/mam.proto.
  */
 export const file_mam_v1_mam: GenFile = /*@__PURE__*/
-  fileDesc("ChBtYW0vdjEvbWFtLnByb3RvEgZtYW0udjEi9QEKCFVzZXJEYXRhEhEKCWNsYXNzbmFtZRgBIAEoCRIUCgxjb3VudHJ5X2NvZGUYAiABKAkSFAoMY291bnRyeV9uYW1lGAMgASgJEhIKCmRvd25sb2FkZWQYBCABKAkSGAoQZG93bmxvYWRlZF9ieXRlcxgFIAEoAxINCgVyYXRpbxgGIAEoARIRCglzZWVkYm9udXMYByABKAUSCwoDdWlkGAggASgFEhAKCHVwbG9hZGVkGAkgASgJEhYKDnVwbG9hZGVkX2J5dGVzGAogASgDEhAKCHVzZXJuYW1lGAsgASgJEhEKCXZpcF91bnRpbBgMIAEoCSIjCgpWaXBSZXF1ZXN0EhUKDWFtb3VudEluV2Vla3MYASABKAUiTwoLVmlwUmVzcG9uc2USDwoHU3VjY2VzcxgBIAEoCBIMCgRUeXBlGAIgASgJEg4KBkFtb3VudBgDIAEoAhIRCglTZWVkQm9udXMYBCABKAIiIgoMQm9udXNSZXF1ZXN0EhIKCmFtb3VudEluR0IYASABKAUisgEKDUJvbnVzUmVzcG9uc2USDwoHU3VjY2VzcxgBIAEoCBIMCgRUeXBlGAIgASgJEg4KBkFtb3VudBgDIAEoAhIRCglTZWVkYm9udXMYBCABKAISEAoIVXBsb2FkZWQYBSABKAMSEgoKRG93bmxvYWRlZBgGIAEoAxITCgtVcGxvYWRGYW5jeRgHIAEoCRIVCg1Eb3dubG9hZEZhbmN5GAggASgJEg0KBVJhdGlvGAkgASgCIlIKDVNlYXJjaFJlc3VsdHMSIwoHcmVzdWx0cxgBIAMoCzISLm1hbS52MS5TZWFyY2hCb29rEg0KBWZvdW5kGAIgASgFEg0KBXRvdGFsGAMgASgFItUDCgpTZWFyY2hCb29rEg4KBm1hbV9pZBgBIAEoBRINCgV0aXRsZRgCIAEoCRIRCgl0aHVtYm5haWwYAyABKAkSHgoGYXV0aG9yGAQgAygLMg4ubWFtLnYxLkF1dGhvchIgCghuYXJyYXRvchgFIAMoCzIOLm1hbS52MS5BdXRob3ISFQoNdXBsb2FkZXJfbmFtZRgGIAEoCRIeCgZzZXJpZXMYByADKAsyDi5tYW0udjEuU2VyaWVzEhMKC2Rlc2NyaXB0aW9uGBUgASgJEgwKBHRhZ3MYCCABKAkSFgoOZGF0ZV9hZGRlZF9pc28YCSABKAkSEAoIc25hdGNoZWQYCiABKAgSFQoNbGFuZ3VhZ2VfY29kZRgLIAEoCRIWCg5tZWRpYV9jYXRlZ29yeRgMIAEoCRITCgtjYXRlZ29yeV9pZBgNIAEoBRIVCg1jYXRlZ29yeV9uYW1lGA4gASgJEhQKDG1lZGlhX2Zvcm1hdBgPIAEoCRISCgptZWRpYV9zaXplGBAgASgJEg8KB3NlZWRlcnMYESABKAUSEAoIbGVlY2hlcnMYEiABKAUSEQoJY29tcGxldGVkGBMgASgFEhQKDHRvcnJlbnRfbGluaxgUIAEoCSIiCgZBdXRob3ISCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCSI7CgZTZXJpZXMSCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIXCg9zZXF1ZW5jZV9udW1iZXIYAyABKAkiLgoNRnJlZUxlZWNoSW5mbxIMCgR0eXBlGAEgASgJEg8KB2V4cGlyZXMYAiABKAkiFgoFUXVlcnkSDQoFcXVlcnkYASABKAkiBwoFRW1wdHky1wEKCk1hbVNlcnZpY2USLgoGU2VhcmNoEg0ubWFtLnYxLlF1ZXJ5GhUubWFtLnYxLlNlYXJjaFJlc3VsdHMSMQoGQnV5VmlwEhIubWFtLnYxLlZpcFJlcXVlc3QaEy5tYW0udjEuVmlwUmVzcG9uc2USLQoKR2V0UHJvZmlsZRINLm1hbS52MS5FbXB0eRoQLm1hbS52MS5Vc2VyRGF0YRI3CghCdXlCb251cxIULm1hbS52MS5Cb251c1JlcXVlc3QaFS5tYW0udjEuQm9udXNSZXNwb25zZUJ4Cgpjb20ubWFtLnYxQghNYW1Qcm90b1ABWidnaXRodWIuY29tL1JBMzQxL2dvdWRhL2dlbmVyYXRlZC9tYW0vdjGiAgNNWFiqAgZNYW0uVjHKAgZNYW1cVjHiAhJNYW1cVjFcR1BCTWV0YWRhdGHqAgdNYW06OlYxYgZwcm90bzM");
+  fileDesc("ChBtYW0vdjEvbWFtLnByb3RvEgZtYW0udjEiEwoRSXNNYW1TZXR1cFJlcXVlc3QiFAoSSXNNYW1TZXR1cFJlc3BvbnNlIvUBCghVc2VyRGF0YRIRCgljbGFzc25hbWUYASABKAkSFAoMY291bnRyeV9jb2RlGAIgASgJEhQKDGNvdW50cnlfbmFtZRgDIAEoCRISCgpkb3dubG9hZGVkGAQgASgJEhgKEGRvd25sb2FkZWRfYnl0ZXMYBSABKAMSDQoFcmF0aW8YBiABKAESEQoJc2VlZGJvbnVzGAcgASgFEgsKA3VpZBgIIAEoBRIQCgh1cGxvYWRlZBgJIAEoCRIWCg51cGxvYWRlZF9ieXRlcxgKIAEoAxIQCgh1c2VybmFtZRgLIAEoCRIRCgl2aXBfdW50aWwYDCABKAkiIwoKVmlwUmVxdWVzdBIVCg1hbW91bnRJbldlZWtzGAEgASgFIk8KC1ZpcFJlc3BvbnNlEg8KB1N1Y2Nlc3MYASABKAgSDAoEVHlwZRgCIAEoCRIOCgZBbW91bnQYAyABKAISEQoJU2VlZEJvbnVzGAQgASgCIiIKDEJvbnVzUmVxdWVzdBISCgphbW91bnRJbkdCGAEgASgFIrIBCg1Cb251c1Jlc3BvbnNlEg8KB1N1Y2Nlc3MYASABKAgSDAoEVHlwZRgCIAEoCRIOCgZBbW91bnQYAyABKAISEQoJU2VlZGJvbnVzGAQgASgCEhAKCFVwbG9hZGVkGAUgASgDEhIKCkRvd25sb2FkZWQYBiABKAMSEwoLVXBsb2FkRmFuY3kYByABKAkSFQoNRG93bmxvYWRGYW5jeRgIIAEoCRINCgVSYXRpbxgJIAEoAiJSCg1TZWFyY2hSZXN1bHRzEiMKB3Jlc3VsdHMYASADKAsyEi5tYW0udjEuU2VhcmNoQm9vaxINCgVmb3VuZBgCIAEoBRINCgV0b3RhbBgDIAEoBSLVAwoKU2VhcmNoQm9vaxIOCgZtYW1faWQYASABKAUSDQoFdGl0bGUYAiABKAkSEQoJdGh1bWJuYWlsGAMgASgJEh4KBmF1dGhvchgEIAMoCzIOLm1hbS52MS5BdXRob3ISIAoIbmFycmF0b3IYBSADKAsyDi5tYW0udjEuQXV0aG9yEhUKDXVwbG9hZGVyX25hbWUYBiABKAkSHgoGc2VyaWVzGAcgAygLMg4ubWFtLnYxLlNlcmllcxITCgtkZXNjcmlwdGlvbhgVIAEoCRIMCgR0YWdzGAggASgJEhYKDmRhdGVfYWRkZWRfaXNvGAkgASgJEhAKCHNuYXRjaGVkGAogASgIEhUKDWxhbmd1YWdlX2NvZGUYCyABKAkSFgoObWVkaWFfY2F0ZWdvcnkYDCABKAkSEwoLY2F0ZWdvcnlfaWQYDSABKAUSFQoNY2F0ZWdvcnlfbmFtZRgOIAEoCRIUCgxtZWRpYV9mb3JtYXQYDyABKAkSEgoKbWVkaWFfc2l6ZRgQIAEoCRIPCgdzZWVkZXJzGBEgASgFEhAKCGxlZWNoZXJzGBIgASgFEhEKCWNvbXBsZXRlZBgTIAEoBRIUCgx0b3JyZW50X2xpbmsYFCABKAkiIgoGQXV0aG9yEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkiOwoGU2VyaWVzEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSFwoPc2VxdWVuY2VfbnVtYmVyGAMgASgJIi4KDUZyZWVMZWVjaEluZm8SDAoEdHlwZRgBIAEoCRIPCgdleHBpcmVzGAIgASgJIhYKBVF1ZXJ5Eg0KBXF1ZXJ5GAEgASgJIgcKBUVtcHR5Mp4CCgpNYW1TZXJ2aWNlEi4KBlNlYXJjaBINLm1hbS52MS5RdWVyeRoVLm1hbS52MS5TZWFyY2hSZXN1bHRzEjEKBkJ1eVZpcBISLm1hbS52MS5WaXBSZXF1ZXN0GhMubWFtLnYxLlZpcFJlc3BvbnNlEi0KCkdldFByb2ZpbGUSDS5tYW0udjEuRW1wdHkaEC5tYW0udjEuVXNlckRhdGESNwoIQnV5Qm9udXMSFC5tYW0udjEuQm9udXNSZXF1ZXN0GhUubWFtLnYxLkJvbnVzUmVzcG9uc2USRQoKSXNNYW1TZXR1cBIZLm1hbS52MS5Jc01hbVNldHVwUmVxdWVzdBoaLm1hbS52MS5Jc01hbVNldHVwUmVzcG9uc2UiAEJ4Cgpjb20ubWFtLnYxQghNYW1Qcm90b1ABWidnaXRodWIuY29tL1JBMzQxL2dvdWRhL2dlbmVyYXRlZC9tYW0vdjGiAgNNWFiqAgZNYW0uVjHKAgZNYW1cVjHiAhJNYW1cVjFcR1BCTWV0YWRhdGHqAgdNYW06OlYxYgZwcm90bzM");
+
+/**
+ * @generated from message mam.v1.IsMamSetupRequest
+ */
+export type IsMamSetupRequest = Message<"mam.v1.IsMamSetupRequest"> & {
+};
+
+/**
+ * Describes the message mam.v1.IsMamSetupRequest.
+ * Use `create(IsMamSetupRequestSchema)` to create a new message.
+ */
+export const IsMamSetupRequestSchema: GenMessage<IsMamSetupRequest> = /*@__PURE__*/
+  messageDesc(file_mam_v1_mam, 0);
+
+/**
+ * @generated from message mam.v1.IsMamSetupResponse
+ */
+export type IsMamSetupResponse = Message<"mam.v1.IsMamSetupResponse"> & {
+};
+
+/**
+ * Describes the message mam.v1.IsMamSetupResponse.
+ * Use `create(IsMamSetupResponseSchema)` to create a new message.
+ */
+export const IsMamSetupResponseSchema: GenMessage<IsMamSetupResponse> = /*@__PURE__*/
+  messageDesc(file_mam_v1_mam, 1);
 
 /**
  * @generated from message mam.v1.UserData
@@ -82,7 +108,7 @@ export type UserData = Message<"mam.v1.UserData"> & {
  * Use `create(UserDataSchema)` to create a new message.
  */
 export const UserDataSchema: GenMessage<UserData> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 0);
+  messageDesc(file_mam_v1_mam, 2);
 
 /**
  * @generated from message mam.v1.VipRequest
@@ -99,7 +125,7 @@ export type VipRequest = Message<"mam.v1.VipRequest"> & {
  * Use `create(VipRequestSchema)` to create a new message.
  */
 export const VipRequestSchema: GenMessage<VipRequest> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 1);
+  messageDesc(file_mam_v1_mam, 3);
 
 /**
  * @generated from message mam.v1.VipResponse
@@ -131,7 +157,7 @@ export type VipResponse = Message<"mam.v1.VipResponse"> & {
  * Use `create(VipResponseSchema)` to create a new message.
  */
 export const VipResponseSchema: GenMessage<VipResponse> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 2);
+  messageDesc(file_mam_v1_mam, 4);
 
 /**
  * @generated from message mam.v1.BonusRequest
@@ -148,7 +174,7 @@ export type BonusRequest = Message<"mam.v1.BonusRequest"> & {
  * Use `create(BonusRequestSchema)` to create a new message.
  */
 export const BonusRequestSchema: GenMessage<BonusRequest> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 3);
+  messageDesc(file_mam_v1_mam, 5);
 
 /**
  * @generated from message mam.v1.BonusResponse
@@ -205,7 +231,7 @@ export type BonusResponse = Message<"mam.v1.BonusResponse"> & {
  * Use `create(BonusResponseSchema)` to create a new message.
  */
 export const BonusResponseSchema: GenMessage<BonusResponse> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 4);
+  messageDesc(file_mam_v1_mam, 6);
 
 /**
  * @generated from message mam.v1.SearchResults
@@ -236,7 +262,7 @@ export type SearchResults = Message<"mam.v1.SearchResults"> & {
  * Use `create(SearchResultsSchema)` to create a new message.
  */
 export const SearchResultsSchema: GenMessage<SearchResults> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 5);
+  messageDesc(file_mam_v1_mam, 7);
 
 /**
  * @generated from message mam.v1.SearchBook
@@ -359,7 +385,7 @@ export type SearchBook = Message<"mam.v1.SearchBook"> & {
  * Use `create(SearchBookSchema)` to create a new message.
  */
 export const SearchBookSchema: GenMessage<SearchBook> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 6);
+  messageDesc(file_mam_v1_mam, 8);
 
 /**
  * @generated from message mam.v1.Author
@@ -381,7 +407,7 @@ export type Author = Message<"mam.v1.Author"> & {
  * Use `create(AuthorSchema)` to create a new message.
  */
 export const AuthorSchema: GenMessage<Author> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 7);
+  messageDesc(file_mam_v1_mam, 9);
 
 /**
  * @generated from message mam.v1.Series
@@ -408,7 +434,7 @@ export type Series = Message<"mam.v1.Series"> & {
  * Use `create(SeriesSchema)` to create a new message.
  */
 export const SeriesSchema: GenMessage<Series> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 8);
+  messageDesc(file_mam_v1_mam, 10);
 
 /**
  * @generated from message mam.v1.FreeLeechInfo
@@ -434,7 +460,7 @@ export type FreeLeechInfo = Message<"mam.v1.FreeLeechInfo"> & {
  * Use `create(FreeLeechInfoSchema)` to create a new message.
  */
 export const FreeLeechInfoSchema: GenMessage<FreeLeechInfo> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 9);
+  messageDesc(file_mam_v1_mam, 11);
 
 /**
  * @generated from message mam.v1.Query
@@ -451,7 +477,7 @@ export type Query = Message<"mam.v1.Query"> & {
  * Use `create(QuerySchema)` to create a new message.
  */
 export const QuerySchema: GenMessage<Query> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 10);
+  messageDesc(file_mam_v1_mam, 12);
 
 /**
  * @generated from message mam.v1.Empty
@@ -464,7 +490,7 @@ export type Empty = Message<"mam.v1.Empty"> & {
  * Use `create(EmptySchema)` to create a new message.
  */
 export const EmptySchema: GenMessage<Empty> = /*@__PURE__*/
-  messageDesc(file_mam_v1_mam, 11);
+  messageDesc(file_mam_v1_mam, 13);
 
 /**
  * @generated from service mam.v1.MamService
@@ -501,6 +527,14 @@ export const MamService: GenService<{
     methodKind: "unary";
     input: typeof BonusRequestSchema;
     output: typeof BonusResponseSchema;
+  },
+  /**
+   * @generated from rpc mam.v1.MamService.IsMamSetup
+   */
+  isMamSetup: {
+    methodKind: "unary";
+    input: typeof IsMamSetupRequestSchema;
+    output: typeof IsMamSetupResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_mam_v1_mam, 0);

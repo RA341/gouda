@@ -14,6 +14,24 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use isMamSetupRequestDescriptor instead')
+const IsMamSetupRequest$json = {
+  '1': 'IsMamSetupRequest',
+};
+
+/// Descriptor for `IsMamSetupRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List isMamSetupRequestDescriptor =
+    $convert.base64Decode('ChFJc01hbVNldHVwUmVxdWVzdA==');
+
+@$core.Deprecated('Use isMamSetupResponseDescriptor instead')
+const IsMamSetupResponse$json = {
+  '1': 'IsMamSetupResponse',
+};
+
+/// Descriptor for `IsMamSetupResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List isMamSetupResponseDescriptor =
+    $convert.base64Decode('ChJJc01hbVNldHVwUmVzcG9uc2U=');
+
 @$core.Deprecated('Use userDataDescriptor instead')
 const UserData$json = {
   '1': 'UserData',

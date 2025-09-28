@@ -41,6 +41,8 @@ const (
 	MamServiceGetProfileProcedure = "/mam.v1.MamService/GetProfile"
 	// MamServiceBuyBonusProcedure is the fully-qualified name of the MamService's BuyBonus RPC.
 	MamServiceBuyBonusProcedure = "/mam.v1.MamService/BuyBonus"
+	// MamServiceIsMamSetupProcedure is the fully-qualified name of the MamService's IsMamSetup RPC.
+	MamServiceIsMamSetupProcedure = "/mam.v1.MamService/IsMamSetup"
 )
 
 // MamServiceClient is a client for the mam.v1.MamService service.
@@ -49,6 +51,7 @@ type MamServiceClient interface {
 	BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error)
 	GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error)
 	BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error)
+	IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error)
 }
 
 // NewMamServiceClient constructs a client for the mam.v1.MamService service. By default, it uses
@@ -86,6 +89,12 @@ func NewMamServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...
 			connect.WithSchema(mamServiceMethods.ByName("BuyBonus")),
 			connect.WithClientOptions(opts...),
 		),
+		isMamSetup: connect.NewClient[v1.IsMamSetupRequest, v1.IsMamSetupResponse](
+			httpClient,
+			baseURL+MamServiceIsMamSetupProcedure,
+			connect.WithSchema(mamServiceMethods.ByName("IsMamSetup")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -95,6 +104,7 @@ type mamServiceClient struct {
 	buyVip     *connect.Client[v1.VipRequest, v1.VipResponse]
 	getProfile *connect.Client[v1.Empty, v1.UserData]
 	buyBonus   *connect.Client[v1.BonusRequest, v1.BonusResponse]
+	isMamSetup *connect.Client[v1.IsMamSetupRequest, v1.IsMamSetupResponse]
 }
 
 // Search calls mam.v1.MamService.Search.
@@ -117,12 +127,18 @@ func (c *mamServiceClient) BuyBonus(ctx context.Context, req *connect.Request[v1
 	return c.buyBonus.CallUnary(ctx, req)
 }
 
+// IsMamSetup calls mam.v1.MamService.IsMamSetup.
+func (c *mamServiceClient) IsMamSetup(ctx context.Context, req *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error) {
+	return c.isMamSetup.CallUnary(ctx, req)
+}
+
 // MamServiceHandler is an implementation of the mam.v1.MamService service.
 type MamServiceHandler interface {
 	Search(context.Context, *connect.Request[v1.Query]) (*connect.Response[v1.SearchResults], error)
 	BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error)
 	GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error)
 	BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error)
+	IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error)
 }
 
 // NewMamServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -156,6 +172,12 @@ func NewMamServiceHandler(svc MamServiceHandler, opts ...connect.HandlerOption) 
 		connect.WithSchema(mamServiceMethods.ByName("BuyBonus")),
 		connect.WithHandlerOptions(opts...),
 	)
+	mamServiceIsMamSetupHandler := connect.NewUnaryHandler(
+		MamServiceIsMamSetupProcedure,
+		svc.IsMamSetup,
+		connect.WithSchema(mamServiceMethods.ByName("IsMamSetup")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/mam.v1.MamService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case MamServiceSearchProcedure:
@@ -166,6 +188,8 @@ func NewMamServiceHandler(svc MamServiceHandler, opts ...connect.HandlerOption) 
 			mamServiceGetProfileHandler.ServeHTTP(w, r)
 		case MamServiceBuyBonusProcedure:
 			mamServiceBuyBonusHandler.ServeHTTP(w, r)
+		case MamServiceIsMamSetupProcedure:
+			mamServiceIsMamSetupHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -189,4 +213,8 @@ func (UnimplementedMamServiceHandler) GetProfile(context.Context, *connect.Reque
 
 func (UnimplementedMamServiceHandler) BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("mam.v1.MamService.BuyBonus is not implemented"))
+}
+
+func (UnimplementedMamServiceHandler) IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("mam.v1.MamService.IsMamSetup is not implemented"))
 }

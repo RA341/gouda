@@ -60,6 +60,13 @@ class MamServiceClient extends $grpc.Client {
     return $createUnaryCall(_$buyBonus, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.IsMamSetupResponse> isMamSetup(
+    $0.IsMamSetupRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$isMamSetup, request, options: options);
+  }
+
   // method descriptors
 
   static final _$search = $grpc.ClientMethod<$0.Query, $0.SearchResults>(
@@ -79,6 +86,11 @@ class MamServiceClient extends $grpc.Client {
           '/mam.v1.MamService/BuyBonus',
           ($0.BonusRequest value) => value.writeToBuffer(),
           $0.BonusResponse.fromBuffer);
+  static final _$isMamSetup =
+      $grpc.ClientMethod<$0.IsMamSetupRequest, $0.IsMamSetupResponse>(
+          '/mam.v1.MamService/IsMamSetup',
+          ($0.IsMamSetupRequest value) => value.writeToBuffer(),
+          $0.IsMamSetupResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('mam.v1.MamService')
@@ -114,6 +126,13 @@ abstract class MamServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.BonusRequest.fromBuffer(value),
         ($0.BonusResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.IsMamSetupRequest, $0.IsMamSetupResponse>(
+        'IsMamSetup',
+        isMamSetup_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.IsMamSetupRequest.fromBuffer(value),
+        ($0.IsMamSetupResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.SearchResults> search_Pre(
@@ -147,4 +166,12 @@ abstract class MamServiceBase extends $grpc.Service {
 
   $async.Future<$0.BonusResponse> buyBonus(
       $grpc.ServiceCall call, $0.BonusRequest request);
+
+  $async.Future<$0.IsMamSetupResponse> isMamSetup_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.IsMamSetupRequest> $request) async {
+    return isMamSetup($call, await $request);
+  }
+
+  $async.Future<$0.IsMamSetupResponse> isMamSetup(
+      $grpc.ServiceCall call, $0.IsMamSetupRequest request);
 }

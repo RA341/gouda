@@ -21,6 +21,166 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type UpdateSettingsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Settings      *GoudaConfig           `protobuf:"bytes,1,opt,name=settings,proto3" json:"settings,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateSettingsRequest) Reset() {
+	*x = UpdateSettingsRequest{}
+	mi := &file_settings_v1_settings_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSettingsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSettingsRequest) ProtoMessage() {}
+
+func (x *UpdateSettingsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_settings_v1_settings_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSettingsRequest.ProtoReflect.Descriptor instead.
+func (*UpdateSettingsRequest) Descriptor() ([]byte, []int) {
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *UpdateSettingsRequest) GetSettings() *GoudaConfig {
+	if x != nil {
+		return x.Settings
+	}
+	return nil
+}
+
+type UpdateSettingsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateSettingsResponse) Reset() {
+	*x = UpdateSettingsResponse{}
+	mi := &file_settings_v1_settings_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSettingsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSettingsResponse) ProtoMessage() {}
+
+func (x *UpdateSettingsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_settings_v1_settings_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSettingsResponse.ProtoReflect.Descriptor instead.
+func (*UpdateSettingsResponse) Descriptor() ([]byte, []int) {
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{1}
+}
+
+type LoadSettingsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadSettingsRequest) Reset() {
+	*x = LoadSettingsRequest{}
+	mi := &file_settings_v1_settings_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadSettingsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadSettingsRequest) ProtoMessage() {}
+
+func (x *LoadSettingsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_settings_v1_settings_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadSettingsRequest.ProtoReflect.Descriptor instead.
+func (*LoadSettingsRequest) Descriptor() ([]byte, []int) {
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{2}
+}
+
+type LoadSettingsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Settings      *GoudaConfig           `protobuf:"bytes,1,opt,name=settings,proto3" json:"settings,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadSettingsResponse) Reset() {
+	*x = LoadSettingsResponse{}
+	mi := &file_settings_v1_settings_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadSettingsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadSettingsResponse) ProtoMessage() {}
+
+func (x *LoadSettingsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_settings_v1_settings_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadSettingsResponse.ProtoReflect.Descriptor instead.
+func (*LoadSettingsResponse) Descriptor() ([]byte, []int) {
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *LoadSettingsResponse) GetSettings() *GoudaConfig {
+	if x != nil {
+		return x.Settings
+	}
+	return nil
+}
+
 type UpdateMamTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -29,7 +189,7 @@ type UpdateMamTokenRequest struct {
 
 func (x *UpdateMamTokenRequest) Reset() {
 	*x = UpdateMamTokenRequest{}
-	mi := &file_settings_v1_settings_proto_msgTypes[0]
+	mi := &file_settings_v1_settings_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -41,7 +201,7 @@ func (x *UpdateMamTokenRequest) String() string {
 func (*UpdateMamTokenRequest) ProtoMessage() {}
 
 func (x *UpdateMamTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[0]
+	mi := &file_settings_v1_settings_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -54,7 +214,7 @@ func (x *UpdateMamTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateMamTokenRequest.ProtoReflect.Descriptor instead.
 func (*UpdateMamTokenRequest) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{0}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{4}
 }
 
 type UpdateMamTokenResponse struct {
@@ -65,7 +225,7 @@ type UpdateMamTokenResponse struct {
 
 func (x *UpdateMamTokenResponse) Reset() {
 	*x = UpdateMamTokenResponse{}
-	mi := &file_settings_v1_settings_proto_msgTypes[1]
+	mi := &file_settings_v1_settings_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -77,7 +237,7 @@ func (x *UpdateMamTokenResponse) String() string {
 func (*UpdateMamTokenResponse) ProtoMessage() {}
 
 func (x *UpdateMamTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[1]
+	mi := &file_settings_v1_settings_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -90,7 +250,7 @@ func (x *UpdateMamTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateMamTokenResponse.ProtoReflect.Descriptor instead.
 func (*UpdateMamTokenResponse) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{1}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{5}
 }
 
 type GetMetadataRequest struct {
@@ -101,7 +261,7 @@ type GetMetadataRequest struct {
 
 func (x *GetMetadataRequest) Reset() {
 	*x = GetMetadataRequest{}
-	mi := &file_settings_v1_settings_proto_msgTypes[2]
+	mi := &file_settings_v1_settings_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -113,7 +273,7 @@ func (x *GetMetadataRequest) String() string {
 func (*GetMetadataRequest) ProtoMessage() {}
 
 func (x *GetMetadataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[2]
+	mi := &file_settings_v1_settings_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -126,7 +286,7 @@ func (x *GetMetadataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMetadataRequest.ProtoReflect.Descriptor instead.
 func (*GetMetadataRequest) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{2}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{6}
 }
 
 type TestTorrentResponse struct {
@@ -137,7 +297,7 @@ type TestTorrentResponse struct {
 
 func (x *TestTorrentResponse) Reset() {
 	*x = TestTorrentResponse{}
-	mi := &file_settings_v1_settings_proto_msgTypes[3]
+	mi := &file_settings_v1_settings_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -149,7 +309,7 @@ func (x *TestTorrentResponse) String() string {
 func (*TestTorrentResponse) ProtoMessage() {}
 
 func (x *TestTorrentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[3]
+	mi := &file_settings_v1_settings_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -162,7 +322,7 @@ func (x *TestTorrentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TestTorrentResponse.ProtoReflect.Descriptor instead.
 func (*TestTorrentResponse) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{3}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{7}
 }
 
 type GetMetadataResponse struct {
@@ -175,7 +335,7 @@ type GetMetadataResponse struct {
 
 func (x *GetMetadataResponse) Reset() {
 	*x = GetMetadataResponse{}
-	mi := &file_settings_v1_settings_proto_msgTypes[4]
+	mi := &file_settings_v1_settings_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -187,7 +347,7 @@ func (x *GetMetadataResponse) String() string {
 func (*GetMetadataResponse) ProtoMessage() {}
 
 func (x *GetMetadataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[4]
+	mi := &file_settings_v1_settings_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -200,7 +360,7 @@ func (x *GetMetadataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMetadataResponse.ProtoReflect.Descriptor instead.
 func (*GetMetadataResponse) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{4}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetMetadataResponse) GetVersion() string {
@@ -225,7 +385,7 @@ type ListSupportedClientsRequest struct {
 
 func (x *ListSupportedClientsRequest) Reset() {
 	*x = ListSupportedClientsRequest{}
-	mi := &file_settings_v1_settings_proto_msgTypes[5]
+	mi := &file_settings_v1_settings_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -237,7 +397,7 @@ func (x *ListSupportedClientsRequest) String() string {
 func (*ListSupportedClientsRequest) ProtoMessage() {}
 
 func (x *ListSupportedClientsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[5]
+	mi := &file_settings_v1_settings_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -250,7 +410,7 @@ func (x *ListSupportedClientsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSupportedClientsRequest.ProtoReflect.Descriptor instead.
 func (*ListSupportedClientsRequest) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{5}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{9}
 }
 
 type ListSupportedClientsResponse struct {
@@ -262,7 +422,7 @@ type ListSupportedClientsResponse struct {
 
 func (x *ListSupportedClientsResponse) Reset() {
 	*x = ListSupportedClientsResponse{}
-	mi := &file_settings_v1_settings_proto_msgTypes[6]
+	mi := &file_settings_v1_settings_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -274,7 +434,7 @@ func (x *ListSupportedClientsResponse) String() string {
 func (*ListSupportedClientsResponse) ProtoMessage() {}
 
 func (x *ListSupportedClientsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[6]
+	mi := &file_settings_v1_settings_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -287,7 +447,7 @@ func (x *ListSupportedClientsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSupportedClientsResponse.ProtoReflect.Descriptor instead.
 func (*ListSupportedClientsResponse) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{6}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ListSupportedClientsResponse) GetClients() []string {
@@ -295,78 +455,6 @@ func (x *ListSupportedClientsResponse) GetClients() []string {
 		return x.Clients
 	}
 	return nil
-}
-
-type UpdateSettingsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateSettingsResponse) Reset() {
-	*x = UpdateSettingsResponse{}
-	mi := &file_settings_v1_settings_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateSettingsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateSettingsResponse) ProtoMessage() {}
-
-func (x *UpdateSettingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateSettingsResponse.ProtoReflect.Descriptor instead.
-func (*UpdateSettingsResponse) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{7}
-}
-
-type ListSettingsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListSettingsResponse) Reset() {
-	*x = ListSettingsResponse{}
-	mi := &file_settings_v1_settings_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListSettingsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListSettingsResponse) ProtoMessage() {}
-
-func (x *ListSettingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListSettingsResponse.ProtoReflect.Descriptor instead.
-func (*ListSettingsResponse) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{8}
 }
 
 // Top-level Gouda configuration
@@ -381,13 +469,14 @@ type GoudaConfig struct {
 	Log            *Logger                `protobuf:"bytes,7,opt,name=log,proto3" json:"log,omitempty"`
 	Downloader     *Downloader            `protobuf:"bytes,8,opt,name=downloader,proto3" json:"downloader,omitempty"`
 	Permissions    *UserPermissions       `protobuf:"bytes,9,opt,name=permissions,proto3" json:"permissions,omitempty"`
+	TorrentClient  *TorrentClient         `protobuf:"bytes,10,opt,name=torrentClient,proto3" json:"torrentClient,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *GoudaConfig) Reset() {
 	*x = GoudaConfig{}
-	mi := &file_settings_v1_settings_proto_msgTypes[9]
+	mi := &file_settings_v1_settings_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -399,7 +488,7 @@ func (x *GoudaConfig) String() string {
 func (*GoudaConfig) ProtoMessage() {}
 
 func (x *GoudaConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[9]
+	mi := &file_settings_v1_settings_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -412,7 +501,7 @@ func (x *GoudaConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GoudaConfig.ProtoReflect.Descriptor instead.
 func (*GoudaConfig) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{9}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GoudaConfig) GetPort() int32 {
@@ -478,6 +567,13 @@ func (x *GoudaConfig) GetPermissions() *UserPermissions {
 	return nil
 }
 
+func (x *GoudaConfig) GetTorrentClient() *TorrentClient {
+	if x != nil {
+		return x.TorrentClient
+	}
+	return nil
+}
+
 type Directories struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConfigDir     string                 `protobuf:"bytes,1,opt,name=config_dir,json=configDir,proto3" json:"config_dir,omitempty"`
@@ -490,7 +586,7 @@ type Directories struct {
 
 func (x *Directories) Reset() {
 	*x = Directories{}
-	mi := &file_settings_v1_settings_proto_msgTypes[10]
+	mi := &file_settings_v1_settings_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -502,7 +598,7 @@ func (x *Directories) String() string {
 func (*Directories) ProtoMessage() {}
 
 func (x *Directories) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[10]
+	mi := &file_settings_v1_settings_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -515,7 +611,7 @@ func (x *Directories) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Directories.ProtoReflect.Descriptor instead.
 func (*Directories) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{10}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Directories) GetConfigDir() string {
@@ -556,7 +652,7 @@ type Logger struct {
 
 func (x *Logger) Reset() {
 	*x = Logger{}
-	mi := &file_settings_v1_settings_proto_msgTypes[11]
+	mi := &file_settings_v1_settings_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -568,7 +664,7 @@ func (x *Logger) String() string {
 func (*Logger) ProtoMessage() {}
 
 func (x *Logger) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[11]
+	mi := &file_settings_v1_settings_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -581,7 +677,7 @@ func (x *Logger) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Logger.ProtoReflect.Descriptor instead.
 func (*Logger) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{11}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *Logger) GetLevel() string {
@@ -608,7 +704,7 @@ type Downloader struct {
 
 func (x *Downloader) Reset() {
 	*x = Downloader{}
-	mi := &file_settings_v1_settings_proto_msgTypes[12]
+	mi := &file_settings_v1_settings_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -620,7 +716,7 @@ func (x *Downloader) String() string {
 func (*Downloader) ProtoMessage() {}
 
 func (x *Downloader) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[12]
+	mi := &file_settings_v1_settings_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -633,7 +729,7 @@ func (x *Downloader) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Downloader.ProtoReflect.Descriptor instead.
 func (*Downloader) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{12}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Downloader) GetTimeout() string {
@@ -660,7 +756,7 @@ type UserPermissions struct {
 
 func (x *UserPermissions) Reset() {
 	*x = UserPermissions{}
-	mi := &file_settings_v1_settings_proto_msgTypes[13]
+	mi := &file_settings_v1_settings_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -672,7 +768,7 @@ func (x *UserPermissions) String() string {
 func (*UserPermissions) ProtoMessage() {}
 
 func (x *UserPermissions) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[13]
+	mi := &file_settings_v1_settings_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -685,7 +781,7 @@ func (x *UserPermissions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserPermissions.ProtoReflect.Descriptor instead.
 func (*UserPermissions) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{13}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *UserPermissions) GetUid() int32 {
@@ -702,172 +798,20 @@ func (x *UserPermissions) GetGid() int32 {
 	return 0
 }
 
-type Settings struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// General settings
-	ApiKey               string `protobuf:"bytes,1,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
-	ServerPort           string `protobuf:"bytes,2,opt,name=server_port,json=serverPort,proto3" json:"server_port,omitempty"`
-	DownloadCheckTimeout uint64 `protobuf:"varint,3,opt,name=download_check_timeout,json=downloadCheckTimeout,proto3" json:"download_check_timeout,omitempty"`
-	// Folder settings
-	CompleteFolder string `protobuf:"bytes,4,opt,name=complete_folder,json=completeFolder,proto3" json:"complete_folder,omitempty"`
-	DownloadFolder string `protobuf:"bytes,5,opt,name=download_folder,json=downloadFolder,proto3" json:"download_folder,omitempty"`
-	TorrentsFolder string `protobuf:"bytes,6,opt,name=torrents_folder,json=torrentsFolder,proto3" json:"torrents_folder,omitempty"`
-	// User settings
-	Username string `protobuf:"bytes,7,opt,name=username,proto3" json:"username,omitempty"`
-	Password string `protobuf:"bytes,8,opt,name=password,proto3" json:"password,omitempty"`
-	UserUid  uint64 `protobuf:"varint,9,opt,name=user_uid,json=userUid,proto3" json:"user_uid,omitempty"`
-	GroupUid uint64 `protobuf:"varint,10,opt,name=group_uid,json=groupUid,proto3" json:"group_uid,omitempty"`
-	// Torrent settings
-	Client        *TorrentClient `protobuf:"bytes,11,opt,name=client,proto3" json:"client,omitempty"`
-	ExitOnClose   bool           `protobuf:"varint,12,opt,name=exit_on_close,json=exitOnClose,proto3" json:"exit_on_close,omitempty"`
-	IgnoreTimeout bool           `protobuf:"varint,13,opt,name=ignore_timeout,json=ignoreTimeout,proto3" json:"ignore_timeout,omitempty"`
-	SetupComplete bool           `protobuf:"varint,14,opt,name=setup_complete,json=setupComplete,proto3" json:"setup_complete,omitempty"`
+type TorrentClient struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientType    string                 `protobuf:"bytes,2,opt,name=clientType,proto3" json:"clientType,omitempty"`
+	Host          string                 `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Protocol      string                 `protobuf:"bytes,4,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	User          string                 `protobuf:"bytes,5,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Settings) Reset() {
-	*x = Settings{}
-	mi := &file_settings_v1_settings_proto_msgTypes[14]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Settings) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Settings) ProtoMessage() {}
-
-func (x *Settings) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[14]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Settings.ProtoReflect.Descriptor instead.
-func (*Settings) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{14}
-}
-
-func (x *Settings) GetApiKey() string {
-	if x != nil {
-		return x.ApiKey
-	}
-	return ""
-}
-
-func (x *Settings) GetServerPort() string {
-	if x != nil {
-		return x.ServerPort
-	}
-	return ""
-}
-
-func (x *Settings) GetDownloadCheckTimeout() uint64 {
-	if x != nil {
-		return x.DownloadCheckTimeout
-	}
-	return 0
-}
-
-func (x *Settings) GetCompleteFolder() string {
-	if x != nil {
-		return x.CompleteFolder
-	}
-	return ""
-}
-
-func (x *Settings) GetDownloadFolder() string {
-	if x != nil {
-		return x.DownloadFolder
-	}
-	return ""
-}
-
-func (x *Settings) GetTorrentsFolder() string {
-	if x != nil {
-		return x.TorrentsFolder
-	}
-	return ""
-}
-
-func (x *Settings) GetUsername() string {
-	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-func (x *Settings) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
-}
-
-func (x *Settings) GetUserUid() uint64 {
-	if x != nil {
-		return x.UserUid
-	}
-	return 0
-}
-
-func (x *Settings) GetGroupUid() uint64 {
-	if x != nil {
-		return x.GroupUid
-	}
-	return 0
-}
-
-func (x *Settings) GetClient() *TorrentClient {
-	if x != nil {
-		return x.Client
-	}
-	return nil
-}
-
-func (x *Settings) GetExitOnClose() bool {
-	if x != nil {
-		return x.ExitOnClose
-	}
-	return false
-}
-
-func (x *Settings) GetIgnoreTimeout() bool {
-	if x != nil {
-		return x.IgnoreTimeout
-	}
-	return false
-}
-
-func (x *Settings) GetSetupComplete() bool {
-	if x != nil {
-		return x.SetupComplete
-	}
-	return false
-}
-
-type TorrentClient struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	TorrentHost     string                 `protobuf:"bytes,1,opt,name=torrent_host,json=torrentHost,proto3" json:"torrent_host,omitempty"`
-	TorrentName     string                 `protobuf:"bytes,2,opt,name=torrent_name,json=torrentName,proto3" json:"torrent_name,omitempty"`
-	TorrentPassword string                 `protobuf:"bytes,3,opt,name=torrent_password,json=torrentPassword,proto3" json:"torrent_password,omitempty"`
-	TorrentProtocol string                 `protobuf:"bytes,4,opt,name=torrent_protocol,json=torrentProtocol,proto3" json:"torrent_protocol,omitempty"`
-	TorrentUser     string                 `protobuf:"bytes,5,opt,name=torrent_user,json=torrentUser,proto3" json:"torrent_user,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
-}
-
 func (x *TorrentClient) Reset() {
 	*x = TorrentClient{}
-	mi := &file_settings_v1_settings_proto_msgTypes[15]
+	mi := &file_settings_v1_settings_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -879,7 +823,7 @@ func (x *TorrentClient) String() string {
 func (*TorrentClient) ProtoMessage() {}
 
 func (x *TorrentClient) ProtoReflect() protoreflect.Message {
-	mi := &file_settings_v1_settings_proto_msgTypes[15]
+	mi := &file_settings_v1_settings_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -892,40 +836,40 @@ func (x *TorrentClient) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TorrentClient.ProtoReflect.Descriptor instead.
 func (*TorrentClient) Descriptor() ([]byte, []int) {
-	return file_settings_v1_settings_proto_rawDescGZIP(), []int{15}
+	return file_settings_v1_settings_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *TorrentClient) GetTorrentHost() string {
+func (x *TorrentClient) GetClientType() string {
 	if x != nil {
-		return x.TorrentHost
+		return x.ClientType
 	}
 	return ""
 }
 
-func (x *TorrentClient) GetTorrentName() string {
+func (x *TorrentClient) GetHost() string {
 	if x != nil {
-		return x.TorrentName
+		return x.Host
 	}
 	return ""
 }
 
-func (x *TorrentClient) GetTorrentPassword() string {
+func (x *TorrentClient) GetPassword() string {
 	if x != nil {
-		return x.TorrentPassword
+		return x.Password
 	}
 	return ""
 }
 
-func (x *TorrentClient) GetTorrentProtocol() string {
+func (x *TorrentClient) GetProtocol() string {
 	if x != nil {
-		return x.TorrentProtocol
+		return x.Protocol
 	}
 	return ""
 }
 
-func (x *TorrentClient) GetTorrentUser() string {
+func (x *TorrentClient) GetUser() string {
 	if x != nil {
-		return x.TorrentUser
+		return x.User
 	}
 	return ""
 }
@@ -934,7 +878,13 @@ var File_settings_v1_settings_proto protoreflect.FileDescriptor
 
 const file_settings_v1_settings_proto_rawDesc = "" +
 	"\n" +
-	"\x1asettings/v1/settings.proto\x12\vsettings.v1\"\x17\n" +
+	"\x1asettings/v1/settings.proto\x12\vsettings.v1\"M\n" +
+	"\x15UpdateSettingsRequest\x124\n" +
+	"\bsettings\x18\x01 \x01(\v2\x18.settings.v1.GoudaConfigR\bsettings\"\x18\n" +
+	"\x16UpdateSettingsResponse\"\x15\n" +
+	"\x13LoadSettingsRequest\"L\n" +
+	"\x14LoadSettingsResponse\x124\n" +
+	"\bsettings\x18\x01 \x01(\v2\x18.settings.v1.GoudaConfigR\bsettings\"\x17\n" +
 	"\x15UpdateMamTokenRequest\"\x18\n" +
 	"\x16UpdateMamTokenResponse\"\x14\n" +
 	"\x12GetMetadataRequest\"\x15\n" +
@@ -946,9 +896,7 @@ const file_settings_v1_settings_proto_rawDesc = "" +
 	"binaryType\"\x1d\n" +
 	"\x1bListSupportedClientsRequest\"8\n" +
 	"\x1cListSupportedClientsResponse\x12\x18\n" +
-	"\aclients\x18\x01 \x03(\tR\aclients\"\x18\n" +
-	"\x16UpdateSettingsResponse\"\x16\n" +
-	"\x14ListSettingsResponse\"\xe0\x02\n" +
+	"\aclients\x18\x01 \x03(\tR\aclients\"\xa2\x03\n" +
 	"\vGoudaConfig\x12\x12\n" +
 	"\x04port\x18\x01 \x01(\x05R\x04port\x12'\n" +
 	"\x0fallowed_origins\x18\x02 \x01(\tR\x0eallowedOrigins\x12\x17\n" +
@@ -960,7 +908,9 @@ const file_settings_v1_settings_proto_rawDesc = "" +
 	"\n" +
 	"downloader\x18\b \x01(\v2\x17.settings.v1.DownloaderR\n" +
 	"downloader\x12>\n" +
-	"\vpermissions\x18\t \x01(\v2\x1c.settings.v1.UserPermissionsR\vpermissions\"\x93\x01\n" +
+	"\vpermissions\x18\t \x01(\v2\x1c.settings.v1.UserPermissionsR\vpermissions\x12@\n" +
+	"\rtorrentClient\x18\n" +
+	" \x01(\v2\x1a.settings.v1.TorrentClientR\rtorrentClient\"\x93\x01\n" +
 	"\vDirectories\x12\x1d\n" +
 	"\n" +
 	"config_dir\x18\x01 \x01(\tR\tconfigDir\x12!\n" +
@@ -977,38 +927,22 @@ const file_settings_v1_settings_proto_rawDesc = "" +
 	"\x0eignore_timeout\x18\x02 \x01(\bR\rignoreTimeout\"5\n" +
 	"\x0fUserPermissions\x12\x10\n" +
 	"\x03uid\x18\x01 \x01(\x05R\x03uid\x12\x10\n" +
-	"\x03gid\x18\x02 \x01(\x05R\x03gid\"\x8b\x04\n" +
-	"\bSettings\x12\x17\n" +
-	"\aapi_key\x18\x01 \x01(\tR\x06apiKey\x12\x1f\n" +
-	"\vserver_port\x18\x02 \x01(\tR\n" +
-	"serverPort\x124\n" +
-	"\x16download_check_timeout\x18\x03 \x01(\x04R\x14downloadCheckTimeout\x12'\n" +
-	"\x0fcomplete_folder\x18\x04 \x01(\tR\x0ecompleteFolder\x12'\n" +
-	"\x0fdownload_folder\x18\x05 \x01(\tR\x0edownloadFolder\x12'\n" +
-	"\x0ftorrents_folder\x18\x06 \x01(\tR\x0etorrentsFolder\x12\x1a\n" +
-	"\busername\x18\a \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\b \x01(\tR\bpassword\x12\x19\n" +
-	"\buser_uid\x18\t \x01(\x04R\auserUid\x12\x1b\n" +
-	"\tgroup_uid\x18\n" +
-	" \x01(\x04R\bgroupUid\x122\n" +
-	"\x06client\x18\v \x01(\v2\x1a.settings.v1.TorrentClientR\x06client\x12\"\n" +
-	"\rexit_on_close\x18\f \x01(\bR\vexitOnClose\x12%\n" +
-	"\x0eignore_timeout\x18\r \x01(\bR\rignoreTimeout\x12%\n" +
-	"\x0esetup_complete\x18\x0e \x01(\bR\rsetupComplete\"\xce\x01\n" +
-	"\rTorrentClient\x12!\n" +
-	"\ftorrent_host\x18\x01 \x01(\tR\vtorrentHost\x12!\n" +
-	"\ftorrent_name\x18\x02 \x01(\tR\vtorrentName\x12)\n" +
-	"\x10torrent_password\x18\x03 \x01(\tR\x0ftorrentPassword\x12)\n" +
-	"\x10torrent_protocol\x18\x04 \x01(\tR\x0ftorrentProtocol\x12!\n" +
-	"\ftorrent_user\x18\x05 \x01(\tR\vtorrentUser2\x9b\x04\n" +
-	"\x0fSettingsService\x12N\n" +
-	"\x0eUpdateSettings\x12\x15.settings.v1.Settings\x1a#.settings.v1.UpdateSettingsResponse\"\x00\x12J\n" +
-	"\fListSettings\x12!.settings.v1.ListSettingsResponse\x1a\x15.settings.v1.Settings\"\x00\x12R\n" +
+	"\x03gid\x18\x02 \x01(\x05R\x03gid\"\x8f\x01\n" +
+	"\rTorrentClient\x12\x1e\n" +
+	"\n" +
+	"clientType\x18\x02 \x01(\tR\n" +
+	"clientType\x12\x12\n" +
+	"\x04host\x18\x01 \x01(\tR\x04host\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x1a\n" +
+	"\bprotocol\x18\x04 \x01(\tR\bprotocol\x12\x12\n" +
+	"\x04user\x18\x05 \x01(\tR\x04user2\xd6\x03\n" +
+	"\x0fSettingsService\x12U\n" +
+	"\fLoadSettings\x12 .settings.v1.LoadSettingsRequest\x1a!.settings.v1.LoadSettingsResponse\"\x00\x12[\n" +
+	"\x0eUpdateSettings\x12\".settings.v1.UpdateSettingsRequest\x1a#.settings.v1.UpdateSettingsResponse\"\x00\x12R\n" +
 	"\vGetMetadata\x12\x1f.settings.v1.GetMetadataRequest\x1a .settings.v1.GetMetadataResponse\"\x00\x12m\n" +
 	"\x14ListSupportedClients\x12(.settings.v1.ListSupportedClientsRequest\x1a).settings.v1.ListSupportedClientsResponse\"\x00\x12L\n" +
 	"\n" +
-	"TestClient\x12\x1a.settings.v1.TorrentClient\x1a .settings.v1.TestTorrentResponse\"\x00\x12[\n" +
-	"\x0eUpdateMamToken\x12\".settings.v1.UpdateMamTokenRequest\x1a#.settings.v1.UpdateMamTokenResponse\"\x00B\x9b\x01\n" +
+	"TestClient\x12\x1a.settings.v1.TorrentClient\x1a .settings.v1.TestTorrentResponse\"\x00B\x9b\x01\n" +
 	"\x0fcom.settings.v1B\rSettingsProtoP\x01Z,github.com/RA341/gouda/generated/settings/v1\xa2\x02\x03SXX\xaa\x02\vSettings.V1\xca\x02\vSettings\\V1\xe2\x02\x17Settings\\V1\\GPBMetadata\xea\x02\fSettings::V1b\x06proto3"
 
 var (
@@ -1023,48 +957,49 @@ func file_settings_v1_settings_proto_rawDescGZIP() []byte {
 	return file_settings_v1_settings_proto_rawDescData
 }
 
-var file_settings_v1_settings_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_settings_v1_settings_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_settings_v1_settings_proto_goTypes = []any{
-	(*UpdateMamTokenRequest)(nil),        // 0: settings.v1.UpdateMamTokenRequest
-	(*UpdateMamTokenResponse)(nil),       // 1: settings.v1.UpdateMamTokenResponse
-	(*GetMetadataRequest)(nil),           // 2: settings.v1.GetMetadataRequest
-	(*TestTorrentResponse)(nil),          // 3: settings.v1.TestTorrentResponse
-	(*GetMetadataResponse)(nil),          // 4: settings.v1.GetMetadataResponse
-	(*ListSupportedClientsRequest)(nil),  // 5: settings.v1.ListSupportedClientsRequest
-	(*ListSupportedClientsResponse)(nil), // 6: settings.v1.ListSupportedClientsResponse
-	(*UpdateSettingsResponse)(nil),       // 7: settings.v1.UpdateSettingsResponse
-	(*ListSettingsResponse)(nil),         // 8: settings.v1.ListSettingsResponse
-	(*GoudaConfig)(nil),                  // 9: settings.v1.GoudaConfig
-	(*Directories)(nil),                  // 10: settings.v1.Directories
-	(*Logger)(nil),                       // 11: settings.v1.Logger
-	(*Downloader)(nil),                   // 12: settings.v1.Downloader
-	(*UserPermissions)(nil),              // 13: settings.v1.UserPermissions
-	(*Settings)(nil),                     // 14: settings.v1.Settings
-	(*TorrentClient)(nil),                // 15: settings.v1.TorrentClient
+	(*UpdateSettingsRequest)(nil),        // 0: settings.v1.UpdateSettingsRequest
+	(*UpdateSettingsResponse)(nil),       // 1: settings.v1.UpdateSettingsResponse
+	(*LoadSettingsRequest)(nil),          // 2: settings.v1.LoadSettingsRequest
+	(*LoadSettingsResponse)(nil),         // 3: settings.v1.LoadSettingsResponse
+	(*UpdateMamTokenRequest)(nil),        // 4: settings.v1.UpdateMamTokenRequest
+	(*UpdateMamTokenResponse)(nil),       // 5: settings.v1.UpdateMamTokenResponse
+	(*GetMetadataRequest)(nil),           // 6: settings.v1.GetMetadataRequest
+	(*TestTorrentResponse)(nil),          // 7: settings.v1.TestTorrentResponse
+	(*GetMetadataResponse)(nil),          // 8: settings.v1.GetMetadataResponse
+	(*ListSupportedClientsRequest)(nil),  // 9: settings.v1.ListSupportedClientsRequest
+	(*ListSupportedClientsResponse)(nil), // 10: settings.v1.ListSupportedClientsResponse
+	(*GoudaConfig)(nil),                  // 11: settings.v1.GoudaConfig
+	(*Directories)(nil),                  // 12: settings.v1.Directories
+	(*Logger)(nil),                       // 13: settings.v1.Logger
+	(*Downloader)(nil),                   // 14: settings.v1.Downloader
+	(*UserPermissions)(nil),              // 15: settings.v1.UserPermissions
+	(*TorrentClient)(nil),                // 16: settings.v1.TorrentClient
 }
 var file_settings_v1_settings_proto_depIdxs = []int32{
-	10, // 0: settings.v1.GoudaConfig.dir:type_name -> settings.v1.Directories
-	11, // 1: settings.v1.GoudaConfig.log:type_name -> settings.v1.Logger
-	12, // 2: settings.v1.GoudaConfig.downloader:type_name -> settings.v1.Downloader
-	13, // 3: settings.v1.GoudaConfig.permissions:type_name -> settings.v1.UserPermissions
-	15, // 4: settings.v1.Settings.client:type_name -> settings.v1.TorrentClient
-	14, // 5: settings.v1.SettingsService.UpdateSettings:input_type -> settings.v1.Settings
-	8,  // 6: settings.v1.SettingsService.ListSettings:input_type -> settings.v1.ListSettingsResponse
-	2,  // 7: settings.v1.SettingsService.GetMetadata:input_type -> settings.v1.GetMetadataRequest
-	5,  // 8: settings.v1.SettingsService.ListSupportedClients:input_type -> settings.v1.ListSupportedClientsRequest
-	15, // 9: settings.v1.SettingsService.TestClient:input_type -> settings.v1.TorrentClient
-	0,  // 10: settings.v1.SettingsService.UpdateMamToken:input_type -> settings.v1.UpdateMamTokenRequest
-	7,  // 11: settings.v1.SettingsService.UpdateSettings:output_type -> settings.v1.UpdateSettingsResponse
-	14, // 12: settings.v1.SettingsService.ListSettings:output_type -> settings.v1.Settings
-	4,  // 13: settings.v1.SettingsService.GetMetadata:output_type -> settings.v1.GetMetadataResponse
-	6,  // 14: settings.v1.SettingsService.ListSupportedClients:output_type -> settings.v1.ListSupportedClientsResponse
-	3,  // 15: settings.v1.SettingsService.TestClient:output_type -> settings.v1.TestTorrentResponse
-	1,  // 16: settings.v1.SettingsService.UpdateMamToken:output_type -> settings.v1.UpdateMamTokenResponse
-	11, // [11:17] is the sub-list for method output_type
-	5,  // [5:11] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	11, // 0: settings.v1.UpdateSettingsRequest.settings:type_name -> settings.v1.GoudaConfig
+	11, // 1: settings.v1.LoadSettingsResponse.settings:type_name -> settings.v1.GoudaConfig
+	12, // 2: settings.v1.GoudaConfig.dir:type_name -> settings.v1.Directories
+	13, // 3: settings.v1.GoudaConfig.log:type_name -> settings.v1.Logger
+	14, // 4: settings.v1.GoudaConfig.downloader:type_name -> settings.v1.Downloader
+	15, // 5: settings.v1.GoudaConfig.permissions:type_name -> settings.v1.UserPermissions
+	16, // 6: settings.v1.GoudaConfig.torrentClient:type_name -> settings.v1.TorrentClient
+	2,  // 7: settings.v1.SettingsService.LoadSettings:input_type -> settings.v1.LoadSettingsRequest
+	0,  // 8: settings.v1.SettingsService.UpdateSettings:input_type -> settings.v1.UpdateSettingsRequest
+	6,  // 9: settings.v1.SettingsService.GetMetadata:input_type -> settings.v1.GetMetadataRequest
+	9,  // 10: settings.v1.SettingsService.ListSupportedClients:input_type -> settings.v1.ListSupportedClientsRequest
+	16, // 11: settings.v1.SettingsService.TestClient:input_type -> settings.v1.TorrentClient
+	3,  // 12: settings.v1.SettingsService.LoadSettings:output_type -> settings.v1.LoadSettingsResponse
+	1,  // 13: settings.v1.SettingsService.UpdateSettings:output_type -> settings.v1.UpdateSettingsResponse
+	8,  // 14: settings.v1.SettingsService.GetMetadata:output_type -> settings.v1.GetMetadataResponse
+	10, // 15: settings.v1.SettingsService.ListSupportedClients:output_type -> settings.v1.ListSupportedClientsResponse
+	7,  // 16: settings.v1.SettingsService.TestClient:output_type -> settings.v1.TestTorrentResponse
+	12, // [12:17] is the sub-list for method output_type
+	7,  // [7:12] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_settings_v1_settings_proto_init() }
@@ -1078,7 +1013,7 @@ func file_settings_v1_settings_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_settings_v1_settings_proto_rawDesc), len(file_settings_v1_settings_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

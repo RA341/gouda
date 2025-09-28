@@ -21,6 +21,78 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type IsMamSetupRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IsMamSetupRequest) Reset() {
+	*x = IsMamSetupRequest{}
+	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IsMamSetupRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IsMamSetupRequest) ProtoMessage() {}
+
+func (x *IsMamSetupRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IsMamSetupRequest.ProtoReflect.Descriptor instead.
+func (*IsMamSetupRequest) Descriptor() ([]byte, []int) {
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{0}
+}
+
+type IsMamSetupResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IsMamSetupResponse) Reset() {
+	*x = IsMamSetupResponse{}
+	mi := &file_mam_v1_mam_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IsMamSetupResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IsMamSetupResponse) ProtoMessage() {}
+
+func (x *IsMamSetupResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_mam_v1_mam_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IsMamSetupResponse.ProtoReflect.Descriptor instead.
+func (*IsMamSetupResponse) Descriptor() ([]byte, []int) {
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{1}
+}
+
 type UserData struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Classname       string                 `protobuf:"bytes,1,opt,name=classname,proto3" json:"classname,omitempty"`
@@ -41,7 +113,7 @@ type UserData struct {
 
 func (x *UserData) Reset() {
 	*x = UserData{}
-	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	mi := &file_mam_v1_mam_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -53,7 +125,7 @@ func (x *UserData) String() string {
 func (*UserData) ProtoMessage() {}
 
 func (x *UserData) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[0]
+	mi := &file_mam_v1_mam_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -66,7 +138,7 @@ func (x *UserData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserData.ProtoReflect.Descriptor instead.
 func (*UserData) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{0}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UserData) GetClassname() string {
@@ -162,7 +234,7 @@ type VipRequest struct {
 
 func (x *VipRequest) Reset() {
 	*x = VipRequest{}
-	mi := &file_mam_v1_mam_proto_msgTypes[1]
+	mi := &file_mam_v1_mam_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -174,7 +246,7 @@ func (x *VipRequest) String() string {
 func (*VipRequest) ProtoMessage() {}
 
 func (x *VipRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[1]
+	mi := &file_mam_v1_mam_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -187,7 +259,7 @@ func (x *VipRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VipRequest.ProtoReflect.Descriptor instead.
 func (*VipRequest) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{1}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *VipRequest) GetAmountInWeeks() int32 {
@@ -209,7 +281,7 @@ type VipResponse struct {
 
 func (x *VipResponse) Reset() {
 	*x = VipResponse{}
-	mi := &file_mam_v1_mam_proto_msgTypes[2]
+	mi := &file_mam_v1_mam_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -221,7 +293,7 @@ func (x *VipResponse) String() string {
 func (*VipResponse) ProtoMessage() {}
 
 func (x *VipResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[2]
+	mi := &file_mam_v1_mam_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -234,7 +306,7 @@ func (x *VipResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VipResponse.ProtoReflect.Descriptor instead.
 func (*VipResponse) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{2}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *VipResponse) GetSuccess() bool {
@@ -274,7 +346,7 @@ type BonusRequest struct {
 
 func (x *BonusRequest) Reset() {
 	*x = BonusRequest{}
-	mi := &file_mam_v1_mam_proto_msgTypes[3]
+	mi := &file_mam_v1_mam_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -286,7 +358,7 @@ func (x *BonusRequest) String() string {
 func (*BonusRequest) ProtoMessage() {}
 
 func (x *BonusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[3]
+	mi := &file_mam_v1_mam_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -299,7 +371,7 @@ func (x *BonusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BonusRequest.ProtoReflect.Descriptor instead.
 func (*BonusRequest) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{3}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *BonusRequest) GetAmountInGB() int32 {
@@ -326,7 +398,7 @@ type BonusResponse struct {
 
 func (x *BonusResponse) Reset() {
 	*x = BonusResponse{}
-	mi := &file_mam_v1_mam_proto_msgTypes[4]
+	mi := &file_mam_v1_mam_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -338,7 +410,7 @@ func (x *BonusResponse) String() string {
 func (*BonusResponse) ProtoMessage() {}
 
 func (x *BonusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[4]
+	mi := &file_mam_v1_mam_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -351,7 +423,7 @@ func (x *BonusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BonusResponse.ProtoReflect.Descriptor instead.
 func (*BonusResponse) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{4}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *BonusResponse) GetSuccess() bool {
@@ -430,7 +502,7 @@ type SearchResults struct {
 
 func (x *SearchResults) Reset() {
 	*x = SearchResults{}
-	mi := &file_mam_v1_mam_proto_msgTypes[5]
+	mi := &file_mam_v1_mam_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -442,7 +514,7 @@ func (x *SearchResults) String() string {
 func (*SearchResults) ProtoMessage() {}
 
 func (x *SearchResults) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[5]
+	mi := &file_mam_v1_mam_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -455,7 +527,7 @@ func (x *SearchResults) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchResults.ProtoReflect.Descriptor instead.
 func (*SearchResults) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{5}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *SearchResults) GetResults() []*SearchBook {
@@ -511,7 +583,7 @@ type SearchBook struct {
 
 func (x *SearchBook) Reset() {
 	*x = SearchBook{}
-	mi := &file_mam_v1_mam_proto_msgTypes[6]
+	mi := &file_mam_v1_mam_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -523,7 +595,7 @@ func (x *SearchBook) String() string {
 func (*SearchBook) ProtoMessage() {}
 
 func (x *SearchBook) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[6]
+	mi := &file_mam_v1_mam_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -536,7 +608,7 @@ func (x *SearchBook) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchBook.ProtoReflect.Descriptor instead.
 func (*SearchBook) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{6}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *SearchBook) GetMamId() int32 {
@@ -696,7 +768,7 @@ type Author struct {
 
 func (x *Author) Reset() {
 	*x = Author{}
-	mi := &file_mam_v1_mam_proto_msgTypes[7]
+	mi := &file_mam_v1_mam_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -708,7 +780,7 @@ func (x *Author) String() string {
 func (*Author) ProtoMessage() {}
 
 func (x *Author) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[7]
+	mi := &file_mam_v1_mam_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -721,7 +793,7 @@ func (x *Author) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Author.ProtoReflect.Descriptor instead.
 func (*Author) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{7}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Author) GetId() string {
@@ -749,7 +821,7 @@ type Series struct {
 
 func (x *Series) Reset() {
 	*x = Series{}
-	mi := &file_mam_v1_mam_proto_msgTypes[8]
+	mi := &file_mam_v1_mam_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -761,7 +833,7 @@ func (x *Series) String() string {
 func (*Series) ProtoMessage() {}
 
 func (x *Series) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[8]
+	mi := &file_mam_v1_mam_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -774,7 +846,7 @@ func (x *Series) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Series.ProtoReflect.Descriptor instead.
 func (*Series) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{8}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Series) GetId() string {
@@ -808,7 +880,7 @@ type FreeLeechInfo struct {
 
 func (x *FreeLeechInfo) Reset() {
 	*x = FreeLeechInfo{}
-	mi := &file_mam_v1_mam_proto_msgTypes[9]
+	mi := &file_mam_v1_mam_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -820,7 +892,7 @@ func (x *FreeLeechInfo) String() string {
 func (*FreeLeechInfo) ProtoMessage() {}
 
 func (x *FreeLeechInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[9]
+	mi := &file_mam_v1_mam_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -833,7 +905,7 @@ func (x *FreeLeechInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FreeLeechInfo.ProtoReflect.Descriptor instead.
 func (*FreeLeechInfo) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{9}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *FreeLeechInfo) GetType() string {
@@ -859,7 +931,7 @@ type Query struct {
 
 func (x *Query) Reset() {
 	*x = Query{}
-	mi := &file_mam_v1_mam_proto_msgTypes[10]
+	mi := &file_mam_v1_mam_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -871,7 +943,7 @@ func (x *Query) String() string {
 func (*Query) ProtoMessage() {}
 
 func (x *Query) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[10]
+	mi := &file_mam_v1_mam_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -884,7 +956,7 @@ func (x *Query) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Query.ProtoReflect.Descriptor instead.
 func (*Query) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{10}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Query) GetQuery() string {
@@ -902,7 +974,7 @@ type Empty struct {
 
 func (x *Empty) Reset() {
 	*x = Empty{}
-	mi := &file_mam_v1_mam_proto_msgTypes[11]
+	mi := &file_mam_v1_mam_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -914,7 +986,7 @@ func (x *Empty) String() string {
 func (*Empty) ProtoMessage() {}
 
 func (x *Empty) ProtoReflect() protoreflect.Message {
-	mi := &file_mam_v1_mam_proto_msgTypes[11]
+	mi := &file_mam_v1_mam_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -927,14 +999,16 @@ func (x *Empty) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Empty.ProtoReflect.Descriptor instead.
 func (*Empty) Descriptor() ([]byte, []int) {
-	return file_mam_v1_mam_proto_rawDescGZIP(), []int{11}
+	return file_mam_v1_mam_proto_rawDescGZIP(), []int{13}
 }
 
 var File_mam_v1_mam_proto protoreflect.FileDescriptor
 
 const file_mam_v1_mam_proto_rawDesc = "" +
 	"\n" +
-	"\x10mam/v1/mam.proto\x12\x06mam.v1\"\xfb\x02\n" +
+	"\x10mam/v1/mam.proto\x12\x06mam.v1\"\x13\n" +
+	"\x11IsMamSetupRequest\"\x14\n" +
+	"\x12IsMamSetupResponse\"\xfb\x02\n" +
 	"\bUserData\x12\x1c\n" +
 	"\tclassname\x18\x01 \x01(\tR\tclassname\x12!\n" +
 	"\fcountry_code\x18\x02 \x01(\tR\vcountryCode\x12!\n" +
@@ -1017,14 +1091,16 @@ const file_mam_v1_mam_proto_rawDesc = "" +
 	"\aexpires\x18\x02 \x01(\tR\aexpires\"\x1d\n" +
 	"\x05Query\x12\x14\n" +
 	"\x05query\x18\x01 \x01(\tR\x05query\"\a\n" +
-	"\x05Empty2\xd7\x01\n" +
+	"\x05Empty2\x9e\x02\n" +
 	"\n" +
 	"MamService\x12.\n" +
 	"\x06Search\x12\r.mam.v1.Query\x1a\x15.mam.v1.SearchResults\x121\n" +
 	"\x06BuyVip\x12\x12.mam.v1.VipRequest\x1a\x13.mam.v1.VipResponse\x12-\n" +
 	"\n" +
 	"GetProfile\x12\r.mam.v1.Empty\x1a\x10.mam.v1.UserData\x127\n" +
-	"\bBuyBonus\x12\x14.mam.v1.BonusRequest\x1a\x15.mam.v1.BonusResponseBx\n" +
+	"\bBuyBonus\x12\x14.mam.v1.BonusRequest\x1a\x15.mam.v1.BonusResponse\x12E\n" +
+	"\n" +
+	"IsMamSetup\x12\x19.mam.v1.IsMamSetupRequest\x1a\x1a.mam.v1.IsMamSetupResponse\"\x00Bx\n" +
 	"\n" +
 	"com.mam.v1B\bMamProtoP\x01Z'github.com/RA341/gouda/generated/mam/v1\xa2\x02\x03MXX\xaa\x02\x06Mam.V1\xca\x02\x06Mam\\V1\xe2\x02\x12Mam\\V1\\GPBMetadata\xea\x02\aMam::V1b\x06proto3"
 
@@ -1040,36 +1116,40 @@ func file_mam_v1_mam_proto_rawDescGZIP() []byte {
 	return file_mam_v1_mam_proto_rawDescData
 }
 
-var file_mam_v1_mam_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_mam_v1_mam_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_mam_v1_mam_proto_goTypes = []any{
-	(*UserData)(nil),      // 0: mam.v1.UserData
-	(*VipRequest)(nil),    // 1: mam.v1.VipRequest
-	(*VipResponse)(nil),   // 2: mam.v1.VipResponse
-	(*BonusRequest)(nil),  // 3: mam.v1.BonusRequest
-	(*BonusResponse)(nil), // 4: mam.v1.BonusResponse
-	(*SearchResults)(nil), // 5: mam.v1.SearchResults
-	(*SearchBook)(nil),    // 6: mam.v1.SearchBook
-	(*Author)(nil),        // 7: mam.v1.Author
-	(*Series)(nil),        // 8: mam.v1.Series
-	(*FreeLeechInfo)(nil), // 9: mam.v1.FreeLeechInfo
-	(*Query)(nil),         // 10: mam.v1.Query
-	(*Empty)(nil),         // 11: mam.v1.Empty
+	(*IsMamSetupRequest)(nil),  // 0: mam.v1.IsMamSetupRequest
+	(*IsMamSetupResponse)(nil), // 1: mam.v1.IsMamSetupResponse
+	(*UserData)(nil),           // 2: mam.v1.UserData
+	(*VipRequest)(nil),         // 3: mam.v1.VipRequest
+	(*VipResponse)(nil),        // 4: mam.v1.VipResponse
+	(*BonusRequest)(nil),       // 5: mam.v1.BonusRequest
+	(*BonusResponse)(nil),      // 6: mam.v1.BonusResponse
+	(*SearchResults)(nil),      // 7: mam.v1.SearchResults
+	(*SearchBook)(nil),         // 8: mam.v1.SearchBook
+	(*Author)(nil),             // 9: mam.v1.Author
+	(*Series)(nil),             // 10: mam.v1.Series
+	(*FreeLeechInfo)(nil),      // 11: mam.v1.FreeLeechInfo
+	(*Query)(nil),              // 12: mam.v1.Query
+	(*Empty)(nil),              // 13: mam.v1.Empty
 }
 var file_mam_v1_mam_proto_depIdxs = []int32{
-	6,  // 0: mam.v1.SearchResults.results:type_name -> mam.v1.SearchBook
-	7,  // 1: mam.v1.SearchBook.author:type_name -> mam.v1.Author
-	7,  // 2: mam.v1.SearchBook.narrator:type_name -> mam.v1.Author
-	8,  // 3: mam.v1.SearchBook.series:type_name -> mam.v1.Series
-	10, // 4: mam.v1.MamService.Search:input_type -> mam.v1.Query
-	1,  // 5: mam.v1.MamService.BuyVip:input_type -> mam.v1.VipRequest
-	11, // 6: mam.v1.MamService.GetProfile:input_type -> mam.v1.Empty
-	3,  // 7: mam.v1.MamService.BuyBonus:input_type -> mam.v1.BonusRequest
-	5,  // 8: mam.v1.MamService.Search:output_type -> mam.v1.SearchResults
-	2,  // 9: mam.v1.MamService.BuyVip:output_type -> mam.v1.VipResponse
-	0,  // 10: mam.v1.MamService.GetProfile:output_type -> mam.v1.UserData
-	4,  // 11: mam.v1.MamService.BuyBonus:output_type -> mam.v1.BonusResponse
-	8,  // [8:12] is the sub-list for method output_type
-	4,  // [4:8] is the sub-list for method input_type
+	8,  // 0: mam.v1.SearchResults.results:type_name -> mam.v1.SearchBook
+	9,  // 1: mam.v1.SearchBook.author:type_name -> mam.v1.Author
+	9,  // 2: mam.v1.SearchBook.narrator:type_name -> mam.v1.Author
+	10, // 3: mam.v1.SearchBook.series:type_name -> mam.v1.Series
+	12, // 4: mam.v1.MamService.Search:input_type -> mam.v1.Query
+	3,  // 5: mam.v1.MamService.BuyVip:input_type -> mam.v1.VipRequest
+	13, // 6: mam.v1.MamService.GetProfile:input_type -> mam.v1.Empty
+	5,  // 7: mam.v1.MamService.BuyBonus:input_type -> mam.v1.BonusRequest
+	0,  // 8: mam.v1.MamService.IsMamSetup:input_type -> mam.v1.IsMamSetupRequest
+	7,  // 9: mam.v1.MamService.Search:output_type -> mam.v1.SearchResults
+	4,  // 10: mam.v1.MamService.BuyVip:output_type -> mam.v1.VipResponse
+	2,  // 11: mam.v1.MamService.GetProfile:output_type -> mam.v1.UserData
+	6,  // 12: mam.v1.MamService.BuyBonus:output_type -> mam.v1.BonusResponse
+	1,  // 13: mam.v1.MamService.IsMamSetup:output_type -> mam.v1.IsMamSetupResponse
+	9,  // [9:14] is the sub-list for method output_type
+	4,  // [4:9] is the sub-list for method input_type
 	4,  // [4:4] is the sub-list for extension type_name
 	4,  // [4:4] is the sub-list for extension extendee
 	0,  // [0:4] is the sub-list for field type_name
@@ -1086,7 +1166,7 @@ func file_mam_v1_mam_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_mam_v1_mam_proto_rawDesc), len(file_mam_v1_mam_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

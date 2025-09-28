@@ -12,10 +12,212 @@
 
 import 'dart:core' as $core;
 
-import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
+class UpdateSettingsRequest extends $pb.GeneratedMessage {
+  factory UpdateSettingsRequest({
+    GoudaConfig? settings,
+  }) {
+    final result = create();
+    if (settings != null) result.settings = settings;
+    return result;
+  }
+
+  UpdateSettingsRequest._();
+
+  factory UpdateSettingsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateSettingsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateSettingsRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..aOM<GoudaConfig>(1, _omitFieldNames ? '' : 'settings',
+        subBuilder: GoudaConfig.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSettingsRequest clone() =>
+      UpdateSettingsRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSettingsRequest copyWith(
+          void Function(UpdateSettingsRequest) updates) =>
+      super.copyWith((message) => updates(message as UpdateSettingsRequest))
+          as UpdateSettingsRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateSettingsRequest create() => UpdateSettingsRequest._();
+  @$core.override
+  UpdateSettingsRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateSettingsRequest> createRepeated() =>
+      $pb.PbList<UpdateSettingsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateSettingsRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateSettingsRequest>(create);
+  static UpdateSettingsRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  GoudaConfig get settings => $_getN(0);
+  @$pb.TagNumber(1)
+  set settings(GoudaConfig value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSettings() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSettings() => $_clearField(1);
+  @$pb.TagNumber(1)
+  GoudaConfig ensureSettings() => $_ensure(0);
+}
+
+class UpdateSettingsResponse extends $pb.GeneratedMessage {
+  factory UpdateSettingsResponse() => create();
+
+  UpdateSettingsResponse._();
+
+  factory UpdateSettingsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateSettingsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateSettingsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSettingsResponse clone() =>
+      UpdateSettingsResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateSettingsResponse copyWith(
+          void Function(UpdateSettingsResponse) updates) =>
+      super.copyWith((message) => updates(message as UpdateSettingsResponse))
+          as UpdateSettingsResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateSettingsResponse create() => UpdateSettingsResponse._();
+  @$core.override
+  UpdateSettingsResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateSettingsResponse> createRepeated() =>
+      $pb.PbList<UpdateSettingsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UpdateSettingsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateSettingsResponse>(create);
+  static UpdateSettingsResponse? _defaultInstance;
+}
+
+class LoadSettingsRequest extends $pb.GeneratedMessage {
+  factory LoadSettingsRequest() => create();
+
+  LoadSettingsRequest._();
+
+  factory LoadSettingsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory LoadSettingsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LoadSettingsRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LoadSettingsRequest clone() => LoadSettingsRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LoadSettingsRequest copyWith(void Function(LoadSettingsRequest) updates) =>
+      super.copyWith((message) => updates(message as LoadSettingsRequest))
+          as LoadSettingsRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LoadSettingsRequest create() => LoadSettingsRequest._();
+  @$core.override
+  LoadSettingsRequest createEmptyInstance() => create();
+  static $pb.PbList<LoadSettingsRequest> createRepeated() =>
+      $pb.PbList<LoadSettingsRequest>();
+  @$core.pragma('dart2js:noInline')
+  static LoadSettingsRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<LoadSettingsRequest>(create);
+  static LoadSettingsRequest? _defaultInstance;
+}
+
+class LoadSettingsResponse extends $pb.GeneratedMessage {
+  factory LoadSettingsResponse({
+    GoudaConfig? settings,
+  }) {
+    final result = create();
+    if (settings != null) result.settings = settings;
+    return result;
+  }
+
+  LoadSettingsResponse._();
+
+  factory LoadSettingsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory LoadSettingsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'LoadSettingsResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..aOM<GoudaConfig>(1, _omitFieldNames ? '' : 'settings',
+        subBuilder: GoudaConfig.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LoadSettingsResponse clone() =>
+      LoadSettingsResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LoadSettingsResponse copyWith(void Function(LoadSettingsResponse) updates) =>
+      super.copyWith((message) => updates(message as LoadSettingsResponse))
+          as LoadSettingsResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LoadSettingsResponse create() => LoadSettingsResponse._();
+  @$core.override
+  LoadSettingsResponse createEmptyInstance() => create();
+  static $pb.PbList<LoadSettingsResponse> createRepeated() =>
+      $pb.PbList<LoadSettingsResponse>();
+  @$core.pragma('dart2js:noInline')
+  static LoadSettingsResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<LoadSettingsResponse>(create);
+  static LoadSettingsResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  GoudaConfig get settings => $_getN(0);
+  @$pb.TagNumber(1)
+  set settings(GoudaConfig value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSettings() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSettings() => $_clearField(1);
+  @$pb.TagNumber(1)
+  GoudaConfig ensureSettings() => $_ensure(0);
+}
 
 class UpdateMamTokenRequest extends $pb.GeneratedMessage {
   factory UpdateMamTokenRequest() => create();
@@ -347,89 +549,6 @@ class ListSupportedClientsResponse extends $pb.GeneratedMessage {
   $pb.PbList<$core.String> get clients => $_getList(0);
 }
 
-class UpdateSettingsResponse extends $pb.GeneratedMessage {
-  factory UpdateSettingsResponse() => create();
-
-  UpdateSettingsResponse._();
-
-  factory UpdateSettingsResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(data, registry);
-  factory UpdateSettingsResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateSettingsResponse',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
-      createEmptyInstance: create)
-    ..hasRequiredFields = false;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateSettingsResponse clone() =>
-      UpdateSettingsResponse()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateSettingsResponse copyWith(
-          void Function(UpdateSettingsResponse) updates) =>
-      super.copyWith((message) => updates(message as UpdateSettingsResponse))
-          as UpdateSettingsResponse;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static UpdateSettingsResponse create() => UpdateSettingsResponse._();
-  @$core.override
-  UpdateSettingsResponse createEmptyInstance() => create();
-  static $pb.PbList<UpdateSettingsResponse> createRepeated() =>
-      $pb.PbList<UpdateSettingsResponse>();
-  @$core.pragma('dart2js:noInline')
-  static UpdateSettingsResponse getDefault() => _defaultInstance ??=
-      $pb.GeneratedMessage.$_defaultFor<UpdateSettingsResponse>(create);
-  static UpdateSettingsResponse? _defaultInstance;
-}
-
-class ListSettingsResponse extends $pb.GeneratedMessage {
-  factory ListSettingsResponse() => create();
-
-  ListSettingsResponse._();
-
-  factory ListSettingsResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(data, registry);
-  factory ListSettingsResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'ListSettingsResponse',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
-      createEmptyInstance: create)
-    ..hasRequiredFields = false;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSettingsResponse clone() =>
-      ListSettingsResponse()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSettingsResponse copyWith(void Function(ListSettingsResponse) updates) =>
-      super.copyWith((message) => updates(message as ListSettingsResponse))
-          as ListSettingsResponse;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static ListSettingsResponse create() => ListSettingsResponse._();
-  @$core.override
-  ListSettingsResponse createEmptyInstance() => create();
-  static $pb.PbList<ListSettingsResponse> createRepeated() =>
-      $pb.PbList<ListSettingsResponse>();
-  @$core.pragma('dart2js:noInline')
-  static ListSettingsResponse getDefault() => _defaultInstance ??=
-      $pb.GeneratedMessage.$_defaultFor<ListSettingsResponse>(create);
-  static ListSettingsResponse? _defaultInstance;
-}
-
 /// Top-level Gouda configuration
 class GoudaConfig extends $pb.GeneratedMessage {
   factory GoudaConfig({
@@ -442,6 +561,7 @@ class GoudaConfig extends $pb.GeneratedMessage {
     Logger? log,
     Downloader? downloader,
     UserPermissions? permissions,
+    TorrentClient? torrentClient,
   }) {
     final result = create();
     if (port != null) result.port = port;
@@ -453,6 +573,7 @@ class GoudaConfig extends $pb.GeneratedMessage {
     if (log != null) result.log = log;
     if (downloader != null) result.downloader = downloader;
     if (permissions != null) result.permissions = permissions;
+    if (torrentClient != null) result.torrentClient = torrentClient;
     return result;
   }
 
@@ -481,6 +602,8 @@ class GoudaConfig extends $pb.GeneratedMessage {
         subBuilder: Downloader.create)
     ..aOM<UserPermissions>(9, _omitFieldNames ? '' : 'permissions',
         subBuilder: UserPermissions.create)
+    ..aOM<TorrentClient>(10, _omitFieldNames ? '' : 'torrentClient',
+        protoName: 'torrentClient', subBuilder: TorrentClient.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -591,6 +714,17 @@ class GoudaConfig extends $pb.GeneratedMessage {
   void clearPermissions() => $_clearField(9);
   @$pb.TagNumber(9)
   UserPermissions ensurePermissions() => $_ensure(8);
+
+  @$pb.TagNumber(10)
+  TorrentClient get torrentClient => $_getN(9);
+  @$pb.TagNumber(10)
+  set torrentClient(TorrentClient value) => $_setField(10, value);
+  @$pb.TagNumber(10)
+  $core.bool hasTorrentClient() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearTorrentClient() => $_clearField(10);
+  @$pb.TagNumber(10)
+  TorrentClient ensureTorrentClient() => $_ensure(9);
 }
 
 class Directories extends $pb.GeneratedMessage {
@@ -884,243 +1018,20 @@ class UserPermissions extends $pb.GeneratedMessage {
   void clearGid() => $_clearField(2);
 }
 
-class Settings extends $pb.GeneratedMessage {
-  factory Settings({
-    $core.String? apiKey,
-    $core.String? serverPort,
-    $fixnum.Int64? downloadCheckTimeout,
-    $core.String? completeFolder,
-    $core.String? downloadFolder,
-    $core.String? torrentsFolder,
-    $core.String? username,
-    $core.String? password,
-    $fixnum.Int64? userUid,
-    $fixnum.Int64? groupUid,
-    TorrentClient? client,
-    $core.bool? exitOnClose,
-    $core.bool? ignoreTimeout,
-    $core.bool? setupComplete,
-  }) {
-    final result = create();
-    if (apiKey != null) result.apiKey = apiKey;
-    if (serverPort != null) result.serverPort = serverPort;
-    if (downloadCheckTimeout != null)
-      result.downloadCheckTimeout = downloadCheckTimeout;
-    if (completeFolder != null) result.completeFolder = completeFolder;
-    if (downloadFolder != null) result.downloadFolder = downloadFolder;
-    if (torrentsFolder != null) result.torrentsFolder = torrentsFolder;
-    if (username != null) result.username = username;
-    if (password != null) result.password = password;
-    if (userUid != null) result.userUid = userUid;
-    if (groupUid != null) result.groupUid = groupUid;
-    if (client != null) result.client = client;
-    if (exitOnClose != null) result.exitOnClose = exitOnClose;
-    if (ignoreTimeout != null) result.ignoreTimeout = ignoreTimeout;
-    if (setupComplete != null) result.setupComplete = setupComplete;
-    return result;
-  }
-
-  Settings._();
-
-  factory Settings.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(data, registry);
-  factory Settings.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'Settings',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
-      createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'apiKey')
-    ..aOS(2, _omitFieldNames ? '' : 'serverPort')
-    ..a<$fixnum.Int64>(
-        3, _omitFieldNames ? '' : 'downloadCheckTimeout', $pb.PbFieldType.OU6,
-        defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOS(4, _omitFieldNames ? '' : 'completeFolder')
-    ..aOS(5, _omitFieldNames ? '' : 'downloadFolder')
-    ..aOS(6, _omitFieldNames ? '' : 'torrentsFolder')
-    ..aOS(7, _omitFieldNames ? '' : 'username')
-    ..aOS(8, _omitFieldNames ? '' : 'password')
-    ..a<$fixnum.Int64>(9, _omitFieldNames ? '' : 'userUid', $pb.PbFieldType.OU6,
-        defaultOrMaker: $fixnum.Int64.ZERO)
-    ..a<$fixnum.Int64>(
-        10, _omitFieldNames ? '' : 'groupUid', $pb.PbFieldType.OU6,
-        defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOM<TorrentClient>(11, _omitFieldNames ? '' : 'client',
-        subBuilder: TorrentClient.create)
-    ..aOB(12, _omitFieldNames ? '' : 'exitOnClose')
-    ..aOB(13, _omitFieldNames ? '' : 'ignoreTimeout')
-    ..aOB(14, _omitFieldNames ? '' : 'setupComplete')
-    ..hasRequiredFields = false;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  Settings clone() => Settings()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  Settings copyWith(void Function(Settings) updates) =>
-      super.copyWith((message) => updates(message as Settings)) as Settings;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static Settings create() => Settings._();
-  @$core.override
-  Settings createEmptyInstance() => create();
-  static $pb.PbList<Settings> createRepeated() => $pb.PbList<Settings>();
-  @$core.pragma('dart2js:noInline')
-  static Settings getDefault() =>
-      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Settings>(create);
-  static Settings? _defaultInstance;
-
-  /// General settings
-  @$pb.TagNumber(1)
-  $core.String get apiKey => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set apiKey($core.String value) => $_setString(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasApiKey() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearApiKey() => $_clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get serverPort => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set serverPort($core.String value) => $_setString(1, value);
-  @$pb.TagNumber(2)
-  $core.bool hasServerPort() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearServerPort() => $_clearField(2);
-
-  @$pb.TagNumber(3)
-  $fixnum.Int64 get downloadCheckTimeout => $_getI64(2);
-  @$pb.TagNumber(3)
-  set downloadCheckTimeout($fixnum.Int64 value) => $_setInt64(2, value);
-  @$pb.TagNumber(3)
-  $core.bool hasDownloadCheckTimeout() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearDownloadCheckTimeout() => $_clearField(3);
-
-  /// Folder settings
-  @$pb.TagNumber(4)
-  $core.String get completeFolder => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set completeFolder($core.String value) => $_setString(3, value);
-  @$pb.TagNumber(4)
-  $core.bool hasCompleteFolder() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearCompleteFolder() => $_clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.String get downloadFolder => $_getSZ(4);
-  @$pb.TagNumber(5)
-  set downloadFolder($core.String value) => $_setString(4, value);
-  @$pb.TagNumber(5)
-  $core.bool hasDownloadFolder() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearDownloadFolder() => $_clearField(5);
-
-  @$pb.TagNumber(6)
-  $core.String get torrentsFolder => $_getSZ(5);
-  @$pb.TagNumber(6)
-  set torrentsFolder($core.String value) => $_setString(5, value);
-  @$pb.TagNumber(6)
-  $core.bool hasTorrentsFolder() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearTorrentsFolder() => $_clearField(6);
-
-  /// User settings
-  @$pb.TagNumber(7)
-  $core.String get username => $_getSZ(6);
-  @$pb.TagNumber(7)
-  set username($core.String value) => $_setString(6, value);
-  @$pb.TagNumber(7)
-  $core.bool hasUsername() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearUsername() => $_clearField(7);
-
-  @$pb.TagNumber(8)
-  $core.String get password => $_getSZ(7);
-  @$pb.TagNumber(8)
-  set password($core.String value) => $_setString(7, value);
-  @$pb.TagNumber(8)
-  $core.bool hasPassword() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearPassword() => $_clearField(8);
-
-  @$pb.TagNumber(9)
-  $fixnum.Int64 get userUid => $_getI64(8);
-  @$pb.TagNumber(9)
-  set userUid($fixnum.Int64 value) => $_setInt64(8, value);
-  @$pb.TagNumber(9)
-  $core.bool hasUserUid() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearUserUid() => $_clearField(9);
-
-  @$pb.TagNumber(10)
-  $fixnum.Int64 get groupUid => $_getI64(9);
-  @$pb.TagNumber(10)
-  set groupUid($fixnum.Int64 value) => $_setInt64(9, value);
-  @$pb.TagNumber(10)
-  $core.bool hasGroupUid() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearGroupUid() => $_clearField(10);
-
-  /// Torrent settings
-  @$pb.TagNumber(11)
-  TorrentClient get client => $_getN(10);
-  @$pb.TagNumber(11)
-  set client(TorrentClient value) => $_setField(11, value);
-  @$pb.TagNumber(11)
-  $core.bool hasClient() => $_has(10);
-  @$pb.TagNumber(11)
-  void clearClient() => $_clearField(11);
-  @$pb.TagNumber(11)
-  TorrentClient ensureClient() => $_ensure(10);
-
-  @$pb.TagNumber(12)
-  $core.bool get exitOnClose => $_getBF(11);
-  @$pb.TagNumber(12)
-  set exitOnClose($core.bool value) => $_setBool(11, value);
-  @$pb.TagNumber(12)
-  $core.bool hasExitOnClose() => $_has(11);
-  @$pb.TagNumber(12)
-  void clearExitOnClose() => $_clearField(12);
-
-  @$pb.TagNumber(13)
-  $core.bool get ignoreTimeout => $_getBF(12);
-  @$pb.TagNumber(13)
-  set ignoreTimeout($core.bool value) => $_setBool(12, value);
-  @$pb.TagNumber(13)
-  $core.bool hasIgnoreTimeout() => $_has(12);
-  @$pb.TagNumber(13)
-  void clearIgnoreTimeout() => $_clearField(13);
-
-  @$pb.TagNumber(14)
-  $core.bool get setupComplete => $_getBF(13);
-  @$pb.TagNumber(14)
-  set setupComplete($core.bool value) => $_setBool(13, value);
-  @$pb.TagNumber(14)
-  $core.bool hasSetupComplete() => $_has(13);
-  @$pb.TagNumber(14)
-  void clearSetupComplete() => $_clearField(14);
-}
-
 class TorrentClient extends $pb.GeneratedMessage {
   factory TorrentClient({
-    $core.String? torrentHost,
-    $core.String? torrentName,
-    $core.String? torrentPassword,
-    $core.String? torrentProtocol,
-    $core.String? torrentUser,
+    $core.String? host,
+    $core.String? clientType,
+    $core.String? password,
+    $core.String? protocol,
+    $core.String? user,
   }) {
     final result = create();
-    if (torrentHost != null) result.torrentHost = torrentHost;
-    if (torrentName != null) result.torrentName = torrentName;
-    if (torrentPassword != null) result.torrentPassword = torrentPassword;
-    if (torrentProtocol != null) result.torrentProtocol = torrentProtocol;
-    if (torrentUser != null) result.torrentUser = torrentUser;
+    if (host != null) result.host = host;
+    if (clientType != null) result.clientType = clientType;
+    if (password != null) result.password = password;
+    if (protocol != null) result.protocol = protocol;
+    if (user != null) result.user = user;
     return result;
   }
 
@@ -1137,11 +1048,11 @@ class TorrentClient extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'TorrentClient',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'torrentHost')
-    ..aOS(2, _omitFieldNames ? '' : 'torrentName')
-    ..aOS(3, _omitFieldNames ? '' : 'torrentPassword')
-    ..aOS(4, _omitFieldNames ? '' : 'torrentProtocol')
-    ..aOS(5, _omitFieldNames ? '' : 'torrentUser')
+    ..aOS(1, _omitFieldNames ? '' : 'host')
+    ..aOS(2, _omitFieldNames ? '' : 'clientType', protoName: 'clientType')
+    ..aOS(3, _omitFieldNames ? '' : 'password')
+    ..aOS(4, _omitFieldNames ? '' : 'protocol')
+    ..aOS(5, _omitFieldNames ? '' : 'user')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1166,49 +1077,49 @@ class TorrentClient extends $pb.GeneratedMessage {
   static TorrentClient? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get torrentHost => $_getSZ(0);
+  $core.String get host => $_getSZ(0);
   @$pb.TagNumber(1)
-  set torrentHost($core.String value) => $_setString(0, value);
+  set host($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasTorrentHost() => $_has(0);
+  $core.bool hasHost() => $_has(0);
   @$pb.TagNumber(1)
-  void clearTorrentHost() => $_clearField(1);
+  void clearHost() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get torrentName => $_getSZ(1);
+  $core.String get clientType => $_getSZ(1);
   @$pb.TagNumber(2)
-  set torrentName($core.String value) => $_setString(1, value);
+  set clientType($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasTorrentName() => $_has(1);
+  $core.bool hasClientType() => $_has(1);
   @$pb.TagNumber(2)
-  void clearTorrentName() => $_clearField(2);
+  void clearClientType() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get torrentPassword => $_getSZ(2);
+  $core.String get password => $_getSZ(2);
   @$pb.TagNumber(3)
-  set torrentPassword($core.String value) => $_setString(2, value);
+  set password($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasTorrentPassword() => $_has(2);
+  $core.bool hasPassword() => $_has(2);
   @$pb.TagNumber(3)
-  void clearTorrentPassword() => $_clearField(3);
+  void clearPassword() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get torrentProtocol => $_getSZ(3);
+  $core.String get protocol => $_getSZ(3);
   @$pb.TagNumber(4)
-  set torrentProtocol($core.String value) => $_setString(3, value);
+  set protocol($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasTorrentProtocol() => $_has(3);
+  $core.bool hasProtocol() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTorrentProtocol() => $_clearField(4);
+  void clearProtocol() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get torrentUser => $_getSZ(4);
+  $core.String get user => $_getSZ(4);
   @$pb.TagNumber(5)
-  set torrentUser($core.String value) => $_setString(4, value);
+  set user($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasTorrentUser() => $_has(4);
+  $core.bool hasUser() => $_has(4);
   @$pb.TagNumber(5)
-  void clearTorrentUser() => $_clearField(5);
+  void clearUser() => $_clearField(5);
 }
 
 const $core.bool _omitFieldNames =

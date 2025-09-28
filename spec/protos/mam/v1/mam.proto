@@ -9,7 +9,12 @@ service MamService {
   rpc BuyVip(VipRequest) returns (VipResponse);
   rpc GetProfile(Empty) returns (UserData);
   rpc BuyBonus(BonusRequest) returns (BonusResponse);
+  rpc IsMamSetup(IsMamSetupRequest) returns (IsMamSetupResponse) {}
 }
+
+message IsMamSetupRequest {}
+
+message IsMamSetupResponse {}
 
 message UserData {
   string classname = 1;

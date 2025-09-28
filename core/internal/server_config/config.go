@@ -54,7 +54,7 @@ func LoadConf() (*GoudaConfig, error) {
 		log.Warn().Err(err).Msgf("Error loading gouda.json file")
 	}
 
-	argos.PrettyPrint(conf, GoudaEnvPrefix)
+	argos.PrettyPrint(&conf, GoudaEnvPrefix)
 	return &conf, nil
 }
 

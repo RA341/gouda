@@ -29,26 +29,27 @@ type DownloadService struct {
 	workerChan chan interface{}
 }
 
-func NewService(conf *sc.GoudaConfig, db Store, tor *sc.TorrentClient, client dc.DownloadClient) *DownloadService {
-	limit, err := conf.Downloader.GetLimit()
-	if err != nil {
-		log.Fatal().Err(err).Msg("Invalid time string")
-	}
-
-	srv := &DownloadService{
-		db:            db,
-		client:        client,
-		perms:         &conf.Permissions,
-		dirs:          &conf.Dir,
-		checkInterval: 30 * time.Second,
-		ignoreTimeout: conf.Downloader.IgnoreTimeout,
-		timout:        limit,
-		workerChan:    make(chan interface{}, 1),
-	}
-	if srv.client != nil {
-		go srv.startMonitor() // initial download check
-	}
-	return srv
+func NewService(db Store, tor *sc.TorrentClient, client dc.DownloadClient) *DownloadService {
+	// todo
+	//limit, err := conf.Downloader.GetLimit()
+	//if err != nil {
+	//	log.Fatal().Err(err).Msg("Invalid time string")
+	//}
+	//
+	//srv := &DownloadService{
+	//	db:            db,
+	//	client:        client,
+	//	perms:         &conf.Permissions,
+	//	dirs:          &conf.Dir,
+	//	checkInterval: 30 * time.Second,
+	//	ignoreTimeout: conf.Downloader.IgnoreTimeout,
+	//	timout:        limit,
+	//	workerChan:    make(chan interface{}, 1),
+	//}
+	//if srv.client != nil {
+	//	go srv.startMonitor() // initial download check
+	//}
+	return nil
 }
 
 // TestAndUpdateClient tests the client first then updates the torrent client if successful
@@ -63,11 +64,11 @@ func (d *DownloadService) TestAndUpdateClient(client *sc.TorrentClient) error {
 }
 
 func (d *DownloadService) TestClient(client *sc.TorrentClient) (dc.DownloadClient, error) {
-	newClient, err := dc.TestTorrentClient(client)
-	if err != nil {
-		return nil, fmt.Errorf("unable to connect torrent client: %v", err)
-	}
-	return newClient, nil
+	//newClient, err := dc.TestTorrentClient(client)
+	//if err != nil {
+	//	return nil, fmt.Errorf("unable to connect torrent client: %v", err)
+	//}
+	return nil, nil
 }
 
 func (d *DownloadService) DownloadMedia(media *Media) error {
@@ -295,11 +296,11 @@ func (d *DownloadService) getDownloadingMedia() (map[string]Media, error) {
 // verifyClient ensures a valid torrent client is available
 func (d *DownloadService) verifyClient() error {
 	if d.client == nil {
-		client, err := dc.InitializeTorrentClient(d.torrentCli)
-		if err != nil {
-			return fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
-		}
-		d.client = client
+		//client, err := dc.InitializeTorrentClient(d.torrentCli)
+		//if err != nil {
+		//	return fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
+		//}
+		//d.client = client
 	}
 	return nil
 }

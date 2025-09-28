@@ -1,11 +1,38 @@
 import 'package:flutter/material.dart';
 
+class LoadingSpinner extends StatelessWidget {
+  const LoadingSpinner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class ErrorDisplay extends StatelessWidget {
+  const ErrorDisplay({required this.message, super.key});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: const TextStyle(fontSize: 20),
+      ),
+    );
+  }
+}
+
 Future<void> showErrorDialog(
   BuildContext context,
   String title,
   String message, {
-      String errorMessage = '',
-    }) async {
+  String errorMessage = '',
+}) async {
   await showDialog<void>(
     context: context,
     barrierDismissible: false,

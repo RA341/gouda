@@ -32,18 +32,18 @@ class SettingsServiceClient extends $grpc.Client {
 
   SettingsServiceClient(super.channel, {super.options, super.interceptors});
 
+  $grpc.ResponseFuture<$0.LoadSettingsResponse> loadSettings(
+    $0.LoadSettingsRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$loadSettings, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.UpdateSettingsResponse> updateSettings(
-    $0.Settings request, {
+    $0.UpdateSettingsRequest request, {
     $grpc.CallOptions? options,
   }) {
     return $createUnaryCall(_$updateSettings, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.Settings> listSettings(
-    $0.ListSettingsResponse request, {
-    $grpc.CallOptions? options,
-  }) {
-    return $createUnaryCall(_$listSettings, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.GetMetadataResponse> getMetadata(
@@ -67,25 +67,18 @@ class SettingsServiceClient extends $grpc.Client {
     return $createUnaryCall(_$testClient, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.UpdateMamTokenResponse> updateMamToken(
-    $0.UpdateMamTokenRequest request, {
-    $grpc.CallOptions? options,
-  }) {
-    return $createUnaryCall(_$updateMamToken, request, options: options);
-  }
-
   // method descriptors
 
+  static final _$loadSettings =
+      $grpc.ClientMethod<$0.LoadSettingsRequest, $0.LoadSettingsResponse>(
+          '/settings.v1.SettingsService/LoadSettings',
+          ($0.LoadSettingsRequest value) => value.writeToBuffer(),
+          $0.LoadSettingsResponse.fromBuffer);
   static final _$updateSettings =
-      $grpc.ClientMethod<$0.Settings, $0.UpdateSettingsResponse>(
+      $grpc.ClientMethod<$0.UpdateSettingsRequest, $0.UpdateSettingsResponse>(
           '/settings.v1.SettingsService/UpdateSettings',
-          ($0.Settings value) => value.writeToBuffer(),
+          ($0.UpdateSettingsRequest value) => value.writeToBuffer(),
           $0.UpdateSettingsResponse.fromBuffer);
-  static final _$listSettings =
-      $grpc.ClientMethod<$0.ListSettingsResponse, $0.Settings>(
-          '/settings.v1.SettingsService/ListSettings',
-          ($0.ListSettingsResponse value) => value.writeToBuffer(),
-          $0.Settings.fromBuffer);
   static final _$getMetadata =
       $grpc.ClientMethod<$0.GetMetadataRequest, $0.GetMetadataResponse>(
           '/settings.v1.SettingsService/GetMetadata',
@@ -101,11 +94,6 @@ class SettingsServiceClient extends $grpc.Client {
           '/settings.v1.SettingsService/TestClient',
           ($0.TorrentClient value) => value.writeToBuffer(),
           $0.TestTorrentResponse.fromBuffer);
-  static final _$updateMamToken =
-      $grpc.ClientMethod<$0.UpdateMamTokenRequest, $0.UpdateMamTokenResponse>(
-          '/settings.v1.SettingsService/UpdateMamToken',
-          ($0.UpdateMamTokenRequest value) => value.writeToBuffer(),
-          $0.UpdateMamTokenResponse.fromBuffer);
 }
 
 @$pb.GrpcServiceName('settings.v1.SettingsService')
@@ -113,21 +101,24 @@ abstract class SettingsServiceBase extends $grpc.Service {
   $core.String get $name => 'settings.v1.SettingsService';
 
   SettingsServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.Settings, $0.UpdateSettingsResponse>(
+    $addMethod(
+        $grpc.ServiceMethod<$0.LoadSettingsRequest, $0.LoadSettingsResponse>(
+            'LoadSettings',
+            loadSettings_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.LoadSettingsRequest.fromBuffer(value),
+            ($0.LoadSettingsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateSettingsRequest,
+            $0.UpdateSettingsResponse>(
         'UpdateSettings',
         updateSettings_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.Settings.fromBuffer(value),
-        ($0.UpdateSettingsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ListSettingsResponse, $0.Settings>(
-        'ListSettings',
-        listSettings_Pre,
-        false,
-        false,
         ($core.List<$core.int> value) =>
-            $0.ListSettingsResponse.fromBuffer(value),
-        ($0.Settings value) => value.writeToBuffer()));
+            $0.UpdateSettingsRequest.fromBuffer(value),
+        ($0.UpdateSettingsResponse value) => value.writeToBuffer()));
     $addMethod(
         $grpc.ServiceMethod<$0.GetMetadataRequest, $0.GetMetadataResponse>(
             'GetMetadata',
@@ -153,32 +144,25 @@ abstract class SettingsServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.TorrentClient.fromBuffer(value),
         ($0.TestTorrentResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UpdateMamTokenRequest,
-            $0.UpdateMamTokenResponse>(
-        'UpdateMamToken',
-        updateMamToken_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) =>
-            $0.UpdateMamTokenRequest.fromBuffer(value),
-        ($0.UpdateMamTokenResponse value) => value.writeToBuffer()));
   }
 
+  $async.Future<$0.LoadSettingsResponse> loadSettings_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.LoadSettingsRequest> $request) async {
+    return loadSettings($call, await $request);
+  }
+
+  $async.Future<$0.LoadSettingsResponse> loadSettings(
+      $grpc.ServiceCall call, $0.LoadSettingsRequest request);
+
   $async.Future<$0.UpdateSettingsResponse> updateSettings_Pre(
-      $grpc.ServiceCall $call, $async.Future<$0.Settings> $request) async {
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UpdateSettingsRequest> $request) async {
     return updateSettings($call, await $request);
   }
 
   $async.Future<$0.UpdateSettingsResponse> updateSettings(
-      $grpc.ServiceCall call, $0.Settings request);
-
-  $async.Future<$0.Settings> listSettings_Pre($grpc.ServiceCall $call,
-      $async.Future<$0.ListSettingsResponse> $request) async {
-    return listSettings($call, await $request);
-  }
-
-  $async.Future<$0.Settings> listSettings(
-      $grpc.ServiceCall call, $0.ListSettingsResponse request);
+      $grpc.ServiceCall call, $0.UpdateSettingsRequest request);
 
   $async.Future<$0.GetMetadataResponse> getMetadata_Pre($grpc.ServiceCall $call,
       $async.Future<$0.GetMetadataRequest> $request) async {
@@ -204,13 +188,4 @@ abstract class SettingsServiceBase extends $grpc.Service {
 
   $async.Future<$0.TestTorrentResponse> testClient(
       $grpc.ServiceCall call, $0.TorrentClient request);
-
-  $async.Future<$0.UpdateMamTokenResponse> updateMamToken_Pre(
-      $grpc.ServiceCall $call,
-      $async.Future<$0.UpdateMamTokenRequest> $request) async {
-    return updateMamToken($call, await $request);
-  }
-
-  $async.Future<$0.UpdateMamTokenResponse> updateMamToken(
-      $grpc.ServiceCall call, $0.UpdateMamTokenRequest request);
 }

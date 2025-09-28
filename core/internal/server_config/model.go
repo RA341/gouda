@@ -6,7 +6,7 @@ import (
 )
 
 type GoudaConfig struct {
-	RW *sync.RWMutex `yaml:"-"`
+	RW sync.RWMutex `yaml:"-"`
 
 	Port           int             `yaml:"port" config:"flag=port,env=PORT,default=9862,usage=Port to run gouda on"`
 	AllowedOrigins string          `yaml:"allowedOrigins" config:"flag=origins,env=ORIGINS,default=*,usage=Allowed origins for the API (in CSV)"`

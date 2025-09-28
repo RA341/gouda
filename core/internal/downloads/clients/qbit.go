@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	sc "github.com/RA341/gouda/internal/server_config"
 	"github.com/RA341/gouda/pkg/magnet"
 	"github.com/hekmon/transmissionrpc/v3"
 	"resty.dev/v3"
@@ -25,21 +24,22 @@ type APIVersion struct {
 	Version string `json:"version"`
 }
 
-func NewQbitClient(client *sc.TorrentClient) (DownloadClient, error) {
-	clientStr := fmt.Sprintf("%s://%s", client.Protocol, client.Host)
-	qbit := &QbitClient{
-		BaseURL: clientStr,
-		defaultHeaders: map[string]string{
-			"Referer": fmt.Sprintf("%s://%s", client.Protocol, client.Host),
-		},
-	}
+// NewQbitClient todo
+func NewQbitClient() (DownloadClient, error) {
+	//clientStr := fmt.Sprintf("%s://%s", client.Protocol, client.Host)
+	//qbit := &QbitClient{
+	//	BaseURL: clientStr,
+	//	defaultHeaders: map[string]string{
+	//		"Referer": fmt.Sprintf("%s://%s", client.Protocol, client.Host),
+	//	},
+	//}
+	//
+	//err := qbit.login(client.User, client.Password)
+	//if err != nil {
+	//	return nil, fmt.Errorf("failed to login: %s", err)
+	//}
 
-	err := qbit.login(client.User, client.Password)
-	if err != nil {
-		return nil, fmt.Errorf("failed to login: %s", err)
-	}
-
-	return qbit, nil
+	return nil, fmt.Errorf("unimplemented qbit")
 }
 
 type QbitClient struct {

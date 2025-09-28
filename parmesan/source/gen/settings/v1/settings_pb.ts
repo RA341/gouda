@@ -10,7 +10,67 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file settings/v1/settings.proto.
  */
 export const file_settings_v1_settings: GenFile = /*@__PURE__*/
-  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiFwoVVXBkYXRlTWFtVG9rZW5SZXF1ZXN0IhgKFlVwZGF0ZU1hbVRva2VuUmVzcG9uc2UiFAoSR2V0TWV0YWRhdGFSZXF1ZXN0IhUKE1Rlc3RUb3JyZW50UmVzcG9uc2UiOgoTR2V0TWV0YWRhdGFSZXNwb25zZRIPCgd2ZXJzaW9uGAEgASgJEhIKCmJpbmFyeVR5cGUYAiABKAkiHQobTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Ii8KHExpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2USDwoHY2xpZW50cxgBIAMoCSIYChZVcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIhYKFExpc3RTZXR0aW5nc1Jlc3BvbnNlIo8CCgtHb3VkYUNvbmZpZxIMCgRwb3J0GAEgASgFEhcKD2FsbG93ZWRfb3JpZ2lucxgCIAEoCRIPCgd1aV9wYXRoGAMgASgJEgwKBGF1dGgYBCABKAgSEQoJbWFtX3Rva2VuGAUgASgJEiUKA2RpchgGIAEoCzIYLnNldHRpbmdzLnYxLkRpcmVjdG9yaWVzEiAKA2xvZxgHIAEoCzITLnNldHRpbmdzLnYxLkxvZ2dlchIrCgpkb3dubG9hZGVyGAggASgLMhcuc2V0dGluZ3MudjEuRG93bmxvYWRlchIxCgtwZXJtaXNzaW9ucxgJIAEoCzIcLnNldHRpbmdzLnYxLlVzZXJQZXJtaXNzaW9ucyJiCgtEaXJlY3RvcmllcxISCgpjb25maWdfZGlyGAEgASgJEhQKDGRvd25sb2FkX2RpchgCIAEoCRIUCgxjb21wbGV0ZV9kaXIYAyABKAkSEwoLdG9ycmVudF9kaXIYBCABKAkiKAoGTG9nZ2VyEg0KBWxldmVsGAEgASgJEg8KB3ZlcmJvc2UYAiABKAgiNQoKRG93bmxvYWRlchIPCgd0aW1lb3V0GAEgASgJEhYKDmlnbm9yZV90aW1lb3V0GAIgASgIIisKD1VzZXJQZXJtaXNzaW9ucxILCgN1aWQYASABKAUSCwoDZ2lkGAIgASgFItcCCghTZXR0aW5ncxIPCgdhcGlfa2V5GAEgASgJEhMKC3NlcnZlcl9wb3J0GAIgASgJEh4KFmRvd25sb2FkX2NoZWNrX3RpbWVvdXQYAyABKAQSFwoPY29tcGxldGVfZm9sZGVyGAQgASgJEhcKD2Rvd25sb2FkX2ZvbGRlchgFIAEoCRIXCg90b3JyZW50c19mb2xkZXIYBiABKAkSEAoIdXNlcm5hbWUYByABKAkSEAoIcGFzc3dvcmQYCCABKAkSEAoIdXNlcl91aWQYCSABKAQSEQoJZ3JvdXBfdWlkGAogASgEEioKBmNsaWVudBgLIAEoCzIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQSFQoNZXhpdF9vbl9jbG9zZRgMIAEoCBIWCg5pZ25vcmVfdGltZW91dBgNIAEoCBIWCg5zZXR1cF9jb21wbGV0ZRgOIAEoCCKFAQoNVG9ycmVudENsaWVudBIUCgx0b3JyZW50X2hvc3QYASABKAkSFAoMdG9ycmVudF9uYW1lGAIgASgJEhgKEHRvcnJlbnRfcGFzc3dvcmQYAyABKAkSGAoQdG9ycmVudF9wcm90b2NvbBgEIAEoCRIUCgx0b3JyZW50X3VzZXIYBSABKAkymwQKD1NldHRpbmdzU2VydmljZRJOCg5VcGRhdGVTZXR0aW5ncxIVLnNldHRpbmdzLnYxLlNldHRpbmdzGiMuc2V0dGluZ3MudjEuVXBkYXRlU2V0dGluZ3NSZXNwb25zZSIAEkoKDExpc3RTZXR0aW5ncxIhLnNldHRpbmdzLnYxLkxpc3RTZXR0aW5nc1Jlc3BvbnNlGhUuc2V0dGluZ3MudjEuU2V0dGluZ3MiABJSCgtHZXRNZXRhZGF0YRIfLnNldHRpbmdzLnYxLkdldE1ldGFkYXRhUmVxdWVzdBogLnNldHRpbmdzLnYxLkdldE1ldGFkYXRhUmVzcG9uc2UiABJtChRMaXN0U3VwcG9ydGVkQ2xpZW50cxIoLnNldHRpbmdzLnYxLkxpc3RTdXBwb3J0ZWRDbGllbnRzUmVxdWVzdBopLnNldHRpbmdzLnYxLkxpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2UiABJMCgpUZXN0Q2xpZW50Ehouc2V0dGluZ3MudjEuVG9ycmVudENsaWVudBogLnNldHRpbmdzLnYxLlRlc3RUb3JyZW50UmVzcG9uc2UiABJbCg5VcGRhdGVNYW1Ub2tlbhIiLnNldHRpbmdzLnYxLlVwZGF0ZU1hbVRva2VuUmVxdWVzdBojLnNldHRpbmdzLnYxLlVwZGF0ZU1hbVRva2VuUmVzcG9uc2UiAEKbAQoPY29tLnNldHRpbmdzLnYxQg1TZXR0aW5nc1Byb3RvUAFaLGdpdGh1Yi5jb20vUkEzNDEvZ291ZGEvZ2VuZXJhdGVkL3NldHRpbmdzL3YxogIDU1hYqgILU2V0dGluZ3MuVjHKAgtTZXR0aW5nc1xWMeICF1NldHRpbmdzXFYxXEdQQk1ldGFkYXRh6gIMU2V0dGluZ3M6OlYxYgZwcm90bzM");
+  fileDesc("ChpzZXR0aW5ncy92MS9zZXR0aW5ncy5wcm90bxILc2V0dGluZ3MudjEiQwoVVXBkYXRlU2V0dGluZ3NSZXF1ZXN0EioKCHNldHRpbmdzGAEgASgLMhguc2V0dGluZ3MudjEuR291ZGFDb25maWciGAoWVXBkYXRlU2V0dGluZ3NSZXNwb25zZSIVChNMb2FkU2V0dGluZ3NSZXF1ZXN0IkIKFExvYWRTZXR0aW5nc1Jlc3BvbnNlEioKCHNldHRpbmdzGAEgASgLMhguc2V0dGluZ3MudjEuR291ZGFDb25maWciFwoVVXBkYXRlTWFtVG9rZW5SZXF1ZXN0IhgKFlVwZGF0ZU1hbVRva2VuUmVzcG9uc2UiFAoSR2V0TWV0YWRhdGFSZXF1ZXN0IhUKE1Rlc3RUb3JyZW50UmVzcG9uc2UiOgoTR2V0TWV0YWRhdGFSZXNwb25zZRIPCgd2ZXJzaW9uGAEgASgJEhIKCmJpbmFyeVR5cGUYAiABKAkiHQobTGlzdFN1cHBvcnRlZENsaWVudHNSZXF1ZXN0Ii8KHExpc3RTdXBwb3J0ZWRDbGllbnRzUmVzcG9uc2USDwoHY2xpZW50cxgBIAMoCSLCAgoLR291ZGFDb25maWcSDAoEcG9ydBgBIAEoBRIXCg9hbGxvd2VkX29yaWdpbnMYAiABKAkSDwoHdWlfcGF0aBgDIAEoCRIMCgRhdXRoGAQgASgIEhEKCW1hbV90b2tlbhgFIAEoCRIlCgNkaXIYBiABKAsyGC5zZXR0aW5ncy52MS5EaXJlY3RvcmllcxIgCgNsb2cYByABKAsyEy5zZXR0aW5ncy52MS5Mb2dnZXISKwoKZG93bmxvYWRlchgIIAEoCzIXLnNldHRpbmdzLnYxLkRvd25sb2FkZXISMQoLcGVybWlzc2lvbnMYCSABKAsyHC5zZXR0aW5ncy52MS5Vc2VyUGVybWlzc2lvbnMSMQoNdG9ycmVudENsaWVudBgKIAEoCzIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQiYgoLRGlyZWN0b3JpZXMSEgoKY29uZmlnX2RpchgBIAEoCRIUCgxkb3dubG9hZF9kaXIYAiABKAkSFAoMY29tcGxldGVfZGlyGAMgASgJEhMKC3RvcnJlbnRfZGlyGAQgASgJIigKBkxvZ2dlchINCgVsZXZlbBgBIAEoCRIPCgd2ZXJib3NlGAIgASgIIjUKCkRvd25sb2FkZXISDwoHdGltZW91dBgBIAEoCRIWCg5pZ25vcmVfdGltZW91dBgCIAEoCCIrCg9Vc2VyUGVybWlzc2lvbnMSCwoDdWlkGAEgASgFEgsKA2dpZBgCIAEoBSJjCg1Ub3JyZW50Q2xpZW50EhIKCmNsaWVudFR5cGUYAiABKAkSDAoEaG9zdBgBIAEoCRIQCghwYXNzd29yZBgDIAEoCRIQCghwcm90b2NvbBgEIAEoCRIMCgR1c2VyGAUgASgJMtYDCg9TZXR0aW5nc1NlcnZpY2USVQoMTG9hZFNldHRpbmdzEiAuc2V0dGluZ3MudjEuTG9hZFNldHRpbmdzUmVxdWVzdBohLnNldHRpbmdzLnYxLkxvYWRTZXR0aW5nc1Jlc3BvbnNlIgASWwoOVXBkYXRlU2V0dGluZ3MSIi5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1JlcXVlc3QaIy5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIgASUgoLR2V0TWV0YWRhdGESHy5zZXR0aW5ncy52MS5HZXRNZXRhZGF0YVJlcXVlc3QaIC5zZXR0aW5ncy52MS5HZXRNZXRhZGF0YVJlc3BvbnNlIgASbQoUTGlzdFN1cHBvcnRlZENsaWVudHMSKC5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1JlcXVlc3QaKS5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlIgASTAoKVGVzdENsaWVudBIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQaIC5zZXR0aW5ncy52MS5UZXN0VG9ycmVudFJlc3BvbnNlIgBCmwEKD2NvbS5zZXR0aW5ncy52MUINU2V0dGluZ3NQcm90b1ABWixnaXRodWIuY29tL1JBMzQxL2dvdWRhL2dlbmVyYXRlZC9zZXR0aW5ncy92MaICA1NYWKoCC1NldHRpbmdzLlYxygILU2V0dGluZ3NcVjHiAhdTZXR0aW5nc1xWMVxHUEJNZXRhZGF0YeoCDFNldHRpbmdzOjpWMWIGcHJvdG8z");
+
+/**
+ * @generated from message settings.v1.UpdateSettingsRequest
+ */
+export type UpdateSettingsRequest = Message<"settings.v1.UpdateSettingsRequest"> & {
+  /**
+   * @generated from field: settings.v1.GoudaConfig settings = 1;
+   */
+  settings?: GoudaConfig;
+};
+
+/**
+ * Describes the message settings.v1.UpdateSettingsRequest.
+ * Use `create(UpdateSettingsRequestSchema)` to create a new message.
+ */
+export const UpdateSettingsRequestSchema: GenMessage<UpdateSettingsRequest> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 0);
+
+/**
+ * @generated from message settings.v1.UpdateSettingsResponse
+ */
+export type UpdateSettingsResponse = Message<"settings.v1.UpdateSettingsResponse"> & {
+};
+
+/**
+ * Describes the message settings.v1.UpdateSettingsResponse.
+ * Use `create(UpdateSettingsResponseSchema)` to create a new message.
+ */
+export const UpdateSettingsResponseSchema: GenMessage<UpdateSettingsResponse> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 1);
+
+/**
+ * @generated from message settings.v1.LoadSettingsRequest
+ */
+export type LoadSettingsRequest = Message<"settings.v1.LoadSettingsRequest"> & {
+};
+
+/**
+ * Describes the message settings.v1.LoadSettingsRequest.
+ * Use `create(LoadSettingsRequestSchema)` to create a new message.
+ */
+export const LoadSettingsRequestSchema: GenMessage<LoadSettingsRequest> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 2);
+
+/**
+ * @generated from message settings.v1.LoadSettingsResponse
+ */
+export type LoadSettingsResponse = Message<"settings.v1.LoadSettingsResponse"> & {
+  /**
+   * @generated from field: settings.v1.GoudaConfig settings = 1;
+   */
+  settings?: GoudaConfig;
+};
+
+/**
+ * Describes the message settings.v1.LoadSettingsResponse.
+ * Use `create(LoadSettingsResponseSchema)` to create a new message.
+ */
+export const LoadSettingsResponseSchema: GenMessage<LoadSettingsResponse> = /*@__PURE__*/
+  messageDesc(file_settings_v1_settings, 3);
 
 /**
  * @generated from message settings.v1.UpdateMamTokenRequest
@@ -23,7 +83,7 @@ export type UpdateMamTokenRequest = Message<"settings.v1.UpdateMamTokenRequest">
  * Use `create(UpdateMamTokenRequestSchema)` to create a new message.
  */
 export const UpdateMamTokenRequestSchema: GenMessage<UpdateMamTokenRequest> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 0);
+  messageDesc(file_settings_v1_settings, 4);
 
 /**
  * @generated from message settings.v1.UpdateMamTokenResponse
@@ -36,7 +96,7 @@ export type UpdateMamTokenResponse = Message<"settings.v1.UpdateMamTokenResponse
  * Use `create(UpdateMamTokenResponseSchema)` to create a new message.
  */
 export const UpdateMamTokenResponseSchema: GenMessage<UpdateMamTokenResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 1);
+  messageDesc(file_settings_v1_settings, 5);
 
 /**
  * @generated from message settings.v1.GetMetadataRequest
@@ -49,7 +109,7 @@ export type GetMetadataRequest = Message<"settings.v1.GetMetadataRequest"> & {
  * Use `create(GetMetadataRequestSchema)` to create a new message.
  */
 export const GetMetadataRequestSchema: GenMessage<GetMetadataRequest> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 2);
+  messageDesc(file_settings_v1_settings, 6);
 
 /**
  * @generated from message settings.v1.TestTorrentResponse
@@ -62,7 +122,7 @@ export type TestTorrentResponse = Message<"settings.v1.TestTorrentResponse"> & {
  * Use `create(TestTorrentResponseSchema)` to create a new message.
  */
 export const TestTorrentResponseSchema: GenMessage<TestTorrentResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 3);
+  messageDesc(file_settings_v1_settings, 7);
 
 /**
  * @generated from message settings.v1.GetMetadataResponse
@@ -84,7 +144,7 @@ export type GetMetadataResponse = Message<"settings.v1.GetMetadataResponse"> & {
  * Use `create(GetMetadataResponseSchema)` to create a new message.
  */
 export const GetMetadataResponseSchema: GenMessage<GetMetadataResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 4);
+  messageDesc(file_settings_v1_settings, 8);
 
 /**
  * @generated from message settings.v1.ListSupportedClientsRequest
@@ -97,7 +157,7 @@ export type ListSupportedClientsRequest = Message<"settings.v1.ListSupportedClie
  * Use `create(ListSupportedClientsRequestSchema)` to create a new message.
  */
 export const ListSupportedClientsRequestSchema: GenMessage<ListSupportedClientsRequest> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 5);
+  messageDesc(file_settings_v1_settings, 9);
 
 /**
  * @generated from message settings.v1.ListSupportedClientsResponse
@@ -114,33 +174,7 @@ export type ListSupportedClientsResponse = Message<"settings.v1.ListSupportedCli
  * Use `create(ListSupportedClientsResponseSchema)` to create a new message.
  */
 export const ListSupportedClientsResponseSchema: GenMessage<ListSupportedClientsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 6);
-
-/**
- * @generated from message settings.v1.UpdateSettingsResponse
- */
-export type UpdateSettingsResponse = Message<"settings.v1.UpdateSettingsResponse"> & {
-};
-
-/**
- * Describes the message settings.v1.UpdateSettingsResponse.
- * Use `create(UpdateSettingsResponseSchema)` to create a new message.
- */
-export const UpdateSettingsResponseSchema: GenMessage<UpdateSettingsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 7);
-
-/**
- * @generated from message settings.v1.ListSettingsResponse
- */
-export type ListSettingsResponse = Message<"settings.v1.ListSettingsResponse"> & {
-};
-
-/**
- * Describes the message settings.v1.ListSettingsResponse.
- * Use `create(ListSettingsResponseSchema)` to create a new message.
- */
-export const ListSettingsResponseSchema: GenMessage<ListSettingsResponse> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 8);
+  messageDesc(file_settings_v1_settings, 10);
 
 /**
  * Top-level Gouda configuration
@@ -192,6 +226,11 @@ export type GoudaConfig = Message<"settings.v1.GoudaConfig"> & {
    * @generated from field: settings.v1.UserPermissions permissions = 9;
    */
   permissions?: UserPermissions;
+
+  /**
+   * @generated from field: settings.v1.TorrentClient torrentClient = 10;
+   */
+  torrentClient?: TorrentClient;
 };
 
 /**
@@ -199,7 +238,7 @@ export type GoudaConfig = Message<"settings.v1.GoudaConfig"> & {
  * Use `create(GoudaConfigSchema)` to create a new message.
  */
 export const GoudaConfigSchema: GenMessage<GoudaConfig> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 9);
+  messageDesc(file_settings_v1_settings, 11);
 
 /**
  * @generated from message settings.v1.Directories
@@ -231,7 +270,7 @@ export type Directories = Message<"settings.v1.Directories"> & {
  * Use `create(DirectoriesSchema)` to create a new message.
  */
 export const DirectoriesSchema: GenMessage<Directories> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 10);
+  messageDesc(file_settings_v1_settings, 12);
 
 /**
  * @generated from message settings.v1.Logger
@@ -253,7 +292,7 @@ export type Logger = Message<"settings.v1.Logger"> & {
  * Use `create(LoggerSchema)` to create a new message.
  */
 export const LoggerSchema: GenMessage<Logger> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 11);
+  messageDesc(file_settings_v1_settings, 13);
 
 /**
  * @generated from message settings.v1.Downloader
@@ -275,7 +314,7 @@ export type Downloader = Message<"settings.v1.Downloader"> & {
  * Use `create(DownloaderSchema)` to create a new message.
  */
 export const DownloaderSchema: GenMessage<Downloader> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 12);
+  messageDesc(file_settings_v1_settings, 14);
 
 /**
  * @generated from message settings.v1.UserPermissions
@@ -297,126 +336,36 @@ export type UserPermissions = Message<"settings.v1.UserPermissions"> & {
  * Use `create(UserPermissionsSchema)` to create a new message.
  */
 export const UserPermissionsSchema: GenMessage<UserPermissions> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 13);
-
-/**
- * @generated from message settings.v1.Settings
- */
-export type Settings = Message<"settings.v1.Settings"> & {
-  /**
-   * General settings
-   *
-   * @generated from field: string api_key = 1;
-   */
-  apiKey: string;
-
-  /**
-   * @generated from field: string server_port = 2;
-   */
-  serverPort: string;
-
-  /**
-   * @generated from field: uint64 download_check_timeout = 3;
-   */
-  downloadCheckTimeout: bigint;
-
-  /**
-   * Folder settings
-   *
-   * @generated from field: string complete_folder = 4;
-   */
-  completeFolder: string;
-
-  /**
-   * @generated from field: string download_folder = 5;
-   */
-  downloadFolder: string;
-
-  /**
-   * @generated from field: string torrents_folder = 6;
-   */
-  torrentsFolder: string;
-
-  /**
-   * User settings
-   *
-   * @generated from field: string username = 7;
-   */
-  username: string;
-
-  /**
-   * @generated from field: string password = 8;
-   */
-  password: string;
-
-  /**
-   * @generated from field: uint64 user_uid = 9;
-   */
-  userUid: bigint;
-
-  /**
-   * @generated from field: uint64 group_uid = 10;
-   */
-  groupUid: bigint;
-
-  /**
-   * Torrent settings
-   *
-   * @generated from field: settings.v1.TorrentClient client = 11;
-   */
-  client?: TorrentClient;
-
-  /**
-   * @generated from field: bool exit_on_close = 12;
-   */
-  exitOnClose: boolean;
-
-  /**
-   * @generated from field: bool ignore_timeout = 13;
-   */
-  ignoreTimeout: boolean;
-
-  /**
-   * @generated from field: bool setup_complete = 14;
-   */
-  setupComplete: boolean;
-};
-
-/**
- * Describes the message settings.v1.Settings.
- * Use `create(SettingsSchema)` to create a new message.
- */
-export const SettingsSchema: GenMessage<Settings> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 14);
+  messageDesc(file_settings_v1_settings, 15);
 
 /**
  * @generated from message settings.v1.TorrentClient
  */
 export type TorrentClient = Message<"settings.v1.TorrentClient"> & {
   /**
-   * @generated from field: string torrent_host = 1;
+   * @generated from field: string clientType = 2;
    */
-  torrentHost: string;
+  clientType: string;
 
   /**
-   * @generated from field: string torrent_name = 2;
+   * @generated from field: string host = 1;
    */
-  torrentName: string;
+  host: string;
 
   /**
-   * @generated from field: string torrent_password = 3;
+   * @generated from field: string password = 3;
    */
-  torrentPassword: string;
+  password: string;
 
   /**
-   * @generated from field: string torrent_protocol = 4;
+   * @generated from field: string protocol = 4;
    */
-  torrentProtocol: string;
+  protocol: string;
 
   /**
-   * @generated from field: string torrent_user = 5;
+   * @generated from field: string user = 5;
    */
-  torrentUser: string;
+  user: string;
 };
 
 /**
@@ -424,27 +373,27 @@ export type TorrentClient = Message<"settings.v1.TorrentClient"> & {
  * Use `create(TorrentClientSchema)` to create a new message.
  */
 export const TorrentClientSchema: GenMessage<TorrentClient> = /*@__PURE__*/
-  messageDesc(file_settings_v1_settings, 15);
+  messageDesc(file_settings_v1_settings, 16);
 
 /**
  * @generated from service settings.v1.SettingsService
  */
 export const SettingsService: GenService<{
   /**
+   * @generated from rpc settings.v1.SettingsService.LoadSettings
+   */
+  loadSettings: {
+    methodKind: "unary";
+    input: typeof LoadSettingsRequestSchema;
+    output: typeof LoadSettingsResponseSchema;
+  },
+  /**
    * @generated from rpc settings.v1.SettingsService.UpdateSettings
    */
   updateSettings: {
     methodKind: "unary";
-    input: typeof SettingsSchema;
+    input: typeof UpdateSettingsRequestSchema;
     output: typeof UpdateSettingsResponseSchema;
-  },
-  /**
-   * @generated from rpc settings.v1.SettingsService.ListSettings
-   */
-  listSettings: {
-    methodKind: "unary";
-    input: typeof ListSettingsResponseSchema;
-    output: typeof SettingsSchema;
   },
   /**
    * @generated from rpc settings.v1.SettingsService.GetMetadata
@@ -469,14 +418,6 @@ export const SettingsService: GenService<{
     methodKind: "unary";
     input: typeof TorrentClientSchema;
     output: typeof TestTorrentResponseSchema;
-  },
-  /**
-   * @generated from rpc settings.v1.SettingsService.UpdateMamToken
-   */
-  updateMamToken: {
-    methodKind: "unary";
-    input: typeof UpdateMamTokenRequestSchema;
-    output: typeof UpdateMamTokenResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_settings_v1_settings, 0);

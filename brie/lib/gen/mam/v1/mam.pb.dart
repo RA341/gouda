@@ -17,6 +17,86 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class IsMamSetupRequest extends $pb.GeneratedMessage {
+  factory IsMamSetupRequest() => create();
+
+  IsMamSetupRequest._();
+
+  factory IsMamSetupRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IsMamSetupRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'IsMamSetupRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  IsMamSetupRequest clone() => IsMamSetupRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  IsMamSetupRequest copyWith(void Function(IsMamSetupRequest) updates) =>
+      super.copyWith((message) => updates(message as IsMamSetupRequest))
+          as IsMamSetupRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static IsMamSetupRequest create() => IsMamSetupRequest._();
+  @$core.override
+  IsMamSetupRequest createEmptyInstance() => create();
+  static $pb.PbList<IsMamSetupRequest> createRepeated() =>
+      $pb.PbList<IsMamSetupRequest>();
+  @$core.pragma('dart2js:noInline')
+  static IsMamSetupRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<IsMamSetupRequest>(create);
+  static IsMamSetupRequest? _defaultInstance;
+}
+
+class IsMamSetupResponse extends $pb.GeneratedMessage {
+  factory IsMamSetupResponse() => create();
+
+  IsMamSetupResponse._();
+
+  factory IsMamSetupResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IsMamSetupResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'IsMamSetupResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  IsMamSetupResponse clone() => IsMamSetupResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  IsMamSetupResponse copyWith(void Function(IsMamSetupResponse) updates) =>
+      super.copyWith((message) => updates(message as IsMamSetupResponse))
+          as IsMamSetupResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static IsMamSetupResponse create() => IsMamSetupResponse._();
+  @$core.override
+  IsMamSetupResponse createEmptyInstance() => create();
+  static $pb.PbList<IsMamSetupResponse> createRepeated() =>
+      $pb.PbList<IsMamSetupResponse>();
+  @$core.pragma('dart2js:noInline')
+  static IsMamSetupResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<IsMamSetupResponse>(create);
+  static IsMamSetupResponse? _defaultInstance;
+}
+
 class UserData extends $pb.GeneratedMessage {
   factory UserData({
     $core.String? classname,

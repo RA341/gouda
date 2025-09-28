@@ -5,15 +5,26 @@ package settings.v1;
 option go_package = "github.com/RA341/gouda/generated/settings/v1";
 
 service SettingsService {
-  rpc UpdateSettings(Settings) returns (UpdateSettingsResponse) {}
-  rpc ListSettings(ListSettingsResponse) returns (Settings) {}
+  rpc LoadSettings(LoadSettingsRequest) returns (LoadSettingsResponse) {}
+  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {}
 
   rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
 
   rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
   rpc TestClient(TorrentClient) returns (TestTorrentResponse) {}
+}
 
-  rpc UpdateMamToken(UpdateMamTokenRequest) returns (UpdateMamTokenResponse) {}
+message UpdateSettingsRequest {
+  GoudaConfig settings = 1;
+}
+
+message UpdateSettingsResponse {
+}
+
+message LoadSettingsRequest {}
+
+message LoadSettingsResponse {
+  GoudaConfig settings = 1;
 }
 
 message UpdateMamTokenRequest {}
@@ -35,10 +46,6 @@ message ListSupportedClientsResponse {
   repeated string clients = 1;
 }
 
-message UpdateSettingsResponse {}
-
-message ListSettingsResponse {}
-
 // Top-level Gouda configuration
 message GoudaConfig {
   int32 port = 1;
@@ -50,6 +57,7 @@ message GoudaConfig {
   Logger log = 7;
   Downloader downloader = 8;
   UserPermissions permissions = 9;
+  TorrentClient torrentClient = 10;
 }
 
 message Directories {
@@ -75,35 +83,10 @@ message UserPermissions {
 }
 
 
-message Settings {
-  // General settings
-  string api_key = 1;
-  string server_port = 2;
-  uint64 download_check_timeout = 3;
-
-  // Folder settings
-  string complete_folder = 4;
-  string download_folder = 5;
-  string torrents_folder = 6;
-
-  // User settings
-  string username = 7;
-  string password = 8;
-  uint64 user_uid = 9;
-  uint64 group_uid = 10;
-
-  // Torrent settings
-  TorrentClient client = 11;
-
-  bool exit_on_close = 12;
-  bool ignore_timeout = 13;
-  bool setup_complete = 14;
-}
-
 message TorrentClient {
-  string torrent_host = 1;
-  string torrent_name = 2;
-  string torrent_password = 3;
-  string torrent_protocol = 4;
-  string torrent_user = 5;
+  string clientType = 2;
+  string host = 1;
+  string password = 3;
+  string protocol = 4;
+  string user = 5;
 }

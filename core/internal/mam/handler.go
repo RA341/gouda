@@ -13,6 +13,14 @@ type Handler struct {
 	srv *Service
 }
 
+func (h *Handler) IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error) {
+	if h.srv.provider() == "" {
+		return nil, fmt.Errorf("mam key not set")
+	}
+
+	return connect.NewResponse(&v1.IsMamSetupResponse{}), nil
+}
+
 func NewHandler(srv *Service) *Handler {
 	return &Handler{srv: srv}
 }

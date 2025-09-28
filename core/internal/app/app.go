@@ -8,15 +8,16 @@ import (
 	authrpc "github.com/RA341/gouda/generated/auth/v1/v1connect"
 	categoryrpc "github.com/RA341/gouda/generated/category/v1/v1connect"
 	mamrpc "github.com/RA341/gouda/generated/mam/v1/v1connect"
+	settingsrpc "github.com/RA341/gouda/generated/settings/v1/v1connect"
 	userrpc "github.com/RA341/gouda/generated/user/v1/v1connect"
-	"github.com/RA341/gouda/internal/server_config"
+	sc "github.com/RA341/gouda/internal/server_config"
 	"github.com/RA341/gouda/internal/user"
 
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/RA341/gouda/internal/category"
 	"github.com/RA341/gouda/internal/database"
 	"github.com/RA341/gouda/internal/mam"
-	media "github.com/RA341/gouda/internal/media_manager"
+	//media "github.com/RA341/gouda/internal/media_manager"
 	"github.com/rs/zerolog/log"
 )
 
@@ -24,13 +25,13 @@ type App struct {
 	categorySrv *category.Service
 	mamSrv      *mam.Service
 	//downloadSrv *downloads.DownloadService
-	mediaSrv *media.MediaManagerService
-	authSrv  *auth.Service
-	conf     *server_config.GoudaConfig
+	authSrv    *auth.Service
+	conf       *sc.GoudaConfig
+	settingSrv *sc.Service
 }
 
-func NewApp(conf *server_config.GoudaConfig) *App {
-	db, err := database.NewDBService(server_config.GoudaConfigDir)
+func NewApp(conf *sc.GoudaConfig) *App {
+	db, err := database.NewDBService(sc.GoudaConfigDir)
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to connect to database")
 	}
@@ -43,6 +44,14 @@ func NewApp(conf *server_config.GoudaConfig) *App {
 	mamSrv := mam.NewService(func() string {
 		return conf.MamToken
 	})
+
+	settingSrv := sc.NewService(conf,
+		mam.NewMamValidator,
+		func(client *sc.TorrentClient) error {
+			log.Error().Msg("Torrent client validator is unimplemented; implement me dum-dum")
+			return nil
+		},
+	)
 	//downloadSrv := downloads.NewService(conf, db, &conf.TorrentClient, client)
 	//mediaSrv := media.NewService(db, downloadSrv, mamSrv)
 
@@ -50,6 +59,7 @@ func NewApp(conf *server_config.GoudaConfig) *App {
 		categorySrv: catSrv,
 		mamSrv:      mamSrv,
 		authSrv:     authSrv,
+		settingSrv:  settingSrv,
 		conf:        conf,
 		//downloadSrv: downloadSrv,
 		//mediaSrv:    mediaSrv,
@@ -95,9 +105,12 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 		//	return a.registerHttpHandler("/api/mam", mam.NewHttpHandler(a.mamSrv))
 		//},
 		// settings
-		//func() (string, http.Handler) {
-		//	return settingsrpc.NewSettingsServiceHandler(settings.NewSettingsHandler(a.downloadSrv), globalInterceptor)
-		//},
+		func() (string, http.Handler) {
+			return settingsrpc.NewSettingsServiceHandler(
+				sc.NewSettingsHandler(a.settingSrv),
+				globalInterceptor,
+			)
+		},
 		// media requests
 		//func() (string, http.Handler) {
 		//	return mediarpc.NewMediaRequestServiceHandler(media.NewMediaManagerHandler(a.mediaSrv), globalInterceptor)
@@ -124,7 +137,7 @@ func (a *App) registerHttpHandler(basePath string, subMux http.Handler) (string,
 	return basePath, baseHandler
 }
 
-//func initDownloadClient(conf *server_config.TorrentClient) clients.DownloadClient {
+//func initDownloadClient(conf *sc.TorrentClient) clients.DownloadClient {
 //	// load torrent client if previously exists
 //	if conf.ClientType == "" && !info.IsDev() {
 //		log.Fatal().Msg("client type is required")
