@@ -37,6 +37,8 @@ const (
 	MamServiceSearchProcedure = "/mam.v1.MamService/Search"
 	// MamServiceBuyVipProcedure is the fully-qualified name of the MamService's BuyVip RPC.
 	MamServiceBuyVipProcedure = "/mam.v1.MamService/BuyVip"
+	// MamServiceGetThumbnailProcedure is the fully-qualified name of the MamService's GetThumbnail RPC.
+	MamServiceGetThumbnailProcedure = "/mam.v1.MamService/GetThumbnail"
 	// MamServiceGetProfileProcedure is the fully-qualified name of the MamService's GetProfile RPC.
 	MamServiceGetProfileProcedure = "/mam.v1.MamService/GetProfile"
 	// MamServiceBuyBonusProcedure is the fully-qualified name of the MamService's BuyBonus RPC.
@@ -49,6 +51,7 @@ const (
 type MamServiceClient interface {
 	Search(context.Context, *connect.Request[v1.Query]) (*connect.Response[v1.SearchResults], error)
 	BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error)
+	GetThumbnail(context.Context, *connect.Request[v1.GetThumbnailRequest]) (*connect.Response[v1.GetThumbnailResponse], error)
 	GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error)
 	BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error)
 	IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error)
@@ -77,6 +80,12 @@ func NewMamServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...
 			connect.WithSchema(mamServiceMethods.ByName("BuyVip")),
 			connect.WithClientOptions(opts...),
 		),
+		getThumbnail: connect.NewClient[v1.GetThumbnailRequest, v1.GetThumbnailResponse](
+			httpClient,
+			baseURL+MamServiceGetThumbnailProcedure,
+			connect.WithSchema(mamServiceMethods.ByName("GetThumbnail")),
+			connect.WithClientOptions(opts...),
+		),
 		getProfile: connect.NewClient[v1.Empty, v1.UserData](
 			httpClient,
 			baseURL+MamServiceGetProfileProcedure,
@@ -100,11 +109,12 @@ func NewMamServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...
 
 // mamServiceClient implements MamServiceClient.
 type mamServiceClient struct {
-	search     *connect.Client[v1.Query, v1.SearchResults]
-	buyVip     *connect.Client[v1.VipRequest, v1.VipResponse]
-	getProfile *connect.Client[v1.Empty, v1.UserData]
-	buyBonus   *connect.Client[v1.BonusRequest, v1.BonusResponse]
-	isMamSetup *connect.Client[v1.IsMamSetupRequest, v1.IsMamSetupResponse]
+	search       *connect.Client[v1.Query, v1.SearchResults]
+	buyVip       *connect.Client[v1.VipRequest, v1.VipResponse]
+	getThumbnail *connect.Client[v1.GetThumbnailRequest, v1.GetThumbnailResponse]
+	getProfile   *connect.Client[v1.Empty, v1.UserData]
+	buyBonus     *connect.Client[v1.BonusRequest, v1.BonusResponse]
+	isMamSetup   *connect.Client[v1.IsMamSetupRequest, v1.IsMamSetupResponse]
 }
 
 // Search calls mam.v1.MamService.Search.
@@ -115,6 +125,11 @@ func (c *mamServiceClient) Search(ctx context.Context, req *connect.Request[v1.Q
 // BuyVip calls mam.v1.MamService.BuyVip.
 func (c *mamServiceClient) BuyVip(ctx context.Context, req *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error) {
 	return c.buyVip.CallUnary(ctx, req)
+}
+
+// GetThumbnail calls mam.v1.MamService.GetThumbnail.
+func (c *mamServiceClient) GetThumbnail(ctx context.Context, req *connect.Request[v1.GetThumbnailRequest]) (*connect.Response[v1.GetThumbnailResponse], error) {
+	return c.getThumbnail.CallUnary(ctx, req)
 }
 
 // GetProfile calls mam.v1.MamService.GetProfile.
@@ -136,6 +151,7 @@ func (c *mamServiceClient) IsMamSetup(ctx context.Context, req *connect.Request[
 type MamServiceHandler interface {
 	Search(context.Context, *connect.Request[v1.Query]) (*connect.Response[v1.SearchResults], error)
 	BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error)
+	GetThumbnail(context.Context, *connect.Request[v1.GetThumbnailRequest]) (*connect.Response[v1.GetThumbnailResponse], error)
 	GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error)
 	BuyBonus(context.Context, *connect.Request[v1.BonusRequest]) (*connect.Response[v1.BonusResponse], error)
 	IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error)
@@ -158,6 +174,12 @@ func NewMamServiceHandler(svc MamServiceHandler, opts ...connect.HandlerOption) 
 		MamServiceBuyVipProcedure,
 		svc.BuyVip,
 		connect.WithSchema(mamServiceMethods.ByName("BuyVip")),
+		connect.WithHandlerOptions(opts...),
+	)
+	mamServiceGetThumbnailHandler := connect.NewUnaryHandler(
+		MamServiceGetThumbnailProcedure,
+		svc.GetThumbnail,
+		connect.WithSchema(mamServiceMethods.ByName("GetThumbnail")),
 		connect.WithHandlerOptions(opts...),
 	)
 	mamServiceGetProfileHandler := connect.NewUnaryHandler(
@@ -184,6 +206,8 @@ func NewMamServiceHandler(svc MamServiceHandler, opts ...connect.HandlerOption) 
 			mamServiceSearchHandler.ServeHTTP(w, r)
 		case MamServiceBuyVipProcedure:
 			mamServiceBuyVipHandler.ServeHTTP(w, r)
+		case MamServiceGetThumbnailProcedure:
+			mamServiceGetThumbnailHandler.ServeHTTP(w, r)
 		case MamServiceGetProfileProcedure:
 			mamServiceGetProfileHandler.ServeHTTP(w, r)
 		case MamServiceBuyBonusProcedure:
@@ -205,6 +229,10 @@ func (UnimplementedMamServiceHandler) Search(context.Context, *connect.Request[v
 
 func (UnimplementedMamServiceHandler) BuyVip(context.Context, *connect.Request[v1.VipRequest]) (*connect.Response[v1.VipResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("mam.v1.MamService.BuyVip is not implemented"))
+}
+
+func (UnimplementedMamServiceHandler) GetThumbnail(context.Context, *connect.Request[v1.GetThumbnailRequest]) (*connect.Response[v1.GetThumbnailResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("mam.v1.MamService.GetThumbnail is not implemented"))
 }
 
 func (UnimplementedMamServiceHandler) GetProfile(context.Context, *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error) {

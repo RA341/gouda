@@ -46,6 +46,13 @@ class MamServiceClient extends $grpc.Client {
     return $createUnaryCall(_$buyVip, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.GetThumbnailResponse> getThumbnail(
+    $0.GetThumbnailRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$getThumbnail, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.UserData> getProfile(
     $0.Empty request, {
     $grpc.CallOptions? options,
@@ -77,6 +84,11 @@ class MamServiceClient extends $grpc.Client {
       '/mam.v1.MamService/BuyVip',
       ($0.VipRequest value) => value.writeToBuffer(),
       $0.VipResponse.fromBuffer);
+  static final _$getThumbnail =
+      $grpc.ClientMethod<$0.GetThumbnailRequest, $0.GetThumbnailResponse>(
+          '/mam.v1.MamService/GetThumbnail',
+          ($0.GetThumbnailRequest value) => value.writeToBuffer(),
+          $0.GetThumbnailResponse.fromBuffer);
   static final _$getProfile = $grpc.ClientMethod<$0.Empty, $0.UserData>(
       '/mam.v1.MamService/GetProfile',
       ($0.Empty value) => value.writeToBuffer(),
@@ -112,6 +124,15 @@ abstract class MamServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.VipRequest.fromBuffer(value),
         ($0.VipResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.GetThumbnailRequest, $0.GetThumbnailResponse>(
+            'GetThumbnail',
+            getThumbnail_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.GetThumbnailRequest.fromBuffer(value),
+            ($0.GetThumbnailResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.UserData>(
         'GetProfile',
         getProfile_Pre,
@@ -150,6 +171,15 @@ abstract class MamServiceBase extends $grpc.Service {
 
   $async.Future<$0.VipResponse> buyVip(
       $grpc.ServiceCall call, $0.VipRequest request);
+
+  $async.Future<$0.GetThumbnailResponse> getThumbnail_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.GetThumbnailRequest> $request) async {
+    return getThumbnail($call, await $request);
+  }
+
+  $async.Future<$0.GetThumbnailResponse> getThumbnail(
+      $grpc.ServiceCall call, $0.GetThumbnailRequest request);
 
   $async.Future<$0.UserData> getProfile_Pre(
       $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {

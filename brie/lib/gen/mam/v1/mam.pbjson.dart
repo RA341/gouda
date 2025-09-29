@@ -14,6 +14,30 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use getThumbnailRequestDescriptor instead')
+const GetThumbnailRequest$json = {
+  '1': 'GetThumbnailRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `GetThumbnailRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getThumbnailRequestDescriptor = $convert
+    .base64Decode('ChNHZXRUaHVtYm5haWxSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZA==');
+
+@$core.Deprecated('Use getThumbnailResponseDescriptor instead')
+const GetThumbnailResponse$json = {
+  '1': 'GetThumbnailResponse',
+  '2': [
+    {'1': 'imageData', '3': 2, '4': 1, '5': 12, '10': 'imageData'},
+  ],
+};
+
+/// Descriptor for `GetThumbnailResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getThumbnailResponseDescriptor = $convert.base64Decode(
+    'ChRHZXRUaHVtYm5haWxSZXNwb25zZRIcCglpbWFnZURhdGEYAiABKAxSCWltYWdlRGF0YQ==');
+
 @$core.Deprecated('Use isMamSetupRequestDescriptor instead')
 const IsMamSetupRequest$json = {
   '1': 'IsMamSetupRequest',

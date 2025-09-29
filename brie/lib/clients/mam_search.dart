@@ -70,6 +70,8 @@ enum SearchInField {
 
 // Main search query builder class
 class MamSearchQuery {
+  MamSearchQuery();
+
   // Core search parameters
   String? text;
   List<SearchInField> searchInFields = [];
@@ -100,8 +102,6 @@ class MamSearchQuery {
   bool showBookmarks = false;
   bool showThumbnail = false;
   String browseFlagsHideVsShow = '0';
-
-  MamSearchQuery();
 
   // Fluent builder methods
   MamSearchQuery withText(String searchText) {

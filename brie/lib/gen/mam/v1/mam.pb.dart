@@ -17,6 +17,121 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
+class GetThumbnailRequest extends $pb.GeneratedMessage {
+  factory GetThumbnailRequest({
+    $core.String? id,
+  }) {
+    final result = create();
+    if (id != null) result.id = id;
+    return result;
+  }
+
+  GetThumbnailRequest._();
+
+  factory GetThumbnailRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetThumbnailRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetThumbnailRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetThumbnailRequest clone() => GetThumbnailRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetThumbnailRequest copyWith(void Function(GetThumbnailRequest) updates) =>
+      super.copyWith((message) => updates(message as GetThumbnailRequest))
+          as GetThumbnailRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetThumbnailRequest create() => GetThumbnailRequest._();
+  @$core.override
+  GetThumbnailRequest createEmptyInstance() => create();
+  static $pb.PbList<GetThumbnailRequest> createRepeated() =>
+      $pb.PbList<GetThumbnailRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetThumbnailRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetThumbnailRequest>(create);
+  static GetThumbnailRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+}
+
+class GetThumbnailResponse extends $pb.GeneratedMessage {
+  factory GetThumbnailResponse({
+    $core.List<$core.int>? imageData,
+  }) {
+    final result = create();
+    if (imageData != null) result.imageData = imageData;
+    return result;
+  }
+
+  GetThumbnailResponse._();
+
+  factory GetThumbnailResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetThumbnailResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'GetThumbnailResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'mam.v1'),
+      createEmptyInstance: create)
+    ..a<$core.List<$core.int>>(
+        2, _omitFieldNames ? '' : 'imageData', $pb.PbFieldType.OY,
+        protoName: 'imageData')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetThumbnailResponse clone() =>
+      GetThumbnailResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetThumbnailResponse copyWith(void Function(GetThumbnailResponse) updates) =>
+      super.copyWith((message) => updates(message as GetThumbnailResponse))
+          as GetThumbnailResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetThumbnailResponse create() => GetThumbnailResponse._();
+  @$core.override
+  GetThumbnailResponse createEmptyInstance() => create();
+  static $pb.PbList<GetThumbnailResponse> createRepeated() =>
+      $pb.PbList<GetThumbnailResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetThumbnailResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<GetThumbnailResponse>(create);
+  static GetThumbnailResponse? _defaultInstance;
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get imageData => $_getN(0);
+  @$pb.TagNumber(2)
+  set imageData($core.List<$core.int> value) => $_setBytes(0, value);
+  @$pb.TagNumber(2)
+  $core.bool hasImageData() => $_has(0);
+  @$pb.TagNumber(2)
+  void clearImageData() => $_clearField(2);
+}
+
 class IsMamSetupRequest extends $pb.GeneratedMessage {
   factory IsMamSetupRequest() => create();
 

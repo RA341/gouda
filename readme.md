@@ -2,15 +2,22 @@
 
 > [!Important]
 > Project status:
-> Well, well, well... look who decided to dust off this repository after months! Finally getting around to this project after months of procrastination; this baby is getting a complete makeover.
+> Overhaul in progress
 >
-> **What's brewing:**
+> Check Progress [here](#overhaul-progress)
+>
+> Well, well, well... look who decided to dust off this repository after months! Finally getting around to this project
+> after months of procrastination; this baby is getting a complete makeover.
+>
+> > **What's brewing:**
 > - Direct download functionality (no need for the extension, you can also download with wedges)
 > - Overseer-like request system so your family can also get their books
-> - Enhanced architecture and performance improvements (translation: I'm fixing all the "TODO: refactor this mess" comments)
+> - Improved architecture and performance improvements (translation: I'm fixing all the "TODO: refactor this mess"
+    comments)
 > - Mobile App !!!
 >
-> The current version works perfectly fine, so feel free to use it while I'm busy working through this overhaul!, but dont expect any bug fixes/features.
+> The current version works perfectly fine, so feel free to use it while I'm busy working through this overhaul!,
+> but dont expect any bug fixes/features.
 
 A lightweight download automation tool for MyAnonaMouse users, offering a simpler alternative
 to [Readarr](https://github.com/Readarr/Readarr).
@@ -18,8 +25,37 @@ to [Readarr](https://github.com/Readarr/Readarr).
 Most of the features offered by readarr are overkill for me. I just want to download my media without monitoring the
 entire authors' collection.
 
-So I made this, the key difference is that Gouda is designed to be used from within myanonamouse site, without leaving it.
+So I made this, the key difference is that Gouda is designed to be used from within myanonamouse site, without leaving
+it.
 Hence, it is intended to work with the [extension](parmesan).
+
+## Overhaul progress
+
+Documents the overhaul progress and tasks
+
+if you have any ideas you would like to add modify this section and open a PR
+
+- [ ] Add direct download functionality
+    - [x] Support downloads without the extension
+    - [x] Support wedge-based downloads
+    - [ ] Add support in client
+
+- [ ] Mam search
+    - [x] Basic Search
+    - [ ] Advanced filtering and sorting
+    - [ ] Wedge usage Recommendation similar to mam ratio protect
+
+- [ ] Mam admin tasks
+    - [ ] Auto buy ratio
+    - [ ] Auto buy wedges
+    - [ ] Auto IP updates
+
+- [ ] Settings
+    - [ ] File picker file paths
+
+- [ ] Book Request System
+
+---
 
 ## Getting Started
 
@@ -27,7 +63,8 @@ Gouda is best used with Docker. For platforms where Docker isn't an option, nati
 
 ### Docker
 
-Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will need to setup your download client correctly
+Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will need to setup your download client
+correctly
 
 * On Linux:
     ```bash
@@ -40,6 +77,7 @@ Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will 
     ```
 
 ### Docs
+
 For configuration options, usage examples, and detailed explanations, refer to the [docs](https://gouda.radn.dev).
 
 ## How it Works

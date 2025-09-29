@@ -1,15 +1,21 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:brie/clients/mam_search.dart';
 import 'package:brie/gen/mam/v1/mam.pbgrpc.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grpc/grpc.dart';
 
 final mamApiProvider = Provider<MamServiceClient>((ref) {
   final channel = ref.watch(grpcChannelProvider);
   final authInterceptor = ref.watch(authInterceptorProvider);
 
-  final client = MamServiceClient(channel, interceptors: [authInterceptor]);
+  final client = MamServiceClient(
+    channel,
+    interceptors: [authInterceptor],
+    options: CallOptions(timeout: const Duration(seconds: 5)),
+  );
   return client;
 });
 
@@ -18,7 +24,7 @@ final mamProfileProvider = FutureProvider<UserData>((ref) async {
   return mam.getProfile(Empty());
 });
 
-final mamBooksSearchNotifier =
+final mamBooksSearchProvider =
     AsyncNotifierProvider<MamBooksSearchNotifier, List<SearchBook>>(() {
       return MamBooksSearchNotifier();
     });
@@ -30,27 +36,23 @@ class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
 
   MamSearchQuery query = MamSearchQuery().resultsPerPage(20).startAt(0);
 
-  // .includeThumbnail();
-
   @override
   Future<List<SearchBook>> build() async {
     return search();
   }
 
   Future<List<SearchBook>> search() async {
-    // todo
-    // final mam = ref.watch(mamApiProvider);
-    // if ((query.text ?? '').isEmpty) {
-    //   return [];
-    // }
-    //
-    // final q = jsonEncode(query.toJson());
-    // final results = await mam.search(q);
-    //
-    // found = results.found;
-    // total = results.total;
-    // return results.results;
-    return [];
+    final mam = ref.watch(mamApiProvider);
+    if ((query.text ?? '').isEmpty) {
+      return [];
+    }
+
+    final q = jsonEncode(query.toJson());
+    final results = await mam.search(Query(query: q));
+
+    found = results.found;
+    total = results.total;
+    return results.results;
   }
 
   Future<void> paginateForward() async {

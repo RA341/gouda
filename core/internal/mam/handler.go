@@ -13,16 +13,16 @@ type Handler struct {
 	srv *Service
 }
 
+func NewHandler(srv *Service) *Handler {
+	return &Handler{srv: srv}
+}
+
 func (h *Handler) IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error) {
 	if h.srv.provider() == "" {
 		return nil, fmt.Errorf("mam key not set")
 	}
 
 	return connect.NewResponse(&v1.IsMamSetupResponse{}), nil
-}
-
-func NewHandler(srv *Service) *Handler {
-	return &Handler{srv: srv}
 }
 
 func (h *Handler) Search(_ context.Context, req *connect.Request[v1.Query]) (*connect.Response[v1.SearchResults], error) {
@@ -47,6 +47,15 @@ func (h *Handler) Search(_ context.Context, req *connect.Request[v1.Query]) (*co
 		Found:   int32(onPage),
 		Total:   int32(found),
 	}), nil
+}
+
+func (h *Handler) GetThumbnail(_ context.Context, req *connect.Request[v1.GetThumbnailRequest]) (*connect.Response[v1.GetThumbnailResponse], error) {
+	thumbnail, err := h.srv.getThumbnail(req.Msg.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return connect.NewResponse(&v1.GetThumbnailResponse{ImageData: thumbnail}), nil
 }
 
 func (h *Handler) GetProfile(_ context.Context, _ *connect.Request[v1.Empty]) (*connect.Response[v1.UserData], error) {

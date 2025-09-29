@@ -7,9 +7,19 @@ option go_package = "github.com/RA341/gouda/generated/mam/v1";
 service MamService {
   rpc Search(Query) returns (SearchResults);
   rpc BuyVip(VipRequest) returns (VipResponse);
+  rpc GetThumbnail(GetThumbnailRequest) returns (GetThumbnailResponse) {}
+
   rpc GetProfile(Empty) returns (UserData);
   rpc BuyBonus(BonusRequest) returns (BonusResponse);
   rpc IsMamSetup(IsMamSetupRequest) returns (IsMamSetupResponse) {}
+}
+
+message GetThumbnailRequest {
+  string id = 1;
+}
+
+message GetThumbnailResponse {
+  bytes imageData = 2;
 }
 
 message IsMamSetupRequest {}
