@@ -2,8 +2,12 @@ package server_config
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 
 	v1 "github.com/RA341/gouda/generated/settings/v1"
+	"github.com/rs/zerolog/log"
 )
 
 // todo separate logic from handler
@@ -36,7 +40,63 @@ func (s *Service) loadConfigToRPC() *v1.GoudaConfig {
 	return ToProto(s.conf)
 }
 
-func (s *Service) saveConfigFromRPC(rpcConfig *v1.GoudaConfig) error {
+func (s *Service) updateMam(mamToken string) error {
+	s.conf.RW.RLock()
+	defer s.conf.RW.RUnlock()
+
+	err := s.mamValidator(mamToken)
+	if err != nil {
+		return err
+	}
+
+	s.conf.MamToken = mamToken
+
+	return s.conf.DumpToYaml()
+}
+
+func (s *Service) updateTorrentClient(client *TorrentClient) error {
+	s.conf.RW.RLock()
+	defer s.conf.RW.RUnlock()
+
+	err := s.clientValidator(client)
+	if err != nil {
+		return err
+	}
+
+	s.conf.TorrentClient = *client
+
+	return s.conf.DumpToYaml()
+}
+
+func (s *Service) listDir(workingDir string) (folders []string, files []string, err error) {
+	workingDir = strings.TrimRight(workingDir, "/")
+	workingDir, err = filepath.Abs(workingDir)
+	if err != nil {
+		return nil, nil, fmt.Errorf("unable to get absloute path: %w", err)
+	}
+
+	dir, err := os.ReadDir(workingDir)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for _, file := range dir {
+		path := workingDir + "/" + file.Name()
+		path = filepath.ToSlash(path)
+
+		if file.IsDir() {
+			folders = append(folders, path)
+		} else {
+			files = append(files, path)
+		}
+	}
+
+	log.Debug().Strs("files", files).Strs("fddd", folders).Msg("folders")
+
+	return folders, files, err
+}
+
+func (s *Service) saveConfigWithValidation(rpcConfig *v1.GoudaConfig) error {
 	s.conf.RW.Lock()
 	defer s.conf.RW.Unlock()
 
@@ -45,7 +105,26 @@ func (s *Service) saveConfigFromRPC(rpcConfig *v1.GoudaConfig) error {
 		return fmt.Errorf("error validating mam token: %v", err)
 	}
 
-	err = s.clientValidator(TorrentClientFromRpc(rpcConfig))
+	err = s.clientValidator(TorrentClientFromRpc(rpcConfig.TorrentClient))
+	if err != nil {
+		return fmt.Errorf("error validating torrent client: %v", err)
+	}
+
+	FromProto(rpcConfig, s.conf)
+
+	return s.conf.DumpToYaml()
+}
+
+func (s *Service) saveConfig(rpcConfig *v1.GoudaConfig) error {
+	s.conf.RW.Lock()
+	defer s.conf.RW.Unlock()
+
+	err := s.mamValidator(rpcConfig.MamToken)
+	if err != nil {
+		return fmt.Errorf("error validating mam token: %v", err)
+	}
+
+	err = s.clientValidator(TorrentClientFromRpc(rpcConfig.TorrentClient))
 	if err != nil {
 		return fmt.Errorf("error validating torrent client: %v", err)
 	}
@@ -128,16 +207,16 @@ func FromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
 	}
 
 	if pb.TorrentClient != nil {
-		conf.TorrentClient = *TorrentClientFromRpc(pb)
+		conf.TorrentClient = *TorrentClientFromRpc(pb.TorrentClient)
 	}
 }
 
-func TorrentClientFromRpc(pb *v1.GoudaConfig) *TorrentClient {
+func TorrentClientFromRpc(client *v1.TorrentClient) *TorrentClient {
 	return &TorrentClient{
-		ClientType: pb.TorrentClient.ClientType,
-		Protocol:   pb.TorrentClient.Protocol,
-		Host:       pb.TorrentClient.Host,
-		User:       pb.TorrentClient.User,
-		Password:   pb.TorrentClient.Password,
+		ClientType: client.ClientType,
+		Protocol:   client.Protocol,
+		Host:       client.Host,
+		User:       client.User,
+		Password:   client.Password,
 	}
 }

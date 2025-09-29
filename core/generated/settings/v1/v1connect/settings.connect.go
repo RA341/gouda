@@ -39,6 +39,18 @@ const (
 	// SettingsServiceUpdateSettingsProcedure is the fully-qualified name of the SettingsService's
 	// UpdateSettings RPC.
 	SettingsServiceUpdateSettingsProcedure = "/settings.v1.SettingsService/UpdateSettings"
+	// SettingsServiceUpdateMamSettingsProcedure is the fully-qualified name of the SettingsService's
+	// UpdateMamSettings RPC.
+	SettingsServiceUpdateMamSettingsProcedure = "/settings.v1.SettingsService/UpdateMamSettings"
+	// SettingsServiceUpdateTorrentClientProcedure is the fully-qualified name of the SettingsService's
+	// UpdateTorrentClient RPC.
+	SettingsServiceUpdateTorrentClientProcedure = "/settings.v1.SettingsService/UpdateTorrentClient"
+	// SettingsServiceUpdateFolderPathsProcedure is the fully-qualified name of the SettingsService's
+	// UpdateFolderPaths RPC.
+	SettingsServiceUpdateFolderPathsProcedure = "/settings.v1.SettingsService/UpdateFolderPaths"
+	// SettingsServiceListDirectoriesProcedure is the fully-qualified name of the SettingsService's
+	// ListDirectories RPC.
+	SettingsServiceListDirectoriesProcedure = "/settings.v1.SettingsService/ListDirectories"
 	// SettingsServiceGetMetadataProcedure is the fully-qualified name of the SettingsService's
 	// GetMetadata RPC.
 	SettingsServiceGetMetadataProcedure = "/settings.v1.SettingsService/GetMetadata"
@@ -54,6 +66,10 @@ const (
 type SettingsServiceClient interface {
 	LoadSettings(context.Context, *connect.Request[v1.LoadSettingsRequest]) (*connect.Response[v1.LoadSettingsResponse], error)
 	UpdateSettings(context.Context, *connect.Request[v1.UpdateSettingsRequest]) (*connect.Response[v1.UpdateSettingsResponse], error)
+	UpdateMamSettings(context.Context, *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error)
+	UpdateTorrentClient(context.Context, *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error)
+	UpdateFolderPaths(context.Context, *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error)
+	ListDirectories(context.Context, *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error)
 	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
@@ -82,6 +98,30 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(settingsServiceMethods.ByName("UpdateSettings")),
 			connect.WithClientOptions(opts...),
 		),
+		updateMamSettings: connect.NewClient[v1.UpdateMamSettingsRequest, v1.UpdateMamSettingsResponse](
+			httpClient,
+			baseURL+SettingsServiceUpdateMamSettingsProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateMamSettings")),
+			connect.WithClientOptions(opts...),
+		),
+		updateTorrentClient: connect.NewClient[v1.UpdateTorrentClientRequest, v1.UpdateTorrentClientResponse](
+			httpClient,
+			baseURL+SettingsServiceUpdateTorrentClientProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateTorrentClient")),
+			connect.WithClientOptions(opts...),
+		),
+		updateFolderPaths: connect.NewClient[v1.UpdateFolderPathsRequest, v1.UpdateFolderPathsResponse](
+			httpClient,
+			baseURL+SettingsServiceUpdateFolderPathsProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateFolderPaths")),
+			connect.WithClientOptions(opts...),
+		),
+		listDirectories: connect.NewClient[v1.ListDirectoriesRequest, v1.ListDirectoriesResponse](
+			httpClient,
+			baseURL+SettingsServiceListDirectoriesProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("ListDirectories")),
+			connect.WithClientOptions(opts...),
+		),
 		getMetadata: connect.NewClient[v1.GetMetadataRequest, v1.GetMetadataResponse](
 			httpClient,
 			baseURL+SettingsServiceGetMetadataProcedure,
@@ -107,6 +147,10 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 type settingsServiceClient struct {
 	loadSettings         *connect.Client[v1.LoadSettingsRequest, v1.LoadSettingsResponse]
 	updateSettings       *connect.Client[v1.UpdateSettingsRequest, v1.UpdateSettingsResponse]
+	updateMamSettings    *connect.Client[v1.UpdateMamSettingsRequest, v1.UpdateMamSettingsResponse]
+	updateTorrentClient  *connect.Client[v1.UpdateTorrentClientRequest, v1.UpdateTorrentClientResponse]
+	updateFolderPaths    *connect.Client[v1.UpdateFolderPathsRequest, v1.UpdateFolderPathsResponse]
+	listDirectories      *connect.Client[v1.ListDirectoriesRequest, v1.ListDirectoriesResponse]
 	getMetadata          *connect.Client[v1.GetMetadataRequest, v1.GetMetadataResponse]
 	listSupportedClients *connect.Client[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse]
 	testClient           *connect.Client[v1.TorrentClient, v1.TestTorrentResponse]
@@ -120,6 +164,26 @@ func (c *settingsServiceClient) LoadSettings(ctx context.Context, req *connect.R
 // UpdateSettings calls settings.v1.SettingsService.UpdateSettings.
 func (c *settingsServiceClient) UpdateSettings(ctx context.Context, req *connect.Request[v1.UpdateSettingsRequest]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	return c.updateSettings.CallUnary(ctx, req)
+}
+
+// UpdateMamSettings calls settings.v1.SettingsService.UpdateMamSettings.
+func (c *settingsServiceClient) UpdateMamSettings(ctx context.Context, req *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error) {
+	return c.updateMamSettings.CallUnary(ctx, req)
+}
+
+// UpdateTorrentClient calls settings.v1.SettingsService.UpdateTorrentClient.
+func (c *settingsServiceClient) UpdateTorrentClient(ctx context.Context, req *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error) {
+	return c.updateTorrentClient.CallUnary(ctx, req)
+}
+
+// UpdateFolderPaths calls settings.v1.SettingsService.UpdateFolderPaths.
+func (c *settingsServiceClient) UpdateFolderPaths(ctx context.Context, req *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error) {
+	return c.updateFolderPaths.CallUnary(ctx, req)
+}
+
+// ListDirectories calls settings.v1.SettingsService.ListDirectories.
+func (c *settingsServiceClient) ListDirectories(ctx context.Context, req *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error) {
+	return c.listDirectories.CallUnary(ctx, req)
 }
 
 // GetMetadata calls settings.v1.SettingsService.GetMetadata.
@@ -141,6 +205,10 @@ func (c *settingsServiceClient) TestClient(ctx context.Context, req *connect.Req
 type SettingsServiceHandler interface {
 	LoadSettings(context.Context, *connect.Request[v1.LoadSettingsRequest]) (*connect.Response[v1.LoadSettingsResponse], error)
 	UpdateSettings(context.Context, *connect.Request[v1.UpdateSettingsRequest]) (*connect.Response[v1.UpdateSettingsResponse], error)
+	UpdateMamSettings(context.Context, *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error)
+	UpdateTorrentClient(context.Context, *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error)
+	UpdateFolderPaths(context.Context, *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error)
+	ListDirectories(context.Context, *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error)
 	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
@@ -163,6 +231,30 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		SettingsServiceUpdateSettingsProcedure,
 		svc.UpdateSettings,
 		connect.WithSchema(settingsServiceMethods.ByName("UpdateSettings")),
+		connect.WithHandlerOptions(opts...),
+	)
+	settingsServiceUpdateMamSettingsHandler := connect.NewUnaryHandler(
+		SettingsServiceUpdateMamSettingsProcedure,
+		svc.UpdateMamSettings,
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateMamSettings")),
+		connect.WithHandlerOptions(opts...),
+	)
+	settingsServiceUpdateTorrentClientHandler := connect.NewUnaryHandler(
+		SettingsServiceUpdateTorrentClientProcedure,
+		svc.UpdateTorrentClient,
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateTorrentClient")),
+		connect.WithHandlerOptions(opts...),
+	)
+	settingsServiceUpdateFolderPathsHandler := connect.NewUnaryHandler(
+		SettingsServiceUpdateFolderPathsProcedure,
+		svc.UpdateFolderPaths,
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateFolderPaths")),
+		connect.WithHandlerOptions(opts...),
+	)
+	settingsServiceListDirectoriesHandler := connect.NewUnaryHandler(
+		SettingsServiceListDirectoriesProcedure,
+		svc.ListDirectories,
+		connect.WithSchema(settingsServiceMethods.ByName("ListDirectories")),
 		connect.WithHandlerOptions(opts...),
 	)
 	settingsServiceGetMetadataHandler := connect.NewUnaryHandler(
@@ -189,6 +281,14 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 			settingsServiceLoadSettingsHandler.ServeHTTP(w, r)
 		case SettingsServiceUpdateSettingsProcedure:
 			settingsServiceUpdateSettingsHandler.ServeHTTP(w, r)
+		case SettingsServiceUpdateMamSettingsProcedure:
+			settingsServiceUpdateMamSettingsHandler.ServeHTTP(w, r)
+		case SettingsServiceUpdateTorrentClientProcedure:
+			settingsServiceUpdateTorrentClientHandler.ServeHTTP(w, r)
+		case SettingsServiceUpdateFolderPathsProcedure:
+			settingsServiceUpdateFolderPathsHandler.ServeHTTP(w, r)
+		case SettingsServiceListDirectoriesProcedure:
+			settingsServiceListDirectoriesHandler.ServeHTTP(w, r)
 		case SettingsServiceGetMetadataProcedure:
 			settingsServiceGetMetadataHandler.ServeHTTP(w, r)
 		case SettingsServiceListSupportedClientsProcedure:
@@ -210,6 +310,22 @@ func (UnimplementedSettingsServiceHandler) LoadSettings(context.Context, *connec
 
 func (UnimplementedSettingsServiceHandler) UpdateSettings(context.Context, *connect.Request[v1.UpdateSettingsRequest]) (*connect.Response[v1.UpdateSettingsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateSettings is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) UpdateMamSettings(context.Context, *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateMamSettings is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) UpdateTorrentClient(context.Context, *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateTorrentClient is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) UpdateFolderPaths(context.Context, *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateFolderPaths is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) ListDirectories(context.Context, *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListDirectories is not implemented"))
 }
 
 func (UnimplementedSettingsServiceHandler) GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {

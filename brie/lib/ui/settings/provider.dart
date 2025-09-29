@@ -2,11 +2,12 @@ import 'package:brie/clients/settings_api.dart';
 import 'package:brie/clients/user_api.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TabIndexNotifier extends Notifier<int> {
   @override
-  int build() => 0;
+  int build() => kDebugMode ? 2 : 0;
 
   void set(int newIndex) => state = newIndex;
 }
@@ -32,6 +33,19 @@ class ServerConfigNotifier extends AsyncNotifier<GoudaConfig> {
   }
 
   Future<void> saveConfig() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await ref
+          .watch(settingsApiProvider)
+          .updateSettings(UpdateSettingsRequest(settings: state.value));
+
+      return fetchConfig();
+    });
+  }
+
+  Future<void> updateFolderConfig(UserPermissions perms,
+      Directories dirs,) async {
+    // todo
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await ref

@@ -2,57 +2,82 @@ import 'package:brie/ui/layout/layout_page.dart';
 import 'package:brie/ui/settings/model.dart';
 import 'package:brie/ui/settings/provider.dart';
 import 'package:brie/ui/settings/tab_account.dart';
+import 'package:brie/ui/settings/tab_files.dart';
 import 'package:brie/ui/settings/tab_mam.dart';
 import 'package:brie/ui/settings/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+final settingsPageConfigProviderProvider =
+FutureProvider<List<SettingsPageConfig>>((ref) async {
+  final isAdmin = await ref.watch(isAdminProvider.future);
+
+  final allSettings = <SettingsPageConfig>[
+    SettingsPageConfig(
+      title: 'Account',
+      iconData: Icons.account_circle,
+      child: const TabAccount(),
+    ),
+  ];
+
+  if (isAdmin) {
+    final adminPages = [
+      SettingsPageConfig(
+        title: 'Mam',
+        iconData: Icons.mouse,
+        child: const ServerSettingsView(child: TabMam()),
+        buttons: [
+          IconLabelButton(
+            onTap: () async {
+              await ref.read(serverConfigProvider.notifier).saveConfig();
+            },
+            label: "Save",
+            icon: Icons.save,
+            isRefreshing: ref
+                .watch(serverConfigProvider)
+                .isLoading,
+          ),
+        ],
+      ),
+      SettingsPageConfig(
+        title: 'Files',
+        iconData: Icons.folder_copy,
+        child: const ServerSettingsView(child: TabFiles()),
+        buttons: [
+          IconLabelButton(
+            onTap: () async {
+              await ref.read(serverConfigProvider.notifier).saveConfig();
+            },
+            label: "Save",
+            icon: Icons.save,
+            isRefreshing: ref
+                .watch(serverConfigProvider)
+                .isLoading,
+          ),
+        ],
+      ),
+    ];
+
+    allSettings.addAll(adminPages);
+  }
+
+  return allSettings;
+});
+
 class SettingsView extends ConsumerWidget {
   const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adminCheck = ref.watch(isAdminProvider);
+    final pages = ref.watch(settingsPageConfigProviderProvider);
 
     return Center(
-      child: adminCheck.when(
-        data: (isAdmin) {
-          final allSettings = <SettingsPageConfig>[
-            SettingsPageConfig(
-              title: 'Account',
-              iconData: Icons.account_circle,
-              child: const TabAccount(),
-            ),
-          ];
-
-          if (isAdmin) {
-            final adminPages = [
-              SettingsPageConfig(
-                title: 'Mam',
-                iconData: Icons.mouse,
-                child: const ServerSettingsView(child: TabMam()),
-                buttons: [
-                  IconLabelButton(
-                    onTap: () async {
-                      await ref
-                          .read(serverConfigProvider.notifier)
-                          .saveConfig();
-                    },
-                    label: "Save",
-                    icon: Icons.save,
-                    isRefreshing: ref.watch(serverConfigProvider).isLoading,
-                  ),
-                ],
-              ),
-            ];
-
-            allSettings.addAll(adminPages);
-          }
-
+      child: pages.when(
+        data: (configs) {
           return isMobileView(context)
-              ? SettingsCoreMobile(pages: allSettings)
-              : SettingsCoreDesktop(pages: allSettings);
+              ? SettingsCoreMobile(pages: configs)
+              : SettingsCoreDesktop(pages: configs);
         },
         error: (error, stackTrace) => Text('Error $error'),
         loading: CircularProgressIndicator.new,

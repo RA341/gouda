@@ -46,6 +46,34 @@ class SettingsServiceClient extends $grpc.Client {
     return $createUnaryCall(_$updateSettings, request, options: options);
   }
 
+  $grpc.ResponseFuture<$0.UpdateMamSettingsResponse> updateMamSettings(
+      $0.UpdateMamSettingsRequest request, {
+        $grpc.CallOptions? options,
+      }) {
+    return $createUnaryCall(_$updateMamSettings, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.UpdateTorrentClientResponse> updateTorrentClient(
+      $0.UpdateTorrentClientRequest request, {
+        $grpc.CallOptions? options,
+      }) {
+    return $createUnaryCall(_$updateTorrentClient, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.UpdateFolderPathsResponse> updateFolderPaths(
+      $0.UpdateFolderPathsRequest request, {
+        $grpc.CallOptions? options,
+      }) {
+    return $createUnaryCall(_$updateFolderPaths, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ListDirectoriesResponse> listDirectories(
+      $0.ListDirectoriesRequest request, {
+        $grpc.CallOptions? options,
+      }) {
+    return $createUnaryCall(_$listDirectories, request, options: options);
+  }
+
   $grpc.ResponseFuture<$0.GetMetadataResponse> getMetadata(
     $0.GetMetadataRequest request, {
     $grpc.CallOptions? options,
@@ -79,6 +107,29 @@ class SettingsServiceClient extends $grpc.Client {
           '/settings.v1.SettingsService/UpdateSettings',
           ($0.UpdateSettingsRequest value) => value.writeToBuffer(),
           $0.UpdateSettingsResponse.fromBuffer);
+  static final _$updateMamSettings = $grpc.ClientMethod<
+      $0.UpdateMamSettingsRequest,
+      $0.UpdateMamSettingsResponse>(
+      '/settings.v1.SettingsService/UpdateMamSettings',
+          ($0.UpdateMamSettingsRequest value) => value.writeToBuffer(),
+      $0.UpdateMamSettingsResponse.fromBuffer);
+  static final _$updateTorrentClient = $grpc.ClientMethod<
+      $0.UpdateTorrentClientRequest,
+      $0.UpdateTorrentClientResponse>(
+      '/settings.v1.SettingsService/UpdateTorrentClient',
+          ($0.UpdateTorrentClientRequest value) => value.writeToBuffer(),
+      $0.UpdateTorrentClientResponse.fromBuffer);
+  static final _$updateFolderPaths = $grpc.ClientMethod<
+      $0.UpdateFolderPathsRequest,
+      $0.UpdateFolderPathsResponse>(
+      '/settings.v1.SettingsService/UpdateFolderPaths',
+          ($0.UpdateFolderPathsRequest value) => value.writeToBuffer(),
+      $0.UpdateFolderPathsResponse.fromBuffer);
+  static final _$listDirectories =
+  $grpc.ClientMethod<$0.ListDirectoriesRequest, $0.ListDirectoriesResponse>(
+      '/settings.v1.SettingsService/ListDirectories',
+          ($0.ListDirectoriesRequest value) => value.writeToBuffer(),
+      $0.ListDirectoriesResponse.fromBuffer);
   static final _$getMetadata =
       $grpc.ClientMethod<$0.GetMetadataRequest, $0.GetMetadataResponse>(
           '/settings.v1.SettingsService/GetMetadata',
@@ -119,6 +170,42 @@ abstract class SettingsServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.UpdateSettingsRequest.fromBuffer(value),
         ($0.UpdateSettingsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateMamSettingsRequest,
+        $0.UpdateMamSettingsResponse>(
+        'UpdateMamSettings',
+        updateMamSettings_Pre,
+        false,
+        false,
+            ($core.List<$core.int> value) =>
+            $0.UpdateMamSettingsRequest.fromBuffer(value),
+            ($0.UpdateMamSettingsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateTorrentClientRequest,
+        $0.UpdateTorrentClientResponse>(
+        'UpdateTorrentClient',
+        updateTorrentClient_Pre,
+        false,
+        false,
+            ($core.List<$core.int> value) =>
+            $0.UpdateTorrentClientRequest.fromBuffer(value),
+            ($0.UpdateTorrentClientResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UpdateFolderPathsRequest,
+        $0.UpdateFolderPathsResponse>(
+        'UpdateFolderPaths',
+        updateFolderPaths_Pre,
+        false,
+        false,
+            ($core.List<$core.int> value) =>
+            $0.UpdateFolderPathsRequest.fromBuffer(value),
+            ($0.UpdateFolderPathsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ListDirectoriesRequest,
+        $0.ListDirectoriesResponse>(
+        'ListDirectories',
+        listDirectories_Pre,
+        false,
+        false,
+            ($core.List<$core.int> value) =>
+            $0.ListDirectoriesRequest.fromBuffer(value),
+            ($0.ListDirectoriesResponse value) => value.writeToBuffer()));
     $addMethod(
         $grpc.ServiceMethod<$0.GetMetadataRequest, $0.GetMetadataResponse>(
             'GetMetadata',
@@ -163,6 +250,42 @@ abstract class SettingsServiceBase extends $grpc.Service {
 
   $async.Future<$0.UpdateSettingsResponse> updateSettings(
       $grpc.ServiceCall call, $0.UpdateSettingsRequest request);
+
+  $async.Future<$0.UpdateMamSettingsResponse> updateMamSettings_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UpdateMamSettingsRequest> $request) async {
+    return updateMamSettings($call, await $request);
+  }
+
+  $async.Future<$0.UpdateMamSettingsResponse> updateMamSettings(
+      $grpc.ServiceCall call, $0.UpdateMamSettingsRequest request);
+
+  $async.Future<$0.UpdateTorrentClientResponse> updateTorrentClient_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UpdateTorrentClientRequest> $request) async {
+    return updateTorrentClient($call, await $request);
+  }
+
+  $async.Future<$0.UpdateTorrentClientResponse> updateTorrentClient(
+      $grpc.ServiceCall call, $0.UpdateTorrentClientRequest request);
+
+  $async.Future<$0.UpdateFolderPathsResponse> updateFolderPaths_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.UpdateFolderPathsRequest> $request) async {
+    return updateFolderPaths($call, await $request);
+  }
+
+  $async.Future<$0.UpdateFolderPathsResponse> updateFolderPaths(
+      $grpc.ServiceCall call, $0.UpdateFolderPathsRequest request);
+
+  $async.Future<$0.ListDirectoriesResponse> listDirectories_Pre(
+      $grpc.ServiceCall $call,
+      $async.Future<$0.ListDirectoriesRequest> $request) async {
+    return listDirectories($call, await $request);
+  }
+
+  $async.Future<$0.ListDirectoriesResponse> listDirectories(
+      $grpc.ServiceCall call, $0.ListDirectoriesRequest request);
 
   $async.Future<$0.GetMetadataResponse> getMetadata_Pre($grpc.ServiceCall $call,
       $async.Future<$0.GetMetadataRequest> $request) async {

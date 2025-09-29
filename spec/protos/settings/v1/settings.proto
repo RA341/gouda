@@ -8,11 +8,48 @@ service SettingsService {
   rpc LoadSettings(LoadSettingsRequest) returns (LoadSettingsResponse) {}
   rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {}
 
+  rpc UpdateMamSettings(UpdateMamSettingsRequest) returns (UpdateMamSettingsResponse) {}
+  rpc UpdateTorrentClient(UpdateTorrentClientRequest) returns (UpdateTorrentClientResponse) {}
+  rpc UpdateFolderPaths(UpdateFolderPathsRequest) returns (UpdateFolderPathsResponse) {}
+
+  rpc ListDirectories(ListDirectoriesRequest) returns (ListDirectoriesResponse) {}
+
+
   rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
 
   rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
   rpc TestClient(TorrentClient) returns (TestTorrentResponse) {}
 }
+
+
+message ListDirectoriesRequest {
+  string filePath = 1;
+}
+
+message ListDirectoriesResponse {
+  repeated string folders = 1;
+  repeated string files = 2;
+}
+
+message UpdateFolderPathsRequest {
+  Directories dirs = 1;
+  UserPermissions perms = 2;
+}
+
+message UpdateFolderPathsResponse {}
+
+message UpdateMamSettingsRequest {
+  string mamToken = 1;
+}
+
+message UpdateMamSettingsResponse {}
+
+message UpdateTorrentClientRequest {
+  TorrentClient client = 1;
+  Downloader downloader = 2;
+}
+
+message UpdateTorrentClientResponse {}
 
 message UpdateSettingsRequest {
   GoudaConfig settings = 1;
@@ -61,10 +98,9 @@ message GoudaConfig {
 }
 
 message Directories {
-  string config_dir = 1;
-  string download_dir = 2;
-  string complete_dir = 3;
-  string torrent_dir = 4;
+  string downloadDir = 2;
+  string completeDir = 3;
+  string torrentDir = 4;
 }
 
 message Logger {
@@ -81,7 +117,6 @@ message UserPermissions {
   int32 uid = 1;
   int32 gid = 2;
 }
-
 
 message TorrentClient {
   string clientType = 2;
