@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:brie/clients/auth_api.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 class LoginView extends HookConsumerWidget {
   const LoginView({super.key});
@@ -21,9 +23,9 @@ class LoginView extends HookConsumerWidget {
 
     final baseUrl = kDebugMode
         ? (kIsWeb || !Platform.isAndroid)
-        ? Env.baseUrl
-    // android emu has a different address
-        : Env.androidUrl
+              ? Env.baseUrl
+              // android emu has a different address
+              : Env.androidUrl
         : Env.baseUrl;
 
     final baseurl = useTextEditingController(
@@ -91,6 +93,7 @@ class LoginView extends HookConsumerWidget {
                         TextField(
                           autofillHints: const [AutofillHints.password],
                           controller: pass,
+                          obscureText: true,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Password',
@@ -117,6 +120,7 @@ class LoginView extends HookConsumerWidget {
                         pass.text,
                       );
 
+                      if (!context.mounted) return;
                       isLoading.value = false;
                     },
                     child: const Text('Submit'),
@@ -129,25 +133,47 @@ class LoginView extends HookConsumerWidget {
     );
   }
 
-  Future<void> handleLogin(BuildContext context,
-      WidgetRef ref,
-      String baseurl,
-      String username,
-      String password,) async {
-    final localSettings = ref.read(
-      appSettingsProvider.notifier,
-    );
+  Future<void> handleLogin(
+    BuildContext context,
+    WidgetRef ref,
+    String initialUrl,
+    String username,
+    String password,
+  ) async {
+    if (initialUrl.isEmpty) {
+      await showErrorDialog(
+        context,
+        'Empty Server Address',
+        "Enter the server address",
+      );
+      return;
+    }
+
+    var baseurl = initialUrl;
+
+    if (!kIsWeb) {
+      final (result, candidates) = await inferServerUrl(baseurl);
+      if (result == null) {
+        logger.i("urls $candidates");
+        await showErrorDialog(
+          context,
+          'Unable to find Gouda server',
+          "Check your address\nTried the following urls:\n${candidates.join("\n")}",
+        );
+        return;
+      }
+
+      baseurl = result;
+    }
+
+    final localSettings = ref.read(appSettingsProvider.notifier);
     await localSettings.updateBasePath(baseurl);
 
     final (session, err) = await runGrpcRequest(
-          () =>
-          ref
-              .read(authApiProvider)
-              .login(
-            LoginRequest(
-              username: username,
-              password: password,
-            ),
+      () => ref
+          .read(authApiProvider)
+          .login(
+            LoginRequest(username: username, password: password),
           ),
     );
 
@@ -163,4 +189,121 @@ class LoginView extends HookConsumerWidget {
       refreshToken: session.session.refreshToken,
     );
   }
+}
+
+/// infer the server URL based on the provided incomplete URL.
+Future<(String?, List<String>)> inferServerUrl(String url) async {
+  final candidates = generateUrlCandidates(url);
+
+  for (final url in candidates) {
+    if (await makeHeadRequest(url)) {
+      return (url, <String>[]);
+    }
+  }
+
+  return (null, candidates);
+}
+
+/// Makes a HEAD request to the specified URL
+/// Returns the response headers and status code
+/// Checks if a server exists by making a HEAD request
+/// Returns true if the server responds (regardless of status code)
+/// Returns false only if the server is unreachable (network error, timeout, etc.)
+Future<bool> makeHeadRequest(String url) async {
+  try {
+    final uri = Uri.parse(url);
+    await http.head(uri).timeout(const Duration(seconds: 1));
+    return true; // Server responded, even if 404 or other status
+  } catch (e) {
+    // Only return false for actual connection errors
+    if (e is SocketException ||
+        e is http.ClientException ||
+        e is TimeoutException) {
+      return false;
+    }
+    // For other errors, still consider server as existing
+    return true;
+  }
+}
+
+/// generate URL candidates based on the input URL.
+List<String> generateUrlCandidates(
+  String initialInput, {
+  String defaultHttpsPort = "9862",
+  String defaultHttpPort = "9862",
+}) {
+  var input = initialInput;
+
+  if (input.endsWith('/')) {
+    input = input.substring(0, input.length - 1);
+  }
+
+  final result = parseUrl(input);
+
+  if (result == null) return [];
+
+  final (scheme, host, port, path) = result;
+
+  final protoCandidates = <String>[];
+  final supportedProtos = <String>['https:', 'http:'];
+
+  if (scheme.isNotEmpty) {
+    protoCandidates.add('$scheme//$host');
+  } else {
+    // The user did not declare a protocol
+    for (final proto in supportedProtos) {
+      protoCandidates.add('$proto//$host');
+    }
+  }
+
+  final finalCandidates = <String>[];
+
+  if (port.isNotEmpty) {
+    for (final candidate in protoCandidates) {
+      finalCandidates.add('$candidate:$port$path');
+    }
+  } else {
+    // The port wasn't declared, so use default Jellyfin and protocol ports
+
+    for (final finalUrl in protoCandidates) {
+      // add url without port
+      finalCandidates.add('$finalUrl$path');
+
+      if (finalUrl.startsWith('https')) {
+        finalCandidates.add('$finalUrl:$defaultHttpsPort$path');
+      } else if (finalUrl.startsWith('http')) {
+        finalCandidates.add('$finalUrl:$defaultHttpPort$path');
+      }
+    }
+  }
+
+  return finalCandidates;
+}
+
+/// parse url and separate it into its components
+/// if you are wondering why we don't use Uri.tryParse() it cannot parse ipv4 or ipv6 addresses
+(String, String, String, String)? parseUrl(String initialInput) {
+  var input = initialInput;
+
+  if (!(input.startsWith('http://') || input.startsWith('https://'))) {
+    // fill in a empty protocol, so regex matches
+    input = 'none://$input';
+  }
+
+  final rgx = RegExp(r'^(.*:)//([A-Za-z0-9\-.]+)(:[0-9]+)?(.*)$');
+  final match = rgx.firstMatch(input);
+  if (match != null) {
+    var scheme = match.group(1) ?? ''; // add back the //
+    final body = match.group(2) ?? '';
+    final port = match.group(3)?.substring(1) ?? ''; // Remove leading colon
+    final path = match.group(4) ?? '';
+
+    if (scheme == 'none:') {
+      scheme = '';
+    }
+
+    return (scheme, body, port, path);
+  }
+
+  return null;
 }
