@@ -42,10 +42,11 @@ jobs:
         run: |
           COMMIT_HASH=$(git rev-parse --short HEAD)
           COMMIT_COUNT=$(git rev-list --count HEAD)
+          BUILD_VERSION="0.1.0-dev+$COMMIT_COUNT-$COMMIT_HASH"
           flutter build apk --release \
-            --build-name=0.1.0-dev+$COMMIT_COUNT \
+            --build-name=$BUILD_VERSION \
             --build-number=$COMMIT_COUNT
-
+      
       - name: Rename APK
         working-directory: brie
         run: |
