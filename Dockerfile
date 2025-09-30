@@ -1,4 +1,4 @@
-FROM ghcr.io/cirruslabs/flutter:stable AS flutter_builder
+FROM ghcr.io/ra341/docker-flutter-web:latest AS flutter_builder
 
 WORKDIR /web/
 
