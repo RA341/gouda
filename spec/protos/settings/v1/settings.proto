@@ -8,17 +8,16 @@ service SettingsService {
   rpc LoadSettings(LoadSettingsRequest) returns (LoadSettingsResponse) {}
   rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {}
 
-  rpc UpdateMamSettings(UpdateMamSettingsRequest) returns (UpdateMamSettingsResponse) {}
-  rpc UpdateTorrentClient(UpdateTorrentClientRequest) returns (UpdateTorrentClientResponse) {}
-  rpc UpdateFolderPaths(UpdateFolderPathsRequest) returns (UpdateFolderPathsResponse) {}
+  rpc UpdateMam(UpdateMamRequest) returns (UpdateMamResponse) {}
+  rpc UpdateDownloader(UpdateDownloaderRequest) returns (UpdateDownloaderResponse) {}
 
+  rpc UpdateDir(UpdateDirRequest) returns (UpdateDirResponse) {}
   rpc ListDirectories(ListDirectoriesRequest) returns (ListDirectoriesResponse) {}
-
-
-  rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
 
   rpc ListSupportedClients(ListSupportedClientsRequest) returns (ListSupportedClientsResponse) {}
   rpc TestClient(TorrentClient) returns (TestTorrentResponse) {}
+
+  rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse) {}
 }
 
 
@@ -31,25 +30,25 @@ message ListDirectoriesResponse {
   repeated string files = 2;
 }
 
-message UpdateFolderPathsRequest {
+message UpdateDirRequest {
   Directories dirs = 1;
   UserPermissions perms = 2;
 }
 
-message UpdateFolderPathsResponse {}
+message UpdateDirResponse {}
 
-message UpdateMamSettingsRequest {
+message UpdateMamRequest {
   string mamToken = 1;
 }
 
-message UpdateMamSettingsResponse {}
+message UpdateMamResponse {}
 
-message UpdateTorrentClientRequest {
+message UpdateDownloaderRequest {
   TorrentClient client = 1;
   Downloader downloader = 2;
 }
 
-message UpdateTorrentClientResponse {}
+message UpdateDownloaderResponse {}
 
 message UpdateSettingsRequest {
   GoudaConfig settings = 1;

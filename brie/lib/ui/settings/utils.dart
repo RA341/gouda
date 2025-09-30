@@ -23,6 +23,7 @@ class SettingsField extends StatelessWidget {
     this.onChanged,
     this.helpText,
     this.clickableLinks,
+    this.enabled = true,
     super.key,
   });
 
@@ -32,12 +33,15 @@ class SettingsField extends StatelessWidget {
   final String? helpText;
   final List<ClickableLink>? clickableLinks;
 
+  final bool enabled;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
+          enabled: enabled,
           controller: controller,
           onChanged: onChanged,
           decoration: InputDecoration(
@@ -66,10 +70,7 @@ class SettingsField extends StatelessWidget {
     if (clickableLinks == null || clickableLinks!.isEmpty) {
       return Text(
         helpText ?? "",
-        style: Theme
-            .of(context)
-            .textTheme
-            .bodySmall,
+        style: Theme.of(context).textTheme.bodySmall,
       );
     }
 
@@ -84,10 +85,7 @@ class SettingsField extends StatelessWidget {
           spans.add(
             TextSpan(
               text: remainingText.substring(0, index),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .bodySmall,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           );
         }
@@ -96,15 +94,8 @@ class SettingsField extends StatelessWidget {
         spans.add(
           TextSpan(
             text: link.text,
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(
-              color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
               decoration: TextDecoration.underline,
             ),
             recognizer: TapGestureRecognizer()
@@ -122,10 +113,7 @@ class SettingsField extends StatelessWidget {
       spans.add(
         TextSpan(
           text: remainingText,
-          style: Theme
-              .of(context)
-              .textTheme
-              .bodySmall,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       );
     }
@@ -220,6 +208,7 @@ class ServerSettingsView extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: config.when(
+        skipLoadingOnReload: true,
         data: (data) => child,
         error: (error, stackTrace) => Align(
           child: ErrorDisplay(message: error.toString()),

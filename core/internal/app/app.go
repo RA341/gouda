@@ -51,6 +51,10 @@ func NewApp(conf *sc.GoudaConfig) *App {
 			log.Error().Msg("Torrent client validator is unimplemented; implement me dum-dum")
 			return nil
 		},
+		func() ([]string, error) {
+			log.Error().Msg("Supported Torrent clients is unimplemented; implement me dum-dum")
+			return []string{"transmission", "qbit"}, nil
+		},
 	)
 	//downloadSrv := downloads.NewService(conf, db, &conf.TorrentClient, client)
 	//mediaSrv := media.NewService(db, downloadSrv, mamSrv)

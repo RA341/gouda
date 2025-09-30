@@ -12,7 +12,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferencesService.init();
 
-  runApp(const ProviderScope(child: App()));
+  runApp(
+    ProviderScope(
+      retry: (retryCount, error) {
+        if (retryCount > 3) return null;
+        return Duration(milliseconds: retryCount * 2);
+      },
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {

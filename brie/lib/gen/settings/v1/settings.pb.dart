@@ -28,14 +28,11 @@ class ListDirectoriesRequest extends $pb.GeneratedMessage {
   ListDirectoriesRequest._();
 
   factory ListDirectoriesRequest.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory ListDirectoriesRequest.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListDirectoriesRequest',
@@ -46,42 +43,33 @@ class ListDirectoriesRequest extends $pb.GeneratedMessage {
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListDirectoriesRequest clone() =>
-      ListDirectoriesRequest()
-        ..mergeFromMessage(this);
-
+      ListDirectoriesRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListDirectoriesRequest copyWith(
-      void Function(ListDirectoriesRequest) updates) =>
+          void Function(ListDirectoriesRequest) updates) =>
       super.copyWith((message) => updates(message as ListDirectoriesRequest))
-      as ListDirectoriesRequest;
+          as ListDirectoriesRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListDirectoriesRequest create() => ListDirectoriesRequest._();
-
   @$core.override
   ListDirectoriesRequest createEmptyInstance() => create();
-
   static $pb.PbList<ListDirectoriesRequest> createRepeated() =>
       $pb.PbList<ListDirectoriesRequest>();
-
   @$core.pragma('dart2js:noInline')
-  static ListDirectoriesRequest getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<ListDirectoriesRequest>(create);
+  static ListDirectoriesRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListDirectoriesRequest>(create);
   static ListDirectoriesRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get filePath => $_getSZ(0);
-
   @$pb.TagNumber(1)
   set filePath($core.String value) => $_setString(0, value);
-
   @$pb.TagNumber(1)
   $core.bool hasFilePath() => $_has(0);
-
   @$pb.TagNumber(1)
   void clearFilePath() => $_clearField(1);
 }
@@ -100,50 +88,41 @@ class ListDirectoriesResponse extends $pb.GeneratedMessage {
   ListDirectoriesResponse._();
 
   factory ListDirectoriesResponse.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory ListDirectoriesResponse.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListDirectoriesResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
-    ..pPS(1, _omitFieldNames ? '' : 'folders')..pPS(
-        2, _omitFieldNames ? '' : 'files')
+    ..pPS(1, _omitFieldNames ? '' : 'folders')
+    ..pPS(2, _omitFieldNames ? '' : 'files')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListDirectoriesResponse clone() =>
-      ListDirectoriesResponse()
-        ..mergeFromMessage(this);
-
+      ListDirectoriesResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListDirectoriesResponse copyWith(
-      void Function(ListDirectoriesResponse) updates) =>
+          void Function(ListDirectoriesResponse) updates) =>
       super.copyWith((message) => updates(message as ListDirectoriesResponse))
-      as ListDirectoriesResponse;
+          as ListDirectoriesResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListDirectoriesResponse create() => ListDirectoriesResponse._();
-
   @$core.override
   ListDirectoriesResponse createEmptyInstance() => create();
-
   static $pb.PbList<ListDirectoriesResponse> createRepeated() =>
       $pb.PbList<ListDirectoriesResponse>();
-
   @$core.pragma('dart2js:noInline')
-  static ListDirectoriesResponse getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<ListDirectoriesResponse>(create);
+  static ListDirectoriesResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ListDirectoriesResponse>(create);
   static ListDirectoriesResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
@@ -153,8 +132,8 @@ class ListDirectoriesResponse extends $pb.GeneratedMessage {
   $pb.PbList<$core.String> get files => $_getList(1);
 }
 
-class UpdateFolderPathsRequest extends $pb.GeneratedMessage {
-  factory UpdateFolderPathsRequest({
+class UpdateDirRequest extends $pb.GeneratedMessage {
+  factory UpdateDirRequest({
     Directories? dirs,
     UserPermissions? perms,
   }) {
@@ -164,141 +143,111 @@ class UpdateFolderPathsRequest extends $pb.GeneratedMessage {
     return result;
   }
 
-  UpdateFolderPathsRequest._();
+  UpdateDirRequest._();
 
-  factory UpdateFolderPathsRequest.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
-  factory UpdateFolderPathsRequest.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+  factory UpdateDirRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateDirRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateFolderPathsRequest',
+      _omitMessageNames ? '' : 'UpdateDirRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
     ..aOM<Directories>(1, _omitFieldNames ? '' : 'dirs',
-        subBuilder: Directories.create)..aOM<UserPermissions>(
-        2, _omitFieldNames ? '' : 'perms',
+        subBuilder: Directories.create)
+    ..aOM<UserPermissions>(2, _omitFieldNames ? '' : 'perms',
         subBuilder: UserPermissions.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateFolderPathsRequest clone() =>
-      UpdateFolderPathsRequest()
-        ..mergeFromMessage(this);
-
+  UpdateDirRequest clone() => UpdateDirRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateFolderPathsRequest copyWith(
-      void Function(UpdateFolderPathsRequest) updates) =>
-      super.copyWith((message) => updates(message as UpdateFolderPathsRequest))
-      as UpdateFolderPathsRequest;
+  UpdateDirRequest copyWith(void Function(UpdateDirRequest) updates) =>
+      super.copyWith((message) => updates(message as UpdateDirRequest))
+          as UpdateDirRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static UpdateFolderPathsRequest create() => UpdateFolderPathsRequest._();
-
+  static UpdateDirRequest create() => UpdateDirRequest._();
   @$core.override
-  UpdateFolderPathsRequest createEmptyInstance() => create();
-
-  static $pb.PbList<UpdateFolderPathsRequest> createRepeated() =>
-      $pb.PbList<UpdateFolderPathsRequest>();
-
+  UpdateDirRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateDirRequest> createRepeated() =>
+      $pb.PbList<UpdateDirRequest>();
   @$core.pragma('dart2js:noInline')
-  static UpdateFolderPathsRequest getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateFolderPathsRequest>(create);
-  static UpdateFolderPathsRequest? _defaultInstance;
+  static UpdateDirRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateDirRequest>(create);
+  static UpdateDirRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   Directories get dirs => $_getN(0);
-
   @$pb.TagNumber(1)
   set dirs(Directories value) => $_setField(1, value);
-
   @$pb.TagNumber(1)
   $core.bool hasDirs() => $_has(0);
-
   @$pb.TagNumber(1)
   void clearDirs() => $_clearField(1);
-
   @$pb.TagNumber(1)
   Directories ensureDirs() => $_ensure(0);
 
   @$pb.TagNumber(2)
   UserPermissions get perms => $_getN(1);
-
   @$pb.TagNumber(2)
   set perms(UserPermissions value) => $_setField(2, value);
-
   @$pb.TagNumber(2)
   $core.bool hasPerms() => $_has(1);
-
   @$pb.TagNumber(2)
   void clearPerms() => $_clearField(2);
-
   @$pb.TagNumber(2)
   UserPermissions ensurePerms() => $_ensure(1);
 }
 
-class UpdateFolderPathsResponse extends $pb.GeneratedMessage {
-  factory UpdateFolderPathsResponse() => create();
+class UpdateDirResponse extends $pb.GeneratedMessage {
+  factory UpdateDirResponse() => create();
 
-  UpdateFolderPathsResponse._();
+  UpdateDirResponse._();
 
-  factory UpdateFolderPathsResponse.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
-  factory UpdateFolderPathsResponse.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+  factory UpdateDirResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateDirResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateFolderPathsResponse',
+      _omitMessageNames ? '' : 'UpdateDirResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateFolderPathsResponse clone() =>
-      UpdateFolderPathsResponse()
-        ..mergeFromMessage(this);
-
+  UpdateDirResponse clone() => UpdateDirResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateFolderPathsResponse copyWith(
-      void Function(UpdateFolderPathsResponse) updates) =>
-      super.copyWith((message) => updates(message as UpdateFolderPathsResponse))
-      as UpdateFolderPathsResponse;
+  UpdateDirResponse copyWith(void Function(UpdateDirResponse) updates) =>
+      super.copyWith((message) => updates(message as UpdateDirResponse))
+          as UpdateDirResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static UpdateFolderPathsResponse create() => UpdateFolderPathsResponse._();
-
+  static UpdateDirResponse create() => UpdateDirResponse._();
   @$core.override
-  UpdateFolderPathsResponse createEmptyInstance() => create();
-
-  static $pb.PbList<UpdateFolderPathsResponse> createRepeated() =>
-      $pb.PbList<UpdateFolderPathsResponse>();
-
+  UpdateDirResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateDirResponse> createRepeated() =>
+      $pb.PbList<UpdateDirResponse>();
   @$core.pragma('dart2js:noInline')
-  static UpdateFolderPathsResponse getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateFolderPathsResponse>(create);
-  static UpdateFolderPathsResponse? _defaultInstance;
+  static UpdateDirResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateDirResponse>(create);
+  static UpdateDirResponse? _defaultInstance;
 }
 
-class UpdateMamSettingsRequest extends $pb.GeneratedMessage {
-  factory UpdateMamSettingsRequest({
+class UpdateMamRequest extends $pb.GeneratedMessage {
+  factory UpdateMamRequest({
     $core.String? mamToken,
   }) {
     final result = create();
@@ -306,120 +255,95 @@ class UpdateMamSettingsRequest extends $pb.GeneratedMessage {
     return result;
   }
 
-  UpdateMamSettingsRequest._();
+  UpdateMamRequest._();
 
-  factory UpdateMamSettingsRequest.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
-  factory UpdateMamSettingsRequest.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+  factory UpdateMamRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateMamRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateMamSettingsRequest',
+      _omitMessageNames ? '' : 'UpdateMamRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'mamToken', protoName: 'mamToken')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateMamSettingsRequest clone() =>
-      UpdateMamSettingsRequest()
-        ..mergeFromMessage(this);
-
+  UpdateMamRequest clone() => UpdateMamRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateMamSettingsRequest copyWith(
-      void Function(UpdateMamSettingsRequest) updates) =>
-      super.copyWith((message) => updates(message as UpdateMamSettingsRequest))
-      as UpdateMamSettingsRequest;
+  UpdateMamRequest copyWith(void Function(UpdateMamRequest) updates) =>
+      super.copyWith((message) => updates(message as UpdateMamRequest))
+          as UpdateMamRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static UpdateMamSettingsRequest create() => UpdateMamSettingsRequest._();
-
+  static UpdateMamRequest create() => UpdateMamRequest._();
   @$core.override
-  UpdateMamSettingsRequest createEmptyInstance() => create();
-
-  static $pb.PbList<UpdateMamSettingsRequest> createRepeated() =>
-      $pb.PbList<UpdateMamSettingsRequest>();
-
+  UpdateMamRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateMamRequest> createRepeated() =>
+      $pb.PbList<UpdateMamRequest>();
   @$core.pragma('dart2js:noInline')
-  static UpdateMamSettingsRequest getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateMamSettingsRequest>(create);
-  static UpdateMamSettingsRequest? _defaultInstance;
+  static UpdateMamRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateMamRequest>(create);
+  static UpdateMamRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get mamToken => $_getSZ(0);
-
   @$pb.TagNumber(1)
   set mamToken($core.String value) => $_setString(0, value);
-
   @$pb.TagNumber(1)
   $core.bool hasMamToken() => $_has(0);
-
   @$pb.TagNumber(1)
   void clearMamToken() => $_clearField(1);
 }
 
-class UpdateMamSettingsResponse extends $pb.GeneratedMessage {
-  factory UpdateMamSettingsResponse() => create();
+class UpdateMamResponse extends $pb.GeneratedMessage {
+  factory UpdateMamResponse() => create();
 
-  UpdateMamSettingsResponse._();
+  UpdateMamResponse._();
 
-  factory UpdateMamSettingsResponse.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
-  factory UpdateMamSettingsResponse.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+  factory UpdateMamResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateMamResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateMamSettingsResponse',
+      _omitMessageNames ? '' : 'UpdateMamResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateMamSettingsResponse clone() =>
-      UpdateMamSettingsResponse()
-        ..mergeFromMessage(this);
-
+  UpdateMamResponse clone() => UpdateMamResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateMamSettingsResponse copyWith(
-      void Function(UpdateMamSettingsResponse) updates) =>
-      super.copyWith((message) => updates(message as UpdateMamSettingsResponse))
-      as UpdateMamSettingsResponse;
+  UpdateMamResponse copyWith(void Function(UpdateMamResponse) updates) =>
+      super.copyWith((message) => updates(message as UpdateMamResponse))
+          as UpdateMamResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static UpdateMamSettingsResponse create() => UpdateMamSettingsResponse._();
-
+  static UpdateMamResponse create() => UpdateMamResponse._();
   @$core.override
-  UpdateMamSettingsResponse createEmptyInstance() => create();
-
-  static $pb.PbList<UpdateMamSettingsResponse> createRepeated() =>
-      $pb.PbList<UpdateMamSettingsResponse>();
-
+  UpdateMamResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateMamResponse> createRepeated() =>
+      $pb.PbList<UpdateMamResponse>();
   @$core.pragma('dart2js:noInline')
-  static UpdateMamSettingsResponse getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateMamSettingsResponse>(create);
-  static UpdateMamSettingsResponse? _defaultInstance;
+  static UpdateMamResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateMamResponse>(create);
+  static UpdateMamResponse? _defaultInstance;
 }
 
-class UpdateTorrentClientRequest extends $pb.GeneratedMessage {
-  factory UpdateTorrentClientRequest({
+class UpdateDownloaderRequest extends $pb.GeneratedMessage {
+  factory UpdateDownloaderRequest({
     TorrentClient? client,
     Downloader? downloader,
   }) {
@@ -429,141 +353,111 @@ class UpdateTorrentClientRequest extends $pb.GeneratedMessage {
     return result;
   }
 
-  UpdateTorrentClientRequest._();
+  UpdateDownloaderRequest._();
 
-  factory UpdateTorrentClientRequest.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
-  factory UpdateTorrentClientRequest.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+  factory UpdateDownloaderRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateDownloaderRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateTorrentClientRequest',
+      _omitMessageNames ? '' : 'UpdateDownloaderRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
     ..aOM<TorrentClient>(1, _omitFieldNames ? '' : 'client',
-        subBuilder: TorrentClient.create)..aOM<Downloader>(
-        2, _omitFieldNames ? '' : 'downloader',
+        subBuilder: TorrentClient.create)
+    ..aOM<Downloader>(2, _omitFieldNames ? '' : 'downloader',
         subBuilder: Downloader.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateTorrentClientRequest clone() =>
-      UpdateTorrentClientRequest()
-        ..mergeFromMessage(this);
-
+  UpdateDownloaderRequest clone() =>
+      UpdateDownloaderRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateTorrentClientRequest copyWith(
-      void Function(UpdateTorrentClientRequest) updates) =>
-      super.copyWith(
-              (message) => updates(message as UpdateTorrentClientRequest))
-      as UpdateTorrentClientRequest;
+  UpdateDownloaderRequest copyWith(
+          void Function(UpdateDownloaderRequest) updates) =>
+      super.copyWith((message) => updates(message as UpdateDownloaderRequest))
+          as UpdateDownloaderRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static UpdateTorrentClientRequest create() => UpdateTorrentClientRequest._();
-
+  static UpdateDownloaderRequest create() => UpdateDownloaderRequest._();
   @$core.override
-  UpdateTorrentClientRequest createEmptyInstance() => create();
-
-  static $pb.PbList<UpdateTorrentClientRequest> createRepeated() =>
-      $pb.PbList<UpdateTorrentClientRequest>();
-
+  UpdateDownloaderRequest createEmptyInstance() => create();
+  static $pb.PbList<UpdateDownloaderRequest> createRepeated() =>
+      $pb.PbList<UpdateDownloaderRequest>();
   @$core.pragma('dart2js:noInline')
-  static UpdateTorrentClientRequest getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateTorrentClientRequest>(create);
-  static UpdateTorrentClientRequest? _defaultInstance;
+  static UpdateDownloaderRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateDownloaderRequest>(create);
+  static UpdateDownloaderRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   TorrentClient get client => $_getN(0);
-
   @$pb.TagNumber(1)
   set client(TorrentClient value) => $_setField(1, value);
-
   @$pb.TagNumber(1)
   $core.bool hasClient() => $_has(0);
-
   @$pb.TagNumber(1)
   void clearClient() => $_clearField(1);
-
   @$pb.TagNumber(1)
   TorrentClient ensureClient() => $_ensure(0);
 
   @$pb.TagNumber(2)
   Downloader get downloader => $_getN(1);
-
   @$pb.TagNumber(2)
   set downloader(Downloader value) => $_setField(2, value);
-
   @$pb.TagNumber(2)
   $core.bool hasDownloader() => $_has(1);
-
   @$pb.TagNumber(2)
   void clearDownloader() => $_clearField(2);
-
   @$pb.TagNumber(2)
   Downloader ensureDownloader() => $_ensure(1);
 }
 
-class UpdateTorrentClientResponse extends $pb.GeneratedMessage {
-  factory UpdateTorrentClientResponse() => create();
+class UpdateDownloaderResponse extends $pb.GeneratedMessage {
+  factory UpdateDownloaderResponse() => create();
 
-  UpdateTorrentClientResponse._();
+  UpdateDownloaderResponse._();
 
-  factory UpdateTorrentClientResponse.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
-
-  factory UpdateTorrentClientResponse.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+  factory UpdateDownloaderResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateDownloaderResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
-      _omitMessageNames ? '' : 'UpdateTorrentClientResponse',
+      _omitMessageNames ? '' : 'UpdateDownloaderResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateTorrentClientResponse clone() =>
-      UpdateTorrentClientResponse()
-        ..mergeFromMessage(this);
-
+  UpdateDownloaderResponse clone() =>
+      UpdateDownloaderResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateTorrentClientResponse copyWith(
-      void Function(UpdateTorrentClientResponse) updates) =>
-      super.copyWith(
-              (message) => updates(message as UpdateTorrentClientResponse))
-      as UpdateTorrentClientResponse;
+  UpdateDownloaderResponse copyWith(
+          void Function(UpdateDownloaderResponse) updates) =>
+      super.copyWith((message) => updates(message as UpdateDownloaderResponse))
+          as UpdateDownloaderResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static UpdateTorrentClientResponse create() =>
-      UpdateTorrentClientResponse._();
-
+  static UpdateDownloaderResponse create() => UpdateDownloaderResponse._();
   @$core.override
-  UpdateTorrentClientResponse createEmptyInstance() => create();
-
-  static $pb.PbList<UpdateTorrentClientResponse> createRepeated() =>
-      $pb.PbList<UpdateTorrentClientResponse>();
-
+  UpdateDownloaderResponse createEmptyInstance() => create();
+  static $pb.PbList<UpdateDownloaderResponse> createRepeated() =>
+      $pb.PbList<UpdateDownloaderResponse>();
   @$core.pragma('dart2js:noInline')
-  static UpdateTorrentClientResponse getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateTorrentClientResponse>(
-              create);
-  static UpdateTorrentClientResponse? _defaultInstance;
+  static UpdateDownloaderResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateDownloaderResponse>(create);
+  static UpdateDownloaderResponse? _defaultInstance;
 }
 
 class UpdateSettingsRequest extends $pb.GeneratedMessage {
@@ -1303,10 +1197,9 @@ class Directories extends $pb.GeneratedMessage {
       _omitMessageNames ? '' : 'Directories',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
       createEmptyInstance: create)
-    ..aOS(
-        2, _omitFieldNames ? '' : 'downloadDir', protoName: 'downloadDir')..aOS(
-        3, _omitFieldNames ? '' : 'completeDir', protoName: 'completeDir')..aOS(
-        4, _omitFieldNames ? '' : 'torrentDir', protoName: 'torrentDir')
+    ..aOS(2, _omitFieldNames ? '' : 'downloadDir', protoName: 'downloadDir')
+    ..aOS(3, _omitFieldNames ? '' : 'completeDir', protoName: 'completeDir')
+    ..aOS(4, _omitFieldNames ? '' : 'torrentDir', protoName: 'torrentDir')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')

@@ -11,7 +11,6 @@ import (
 
 type Handler struct {
 	srv *Service
-	// todo interface
 }
 
 func NewSettingsHandler(srv *Service) *Handler {
@@ -35,29 +34,34 @@ func (h *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Upda
 	return connect.NewResponse(&v1.UpdateSettingsResponse{}), nil
 }
 
-func (h *Handler) UpdateMamSettings(ctx context.Context, req *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error) {
+func (h *Handler) UpdateMam(_ context.Context, req *connect.Request[v1.UpdateMamRequest]) (*connect.Response[v1.UpdateMamResponse], error) {
 	err := h.srv.updateMam(req.Msg.MamToken)
 	if err != nil {
 		return nil, err
 	}
 
-	return connect.NewResponse(&v1.UpdateMamSettingsResponse{}), nil
+	return connect.NewResponse(&v1.UpdateMamResponse{}), nil
+
 }
 
-func (h *Handler) UpdateTorrentClient(ctx context.Context, req *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error) {
+func (h *Handler) UpdateDownloader(_ context.Context, req *connect.Request[v1.UpdateDownloaderRequest]) (*connect.Response[v1.UpdateDownloaderResponse], error) {
 	client := TorrentClientFromRpc(req.Msg.Client)
 	err := h.srv.updateTorrentClient(client)
 	if err != nil {
 		return nil, err
 	}
 
-	return connect.NewResponse(&v1.UpdateTorrentClientResponse{}), nil
+	return connect.NewResponse(&v1.UpdateDownloaderResponse{}), nil
 }
 
-func (h *Handler) UpdateFolderPaths(ctx context.Context, req *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error) {
+func (h *Handler) UpdateDir(_ context.Context, req *connect.Request[v1.UpdateDirRequest]) (*connect.Response[v1.UpdateDirResponse], error) {
+	client := DirectoryFromRpc(req.Msg.Dirs)
+	err := h.srv.updateDirectory(client)
+	if err != nil {
+		return nil, err
+	}
 
-	//TODO implement me
-	return nil, fmt.Errorf("implement me UpdateFolderPaths")
+	return connect.NewResponse(&v1.UpdateDirResponse{}), nil
 }
 
 func (h *Handler) ListDirectories(_ context.Context, req *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error) {
@@ -81,7 +85,6 @@ func (h *Handler) GetMetadata(_ context.Context, _ *connect.Request[v1.GetMetada
 }
 
 func (h *Handler) TestClient(_ context.Context, c *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error) {
-	// todo
 	//rpcClient := c.Msg
 	//_, err := h.downloadSrv.TestClient(&sc.TorrentClient{
 	//	ClientType: rpcClient.TorrentName,
@@ -94,21 +97,22 @@ func (h *Handler) TestClient(_ context.Context, c *connect.Request[v1.TorrentCli
 	//	return nil, err
 	//}
 
-	// successful connect
-	return connect.NewResponse(&v1.TestTorrentResponse{}), nil
+	return nil, fmt.Errorf("implement me TestClient")
 }
 
 func (h *Handler) ListSupportedClients(_ context.Context, _ *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
-	// todo
-	//supportedClients := clients.GetSupportedClients()
-	//
-	//res := connect.NewResponse(&v1.ListSupportedClientsResponse{
-	//	Clients: supportedClients,
-	//})
+	supportedClients, err := h.srv.supportedClientsProvider()
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, fmt.Errorf("ListSupportedClients not implemented")
+	res := v1.ListSupportedClientsResponse{
+		Clients: supportedClients,
+	}
+
+	return connect.NewResponse(&res), nil
 }
 
-func (h *Handler) UpdateMamToken(ctx context.Context, c *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error) {
+func (h *Handler) UpdateMamToken(ctx context.Context, req *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error) {
 	return nil, fmt.Errorf("implement me UpdateMamToken")
 }

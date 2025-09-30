@@ -14,28 +14,33 @@ type ValidatorMamToken func(token string) error
 
 type ValidatorTorrentClient func(client *TorrentClient) error
 
+type SupportedClientsProvider func() ([]string, error)
+
 type Service struct {
-	conf            *GoudaConfig
-	mamValidator    ValidatorMamToken
-	clientValidator ValidatorTorrentClient
+	conf                     *GoudaConfig
+	mamValidator             ValidatorMamToken
+	clientValidator          ValidatorTorrentClient
+	supportedClientsProvider SupportedClientsProvider
 }
 
 func NewService(
 	conf *GoudaConfig,
 	mamValidator ValidatorMamToken,
 	clientValidator ValidatorTorrentClient,
+	supportedClientsProvider SupportedClientsProvider,
 ) *Service {
 	return &Service{
-		conf:            conf,
-		mamValidator:    mamValidator,
-		clientValidator: clientValidator,
+		conf:                     conf,
+		mamValidator:             mamValidator,
+		clientValidator:          clientValidator,
+		supportedClientsProvider: supportedClientsProvider,
 	}
 }
 
 func (s *Service) loadConfigToRPC() *v1.GoudaConfig {
 	s.conf.RW.RLock()
 	defer s.conf.RW.RUnlock()
-	return ToProto(s.conf)
+	return GoudaConfigToProto(s.conf)
 }
 
 func (s *Service) updateMam(mamToken string) error {
@@ -62,6 +67,15 @@ func (s *Service) updateTorrentClient(client *TorrentClient) error {
 	}
 
 	s.conf.TorrentClient = *client
+
+	return s.conf.DumpToYaml()
+}
+
+func (s *Service) updateDirectory(dirs *Directories) error {
+	s.conf.RW.RLock()
+	defer s.conf.RW.RUnlock()
+
+	s.conf.Dir = *dirs
 
 	return s.conf.DumpToYaml()
 }
@@ -105,7 +119,7 @@ func (s *Service) saveConfigWithValidation(rpcConfig *v1.GoudaConfig) error {
 		return fmt.Errorf("error validating torrent client: %v", err)
 	}
 
-	FromProto(rpcConfig, s.conf)
+	GoudaConfigFromProto(rpcConfig, s.conf)
 
 	return s.conf.DumpToYaml()
 }
@@ -124,12 +138,12 @@ func (s *Service) saveConfig(rpcConfig *v1.GoudaConfig) error {
 		return fmt.Errorf("error validating torrent client: %v", err)
 	}
 
-	FromProto(rpcConfig, s.conf)
+	GoudaConfigFromProto(rpcConfig, s.conf)
 
 	return s.conf.DumpToYaml()
 }
 
-func ToProto(cfg *GoudaConfig) *v1.GoudaConfig {
+func GoudaConfigToProto(cfg *GoudaConfig) *v1.GoudaConfig {
 	return &v1.GoudaConfig{
 		Port:           int32(cfg.Port),
 		AllowedOrigins: cfg.AllowedOrigins,
@@ -162,7 +176,7 @@ func ToProto(cfg *GoudaConfig) *v1.GoudaConfig {
 	}
 }
 
-func FromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
+func GoudaConfigFromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
 	if pb == nil || conf == nil {
 		return
 	}
@@ -173,11 +187,7 @@ func FromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
 	conf.MamToken = pb.MamToken
 
 	if pb.Dir != nil {
-		conf.Dir = Directories{
-			DownloadDir: pb.Dir.DownloadDir,
-			CompleteDir: pb.Dir.CompleteDir,
-			TorrentDir:  pb.Dir.TorrentDir,
-		}
+		conf.Dir = *DirectoryFromRpc(pb.Dir)
 	}
 
 	if pb.Log != nil {
@@ -195,10 +205,7 @@ func FromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
 	}
 
 	if pb.Permissions != nil {
-		conf.Permissions = UserPermissions{
-			UID: int(pb.Permissions.Uid),
-			GID: int(pb.Permissions.Gid),
-		}
+		conf.Permissions = *PermissionsFromRpc(pb.Permissions)
 	}
 
 	if pb.TorrentClient != nil {
@@ -213,5 +220,20 @@ func TorrentClientFromRpc(client *v1.TorrentClient) *TorrentClient {
 		Host:       client.Host,
 		User:       client.User,
 		Password:   client.Password,
+	}
+}
+
+func DirectoryFromRpc(dirs *v1.Directories) *Directories {
+	return &Directories{
+		DownloadDir: dirs.DownloadDir,
+		CompleteDir: dirs.CompleteDir,
+		TorrentDir:  dirs.TorrentDir,
+	}
+}
+
+func PermissionsFromRpc(perms *v1.UserPermissions) *UserPermissions {
+	return &UserPermissions{
+		UID: int(perms.Uid),
+		GID: int(perms.Gid),
 	}
 }

@@ -47,16 +47,19 @@ class TabMam extends HookConsumerWidget {
                       children: [
                         const Icon(Icons.info),
                         const Text("Authentication token for Mam"),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final url = Uri.parse(
-                              'https://www.myanonamouse.net/preferences/index.php?view=security',
-                            );
-                            if (!await launchUrl(url)) {
-                              logger.w('Could not launch $url');
-                            }
-                          },
-                          child: const Text('Generate token'),
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              final url = Uri.parse(
+                                'https://www.myanonamouse.net/preferences/index.php?view=security',
+                              );
+                              if (!await launchUrl(url)) {
+                                logger.w('Could not launch $url');
+                              }
+                            },
+                            child: const Text('Generate token'),
+                          ),
                         ),
                       ],
                     ),

@@ -117,7 +117,7 @@ func (x *ListDirectoriesResponse) GetFiles() []string {
 	return nil
 }
 
-type UpdateFolderPathsRequest struct {
+type UpdateDirRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Dirs          *Directories           `protobuf:"bytes,1,opt,name=dirs,proto3" json:"dirs,omitempty"`
 	Perms         *UserPermissions       `protobuf:"bytes,2,opt,name=perms,proto3" json:"perms,omitempty"`
@@ -125,20 +125,20 @@ type UpdateFolderPathsRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateFolderPathsRequest) Reset() {
-	*x = UpdateFolderPathsRequest{}
+func (x *UpdateDirRequest) Reset() {
+	*x = UpdateDirRequest{}
 	mi := &file_settings_v1_settings_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateFolderPathsRequest) String() string {
+func (x *UpdateDirRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateFolderPathsRequest) ProtoMessage() {}
+func (*UpdateDirRequest) ProtoMessage() {}
 
-func (x *UpdateFolderPathsRequest) ProtoReflect() protoreflect.Message {
+func (x *UpdateDirRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_settings_v1_settings_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -150,45 +150,45 @@ func (x *UpdateFolderPathsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateFolderPathsRequest.ProtoReflect.Descriptor instead.
-func (*UpdateFolderPathsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateDirRequest.ProtoReflect.Descriptor instead.
+func (*UpdateDirRequest) Descriptor() ([]byte, []int) {
 	return file_settings_v1_settings_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *UpdateFolderPathsRequest) GetDirs() *Directories {
+func (x *UpdateDirRequest) GetDirs() *Directories {
 	if x != nil {
 		return x.Dirs
 	}
 	return nil
 }
 
-func (x *UpdateFolderPathsRequest) GetPerms() *UserPermissions {
+func (x *UpdateDirRequest) GetPerms() *UserPermissions {
 	if x != nil {
 		return x.Perms
 	}
 	return nil
 }
 
-type UpdateFolderPathsResponse struct {
+type UpdateDirResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateFolderPathsResponse) Reset() {
-	*x = UpdateFolderPathsResponse{}
+func (x *UpdateDirResponse) Reset() {
+	*x = UpdateDirResponse{}
 	mi := &file_settings_v1_settings_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateFolderPathsResponse) String() string {
+func (x *UpdateDirResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateFolderPathsResponse) ProtoMessage() {}
+func (*UpdateDirResponse) ProtoMessage() {}
 
-func (x *UpdateFolderPathsResponse) ProtoReflect() protoreflect.Message {
+func (x *UpdateDirResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_settings_v1_settings_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -200,32 +200,32 @@ func (x *UpdateFolderPathsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateFolderPathsResponse.ProtoReflect.Descriptor instead.
-func (*UpdateFolderPathsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateDirResponse.ProtoReflect.Descriptor instead.
+func (*UpdateDirResponse) Descriptor() ([]byte, []int) {
 	return file_settings_v1_settings_proto_rawDescGZIP(), []int{3}
 }
 
-type UpdateMamSettingsRequest struct {
+type UpdateMamRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	MamToken      string                 `protobuf:"bytes,1,opt,name=mamToken,proto3" json:"mamToken,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateMamSettingsRequest) Reset() {
-	*x = UpdateMamSettingsRequest{}
+func (x *UpdateMamRequest) Reset() {
+	*x = UpdateMamRequest{}
 	mi := &file_settings_v1_settings_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateMamSettingsRequest) String() string {
+func (x *UpdateMamRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateMamSettingsRequest) ProtoMessage() {}
+func (*UpdateMamRequest) ProtoMessage() {}
 
-func (x *UpdateMamSettingsRequest) ProtoReflect() protoreflect.Message {
+func (x *UpdateMamRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_settings_v1_settings_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -237,38 +237,38 @@ func (x *UpdateMamSettingsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateMamSettingsRequest.ProtoReflect.Descriptor instead.
-func (*UpdateMamSettingsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateMamRequest.ProtoReflect.Descriptor instead.
+func (*UpdateMamRequest) Descriptor() ([]byte, []int) {
 	return file_settings_v1_settings_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *UpdateMamSettingsRequest) GetMamToken() string {
+func (x *UpdateMamRequest) GetMamToken() string {
 	if x != nil {
 		return x.MamToken
 	}
 	return ""
 }
 
-type UpdateMamSettingsResponse struct {
+type UpdateMamResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateMamSettingsResponse) Reset() {
-	*x = UpdateMamSettingsResponse{}
+func (x *UpdateMamResponse) Reset() {
+	*x = UpdateMamResponse{}
 	mi := &file_settings_v1_settings_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateMamSettingsResponse) String() string {
+func (x *UpdateMamResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateMamSettingsResponse) ProtoMessage() {}
+func (*UpdateMamResponse) ProtoMessage() {}
 
-func (x *UpdateMamSettingsResponse) ProtoReflect() protoreflect.Message {
+func (x *UpdateMamResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_settings_v1_settings_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -280,12 +280,12 @@ func (x *UpdateMamSettingsResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateMamSettingsResponse.ProtoReflect.Descriptor instead.
-func (*UpdateMamSettingsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateMamResponse.ProtoReflect.Descriptor instead.
+func (*UpdateMamResponse) Descriptor() ([]byte, []int) {
 	return file_settings_v1_settings_proto_rawDescGZIP(), []int{5}
 }
 
-type UpdateTorrentClientRequest struct {
+type UpdateDownloaderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Client        *TorrentClient         `protobuf:"bytes,1,opt,name=client,proto3" json:"client,omitempty"`
 	Downloader    *Downloader            `protobuf:"bytes,2,opt,name=downloader,proto3" json:"downloader,omitempty"`
@@ -293,20 +293,20 @@ type UpdateTorrentClientRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateTorrentClientRequest) Reset() {
-	*x = UpdateTorrentClientRequest{}
+func (x *UpdateDownloaderRequest) Reset() {
+	*x = UpdateDownloaderRequest{}
 	mi := &file_settings_v1_settings_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateTorrentClientRequest) String() string {
+func (x *UpdateDownloaderRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateTorrentClientRequest) ProtoMessage() {}
+func (*UpdateDownloaderRequest) ProtoMessage() {}
 
-func (x *UpdateTorrentClientRequest) ProtoReflect() protoreflect.Message {
+func (x *UpdateDownloaderRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_settings_v1_settings_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -318,45 +318,45 @@ func (x *UpdateTorrentClientRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateTorrentClientRequest.ProtoReflect.Descriptor instead.
-func (*UpdateTorrentClientRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateDownloaderRequest.ProtoReflect.Descriptor instead.
+func (*UpdateDownloaderRequest) Descriptor() ([]byte, []int) {
 	return file_settings_v1_settings_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *UpdateTorrentClientRequest) GetClient() *TorrentClient {
+func (x *UpdateDownloaderRequest) GetClient() *TorrentClient {
 	if x != nil {
 		return x.Client
 	}
 	return nil
 }
 
-func (x *UpdateTorrentClientRequest) GetDownloader() *Downloader {
+func (x *UpdateDownloaderRequest) GetDownloader() *Downloader {
 	if x != nil {
 		return x.Downloader
 	}
 	return nil
 }
 
-type UpdateTorrentClientResponse struct {
+type UpdateDownloaderResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateTorrentClientResponse) Reset() {
-	*x = UpdateTorrentClientResponse{}
+func (x *UpdateDownloaderResponse) Reset() {
+	*x = UpdateDownloaderResponse{}
 	mi := &file_settings_v1_settings_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateTorrentClientResponse) String() string {
+func (x *UpdateDownloaderResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateTorrentClientResponse) ProtoMessage() {}
+func (*UpdateDownloaderResponse) ProtoMessage() {}
 
-func (x *UpdateTorrentClientResponse) ProtoReflect() protoreflect.Message {
+func (x *UpdateDownloaderResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_settings_v1_settings_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -368,8 +368,8 @@ func (x *UpdateTorrentClientResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateTorrentClientResponse.ProtoReflect.Descriptor instead.
-func (*UpdateTorrentClientResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateDownloaderResponse.ProtoReflect.Descriptor instead.
+func (*UpdateDownloaderResponse) Descriptor() ([]byte, []int) {
 	return file_settings_v1_settings_proto_rawDescGZIP(), []int{7}
 }
 
@@ -1227,20 +1227,20 @@ const file_settings_v1_settings_proto_rawDesc = "" +
 	"\bfilePath\x18\x01 \x01(\tR\bfilePath\"I\n" +
 	"\x17ListDirectoriesResponse\x12\x18\n" +
 	"\afolders\x18\x01 \x03(\tR\afolders\x12\x14\n" +
-	"\x05files\x18\x02 \x03(\tR\x05files\"|\n" +
-	"\x18UpdateFolderPathsRequest\x12,\n" +
+	"\x05files\x18\x02 \x03(\tR\x05files\"t\n" +
+	"\x10UpdateDirRequest\x12,\n" +
 	"\x04dirs\x18\x01 \x01(\v2\x18.settings.v1.DirectoriesR\x04dirs\x122\n" +
-	"\x05perms\x18\x02 \x01(\v2\x1c.settings.v1.UserPermissionsR\x05perms\"\x1b\n" +
-	"\x19UpdateFolderPathsResponse\"6\n" +
-	"\x18UpdateMamSettingsRequest\x12\x1a\n" +
-	"\bmamToken\x18\x01 \x01(\tR\bmamToken\"\x1b\n" +
-	"\x19UpdateMamSettingsResponse\"\x89\x01\n" +
-	"\x1aUpdateTorrentClientRequest\x122\n" +
+	"\x05perms\x18\x02 \x01(\v2\x1c.settings.v1.UserPermissionsR\x05perms\"\x13\n" +
+	"\x11UpdateDirResponse\".\n" +
+	"\x10UpdateMamRequest\x12\x1a\n" +
+	"\bmamToken\x18\x01 \x01(\tR\bmamToken\"\x13\n" +
+	"\x11UpdateMamResponse\"\x86\x01\n" +
+	"\x17UpdateDownloaderRequest\x122\n" +
 	"\x06client\x18\x01 \x01(\v2\x1a.settings.v1.TorrentClientR\x06client\x127\n" +
 	"\n" +
 	"downloader\x18\x02 \x01(\v2\x17.settings.v1.DownloaderR\n" +
-	"downloader\"\x1d\n" +
-	"\x1bUpdateTorrentClientResponse\"M\n" +
+	"downloader\"\x1a\n" +
+	"\x18UpdateDownloaderResponse\"M\n" +
 	"\x15UpdateSettingsRequest\x124\n" +
 	"\bsettings\x18\x01 \x01(\v2\x18.settings.v1.GoudaConfigR\bsettings\"\x18\n" +
 	"\x16UpdateSettingsResponse\"\x15\n" +
@@ -1296,18 +1296,18 @@ const file_settings_v1_settings_proto_rawDesc = "" +
 	"\x04host\x18\x01 \x01(\tR\x04host\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x1a\n" +
 	"\bprotocol\x18\x04 \x01(\tR\bprotocol\x12\x12\n" +
-	"\x04user\x18\x05 \x01(\tR\x04user2\xee\x06\n" +
+	"\x04user\x18\x05 \x01(\tR\x04user2\xb5\x06\n" +
 	"\x0fSettingsService\x12U\n" +
 	"\fLoadSettings\x12 .settings.v1.LoadSettingsRequest\x1a!.settings.v1.LoadSettingsResponse\"\x00\x12[\n" +
-	"\x0eUpdateSettings\x12\".settings.v1.UpdateSettingsRequest\x1a#.settings.v1.UpdateSettingsResponse\"\x00\x12d\n" +
-	"\x11UpdateMamSettings\x12%.settings.v1.UpdateMamSettingsRequest\x1a&.settings.v1.UpdateMamSettingsResponse\"\x00\x12j\n" +
-	"\x13UpdateTorrentClient\x12'.settings.v1.UpdateTorrentClientRequest\x1a(.settings.v1.UpdateTorrentClientResponse\"\x00\x12d\n" +
-	"\x11UpdateFolderPaths\x12%.settings.v1.UpdateFolderPathsRequest\x1a&.settings.v1.UpdateFolderPathsResponse\"\x00\x12^\n" +
-	"\x0fListDirectories\x12#.settings.v1.ListDirectoriesRequest\x1a$.settings.v1.ListDirectoriesResponse\"\x00\x12R\n" +
-	"\vGetMetadata\x12\x1f.settings.v1.GetMetadataRequest\x1a .settings.v1.GetMetadataResponse\"\x00\x12m\n" +
+	"\x0eUpdateSettings\x12\".settings.v1.UpdateSettingsRequest\x1a#.settings.v1.UpdateSettingsResponse\"\x00\x12L\n" +
+	"\tUpdateMam\x12\x1d.settings.v1.UpdateMamRequest\x1a\x1e.settings.v1.UpdateMamResponse\"\x00\x12a\n" +
+	"\x10UpdateDownloader\x12$.settings.v1.UpdateDownloaderRequest\x1a%.settings.v1.UpdateDownloaderResponse\"\x00\x12L\n" +
+	"\tUpdateDir\x12\x1d.settings.v1.UpdateDirRequest\x1a\x1e.settings.v1.UpdateDirResponse\"\x00\x12^\n" +
+	"\x0fListDirectories\x12#.settings.v1.ListDirectoriesRequest\x1a$.settings.v1.ListDirectoriesResponse\"\x00\x12m\n" +
 	"\x14ListSupportedClients\x12(.settings.v1.ListSupportedClientsRequest\x1a).settings.v1.ListSupportedClientsResponse\"\x00\x12L\n" +
 	"\n" +
-	"TestClient\x12\x1a.settings.v1.TorrentClient\x1a .settings.v1.TestTorrentResponse\"\x00B\x9b\x01\n" +
+	"TestClient\x12\x1a.settings.v1.TorrentClient\x1a .settings.v1.TestTorrentResponse\"\x00\x12R\n" +
+	"\vGetMetadata\x12\x1f.settings.v1.GetMetadataRequest\x1a .settings.v1.GetMetadataResponse\"\x00B\x9b\x01\n" +
 	"\x0fcom.settings.v1B\rSettingsProtoP\x01Z,github.com/RA341/gouda/generated/settings/v1\xa2\x02\x03SXX\xaa\x02\vSettings.V1\xca\x02\vSettings\\V1\xe2\x02\x17Settings\\V1\\GPBMetadata\xea\x02\fSettings::V1b\x06proto3"
 
 var (
@@ -1326,12 +1326,12 @@ var file_settings_v1_settings_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_settings_v1_settings_proto_goTypes = []any{
 	(*ListDirectoriesRequest)(nil),       // 0: settings.v1.ListDirectoriesRequest
 	(*ListDirectoriesResponse)(nil),      // 1: settings.v1.ListDirectoriesResponse
-	(*UpdateFolderPathsRequest)(nil),     // 2: settings.v1.UpdateFolderPathsRequest
-	(*UpdateFolderPathsResponse)(nil),    // 3: settings.v1.UpdateFolderPathsResponse
-	(*UpdateMamSettingsRequest)(nil),     // 4: settings.v1.UpdateMamSettingsRequest
-	(*UpdateMamSettingsResponse)(nil),    // 5: settings.v1.UpdateMamSettingsResponse
-	(*UpdateTorrentClientRequest)(nil),   // 6: settings.v1.UpdateTorrentClientRequest
-	(*UpdateTorrentClientResponse)(nil),  // 7: settings.v1.UpdateTorrentClientResponse
+	(*UpdateDirRequest)(nil),             // 2: settings.v1.UpdateDirRequest
+	(*UpdateDirResponse)(nil),            // 3: settings.v1.UpdateDirResponse
+	(*UpdateMamRequest)(nil),             // 4: settings.v1.UpdateMamRequest
+	(*UpdateMamResponse)(nil),            // 5: settings.v1.UpdateMamResponse
+	(*UpdateDownloaderRequest)(nil),      // 6: settings.v1.UpdateDownloaderRequest
+	(*UpdateDownloaderResponse)(nil),     // 7: settings.v1.UpdateDownloaderResponse
 	(*UpdateSettingsRequest)(nil),        // 8: settings.v1.UpdateSettingsRequest
 	(*UpdateSettingsResponse)(nil),       // 9: settings.v1.UpdateSettingsResponse
 	(*LoadSettingsRequest)(nil),          // 10: settings.v1.LoadSettingsRequest
@@ -1351,10 +1351,10 @@ var file_settings_v1_settings_proto_goTypes = []any{
 	(*TorrentClient)(nil),                // 24: settings.v1.TorrentClient
 }
 var file_settings_v1_settings_proto_depIdxs = []int32{
-	20, // 0: settings.v1.UpdateFolderPathsRequest.dirs:type_name -> settings.v1.Directories
-	23, // 1: settings.v1.UpdateFolderPathsRequest.perms:type_name -> settings.v1.UserPermissions
-	24, // 2: settings.v1.UpdateTorrentClientRequest.client:type_name -> settings.v1.TorrentClient
-	22, // 3: settings.v1.UpdateTorrentClientRequest.downloader:type_name -> settings.v1.Downloader
+	20, // 0: settings.v1.UpdateDirRequest.dirs:type_name -> settings.v1.Directories
+	23, // 1: settings.v1.UpdateDirRequest.perms:type_name -> settings.v1.UserPermissions
+	24, // 2: settings.v1.UpdateDownloaderRequest.client:type_name -> settings.v1.TorrentClient
+	22, // 3: settings.v1.UpdateDownloaderRequest.downloader:type_name -> settings.v1.Downloader
 	19, // 4: settings.v1.UpdateSettingsRequest.settings:type_name -> settings.v1.GoudaConfig
 	19, // 5: settings.v1.LoadSettingsResponse.settings:type_name -> settings.v1.GoudaConfig
 	20, // 6: settings.v1.GoudaConfig.dir:type_name -> settings.v1.Directories
@@ -1364,22 +1364,22 @@ var file_settings_v1_settings_proto_depIdxs = []int32{
 	24, // 10: settings.v1.GoudaConfig.torrentClient:type_name -> settings.v1.TorrentClient
 	10, // 11: settings.v1.SettingsService.LoadSettings:input_type -> settings.v1.LoadSettingsRequest
 	8,  // 12: settings.v1.SettingsService.UpdateSettings:input_type -> settings.v1.UpdateSettingsRequest
-	4,  // 13: settings.v1.SettingsService.UpdateMamSettings:input_type -> settings.v1.UpdateMamSettingsRequest
-	6,  // 14: settings.v1.SettingsService.UpdateTorrentClient:input_type -> settings.v1.UpdateTorrentClientRequest
-	2,  // 15: settings.v1.SettingsService.UpdateFolderPaths:input_type -> settings.v1.UpdateFolderPathsRequest
+	4,  // 13: settings.v1.SettingsService.UpdateMam:input_type -> settings.v1.UpdateMamRequest
+	6,  // 14: settings.v1.SettingsService.UpdateDownloader:input_type -> settings.v1.UpdateDownloaderRequest
+	2,  // 15: settings.v1.SettingsService.UpdateDir:input_type -> settings.v1.UpdateDirRequest
 	0,  // 16: settings.v1.SettingsService.ListDirectories:input_type -> settings.v1.ListDirectoriesRequest
-	14, // 17: settings.v1.SettingsService.GetMetadata:input_type -> settings.v1.GetMetadataRequest
-	17, // 18: settings.v1.SettingsService.ListSupportedClients:input_type -> settings.v1.ListSupportedClientsRequest
-	24, // 19: settings.v1.SettingsService.TestClient:input_type -> settings.v1.TorrentClient
+	17, // 17: settings.v1.SettingsService.ListSupportedClients:input_type -> settings.v1.ListSupportedClientsRequest
+	24, // 18: settings.v1.SettingsService.TestClient:input_type -> settings.v1.TorrentClient
+	14, // 19: settings.v1.SettingsService.GetMetadata:input_type -> settings.v1.GetMetadataRequest
 	11, // 20: settings.v1.SettingsService.LoadSettings:output_type -> settings.v1.LoadSettingsResponse
 	9,  // 21: settings.v1.SettingsService.UpdateSettings:output_type -> settings.v1.UpdateSettingsResponse
-	5,  // 22: settings.v1.SettingsService.UpdateMamSettings:output_type -> settings.v1.UpdateMamSettingsResponse
-	7,  // 23: settings.v1.SettingsService.UpdateTorrentClient:output_type -> settings.v1.UpdateTorrentClientResponse
-	3,  // 24: settings.v1.SettingsService.UpdateFolderPaths:output_type -> settings.v1.UpdateFolderPathsResponse
+	5,  // 22: settings.v1.SettingsService.UpdateMam:output_type -> settings.v1.UpdateMamResponse
+	7,  // 23: settings.v1.SettingsService.UpdateDownloader:output_type -> settings.v1.UpdateDownloaderResponse
+	3,  // 24: settings.v1.SettingsService.UpdateDir:output_type -> settings.v1.UpdateDirResponse
 	1,  // 25: settings.v1.SettingsService.ListDirectories:output_type -> settings.v1.ListDirectoriesResponse
-	16, // 26: settings.v1.SettingsService.GetMetadata:output_type -> settings.v1.GetMetadataResponse
-	18, // 27: settings.v1.SettingsService.ListSupportedClients:output_type -> settings.v1.ListSupportedClientsResponse
-	15, // 28: settings.v1.SettingsService.TestClient:output_type -> settings.v1.TestTorrentResponse
+	18, // 26: settings.v1.SettingsService.ListSupportedClients:output_type -> settings.v1.ListSupportedClientsResponse
+	15, // 27: settings.v1.SettingsService.TestClient:output_type -> settings.v1.TestTorrentResponse
+	16, // 28: settings.v1.SettingsService.GetMetadata:output_type -> settings.v1.GetMetadataResponse
 	20, // [20:29] is the sub-list for method output_type
 	11, // [11:20] is the sub-list for method input_type
 	11, // [11:11] is the sub-list for extension type_name

@@ -39,40 +39,40 @@ const (
 	// SettingsServiceUpdateSettingsProcedure is the fully-qualified name of the SettingsService's
 	// UpdateSettings RPC.
 	SettingsServiceUpdateSettingsProcedure = "/settings.v1.SettingsService/UpdateSettings"
-	// SettingsServiceUpdateMamSettingsProcedure is the fully-qualified name of the SettingsService's
-	// UpdateMamSettings RPC.
-	SettingsServiceUpdateMamSettingsProcedure = "/settings.v1.SettingsService/UpdateMamSettings"
-	// SettingsServiceUpdateTorrentClientProcedure is the fully-qualified name of the SettingsService's
-	// UpdateTorrentClient RPC.
-	SettingsServiceUpdateTorrentClientProcedure = "/settings.v1.SettingsService/UpdateTorrentClient"
-	// SettingsServiceUpdateFolderPathsProcedure is the fully-qualified name of the SettingsService's
-	// UpdateFolderPaths RPC.
-	SettingsServiceUpdateFolderPathsProcedure = "/settings.v1.SettingsService/UpdateFolderPaths"
+	// SettingsServiceUpdateMamProcedure is the fully-qualified name of the SettingsService's UpdateMam
+	// RPC.
+	SettingsServiceUpdateMamProcedure = "/settings.v1.SettingsService/UpdateMam"
+	// SettingsServiceUpdateDownloaderProcedure is the fully-qualified name of the SettingsService's
+	// UpdateDownloader RPC.
+	SettingsServiceUpdateDownloaderProcedure = "/settings.v1.SettingsService/UpdateDownloader"
+	// SettingsServiceUpdateDirProcedure is the fully-qualified name of the SettingsService's UpdateDir
+	// RPC.
+	SettingsServiceUpdateDirProcedure = "/settings.v1.SettingsService/UpdateDir"
 	// SettingsServiceListDirectoriesProcedure is the fully-qualified name of the SettingsService's
 	// ListDirectories RPC.
 	SettingsServiceListDirectoriesProcedure = "/settings.v1.SettingsService/ListDirectories"
-	// SettingsServiceGetMetadataProcedure is the fully-qualified name of the SettingsService's
-	// GetMetadata RPC.
-	SettingsServiceGetMetadataProcedure = "/settings.v1.SettingsService/GetMetadata"
 	// SettingsServiceListSupportedClientsProcedure is the fully-qualified name of the SettingsService's
 	// ListSupportedClients RPC.
 	SettingsServiceListSupportedClientsProcedure = "/settings.v1.SettingsService/ListSupportedClients"
 	// SettingsServiceTestClientProcedure is the fully-qualified name of the SettingsService's
 	// TestClient RPC.
 	SettingsServiceTestClientProcedure = "/settings.v1.SettingsService/TestClient"
+	// SettingsServiceGetMetadataProcedure is the fully-qualified name of the SettingsService's
+	// GetMetadata RPC.
+	SettingsServiceGetMetadataProcedure = "/settings.v1.SettingsService/GetMetadata"
 )
 
 // SettingsServiceClient is a client for the settings.v1.SettingsService service.
 type SettingsServiceClient interface {
 	LoadSettings(context.Context, *connect.Request[v1.LoadSettingsRequest]) (*connect.Response[v1.LoadSettingsResponse], error)
 	UpdateSettings(context.Context, *connect.Request[v1.UpdateSettingsRequest]) (*connect.Response[v1.UpdateSettingsResponse], error)
-	UpdateMamSettings(context.Context, *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error)
-	UpdateTorrentClient(context.Context, *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error)
-	UpdateFolderPaths(context.Context, *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error)
+	UpdateMam(context.Context, *connect.Request[v1.UpdateMamRequest]) (*connect.Response[v1.UpdateMamResponse], error)
+	UpdateDownloader(context.Context, *connect.Request[v1.UpdateDownloaderRequest]) (*connect.Response[v1.UpdateDownloaderResponse], error)
+	UpdateDir(context.Context, *connect.Request[v1.UpdateDirRequest]) (*connect.Response[v1.UpdateDirResponse], error)
 	ListDirectories(context.Context, *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error)
-	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
+	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 }
 
 // NewSettingsServiceClient constructs a client for the settings.v1.SettingsService service. By
@@ -98,34 +98,28 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(settingsServiceMethods.ByName("UpdateSettings")),
 			connect.WithClientOptions(opts...),
 		),
-		updateMamSettings: connect.NewClient[v1.UpdateMamSettingsRequest, v1.UpdateMamSettingsResponse](
+		updateMam: connect.NewClient[v1.UpdateMamRequest, v1.UpdateMamResponse](
 			httpClient,
-			baseURL+SettingsServiceUpdateMamSettingsProcedure,
-			connect.WithSchema(settingsServiceMethods.ByName("UpdateMamSettings")),
+			baseURL+SettingsServiceUpdateMamProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateMam")),
 			connect.WithClientOptions(opts...),
 		),
-		updateTorrentClient: connect.NewClient[v1.UpdateTorrentClientRequest, v1.UpdateTorrentClientResponse](
+		updateDownloader: connect.NewClient[v1.UpdateDownloaderRequest, v1.UpdateDownloaderResponse](
 			httpClient,
-			baseURL+SettingsServiceUpdateTorrentClientProcedure,
-			connect.WithSchema(settingsServiceMethods.ByName("UpdateTorrentClient")),
+			baseURL+SettingsServiceUpdateDownloaderProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateDownloader")),
 			connect.WithClientOptions(opts...),
 		),
-		updateFolderPaths: connect.NewClient[v1.UpdateFolderPathsRequest, v1.UpdateFolderPathsResponse](
+		updateDir: connect.NewClient[v1.UpdateDirRequest, v1.UpdateDirResponse](
 			httpClient,
-			baseURL+SettingsServiceUpdateFolderPathsProcedure,
-			connect.WithSchema(settingsServiceMethods.ByName("UpdateFolderPaths")),
+			baseURL+SettingsServiceUpdateDirProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("UpdateDir")),
 			connect.WithClientOptions(opts...),
 		),
 		listDirectories: connect.NewClient[v1.ListDirectoriesRequest, v1.ListDirectoriesResponse](
 			httpClient,
 			baseURL+SettingsServiceListDirectoriesProcedure,
 			connect.WithSchema(settingsServiceMethods.ByName("ListDirectories")),
-			connect.WithClientOptions(opts...),
-		),
-		getMetadata: connect.NewClient[v1.GetMetadataRequest, v1.GetMetadataResponse](
-			httpClient,
-			baseURL+SettingsServiceGetMetadataProcedure,
-			connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
 			connect.WithClientOptions(opts...),
 		),
 		listSupportedClients: connect.NewClient[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse](
@@ -140,6 +134,12 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(settingsServiceMethods.ByName("TestClient")),
 			connect.WithClientOptions(opts...),
 		),
+		getMetadata: connect.NewClient[v1.GetMetadataRequest, v1.GetMetadataResponse](
+			httpClient,
+			baseURL+SettingsServiceGetMetadataProcedure,
+			connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -147,13 +147,13 @@ func NewSettingsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 type settingsServiceClient struct {
 	loadSettings         *connect.Client[v1.LoadSettingsRequest, v1.LoadSettingsResponse]
 	updateSettings       *connect.Client[v1.UpdateSettingsRequest, v1.UpdateSettingsResponse]
-	updateMamSettings    *connect.Client[v1.UpdateMamSettingsRequest, v1.UpdateMamSettingsResponse]
-	updateTorrentClient  *connect.Client[v1.UpdateTorrentClientRequest, v1.UpdateTorrentClientResponse]
-	updateFolderPaths    *connect.Client[v1.UpdateFolderPathsRequest, v1.UpdateFolderPathsResponse]
+	updateMam            *connect.Client[v1.UpdateMamRequest, v1.UpdateMamResponse]
+	updateDownloader     *connect.Client[v1.UpdateDownloaderRequest, v1.UpdateDownloaderResponse]
+	updateDir            *connect.Client[v1.UpdateDirRequest, v1.UpdateDirResponse]
 	listDirectories      *connect.Client[v1.ListDirectoriesRequest, v1.ListDirectoriesResponse]
-	getMetadata          *connect.Client[v1.GetMetadataRequest, v1.GetMetadataResponse]
 	listSupportedClients *connect.Client[v1.ListSupportedClientsRequest, v1.ListSupportedClientsResponse]
 	testClient           *connect.Client[v1.TorrentClient, v1.TestTorrentResponse]
+	getMetadata          *connect.Client[v1.GetMetadataRequest, v1.GetMetadataResponse]
 }
 
 // LoadSettings calls settings.v1.SettingsService.LoadSettings.
@@ -166,29 +166,24 @@ func (c *settingsServiceClient) UpdateSettings(ctx context.Context, req *connect
 	return c.updateSettings.CallUnary(ctx, req)
 }
 
-// UpdateMamSettings calls settings.v1.SettingsService.UpdateMamSettings.
-func (c *settingsServiceClient) UpdateMamSettings(ctx context.Context, req *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error) {
-	return c.updateMamSettings.CallUnary(ctx, req)
+// UpdateMam calls settings.v1.SettingsService.UpdateMam.
+func (c *settingsServiceClient) UpdateMam(ctx context.Context, req *connect.Request[v1.UpdateMamRequest]) (*connect.Response[v1.UpdateMamResponse], error) {
+	return c.updateMam.CallUnary(ctx, req)
 }
 
-// UpdateTorrentClient calls settings.v1.SettingsService.UpdateTorrentClient.
-func (c *settingsServiceClient) UpdateTorrentClient(ctx context.Context, req *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error) {
-	return c.updateTorrentClient.CallUnary(ctx, req)
+// UpdateDownloader calls settings.v1.SettingsService.UpdateDownloader.
+func (c *settingsServiceClient) UpdateDownloader(ctx context.Context, req *connect.Request[v1.UpdateDownloaderRequest]) (*connect.Response[v1.UpdateDownloaderResponse], error) {
+	return c.updateDownloader.CallUnary(ctx, req)
 }
 
-// UpdateFolderPaths calls settings.v1.SettingsService.UpdateFolderPaths.
-func (c *settingsServiceClient) UpdateFolderPaths(ctx context.Context, req *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error) {
-	return c.updateFolderPaths.CallUnary(ctx, req)
+// UpdateDir calls settings.v1.SettingsService.UpdateDir.
+func (c *settingsServiceClient) UpdateDir(ctx context.Context, req *connect.Request[v1.UpdateDirRequest]) (*connect.Response[v1.UpdateDirResponse], error) {
+	return c.updateDir.CallUnary(ctx, req)
 }
 
 // ListDirectories calls settings.v1.SettingsService.ListDirectories.
 func (c *settingsServiceClient) ListDirectories(ctx context.Context, req *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error) {
 	return c.listDirectories.CallUnary(ctx, req)
-}
-
-// GetMetadata calls settings.v1.SettingsService.GetMetadata.
-func (c *settingsServiceClient) GetMetadata(ctx context.Context, req *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
-	return c.getMetadata.CallUnary(ctx, req)
 }
 
 // ListSupportedClients calls settings.v1.SettingsService.ListSupportedClients.
@@ -201,17 +196,22 @@ func (c *settingsServiceClient) TestClient(ctx context.Context, req *connect.Req
 	return c.testClient.CallUnary(ctx, req)
 }
 
+// GetMetadata calls settings.v1.SettingsService.GetMetadata.
+func (c *settingsServiceClient) GetMetadata(ctx context.Context, req *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+	return c.getMetadata.CallUnary(ctx, req)
+}
+
 // SettingsServiceHandler is an implementation of the settings.v1.SettingsService service.
 type SettingsServiceHandler interface {
 	LoadSettings(context.Context, *connect.Request[v1.LoadSettingsRequest]) (*connect.Response[v1.LoadSettingsResponse], error)
 	UpdateSettings(context.Context, *connect.Request[v1.UpdateSettingsRequest]) (*connect.Response[v1.UpdateSettingsResponse], error)
-	UpdateMamSettings(context.Context, *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error)
-	UpdateTorrentClient(context.Context, *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error)
-	UpdateFolderPaths(context.Context, *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error)
+	UpdateMam(context.Context, *connect.Request[v1.UpdateMamRequest]) (*connect.Response[v1.UpdateMamResponse], error)
+	UpdateDownloader(context.Context, *connect.Request[v1.UpdateDownloaderRequest]) (*connect.Response[v1.UpdateDownloaderResponse], error)
+	UpdateDir(context.Context, *connect.Request[v1.UpdateDirRequest]) (*connect.Response[v1.UpdateDirResponse], error)
 	ListDirectories(context.Context, *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error)
-	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 	ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error)
 	TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error)
+	GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error)
 }
 
 // NewSettingsServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -233,34 +233,28 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(settingsServiceMethods.ByName("UpdateSettings")),
 		connect.WithHandlerOptions(opts...),
 	)
-	settingsServiceUpdateMamSettingsHandler := connect.NewUnaryHandler(
-		SettingsServiceUpdateMamSettingsProcedure,
-		svc.UpdateMamSettings,
-		connect.WithSchema(settingsServiceMethods.ByName("UpdateMamSettings")),
+	settingsServiceUpdateMamHandler := connect.NewUnaryHandler(
+		SettingsServiceUpdateMamProcedure,
+		svc.UpdateMam,
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateMam")),
 		connect.WithHandlerOptions(opts...),
 	)
-	settingsServiceUpdateTorrentClientHandler := connect.NewUnaryHandler(
-		SettingsServiceUpdateTorrentClientProcedure,
-		svc.UpdateTorrentClient,
-		connect.WithSchema(settingsServiceMethods.ByName("UpdateTorrentClient")),
+	settingsServiceUpdateDownloaderHandler := connect.NewUnaryHandler(
+		SettingsServiceUpdateDownloaderProcedure,
+		svc.UpdateDownloader,
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateDownloader")),
 		connect.WithHandlerOptions(opts...),
 	)
-	settingsServiceUpdateFolderPathsHandler := connect.NewUnaryHandler(
-		SettingsServiceUpdateFolderPathsProcedure,
-		svc.UpdateFolderPaths,
-		connect.WithSchema(settingsServiceMethods.ByName("UpdateFolderPaths")),
+	settingsServiceUpdateDirHandler := connect.NewUnaryHandler(
+		SettingsServiceUpdateDirProcedure,
+		svc.UpdateDir,
+		connect.WithSchema(settingsServiceMethods.ByName("UpdateDir")),
 		connect.WithHandlerOptions(opts...),
 	)
 	settingsServiceListDirectoriesHandler := connect.NewUnaryHandler(
 		SettingsServiceListDirectoriesProcedure,
 		svc.ListDirectories,
 		connect.WithSchema(settingsServiceMethods.ByName("ListDirectories")),
-		connect.WithHandlerOptions(opts...),
-	)
-	settingsServiceGetMetadataHandler := connect.NewUnaryHandler(
-		SettingsServiceGetMetadataProcedure,
-		svc.GetMetadata,
-		connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
 		connect.WithHandlerOptions(opts...),
 	)
 	settingsServiceListSupportedClientsHandler := connect.NewUnaryHandler(
@@ -275,26 +269,32 @@ func NewSettingsServiceHandler(svc SettingsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(settingsServiceMethods.ByName("TestClient")),
 		connect.WithHandlerOptions(opts...),
 	)
+	settingsServiceGetMetadataHandler := connect.NewUnaryHandler(
+		SettingsServiceGetMetadataProcedure,
+		svc.GetMetadata,
+		connect.WithSchema(settingsServiceMethods.ByName("GetMetadata")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/settings.v1.SettingsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case SettingsServiceLoadSettingsProcedure:
 			settingsServiceLoadSettingsHandler.ServeHTTP(w, r)
 		case SettingsServiceUpdateSettingsProcedure:
 			settingsServiceUpdateSettingsHandler.ServeHTTP(w, r)
-		case SettingsServiceUpdateMamSettingsProcedure:
-			settingsServiceUpdateMamSettingsHandler.ServeHTTP(w, r)
-		case SettingsServiceUpdateTorrentClientProcedure:
-			settingsServiceUpdateTorrentClientHandler.ServeHTTP(w, r)
-		case SettingsServiceUpdateFolderPathsProcedure:
-			settingsServiceUpdateFolderPathsHandler.ServeHTTP(w, r)
+		case SettingsServiceUpdateMamProcedure:
+			settingsServiceUpdateMamHandler.ServeHTTP(w, r)
+		case SettingsServiceUpdateDownloaderProcedure:
+			settingsServiceUpdateDownloaderHandler.ServeHTTP(w, r)
+		case SettingsServiceUpdateDirProcedure:
+			settingsServiceUpdateDirHandler.ServeHTTP(w, r)
 		case SettingsServiceListDirectoriesProcedure:
 			settingsServiceListDirectoriesHandler.ServeHTTP(w, r)
-		case SettingsServiceGetMetadataProcedure:
-			settingsServiceGetMetadataHandler.ServeHTTP(w, r)
 		case SettingsServiceListSupportedClientsProcedure:
 			settingsServiceListSupportedClientsHandler.ServeHTTP(w, r)
 		case SettingsServiceTestClientProcedure:
 			settingsServiceTestClientHandler.ServeHTTP(w, r)
+		case SettingsServiceGetMetadataProcedure:
+			settingsServiceGetMetadataHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -312,24 +312,20 @@ func (UnimplementedSettingsServiceHandler) UpdateSettings(context.Context, *conn
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateSettings is not implemented"))
 }
 
-func (UnimplementedSettingsServiceHandler) UpdateMamSettings(context.Context, *connect.Request[v1.UpdateMamSettingsRequest]) (*connect.Response[v1.UpdateMamSettingsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateMamSettings is not implemented"))
+func (UnimplementedSettingsServiceHandler) UpdateMam(context.Context, *connect.Request[v1.UpdateMamRequest]) (*connect.Response[v1.UpdateMamResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateMam is not implemented"))
 }
 
-func (UnimplementedSettingsServiceHandler) UpdateTorrentClient(context.Context, *connect.Request[v1.UpdateTorrentClientRequest]) (*connect.Response[v1.UpdateTorrentClientResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateTorrentClient is not implemented"))
+func (UnimplementedSettingsServiceHandler) UpdateDownloader(context.Context, *connect.Request[v1.UpdateDownloaderRequest]) (*connect.Response[v1.UpdateDownloaderResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateDownloader is not implemented"))
 }
 
-func (UnimplementedSettingsServiceHandler) UpdateFolderPaths(context.Context, *connect.Request[v1.UpdateFolderPathsRequest]) (*connect.Response[v1.UpdateFolderPathsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateFolderPaths is not implemented"))
+func (UnimplementedSettingsServiceHandler) UpdateDir(context.Context, *connect.Request[v1.UpdateDirRequest]) (*connect.Response[v1.UpdateDirResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.UpdateDir is not implemented"))
 }
 
 func (UnimplementedSettingsServiceHandler) ListDirectories(context.Context, *connect.Request[v1.ListDirectoriesRequest]) (*connect.Response[v1.ListDirectoriesResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.ListDirectories is not implemented"))
-}
-
-func (UnimplementedSettingsServiceHandler) GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.GetMetadata is not implemented"))
 }
 
 func (UnimplementedSettingsServiceHandler) ListSupportedClients(context.Context, *connect.Request[v1.ListSupportedClientsRequest]) (*connect.Response[v1.ListSupportedClientsResponse], error) {
@@ -338,4 +334,8 @@ func (UnimplementedSettingsServiceHandler) ListSupportedClients(context.Context,
 
 func (UnimplementedSettingsServiceHandler) TestClient(context.Context, *connect.Request[v1.TorrentClient]) (*connect.Response[v1.TestTorrentResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.TestClient is not implemented"))
+}
+
+func (UnimplementedSettingsServiceHandler) GetMetadata(context.Context, *connect.Request[v1.GetMetadataRequest]) (*connect.Response[v1.GetMetadataResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("settings.v1.SettingsService.GetMetadata is not implemented"))
 }

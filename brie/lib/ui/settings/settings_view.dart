@@ -2,15 +2,17 @@ import 'package:brie/ui/layout/layout_page.dart';
 import 'package:brie/ui/settings/model.dart';
 import 'package:brie/ui/settings/provider.dart';
 import 'package:brie/ui/settings/tab_account.dart';
-import 'package:brie/ui/settings/tab_files.dart';
-import 'package:brie/ui/settings/tab_mam.dart';
+import 'package:brie/ui/settings/tab_admin_downloader.dart';
+import 'package:brie/ui/settings/tab_admin_files.dart';
+import 'package:brie/ui/settings/tab_admin_mam.dart';
 import 'package:brie/ui/settings/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final settingsPageConfigProviderProvider =
-FutureProvider<List<SettingsPageConfig>>((ref) async {
+final settingsPageConfigProvider = FutureProvider<List<SettingsPageConfig>>((
+  ref,
+) async {
   final isAdmin = await ref.watch(isAdminProvider.future);
 
   final allSettings = <SettingsPageConfig>[
@@ -28,15 +30,8 @@ FutureProvider<List<SettingsPageConfig>>((ref) async {
         iconData: Icons.mouse,
         child: const ServerSettingsView(child: TabMam()),
         buttons: [
-          IconLabelButton(
-            onTap: () async {
-              await ref.read(serverConfigProvider.notifier).saveConfig();
-            },
-            label: "Save",
-            icon: Icons.save,
-            isRefreshing: ref
-                .watch(serverConfigProvider)
-                .isLoading,
+          SettingsUpdateButton(
+            onTap: () => ref.read(serverConfigProvider.notifier).updateMam(),
           ),
         ],
       ),
@@ -45,15 +40,19 @@ FutureProvider<List<SettingsPageConfig>>((ref) async {
         iconData: Icons.folder_copy,
         child: const ServerSettingsView(child: TabFiles()),
         buttons: [
-          IconLabelButton(
-            onTap: () async {
-              await ref.read(serverConfigProvider.notifier).saveConfig();
-            },
-            label: "Save",
-            icon: Icons.save,
-            isRefreshing: ref
-                .watch(serverConfigProvider)
-                .isLoading,
+          SettingsUpdateButton(
+            onTap: () => ref.read(serverConfigProvider.notifier).updateDirs(),
+          ),
+        ],
+      ),
+      SettingsPageConfig(
+        title: 'Downloader',
+        iconData: Icons.download_for_offline,
+        child: const ServerSettingsView(child: TabDownloader()),
+        buttons: [
+          SettingsUpdateButton(
+            onTap: () =>
+                ref.read(serverConfigProvider.notifier).updateDownloader(),
           ),
         ],
       ),
@@ -70,7 +69,7 @@ class SettingsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pages = ref.watch(settingsPageConfigProviderProvider);
+    final pages = ref.watch(settingsPageConfigProvider);
 
     return Center(
       child: pages.when(
@@ -193,6 +192,25 @@ class SettingsCoreMobile extends HookConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class SettingsUpdateButton extends ConsumerWidget {
+  const SettingsUpdateButton({
+    required this.onTap,
+    super.key,
+  });
+
+  final Future<void> Function() onTap;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconLabelButton(
+      onTap: onTap,
+      label: "Save",
+      icon: Icons.save,
+      isRefreshing: ref.watch(serverConfigProvider).isLoading,
     );
   }
 }

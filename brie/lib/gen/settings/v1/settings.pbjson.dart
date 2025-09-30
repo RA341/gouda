@@ -24,8 +24,8 @@ const ListDirectoriesRequest$json = {
 
 /// Descriptor for `ListDirectoriesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List listDirectoriesRequestDescriptor =
-$convert.base64Decode(
-    'ChZMaXN0RGlyZWN0b3JpZXNSZXF1ZXN0EhoKCGZpbGVQYXRoGAEgASgJUghmaWxlUGF0aA==');
+    $convert.base64Decode(
+        'ChZMaXN0RGlyZWN0b3JpZXNSZXF1ZXN0EhoKCGZpbGVQYXRoGAEgASgJUghmaWxlUGF0aA==');
 
 @$core.Deprecated('Use listDirectoriesResponseDescriptor instead')
 const ListDirectoriesResponse$json = {
@@ -38,13 +38,13 @@ const ListDirectoriesResponse$json = {
 
 /// Descriptor for `ListDirectoriesResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List listDirectoriesResponseDescriptor =
-$convert.base64Decode(
-    'ChdMaXN0RGlyZWN0b3JpZXNSZXNwb25zZRIYCgdmb2xkZXJzGAEgAygJUgdmb2xkZXJzEhQKBW'
+    $convert.base64Decode(
+        'ChdMaXN0RGlyZWN0b3JpZXNSZXNwb25zZRIYCgdmb2xkZXJzGAEgAygJUgdmb2xkZXJzEhQKBW'
         'ZpbGVzGAIgAygJUgVmaWxlcw==');
 
-@$core.Deprecated('Use updateFolderPathsRequestDescriptor instead')
-const UpdateFolderPathsRequest$json = {
-  '1': 'UpdateFolderPathsRequest',
+@$core.Deprecated('Use updateDirRequestDescriptor instead')
+const UpdateDirRequest$json = {
+  '1': 'UpdateDirRequest',
   '2': [
     {
       '1': 'dirs',
@@ -65,47 +65,45 @@ const UpdateFolderPathsRequest$json = {
   ],
 };
 
-/// Descriptor for `UpdateFolderPathsRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateFolderPathsRequestDescriptor = $convert
-    .base64Decode(
-    'ChhVcGRhdGVGb2xkZXJQYXRoc1JlcXVlc3QSLAoEZGlycxgBIAEoCzIYLnNldHRpbmdzLnYxLk'
-        'RpcmVjdG9yaWVzUgRkaXJzEjIKBXBlcm1zGAIgASgLMhwuc2V0dGluZ3MudjEuVXNlclBlcm1p'
-        'c3Npb25zUgVwZXJtcw==');
+/// Descriptor for `UpdateDirRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateDirRequestDescriptor = $convert.base64Decode(
+    'ChBVcGRhdGVEaXJSZXF1ZXN0EiwKBGRpcnMYASABKAsyGC5zZXR0aW5ncy52MS5EaXJlY3Rvcm'
+    'llc1IEZGlycxIyCgVwZXJtcxgCIAEoCzIcLnNldHRpbmdzLnYxLlVzZXJQZXJtaXNzaW9uc1IF'
+    'cGVybXM=');
 
-@$core.Deprecated('Use updateFolderPathsResponseDescriptor instead')
-const UpdateFolderPathsResponse$json = {
-  '1': 'UpdateFolderPathsResponse',
+@$core.Deprecated('Use updateDirResponseDescriptor instead')
+const UpdateDirResponse$json = {
+  '1': 'UpdateDirResponse',
 };
 
-/// Descriptor for `UpdateFolderPathsResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateFolderPathsResponseDescriptor =
-$convert.base64Decode('ChlVcGRhdGVGb2xkZXJQYXRoc1Jlc3BvbnNl');
+/// Descriptor for `UpdateDirResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateDirResponseDescriptor =
+    $convert.base64Decode('ChFVcGRhdGVEaXJSZXNwb25zZQ==');
 
-@$core.Deprecated('Use updateMamSettingsRequestDescriptor instead')
-const UpdateMamSettingsRequest$json = {
-  '1': 'UpdateMamSettingsRequest',
+@$core.Deprecated('Use updateMamRequestDescriptor instead')
+const UpdateMamRequest$json = {
+  '1': 'UpdateMamRequest',
   '2': [
     {'1': 'mamToken', '3': 1, '4': 1, '5': 9, '10': 'mamToken'},
   ],
 };
 
-/// Descriptor for `UpdateMamSettingsRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateMamSettingsRequestDescriptor =
-$convert.base64Decode(
-    'ChhVcGRhdGVNYW1TZXR0aW5nc1JlcXVlc3QSGgoIbWFtVG9rZW4YASABKAlSCG1hbVRva2Vu');
+/// Descriptor for `UpdateMamRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateMamRequestDescriptor = $convert.base64Decode(
+    'ChBVcGRhdGVNYW1SZXF1ZXN0EhoKCG1hbVRva2VuGAEgASgJUghtYW1Ub2tlbg==');
 
-@$core.Deprecated('Use updateMamSettingsResponseDescriptor instead')
-const UpdateMamSettingsResponse$json = {
-  '1': 'UpdateMamSettingsResponse',
+@$core.Deprecated('Use updateMamResponseDescriptor instead')
+const UpdateMamResponse$json = {
+  '1': 'UpdateMamResponse',
 };
 
-/// Descriptor for `UpdateMamSettingsResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateMamSettingsResponseDescriptor =
-$convert.base64Decode('ChlVcGRhdGVNYW1TZXR0aW5nc1Jlc3BvbnNl');
+/// Descriptor for `UpdateMamResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateMamResponseDescriptor =
+    $convert.base64Decode('ChFVcGRhdGVNYW1SZXNwb25zZQ==');
 
-@$core.Deprecated('Use updateTorrentClientRequestDescriptor instead')
-const UpdateTorrentClientRequest$json = {
-  '1': 'UpdateTorrentClientRequest',
+@$core.Deprecated('Use updateDownloaderRequestDescriptor instead')
+const UpdateDownloaderRequest$json = {
+  '1': 'UpdateDownloaderRequest',
   '2': [
     {
       '1': 'client',
@@ -126,21 +124,20 @@ const UpdateTorrentClientRequest$json = {
   ],
 };
 
-/// Descriptor for `UpdateTorrentClientRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateTorrentClientRequestDescriptor =
-$convert.base64Decode(
-    'ChpVcGRhdGVUb3JyZW50Q2xpZW50UmVxdWVzdBIyCgZjbGllbnQYASABKAsyGi5zZXR0aW5ncy'
-        '52MS5Ub3JyZW50Q2xpZW50UgZjbGllbnQSNwoKZG93bmxvYWRlchgCIAEoCzIXLnNldHRpbmdz'
-        'LnYxLkRvd25sb2FkZXJSCmRvd25sb2FkZXI=');
+/// Descriptor for `UpdateDownloaderRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateDownloaderRequestDescriptor = $convert.base64Decode(
+    'ChdVcGRhdGVEb3dubG9hZGVyUmVxdWVzdBIyCgZjbGllbnQYASABKAsyGi5zZXR0aW5ncy52MS'
+    '5Ub3JyZW50Q2xpZW50UgZjbGllbnQSNwoKZG93bmxvYWRlchgCIAEoCzIXLnNldHRpbmdzLnYx'
+    'LkRvd25sb2FkZXJSCmRvd25sb2FkZXI=');
 
-@$core.Deprecated('Use updateTorrentClientResponseDescriptor instead')
-const UpdateTorrentClientResponse$json = {
-  '1': 'UpdateTorrentClientResponse',
+@$core.Deprecated('Use updateDownloaderResponseDescriptor instead')
+const UpdateDownloaderResponse$json = {
+  '1': 'UpdateDownloaderResponse',
 };
 
-/// Descriptor for `UpdateTorrentClientResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateTorrentClientResponseDescriptor =
-$convert.base64Decode('ChtVcGRhdGVUb3JyZW50Q2xpZW50UmVzcG9uc2U=');
+/// Descriptor for `UpdateDownloaderResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateDownloaderResponseDescriptor =
+    $convert.base64Decode('ChhVcGRhdGVEb3dubG9hZGVyUmVzcG9uc2U=');
 
 @$core.Deprecated('Use updateSettingsRequestDescriptor instead')
 const UpdateSettingsRequest$json = {
@@ -349,8 +346,8 @@ const Directories$json = {
 /// Descriptor for `Directories`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List directoriesDescriptor = $convert.base64Decode(
     'CgtEaXJlY3RvcmllcxIgCgtkb3dubG9hZERpchgCIAEoCVILZG93bmxvYWREaXISIAoLY29tcG'
-        'xldGVEaXIYAyABKAlSC2NvbXBsZXRlRGlyEh4KCnRvcnJlbnREaXIYBCABKAlSCnRvcnJlbnRE'
-        'aXI=');
+    'xldGVEaXIYAyABKAlSC2NvbXBsZXRlRGlyEh4KCnRvcnJlbnREaXIYBCABKAlSCnRvcnJlbnRE'
+    'aXI=');
 
 @$core.Deprecated('Use loggerDescriptor instead')
 const Logger$json = {
