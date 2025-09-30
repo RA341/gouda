@@ -19,7 +19,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
+      
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -42,7 +44,7 @@ jobs:
         run: |
           COMMIT_HASH=$(git rev-parse --short HEAD)
           COMMIT_COUNT=$(git rev-list --count HEAD)
-          BUILD_VERSION="0.1.0-dev+$COMMIT_COUNT-$COMMIT_HASH"
+          BUILD_VERSION="0.1.0-dev+$COMMIT_COUNT"
           flutter build apk --release \
             --build-name=$BUILD_VERSION \
             --build-number=$COMMIT_COUNT
