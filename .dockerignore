@@ -66,5 +66,5 @@ brie/android/app/debug
 brie/android/app/profile
 brie/android/app/release
 
-**/.build
+/**/.build
 core/**/web

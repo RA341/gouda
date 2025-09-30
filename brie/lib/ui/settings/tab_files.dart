@@ -2,6 +2,7 @@ import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/ui/settings/provider.dart';
 import 'package:brie/ui/settings/utils.dart';
+import 'package:brie/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,7 +46,7 @@ class TabFiles extends HookConsumerWidget {
                   .read(serverConfigProvider.notifier)
                   .updateConfigField(
                     (existingConfig) =>
-                existingConfig..permissions.gid = int.parse(value),
+                    existingConfig..permissions.gid = int.parse(value),
               );
             },
             helpText: "GID for files. Learn more.",
@@ -72,7 +73,7 @@ class TabFiles extends HookConsumerWidget {
                   .read(serverConfigProvider.notifier)
                   .updateConfigField(
                     (existingConfig) =>
-                existingConfig..permissions.uid = int.parse(value),
+                    existingConfig..permissions.uid = int.parse(value),
               );
             },
           ),
@@ -102,8 +103,8 @@ class TabFiles extends HookConsumerWidget {
                         .read(serverConfigProvider.notifier)
                         .updateConfigField(
                           (existingConfig) =>
-                      existingConfig
-                        ..dir.downloadDir = downloadsDirController.text,
+                          existingConfig
+                            ..dir.downloadDir = downloadsDirController.text,
                     );
                   },
 
@@ -137,8 +138,8 @@ class TabFiles extends HookConsumerWidget {
                         .read(serverConfigProvider.notifier)
                         .updateConfigField(
                           (existingConfig) =>
-                      existingConfig
-                        ..dir.completeDir = completeDirController.text,
+                          existingConfig
+                            ..dir.completeDir = completeDirController.text,
                     );
                   },
 
@@ -172,8 +173,8 @@ class TabFiles extends HookConsumerWidget {
                         .read(serverConfigProvider.notifier)
                         .updateConfigField(
                           (existingConfig) =>
-                      existingConfig
-                        ..dir.torrentDir = torrentDirController.text,
+                          existingConfig
+                            ..dir.torrentDir = torrentDirController.text,
                     );
                   },
                   icon: const Icon(Icons.create_new_folder),
@@ -211,6 +212,8 @@ final directoryListingsProvider =
 FutureProvider.family<ListDirectoriesResponse, String>((ref,
     path,) async {
   final settingsApi = ref.read(settingsApiProvider);
+  logger.d("getting path $path");
+
   return await settingsApi.listDirectories(
     ListDirectoriesRequest(filePath: path),
   );
@@ -253,6 +256,11 @@ class FilePicker extends HookConsumerWidget {
     void navigateUp() {
       final split = currentPath.value.split("/");
       final parent = split.sublist(0, split.length - 1).join("/");
+
+      if (parent == "") {
+        navigateToPath("/");
+        return;
+      }
 
       if (parent != currentPath.value) {
         navigateToPath(parent);
@@ -418,7 +426,6 @@ class FilePicker extends HookConsumerWidget {
 
             const Divider(),
 
-            // Action buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

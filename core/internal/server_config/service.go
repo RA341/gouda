@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	v1 "github.com/RA341/gouda/generated/settings/v1"
-	"github.com/rs/zerolog/log"
 )
 
 // todo separate logic from handler
@@ -69,7 +67,6 @@ func (s *Service) updateTorrentClient(client *TorrentClient) error {
 }
 
 func (s *Service) listDir(workingDir string) (folders []string, files []string, err error) {
-	workingDir = strings.TrimRight(workingDir, "/")
 	workingDir, err = filepath.Abs(workingDir)
 	if err != nil {
 		return nil, nil, fmt.Errorf("unable to get absloute path: %w", err)
@@ -81,7 +78,7 @@ func (s *Service) listDir(workingDir string) (folders []string, files []string, 
 	}
 
 	for _, file := range dir {
-		path := workingDir + "/" + file.Name()
+		path := filepath.Join(workingDir, file.Name())
 		path = filepath.ToSlash(path)
 
 		if file.IsDir() {
@@ -90,8 +87,6 @@ func (s *Service) listDir(workingDir string) (folders []string, files []string, 
 			files = append(files, path)
 		}
 	}
-
-	log.Debug().Strs("files", files).Strs("fddd", folders).Msg("folders")
 
 	return folders, files, err
 }
