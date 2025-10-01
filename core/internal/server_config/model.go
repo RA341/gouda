@@ -17,6 +17,7 @@ type GoudaConfig struct {
 	Downloader     Downloader      `yaml:"downloader" config:""`
 	Permissions    UserPermissions `yaml:"permissions" config:""`
 	TorrentClient  TorrentClient   `yaml:"torrentClient" config:""`
+	Mam            MamConfig       `yaml:"mam" config:""`
 }
 
 func (cfg *GoudaConfig) GetVal() *GoudaConfig {
@@ -24,6 +25,21 @@ func (cfg *GoudaConfig) GetVal() *GoudaConfig {
 	defer cfg.RW.RUnlock()
 
 	return cfg
+}
+
+type MamConfig struct {
+	MamToken        string `yaml:"mamToken" config:"flag=mam,env=MAM_TOKEN,default=,usage=myanaonmouse token,hide=true"`
+	ServiceInterval string `yaml:"timeout" config:"flag=mst,env=MAM_ADMIN_INTERVAL,default=24h,usage=interval to run mam admin tasks"`
+	AutoBuyBonus    bool   `yaml:"autoBuyBonus" config:"flag=mab,env=MAM_AUTO_BUY_BONUS,default=false,usage=enable auto buy bonus points"`
+	AutoBuyVip      bool   `yaml:"autoBuyVip" config:"flag=mav,env=MAM_AUTO_BUY_VIP,default=false,usage=enable auto buy vip duration"`
+}
+
+func (d MamConfig) GetMamInterval(defaultTime time.Duration) time.Duration {
+	dur, err := time.ParseDuration(d.ServiceInterval)
+	if err != nil {
+		return defaultTime
+	}
+	return dur
 }
 
 type Directories struct {

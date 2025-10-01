@@ -38,7 +38,8 @@ if you have any ideas you would like to add modify this section and open a PR
 - [ ] Add direct download functionality
     - [x] Support downloads without the extension
     - [x] Support wedge-based downloads
-    - [ ] Add support in client
+    - [ ] [UI] Allow option to download with wedge
+    - [ ] [UI] Add searching and filtering for downloaded/requested books
 
 - [ ] Mam search
     - [x] Basic Search
@@ -46,14 +47,19 @@ if you have any ideas you would like to add modify this section and open a PR
     - [ ] Wedge usage Recommendation similar to mam ratio protect
 
 - [ ] Mam admin tasks
-    - [ ] Auto buy ratio
-    - [ ] Auto buy wedges
+    - [x] Auto buy ratio
+    - [x] Auto buy wedges
     - [ ] Auto IP updates
+    - [ ] add frontend settings page
 
 - [ ] Settings
     - [ ] File picker file paths
 
-- [ ] Book Request System
+- [ ] Request System
+    - [ ] Implement user request page
+    - [ ] Implement admin request page
+        - [ ] Approve/Disapprove
+    - [ ] Notifications ???
 
 ---
 

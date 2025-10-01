@@ -43,7 +43,16 @@ func (s *Service) loadConfigToRPC() *v1.GoudaConfig {
 	return GoudaConfigToProto(s.conf)
 }
 
-func (s *Service) updateMam(mamToken string) error {
+func (s *Service) updateMamAdminConfig(config MamConfig) error {
+	s.conf.RW.RLock()
+	defer s.conf.RW.RUnlock()
+
+	config.MamToken = s.conf.Mam.MamToken
+	s.conf.Mam = config
+
+	return s.conf.DumpToYaml()
+}
+func (s *Service) updateMamToken(mamToken string) error {
 	s.conf.RW.RLock()
 	defer s.conf.RW.RUnlock()
 
@@ -52,7 +61,7 @@ func (s *Service) updateMam(mamToken string) error {
 		return err
 	}
 
-	s.conf.MamToken = mamToken
+	s.conf.Mam.MamToken = mamToken
 
 	return s.conf.DumpToYaml()
 }
@@ -149,7 +158,7 @@ func GoudaConfigToProto(cfg *GoudaConfig) *v1.GoudaConfig {
 		Port:           int32(cfg.Port),
 		AllowedOrigins: cfg.AllowedOrigins,
 		UiPath:         cfg.UIPath,
-		MamToken:       cfg.MamToken,
+		MamToken:       cfg.Mam.MamToken,
 		Dir: &v1.Directories{
 			DownloadDir: cfg.Dir.DownloadDir,
 			CompleteDir: cfg.Dir.CompleteDir,
@@ -185,7 +194,7 @@ func GoudaConfigFromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
 	conf.Port = int(pb.Port)
 	conf.AllowedOrigins = pb.AllowedOrigins
 	conf.UIPath = pb.UiPath
-	conf.MamToken = pb.MamToken
+	conf.Mam.MamToken = pb.MamToken
 
 	if pb.Dir != nil {
 		conf.Dir = *DirectoryFromRpc(pb.Dir)

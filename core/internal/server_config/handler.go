@@ -35,7 +35,7 @@ func (h *Handler) UpdateSettings(_ context.Context, req *connect.Request[v1.Upda
 }
 
 func (h *Handler) UpdateMam(_ context.Context, req *connect.Request[v1.UpdateMamRequest]) (*connect.Response[v1.UpdateMamResponse], error) {
-	err := h.srv.updateMam(req.Msg.MamToken)
+	err := h.srv.updateMamToken(req.Msg.MamToken)
 	if err != nil {
 		return nil, err
 	}

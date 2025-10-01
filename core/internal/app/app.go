@@ -43,8 +43,8 @@ func NewApp(conf *sc.GoudaConfig) *App {
 
 	authSrv := auth.NewService(db, db)
 	catSrv := category.NewService(db)
-	mamSrv := mam.NewService(func() string {
-		return conf.GetVal().MamToken
+	mamSrv := mam.NewService(func() sc.MamConfig {
+		return conf.GetVal().Mam
 	})
 	downloadSrv := downloads.NewService(
 		db,

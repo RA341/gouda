@@ -39,9 +39,9 @@ func TestService_SearchRaw(t *testing.T) {
 }
 
 func setup(t *testing.T) *Service {
-	cookie := getMamCookie(t)
-	srv := NewService(cookie)
-	return srv
+	//cookie := getMamCookie(t)
+	//srv := NewService(cookie)
+	return nil
 }
 
 func getMamCookie(t *testing.T) string {

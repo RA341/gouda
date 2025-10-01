@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/RA341/gouda/internal/info"
+	sc "github.com/RA341/gouda/internal/server_config"
 	fu "github.com/RA341/gouda/pkg/file_utils"
 	"github.com/rs/zerolog/log"
 	"resty.dev/v3"
@@ -23,20 +24,24 @@ type Service struct {
 	client   func() *resty.Client
 	provider ApiKeyProvider
 }
-type ApiKeyProvider func() string
+type ApiKeyProvider func() sc.MamConfig
 
 // NewService creates a new instance of the MAM service.
 func NewService(provider ApiKeyProvider) *Service {
 	client := setupClient(provider)
-	return &Service{
+	s := &Service{
 		client:   client,
 		provider: provider,
 	}
+
+	go NewBackgroundService(s).Start()
+
+	return s
 }
 
 func NewMamValidator(token string) error {
-	provider := func() string {
-		return token
+	provider := func() sc.MamConfig {
+		return sc.MamConfig{MamToken: token}
 	}
 	client := setupClient(provider)
 	service := Service{
@@ -96,13 +101,17 @@ func (s *Service) BuyBonus(amountInGB uint) (*BuyBonusResponse, error) {
 	return &result, nil
 }
 
-func (s *Service) IsMamSetup() error {
-	key := s.provider()
+func (s *Service) SafeGetProfile() (*UserData, error) {
+	key := s.provider().MamToken
 	if key == "" {
-		return fmt.Errorf("mam api key is empty")
+		return nil, fmt.Errorf("mam api key is empty")
 	}
 
-	_, err := s.GetProfile()
+	return s.GetProfile()
+}
+
+func (s *Service) IsMamSetup() error {
+	_, err := s.SafeGetProfile()
 	return err
 }
 
@@ -604,7 +613,7 @@ func setupClient(provider ApiKeyProvider) func() *resty.Client {
 	return func() *resty.Client {
 		authCookie := &http.Cookie{
 			Name:  IDCookieKey,
-			Value: provider(),
+			Value: provider().MamToken,
 		}
 		client := resty.New().
 			SetCookie(authCookie).
