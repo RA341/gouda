@@ -11,7 +11,6 @@ type GoudaConfig struct {
 	Port           int             `yaml:"port" config:"flag=port,env=PORT,default=9862,usage=Port to run gouda on"`
 	AllowedOrigins string          `yaml:"allowedOrigins" config:"flag=origins,env=ORIGINS,default=*,usage=Allowed origins for the API (in CSV)"`
 	UIPath         string          `yaml:"uiPath" config:"flag=ui,env=UI_PATH,default=web,usage=Path to frontend files"`
-	MamToken       string          `yaml:"mamToken" config:"flag=mam,env=MAM_TOKEN,default=,usage=myanaonmouse token,hide=true"`
 	Dir            Directories     `yaml:"dir" config:""`
 	Log            Logger          `yaml:"log" config:""`
 	Downloader     Downloader      `yaml:"downloader" config:""`
