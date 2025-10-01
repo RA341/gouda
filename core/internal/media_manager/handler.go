@@ -20,7 +20,6 @@ func NewMediaManagerHandler(mr *MediaManagerService) *MediaManagerHandler {
 func (handler *MediaManagerHandler) AddMedia(_ context.Context, req *connect.Request[v1.AddMediaRequest]) (*connect.Response[v1.AddMediaResponse], error) {
 	var mediaRequest downloads.Media
 	mediaRequest.FromProto(req.Msg.GetMedia())
-	log.Info().Any("torrent", mediaRequest).Msg("Received a torrent request")
 
 	err := handler.mr.AddMedia(&mediaRequest, false)
 	if err != nil {

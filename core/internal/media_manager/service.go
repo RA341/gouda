@@ -8,24 +8,24 @@ import (
 	"github.com/RA341/gouda/internal/info"
 	"github.com/RA341/gouda/internal/mam"
 	"github.com/rs/zerolog/log"
-	"gorm.io/gorm"
 )
-
-type Services interface {
-	GetDB() *gorm.DB
-	GetMAM() *mam.Service
-	GetStore() Store
-	GetDownloads() *downloads.DownloadService
-}
 
 type MediaManagerService struct {
 	db  Store
-	ds  *downloads.DownloadService
+	ds  *downloads.Service
 	mam *mam.Service
 }
 
-func NewService(db Store, ds *downloads.DownloadService, mam *mam.Service) *MediaManagerService {
-	return &MediaManagerService{db: db, ds: ds, mam: mam}
+func NewService(
+	db Store,
+	ds *downloads.Service,
+	mam *mam.Service,
+) *MediaManagerService {
+	return &MediaManagerService{
+		db:  db,
+		ds:  ds,
+		mam: mam,
+	}
 }
 
 func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media, withFreeleech bool) error {
@@ -43,7 +43,7 @@ func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media, withFree
 	err := srv.ds.DownloadMedia(mediaRequest)
 	if err != nil {
 		mediaRequest.MarkError(err)
-		err = srv.db.Edit(mediaRequest) // update in db
+		err = srv.db.Edit(mediaRequest)
 		if err != nil {
 			log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
 			return err

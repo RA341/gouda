@@ -31,7 +31,7 @@ type App struct {
 	categorySrv *category.Service
 	mamSrv      *mam.Service
 	authSrv     *auth.Service
-	downloadSrv *downloads.DownloadService
+	downloadSrv *downloads.Service
 	mediaSrv    *mediaManager.MediaManagerService
 }
 

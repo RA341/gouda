@@ -102,7 +102,8 @@ func (tm *TransmissionClient) GetTorrentStatus(torrentIds ...string) ([]TorrentS
 		status := Downloading
 		if info.Status.String() == "seeding" {
 			status = Complete
-		} else if info.Status.String() == "error" {
+		} else if info.Status.String() == "error" ||
+			info.Status.String() == "stopped" {
 			status = Error
 		}
 
