@@ -1,9 +1,15 @@
+import 'package:brie/clients/history_api.dart';
+import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/mam/v1/mam.pb.dart';
+import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/ui/mam/ui_narrator.dart';
 import 'package:brie/ui/mam/ui_title_author.dart';
+import 'package:brie/ui/shared/error_dialog.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchBookItem extends ConsumerWidget {
   const SearchBookItem({required this.book, super.key});
@@ -16,7 +22,7 @@ class SearchBookItem extends ConsumerWidget {
   }
 }
 
-class SearchBookItemMobile extends ConsumerWidget {
+class SearchBookItemMobile extends HookConsumerWidget {
   const SearchBookItemMobile({required this.book, super.key});
 
   final SearchBook book;
@@ -24,6 +30,8 @@ class SearchBookItemMobile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mediaType = getMediaIcon(book);
+
+    final isSending = useState(false);
 
     return Card(
       child: ExpansionTile(
@@ -84,12 +92,66 @@ class SearchBookItemMobile extends ConsumerWidget {
                     children: [
                       // todo make this button have icons
                       ElevatedButton(
-                        child: const Text("Download"),
-                        onPressed: () {},
+                        onPressed: isSending.value
+                            ? null
+                            : () async {
+                                isSending.value = true;
+
+                                final (result, err) = await runGrpcRequest(
+                                  () => ref
+                                      .read(mediaRequestApiProvider)
+                                      .addMedia(
+                                        AddMediaRequest(
+                                          media: buildMedia(book),
+                                        ),
+                                      ),
+                                );
+                                if (err.isNotEmpty) {
+                                  if (!context.mounted) return;
+
+                                  await showErrorDialog(
+                                    context,
+                                    "Unable to send media",
+                                    err,
+                                  );
+                                }
+
+                                isSending.value = false;
+                              },
+                        child: isSending.value
+                            ? const CircularProgressIndicator()
+                            : const Text("Download"),
                       ),
                       ElevatedButton(
-                        child: const Text("Wedge Download"),
-                        onPressed: () {},
+                        onPressed: isSending.value
+                            ? null
+                            : () async {
+                                isSending.value = true;
+
+                                final (result, err) = await runGrpcRequest(
+                                  () => ref
+                                      .read(mediaRequestApiProvider)
+                                      .addMediaWithFreeleech(
+                                        AddMediaRequest(
+                                          media: buildMedia(book),
+                                        ),
+                                      ),
+                                );
+                                if (err.isNotEmpty) {
+                                  if (!context.mounted) return;
+
+                                  await showErrorDialog(
+                                    context,
+                                    "Unable to send media",
+                                    err,
+                                  );
+                                }
+
+                                isSending.value = false;
+                              },
+                        child: isSending.value
+                            ? const CircularProgressIndicator()
+                            : const Text("Wedge Download"),
                       ),
                     ],
                   ),
@@ -129,6 +191,18 @@ class SearchBookItemMobile extends ConsumerWidget {
       ),
     );
   }
+}
+
+Media buildMedia(SearchBook book) {
+  return Media(
+    author: book.author.first.name,
+    book: book.title,
+    // todo
+    // category: book,
+    fileLink: book.torrentLink,
+    mamBookId: Int64(book.mamId),
+    series: book.series.first.name,
+  );
 }
 
 // add more as needed

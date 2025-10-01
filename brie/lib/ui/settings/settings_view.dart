@@ -188,6 +188,16 @@ class SettingsCoreMobile extends HookConsumerWidget {
       initialIndex: curTab,
     );
 
+    useEffect(() {
+      void listener() {
+        ref.read(settingsTabIndexProvider.notifier).set(tabController.index);
+      }
+
+      tabController.addListener(listener);
+      // Return cleanup function that removes the listener
+      return () => tabController.removeListener(listener);
+    }, [tabController]);
+
     return Column(
       children: [
         ColoredBox(
