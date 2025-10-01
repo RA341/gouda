@@ -258,7 +258,7 @@ class SettingsUpdateButton extends HookConsumerWidget {
           if (!context.mounted) return;
           await showErrorDialog(
             context,
-            "Unable to save",
+            errorMessage,
             e.toString(),
           );
         }

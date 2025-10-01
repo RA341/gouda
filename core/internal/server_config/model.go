@@ -66,8 +66,8 @@ type UserPermissions struct {
 
 type TorrentClient struct {
 	ClientType string `yaml:"clientType" config:"flag=ct,env=CLIENT_TYPE,default=,usage=Client: qbit|transmission|deluge"`
-	User       string `yaml:"user" config:"flag=torUser,env=TORRENT_USER,default=,usage=Username for torrent client authentication"`
-	Password   string `yaml:"password" config:"flag=torPass,env=TORRENT_PASSWORD,default=,usage=Password for torrent client authentication"`
-	Protocol   string `yaml:"protocol" config:"flag=torProto,env=TORRENT_PROTOCOL,default=http,usage=Protocol for torrent client connection http|https,hide=true"`
+	Protocol   string `yaml:"protocol" config:"flag=torProto,env=TORRENT_PROTOCOL,default=http,usage=Protocol for torrent client connection http|https"`
 	Host       string `yaml:"host" config:"flag=host,env=TORRENT_HOST,default=localhost:8080,usage=Host e.g. localhost:8080|qbit.somedomain.com"`
+	User       string `yaml:"user" config:"flag=torUser,env=TORRENT_USER,default=,usage=Username for torrent client authentication"`
+	Password   string `yaml:"password" config:"flag=torPass,env=TORRENT_PASSWORD,default=,usage=Password for torrent client authentication,hide=true"`
 }
