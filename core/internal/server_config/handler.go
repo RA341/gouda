@@ -46,7 +46,9 @@ func (h *Handler) UpdateMam(_ context.Context, req *connect.Request[v1.UpdateMam
 
 func (h *Handler) UpdateDownloader(_ context.Context, req *connect.Request[v1.UpdateDownloaderRequest]) (*connect.Response[v1.UpdateDownloaderResponse], error) {
 	client := TorrentClientFromRpc(req.Msg.Client)
-	err := h.srv.updateTorrentClient(client)
+	downloader := DownloaderFromRpc(req.Msg.Downloader)
+
+	err := h.srv.updateTorrentClient(client, downloader)
 	if err != nil {
 		return nil, err
 	}
@@ -114,5 +116,6 @@ func (h *Handler) ListSupportedClients(_ context.Context, _ *connect.Request[v1.
 }
 
 func (h *Handler) UpdateMamToken(ctx context.Context, req *connect.Request[v1.UpdateMamTokenRequest]) (*connect.Response[v1.UpdateMamTokenResponse], error) {
+
 	return nil, fmt.Errorf("implement me UpdateMamToken")
 }

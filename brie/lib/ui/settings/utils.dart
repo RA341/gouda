@@ -210,9 +210,11 @@ class ServerSettingsView extends ConsumerWidget {
       child: config.when(
         skipLoadingOnReload: true,
         data: (data) => child,
-        error: (error, stackTrace) => Align(
-          child: ErrorDisplay(message: error.toString()),
-        ),
+        error: (error, stackTrace) {
+          return Align(
+            child: ErrorDisplay(message: error.toString()),
+          );
+        },
         loading: LoadingSpinner.new,
       ),
     );

@@ -15,65 +15,82 @@ import (
 	"resty.dev/v3"
 )
 
+type TorrentClientProvider func() *sc.TorrentClient
+type DownloaderProvider func() *sc.Downloader
+type UserPermissionsProvider func() *sc.UserPermissions
+type DirectoryProvider func() *sc.Directories
+
 type DownloadService struct {
-	db     Store
-	client dc.DownloadClient
+	db Store
 
-	torrentCli    *sc.TorrentClient
-	perms         *sc.UserPermissions
-	dirs          *sc.Directories
+	torrentClient dc.DownloadClient
+	torrentConfig TorrentClientProvider
+
+	perms      UserPermissionsProvider
+	dirs       DirectoryProvider
+	downloader DownloaderProvider
+
 	checkInterval time.Duration
-	timout        time.Duration
-	ignoreTimeout bool
-
-	workerChan chan interface{}
+	workerChan    chan interface{}
 }
 
-func NewService(db Store, tor *sc.TorrentClient, client dc.DownloadClient) *DownloadService {
-	// todo
-	//limit, err := conf.Downloader.GetLimit()
-	//if err != nil {
-	//	log.Fatal().Err(err).Msg("Invalid time string")
-	//}
-	//
-	//srv := &DownloadService{
-	//	db:            db,
-	//	client:        client,
-	//	perms:         &conf.Permissions,
-	//	dirs:          &conf.Dir,
-	//	checkInterval: 30 * time.Second,
-	//	ignoreTimeout: conf.Downloader.IgnoreTimeout,
-	//	timout:        limit,
-	//	workerChan:    make(chan interface{}, 1),
-	//}
-	//if srv.client != nil {
-	//	go srv.startMonitor() // initial download check
-	//}
+func NewService(
+	db Store,
+	torConfig TorrentClientProvider,
+	perms UserPermissionsProvider,
+	dir DirectoryProvider,
+	downloader DownloaderProvider,
+) *DownloadService {
+	srv := &DownloadService{
+		db:            db,
+		torrentConfig: torConfig,
+		perms:         perms,
+		dirs:          dir,
+		downloader:    downloader,
+
+		workerChan: make(chan interface{}, 1),
+	}
+
+	// initialize client if possible
+	err := srv.TestAndUpdateClient()
+	if err != nil {
+		log.Warn().Err(err).Msg("invalid download client, check your config")
+	}
+
+	if srv.torrentClient != nil {
+		go srv.startMonitor() // initial download check
+	}
+
 	return nil
 }
 
-// TestAndUpdateClient tests the client first then updates the torrent client if successful
-func (d *DownloadService) TestAndUpdateClient(client *sc.TorrentClient) error {
-	newClient, err := d.TestClient(client)
+// TestAndUpdateClient tests the torrentClient first then updates the torrent torrentClient if successful
+func (d *DownloadService) TestAndUpdateClient() error {
+	newClient, err := d.TestClient(d.torrentConfig())
 	if err != nil {
 		return err
 	}
 
-	d.client = newClient
+	d.torrentClient = newClient
 	return nil
 }
 
 func (d *DownloadService) TestClient(client *sc.TorrentClient) (dc.DownloadClient, error) {
-	//newClient, err := dc.TestTorrentClient(client)
-	//if err != nil {
-	//	return nil, fmt.Errorf("unable to connect torrent client: %v", err)
-	//}
-	return nil, nil
+	newClient, err := dc.TestTorrentClient(client)
+	if err != nil {
+		return nil, fmt.Errorf("unable to connect torrent torrentClient: %v", err)
+	}
+	return newClient, nil
+}
+
+func (d *DownloadService) ValidateClient(client *sc.TorrentClient) error {
+	_, err := d.TestClient(client)
+	return err
 }
 
 func (d *DownloadService) DownloadMedia(media *Media) error {
 	if err := d.verifyClient(); err != nil {
-		log.Warn().Err(err).Msg("download client is uninitialized")
+		log.Warn().Err(err).Msg("download torrentClient is uninitialized")
 		return err
 	}
 
@@ -84,16 +101,16 @@ func (d *DownloadService) DownloadMedia(media *Media) error {
 	media.TorrentMagentLink = magnetLink
 	log.Debug().Str("magnet_link", media.TorrentMagentLink).Msg("using magnet URL")
 
-	downloadsDir, err := filepath.Abs(d.dirs.DownloadDir)
+	downloadsDir, err := filepath.Abs(d.dirs().DownloadDir)
 	if err != nil {
-		return fmt.Errorf("unable to determine absolute path: %s", d.dirs.DownloadDir)
+		return fmt.Errorf("unable to determine absolute path: %s", d.dirs().DownloadDir)
 	}
 
-	torrentId, err := d.client.DownloadTorrentWithMagnet(media.TorrentMagentLink, downloadsDir, media.Category)
+	torrentId, err := d.torrentClient.DownloadTorrentWithMagnet(media.TorrentMagentLink, downloadsDir, media.Category)
 	if err != nil {
 		return err
 	}
-	log.Debug().Str("torrent_id", torrentId).Msg("Sent media to client")
+	log.Debug().Str("torrent_id", torrentId).Msg("Sent media to torrentClient")
 
 	media.TorrentId = torrentId
 	media.CreatedAt = time.Now() // reset time-running for timeout check
@@ -122,13 +139,13 @@ func (d *DownloadService) startMonitor() {
 
 func (d *DownloadService) monitorDownloads() {
 	if err := d.verifyClient(); err != nil {
-		log.Warn().Err(err).Msg("download client is uninitialized")
+		log.Warn().Err(err).Msg("download torrentClient is uninitialized")
 		return
 	}
 
 	timeoutFunc := d.setupTimeoutFunc()
 
-	ticker := time.NewTicker(d.checkInterval) // run check every minute
+	ticker := time.NewTicker(d.downloader().GetCheckInterval(time.Minute * 2))
 	defer ticker.Stop()
 	for {
 		downloadingMedia, err := d.getDownloadingMedia()
@@ -143,7 +160,7 @@ func (d *DownloadService) monitorDownloads() {
 		}
 
 		torrentIds := getKeys(downloadingMedia)
-		statuses, err := d.client.GetTorrentStatus(torrentIds...)
+		statuses, err := d.torrentClient.GetTorrentStatus(torrentIds...)
 		if err != nil {
 			log.Warn().Err(err).Msg("Failed to check torrent status, retrying in minute")
 			continue
@@ -192,8 +209,8 @@ func (d *DownloadService) checkDownload(media *Media, torrentStatus *dc.TorrentS
 	if torrentStatus.ParsedStatus == dc.Error {
 		log.Error().
 			Str("Media", media.Book).
-			Msg("Download failed, check your torrent client")
-		media.MarkError(fmt.Errorf("download failed, check your client: %v", torrentStatus.ClientStatus))
+			Msg("Download failed, check your torrent torrentClient")
+		media.MarkError(fmt.Errorf("download failed, check your torrentClient: %v", torrentStatus.ClientStatus))
 		return
 	}
 
@@ -213,7 +230,7 @@ func (d *DownloadService) checkDownload(media *Media, torrentStatus *dc.TorrentS
 }
 
 func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus *dc.TorrentStatus) error {
-	categoryPath := fmt.Sprintf("%s/%s", d.dirs.CompleteDir, torrentRequest.Category)
+	categoryPath := fmt.Sprintf("%s/%s", d.dirs().CompleteDir, torrentRequest.Category)
 	destPath := fmt.Sprintf("%s/%s/%s", categoryPath, torrentRequest.Author, torrentRequest.Book)
 	torrentStatus.DownloadPath = fmt.Sprintf("%s/%s", torrentStatus.DownloadPath, torrentStatus.Name)
 
@@ -230,8 +247,8 @@ func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus 
 		}
 	}
 
-	sourceUID := d.perms.UID
-	sourceGID := d.perms.GID
+	sourceUID := d.perms().UID
+	sourceGID := d.perms().GID
 	log.Info().Int("UID", sourceUID).Int("GID", sourceGID).Msg("Changing file perm")
 	if err = fu.RecursiveChown(categoryPath, sourceUID, sourceGID); err != nil {
 		return fmt.Errorf("failed to chown download: %v", err)
@@ -247,8 +264,7 @@ func (d *DownloadService) finalizeDownload(torrentRequest *Media, torrentStatus 
 }
 
 func (d *DownloadService) setupTimeoutFunc() func(media *Media) (time.Duration, bool) {
-	ignoreTimeout := d.ignoreTimeout
-	torrentCheckTimeout := d.timout
+	ignoreTimeout := d.downloader().IgnoreTimeout
 
 	if ignoreTimeout {
 		log.Info().
@@ -260,7 +276,9 @@ func (d *DownloadService) setupTimeoutFunc() func(media *Media) (time.Duration, 
 		}
 	}
 
+	torrentCheckTimeout := d.downloader().GetDownloadLimit(time.Hour)
 	log.Info().Str("timeout", torrentCheckTimeout.String()).Msg("download timeout is set to...")
+
 	return func(media *Media) (time.Duration, bool) {
 		torrentRunningDuration := time.Now().Sub(media.CreatedAt)
 
@@ -270,7 +288,7 @@ func (d *DownloadService) setupTimeoutFunc() func(media *Media) (time.Duration, 
 				Dur("time_running", torrentRunningDuration).
 				Dur("max_timeout", torrentCheckTimeout).
 				Msg("Maximum timeout reached abandoning check for media" +
-					"\nCheck your download client or increase timeout in settings")
+					"\nCheck your torrent Client or increase timeout in settings")
 			return torrentRunningDuration, true
 		}
 
@@ -293,14 +311,14 @@ func (d *DownloadService) getDownloadingMedia() (map[string]Media, error) {
 	return mediaMap, nil
 }
 
-// verifyClient ensures a valid torrent client is available
+// verifyClient ensures a valid torrent torrentClient is available
 func (d *DownloadService) verifyClient() error {
-	if d.client == nil {
-		//client, err := dc.InitializeTorrentClient(d.torrentCli)
+	if d.torrentClient == nil {
+		//torrentClient, err := dc.InitializeTorrentClient(d.torrentConfig)
 		//if err != nil {
-		//	return fmt.Errorf("unable to connect to download client\n\n%v", err.Error())
+		//	return fmt.Errorf("unable to connect to download torrentClient\n\n%v", err.Error())
 		//}
-		//d.client = client
+		//d.torrentClient = torrentClient
 	}
 	return nil
 }

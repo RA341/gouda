@@ -19,6 +19,13 @@ type GoudaConfig struct {
 	TorrentClient  TorrentClient   `yaml:"torrentClient" config:""`
 }
 
+func (cfg *GoudaConfig) GetVal() *GoudaConfig {
+	cfg.RW.RLock()
+	defer cfg.RW.RUnlock()
+
+	return cfg
+}
+
 type Directories struct {
 	DownloadDir string `yaml:"downloadDir" config:"flag=df,env=DOWNLOAD,default=./download,usage=Directory to store download files"`
 	CompleteDir string `yaml:"completeDir" config:"flag=cmf,env=COMPLETE,default=./complete,usage=Directory for completed files"`
@@ -33,6 +40,23 @@ type Logger struct {
 type Downloader struct {
 	Timeout       string `yaml:"timeout" config:"flag=dt,env=TIMEOUT,default=15m,usage=300ms/1.5h/2h45m. Valid units ns/us/ms/s/m/h"`
 	IgnoreTimeout bool   `yaml:"ignoreTimeout" config:"flag=digt,env=IGNORE_TIMEOUT,default=false,usage=Ignore time limit for download"`
+	CheckInterval string `yaml:"checkInterval" config:"flag=cit,env=CHECK_INTERVAL,default=1m,usage=Download check interval"`
+}
+
+func (d Downloader) GetDownloadLimit(defaultTime time.Duration) time.Duration {
+	dur, err := time.ParseDuration(d.Timeout)
+	if err != nil {
+		return defaultTime
+	}
+	return dur
+}
+
+func (d Downloader) GetCheckInterval(defaultTime time.Duration) time.Duration {
+	dur, err := time.ParseDuration(d.CheckInterval)
+	if err != nil {
+		return defaultTime
+	}
+	return dur
 }
 
 type UserPermissions struct {
@@ -46,8 +70,4 @@ type TorrentClient struct {
 	Password   string `yaml:"password" config:"flag=torPass,env=TORRENT_PASSWORD,default=,usage=Password for torrent client authentication"`
 	Protocol   string `yaml:"protocol" config:"flag=torProto,env=TORRENT_PROTOCOL,default=http,usage=Protocol for torrent client connection http|https,hide=true"`
 	Host       string `yaml:"host" config:"flag=host,env=TORRENT_HOST,default=localhost:8080,usage=Host e.g. localhost:8080|qbit.somedomain.com"`
-}
-
-func (d Downloader) GetLimit() (time.Duration, error) {
-	return time.ParseDuration(d.Timeout)
 }

@@ -24,6 +24,16 @@ extension ConfigUpdateExtension on WidgetRef {
   void serverUpdateConfig(GoudaConfig Function(GoudaConfig) update) {
     read(serverConfigProvider.notifier).updateConfigField(update);
   }
+
+  GoudaConfig serverGetConfig() {
+    return read(serverConfigProvider).requireValue;
+  }
+}
+
+extension ConfigUpdateExtension2 on Ref {
+  GoudaConfig serverGetConfig() {
+    return read(serverConfigProvider).requireValue;
+  }
 }
 
 final AsyncNotifierProvider<ServerConfigNotifier, GoudaConfig>
@@ -41,62 +51,6 @@ class ServerConfigNotifier extends AsyncNotifier<GoudaConfig> {
       () => ref.watch(settingsApiProvider).loadSettings(LoadSettingsRequest()),
     );
     return response.settings;
-  }
-
-  Future<void> saveAndFetch(
-    Future<void> Function() updateFn,
-  ) async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      await updateFn();
-      return fetchConfig();
-    });
-  }
-
-  Future<void> updateConfig() async {
-    await saveAndFetch(
-      () async => ref
-          .watch(settingsApiProvider)
-          .updateSettings(UpdateSettingsRequest(settings: state.value)),
-    );
-  }
-
-  Future<void> updateMam() async {
-    await saveAndFetch(
-      () async => ref
-          .watch(settingsApiProvider)
-          .updateMam(
-            UpdateMamRequest(
-              mamToken: state.requireValue.mamToken,
-            ),
-          ),
-    );
-  }
-
-  Future<void> updateDownloader() async {
-    await saveAndFetch(
-      () async => ref
-          .watch(settingsApiProvider)
-          .updateDownloader(
-            UpdateDownloaderRequest(
-              client: state.requireValue.torrentClient,
-              downloader: state.requireValue.downloader,
-            ),
-          ),
-    );
-  }
-
-  Future<void> updateDirs() async {
-    await saveAndFetch(
-      () async => ref
-          .watch(settingsApiProvider)
-          .updateDir(
-            UpdateDirRequest(
-              dirs: state.requireValue.dir,
-              perms: state.requireValue.permissions,
-            ),
-          ),
-    );
   }
 
   void updateConfigField(

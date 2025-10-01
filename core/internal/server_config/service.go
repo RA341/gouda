@@ -57,7 +57,7 @@ func (s *Service) updateMam(mamToken string) error {
 	return s.conf.DumpToYaml()
 }
 
-func (s *Service) updateTorrentClient(client *TorrentClient) error {
+func (s *Service) updateTorrentClient(client *TorrentClient, downloader *Downloader) error {
 	s.conf.RW.RLock()
 	defer s.conf.RW.RUnlock()
 
@@ -66,6 +66,7 @@ func (s *Service) updateTorrentClient(client *TorrentClient) error {
 		return err
 	}
 
+	s.conf.Downloader = *downloader
 	s.conf.TorrentClient = *client
 
 	return s.conf.DumpToYaml()
@@ -198,10 +199,7 @@ func GoudaConfigFromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
 	}
 
 	if pb.Downloader != nil {
-		conf.Downloader = Downloader{
-			Timeout:       pb.Downloader.Timeout,
-			IgnoreTimeout: pb.Downloader.IgnoreTimeout,
-		}
+		conf.Downloader = *DownloaderFromRpc(pb.Downloader)
 	}
 
 	if pb.Permissions != nil {
@@ -210,6 +208,13 @@ func GoudaConfigFromProto(pb *v1.GoudaConfig, conf *GoudaConfig) {
 
 	if pb.TorrentClient != nil {
 		conf.TorrentClient = *TorrentClientFromRpc(pb.TorrentClient)
+	}
+}
+
+func DownloaderFromRpc(downloader *v1.Downloader) *Downloader {
+	return &Downloader{
+		Timeout:       downloader.Timeout,
+		IgnoreTimeout: downloader.IgnoreTimeout,
 	}
 }
 

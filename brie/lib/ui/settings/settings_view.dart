@@ -1,3 +1,5 @@
+import 'package:brie/clients/settings_api.dart';
+import 'package:brie/gen/settings/v1/settings.pb.dart';
 import 'package:brie/ui/layout/layout_page.dart';
 import 'package:brie/ui/settings/model.dart';
 import 'package:brie/ui/settings/provider.dart';
@@ -6,6 +8,7 @@ import 'package:brie/ui/settings/tab_admin_downloader.dart';
 import 'package:brie/ui/settings/tab_admin_files.dart';
 import 'package:brie/ui/settings/tab_admin_mam.dart';
 import 'package:brie/ui/settings/utils.dart';
+import 'package:brie/ui/shared/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,7 +34,18 @@ final settingsPageConfigProvider = FutureProvider<List<SettingsPageConfig>>((
         child: const ServerSettingsView(child: TabMam()),
         buttons: [
           SettingsUpdateButton(
-            onTap: () => ref.read(serverConfigProvider.notifier).updateMam(),
+            onTap: () async {
+              await mustRunGrpcRequest(
+                () => ref
+                    .read(settingsApiProvider)
+                    .updateMam(
+                      UpdateMamRequest(
+                        mamToken: ref.serverGetConfig().mamToken,
+                      ),
+                    ),
+              );
+              ref.invalidate(serverConfigProvider);
+            },
           ),
         ],
       ),
@@ -41,7 +55,19 @@ final settingsPageConfigProvider = FutureProvider<List<SettingsPageConfig>>((
         child: const ServerSettingsView(child: TabFiles()),
         buttons: [
           SettingsUpdateButton(
-            onTap: () => ref.read(serverConfigProvider.notifier).updateDirs(),
+            onTap: () async {
+              await mustRunGrpcRequest(
+                () => ref
+                    .read(settingsApiProvider)
+                    .updateDir(
+                      UpdateDirRequest(
+                        dirs: ref.serverGetConfig().dir,
+                        perms: ref.serverGetConfig().permissions,
+                      ),
+                    ),
+              );
+              ref.invalidate(serverConfigProvider);
+            },
           ),
         ],
       ),
@@ -51,8 +77,20 @@ final settingsPageConfigProvider = FutureProvider<List<SettingsPageConfig>>((
         child: const ServerSettingsView(child: TabDownloader()),
         buttons: [
           SettingsUpdateButton(
-            onTap: () =>
-                ref.read(serverConfigProvider.notifier).updateDownloader(),
+            onTap: () async {
+              await mustRunGrpcRequest(
+                () => ref
+                    .read(settingsApiProvider)
+                    .updateDownloader(
+                      UpdateDownloaderRequest(
+                        client: ref.serverGetConfig().torrentClient,
+                        downloader: ref.serverGetConfig().downloader,
+                      ),
+                    ),
+              );
+
+              ref.invalidate(serverConfigProvider);
+            },
           ),
         ],
       ),
@@ -196,21 +234,41 @@ class SettingsCoreMobile extends HookConsumerWidget {
   }
 }
 
-class SettingsUpdateButton extends ConsumerWidget {
+class SettingsUpdateButton extends HookConsumerWidget {
   const SettingsUpdateButton({
     required this.onTap,
+    this.errorMessage = "Error occurred while saving",
     super.key,
   });
 
+  final String errorMessage;
   final Future<void> Function() onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = useState(false);
+
     return IconLabelButton(
-      onTap: onTap,
+      onTap: () async {
+        isLoading.value = true;
+
+        try {
+          await onTap();
+        } catch (e) {
+          if (!context.mounted) return;
+          await showErrorDialog(
+            context,
+            "Unable to save",
+            e.toString(),
+          );
+        }
+
+        isLoading.value = false;
+      },
       label: "Save",
       icon: Icons.save,
-      isRefreshing: ref.watch(serverConfigProvider).isLoading,
+      isRefreshing:
+          ref.watch(serverConfigProvider).isLoading || isLoading.value,
     );
   }
 }

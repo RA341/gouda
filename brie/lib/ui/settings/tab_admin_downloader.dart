@@ -156,6 +156,10 @@ class TorrentClientSettings extends HookConsumerWidget {
                     Expanded(
                       flex: 7,
                       child: TextField(
+                        onChanged: (value) =>
+                            ref.serverUpdateConfig(
+                                  (con) => con..torrentClient.host = value,
+                            ),
                         controller: hostController,
                         decoration: const InputDecoration(
                           label: Text("Host"),
@@ -169,12 +173,18 @@ class TorrentClientSettings extends HookConsumerWidget {
             ],
           ),
           SettingsField(
-            controller: clientUsernameController,
             labelText: "Client username",
+            controller: clientUsernameController,
+            onChanged: (value) => ref.serverUpdateConfig(
+              (con) => con..torrentClient.user = value,
+            ),
           ),
           SettingsField(
             controller: clientPasswordController,
             labelText: "Client password",
+            onChanged: (value) => ref.serverUpdateConfig(
+              (con) => con..torrentClient.password = value,
+            ),
           ),
         ],
       ),

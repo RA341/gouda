@@ -88,7 +88,7 @@ func (t *TestDownloadClient) GetTorrentStatus(torrentIds ...string) ([]clients.T
 			Name:         value.torrent,
 			DownloadPath: value.downloadPath,
 			ParsedStatus: clients.Complete,
-			ClientStatus: "no status test client",
+			ClientStatus: "no status test torrentClient",
 		})
 	}
 
@@ -126,7 +126,7 @@ func (t *TestDownloadClient) addTorrent(torrent string, downloadPath string, cat
 }
 
 func (t *TestDownloadClient) Test() (string, string, error) {
-	return "test-client", "vtest", nil
+	return "test-torrentClient", "vtest", nil
 }
 
 type TestDownloadStore struct {
