@@ -43,12 +43,15 @@ class TabMam extends HookConsumerWidget {
                       ),
                     ),
                     Row(
-                      spacing: 10,
+                      spacing: 2,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.info),
-                        const Text("Authentication token for Mam"),
-                        SizedBox(
-                          width: 150,
+                        const Expanded(
+                          flex: 6,
+                          child: Text("Authentication token for Mam"),
+                        ),
+                        Expanded(
+                          flex: 2,
                           child: ElevatedButton(
                             onPressed: () async {
                               final url = Uri.parse(
@@ -58,7 +61,7 @@ class TabMam extends HookConsumerWidget {
                                 logger.w('Could not launch $url');
                               }
                             },
-                            child: const Text('Generate token'),
+                            child: const Text('Generate'),
                           ),
                         ),
                       ],
