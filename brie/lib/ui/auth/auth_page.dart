@@ -28,9 +28,7 @@ class LoginView extends HookConsumerWidget {
               : Env.androidUrl
         : Env.baseUrl;
 
-    final baseurl = useTextEditingController(
-      text: baseUrl,
-    );
+    final baseurl = useTextEditingController(text: baseUrl);
 
     final user = useTextEditingController(
       text: kDebugMode ? 'admin' : '',
@@ -66,10 +64,11 @@ class LoginView extends HookConsumerWidget {
                 const Text('Login', style: TextStyle(fontSize: 30)),
                 const SizedBox(height: 20),
 
-                AutofillGroup(
-                  child: SizedBox(
-                    width: width,
+                SizedBox(
+                  width: width,
+                  child: AutofillGroup(
                     child: Column(
+                      spacing: 20,
                       children: [
                         if (!kIsWeb)
                           TextField(
@@ -80,7 +79,6 @@ class LoginView extends HookConsumerWidget {
                               labelText: 'Server Address',
                             ),
                           ),
-                        const SizedBox(height: 20),
                         TextField(
                           autofillHints: const [AutofillHints.username],
                           controller: user,
@@ -89,7 +87,6 @@ class LoginView extends HookConsumerWidget {
                             labelText: 'Username',
                           ),
                         ),
-                        const SizedBox(height: 20),
                         TextField(
                           autofillHints: const [AutofillHints.password],
                           controller: pass,
@@ -140,18 +137,20 @@ class LoginView extends HookConsumerWidget {
     String username,
     String password,
   ) async {
-    if (initialUrl.isEmpty) {
-      await showErrorDialog(
-        context,
-        'Empty Server Address',
-        "Enter the server address",
-      );
-      return;
-    }
-
-    var baseurl = initialUrl;
+    final localSettings = ref.read(appSettingsProvider.notifier);
 
     if (!kIsWeb) {
+      if (initialUrl.isEmpty) {
+        await showErrorDialog(
+          context,
+          'Empty Server Address',
+          "Enter the server address",
+        );
+        return;
+      }
+
+      var baseurl = initialUrl;
+
       final (result, candidates) = await inferServerUrl(baseurl);
       if (result == null) {
         logger.i("urls $candidates");
@@ -164,10 +163,9 @@ class LoginView extends HookConsumerWidget {
       }
 
       baseurl = result;
-    }
 
-    final localSettings = ref.read(appSettingsProvider.notifier);
-    await localSettings.updateBasePath(baseurl);
+      await localSettings.updateBasePath(baseurl);
+    }
 
     final (session, err) = await runGrpcRequest(
       () => ref
