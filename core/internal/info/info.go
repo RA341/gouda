@@ -1,9 +1,10 @@
 package info
 
 import (
-	"github.com/RA341/gouda/pkg/litany"
 	"os"
 	"path/filepath"
+
+	"github.com/RA341/gouda/pkg/litany"
 )
 
 // build args to modify vars

@@ -38,11 +38,6 @@ func IsDesktopMode() bool {
 	return Flavour == string(Desktop)
 }
 
-func SetMode(mode BinaryType) {
-	Flavour = string(mode)
-	//log.Info().Str("mode", string(Flavour)).Msgf("setting mode...")
-}
-
 func IsKnown(value string) bool {
 	return value != Unknown
 }
