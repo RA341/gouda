@@ -9,7 +9,7 @@ type DownloadsStore struct {
 	db *gorm.DB
 }
 
-func (d DownloadsStore) Save(media *downloads.Media) error {
+func (d *DownloadsStore) Save(media *downloads.Media) error {
 	res := d.db.Save(&media)
 	if res.Error != nil {
 		return res.Error
@@ -18,11 +18,11 @@ func (d DownloadsStore) Save(media *downloads.Media) error {
 	return nil
 }
 
-func (d DownloadsStore) GetMediaByTorrentId(torrentId string) (*downloads.Media, error) {
+func (d *DownloadsStore) GetMediaByTorrentId(torrentId string) (*downloads.Media, error) {
 	var media downloads.Media
 	resp := d.db.
 		Where("torrent_id = ?", torrentId).
-		Where("status = ?", "downloading").
+		Where("status = ?", downloads.Downloading).
 		First(&media)
 
 	if resp.Error != nil {
@@ -32,11 +32,11 @@ func (d DownloadsStore) GetMediaByTorrentId(torrentId string) (*downloads.Media,
 	return &media, nil
 }
 
-func (d DownloadsStore) GetDownloadingMedia() ([]downloads.Media, error) {
+func (d *DownloadsStore) GetDownloadingMedia() ([]downloads.Media, error) {
 	var results []downloads.Media
 	result := d.db.
 		Model(&downloads.Media{}).
-		Where("status = ?", "downloading").
+		Where("status = ?", downloads.Downloading).
 		Find(&results)
 
 	if result.Error != nil {
