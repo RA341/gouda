@@ -38,6 +38,7 @@ func StartServer(UIFS fs.FS) {
 	registerFrontend(mux, conf, UIFS)
 
 	middleware := cors.New(cors.Options{
+		Debug:               info.IsDev(),
 		AllowedOrigins:      []string{"*"},
 		AllowPrivateNetwork: true,
 		AllowedMethods:      connectcors.AllowedMethods(),
