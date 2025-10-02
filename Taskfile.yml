@@ -83,9 +83,9 @@ tasks:
     cmds:
       - docker build . -t {{.IMAGE}}
       - docker run --rm
-        -v ./{{.DEV_BUILD}}/docker/config:/app/config
+        -v ./{{.DEV_BUILD}}/develop/config:/app/config
         -e GOUDA_LOG_LEVEL=debug
-        -p 9862:9862
+        -p 9860:9862
         {{.IMAGE}}
 
   dk:prune:
