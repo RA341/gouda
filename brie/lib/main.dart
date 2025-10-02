@@ -37,7 +37,7 @@ class App extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const AppView(),
+      home: const SafeArea(child: AppView()),
     );
   }
 }
@@ -109,6 +109,7 @@ class AppView extends ConsumerWidget {
       loading: () => const Scaffold(
         body: Center(
           child: Column(
+            spacing: 20,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(),

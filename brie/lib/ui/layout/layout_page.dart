@@ -86,11 +86,9 @@ class LayoutView extends ConsumerWidget {
           );
         } else {
           // mobile view
-          return SafeArea(
-            child: Scaffold(
-              body: pages[pageIndex].page,
-              bottomNavigationBar: MobileNavbar(pageData: pages),
-            ),
+          return Scaffold(
+            body: pages[pageIndex].page,
+            bottomNavigationBar: MobileNavbar(pageData: pages),
           );
         }
       },

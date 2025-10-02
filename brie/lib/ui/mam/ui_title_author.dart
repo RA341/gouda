@@ -17,8 +17,8 @@ class TitleAndAuthorInfo extends StatelessWidget {
       spacing: 10,
       runSpacing: 5,
       children: [
-        RichText(
-          text: TextSpan(
+        Text.rich(
+          TextSpan(
             children: [
               TextSpan(
                 text: book.title,

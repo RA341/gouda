@@ -70,7 +70,7 @@ class LoginView extends HookConsumerWidget {
                     child: Column(
                       spacing: 20,
                       children: [
-                        if (!kIsWeb)
+                        if (kDebugMode || !kIsWeb)
                           TextField(
                             autofillHints: const [AutofillHints.url],
                             controller: baseurl,
@@ -139,7 +139,7 @@ class LoginView extends HookConsumerWidget {
   ) async {
     final localSettings = ref.read(appSettingsProvider.notifier);
 
-    if (!kIsWeb) {
+    if (!kIsWeb || kDebugMode) {
       if (initialUrl.isEmpty) {
         await showErrorDialog(
           context,

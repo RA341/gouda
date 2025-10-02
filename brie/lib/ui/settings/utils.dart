@@ -118,9 +118,7 @@ class SettingsField extends StatelessWidget {
       );
     }
 
-    return RichText(
-      text: TextSpan(children: spans),
-    );
+    return Text.rich(TextSpan(children: spans));
   }
 
   Future<void> _launchUrl(String url) async {
