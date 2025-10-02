@@ -195,13 +195,13 @@ class SearchBookItemMobile extends HookConsumerWidget {
 
 Media buildMedia(SearchBook book) {
   return Media(
-    author: book.author.first.name,
+    // author: book.author.first.name,
     book: book.title,
     // todo
     // category: book,
     fileLink: book.torrentLink,
     mamBookId: Int64(book.mamId),
-    series: book.series.first.name,
+    // series: book.series.first.name,
   );
 }
 

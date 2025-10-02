@@ -59,6 +59,10 @@ func (srv *MediaManagerService) List(limit, offset int) (int64, []downloads.Medi
 		//log.Debug().Int("limit", limit).Int("offset", offset).Msg("history query limits")
 	}
 
+	if limit == 0 {
+		limit = 20
+	}
+
 	torrents, err := srv.db.ListMedia(offset, limit)
 	if err != nil {
 		return 0, nil, err
