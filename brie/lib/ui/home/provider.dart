@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:brie/clients/history_api.dart';
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/media_requests/v1/media_requests.pbgrpc.dart';
-import 'package:brie/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final AsyncNotifierProvider<BookRequestHistoryNotifier, List<Media>>
@@ -40,7 +39,6 @@ class BookRequestHistoryNotifier extends AsyncNotifier<List<Media>> {
       ),
     );
 
-    logger.i("ssscc");
     return res.results.toList();
   }
 }

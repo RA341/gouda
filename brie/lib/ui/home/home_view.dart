@@ -1,3 +1,4 @@
+import 'package:brie/ui/home/home_book_item.dart';
 import 'package:brie/ui/home/provider.dart';
 import 'package:brie/ui/shared/error_dialog.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,9 @@ class HomeView extends ConsumerWidget {
     return books.when(
       data: (data) {
         return ListView.builder(
+          padding: const EdgeInsets.all(8),
           itemCount: data.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(data[index].book),
-              subtitle: Text(data[index].status),
-            );
-          },
+          itemBuilder: (context, index) => HomeBookItem(media: data[index]),
         );
       },
       error: (error, stackTrace) {
