@@ -170,7 +170,7 @@ func (s *Service) UseFreeleech(torrentID string, leechType LeechType) (*BuyFLRes
 	}
 
 	var result BuyFLResponse
-	err = parseBuyResponse(body, result)
+	err = parseBuyResponse(body, &result)
 	if err != nil {
 		return nil, fmt.Errorf("could not parse body: %w", err)
 	}
@@ -284,7 +284,7 @@ func (s *Service) BuyVault(apiKey string, amount uint) error {
 // - text (string): Text string to search for.
 //
 // Returns:
-// - books ([]Book): List of matching Book entries.
+// - books ([]title): List of matching title entries.
 // - found (int): Number of items found in this response.
 // - total (int): Total number of items matching the query.
 // - err (error): Error, if any occurred during the request.
@@ -379,13 +379,17 @@ func (s *Service) DownloadTorrentFile(link string) (io.ReadCloser, error) {
 func parseBuyResponse(data []byte, result any) error {
 	// First unmarshal just the `success` field
 	var meta struct {
-		Success bool `json:"success"`
+		Success bool   `json:"success"`
+		Error   string `json:"error"`
 	}
 	if err := json.Unmarshal(data, &meta); err != nil {
 		return fmt.Errorf("failed to check success flag: %w", err)
 	}
 
 	if !meta.Success {
+		if meta.Error == "This is already a personal freeleech" {
+			return nil
+		}
 		return fmt.Errorf("api returned a failed response: %s", string(data))
 	}
 
@@ -437,7 +441,7 @@ func parseBuyResponse(data []byte, result any) error {
 	"cat" : "<div class=\"cat46\">&nbsp;</div>"
 }
 */
-// processResponseItems iterates over raw API data and converts it into a slice of Book structs.
+// processResponseItems iterates over raw API data and converts it into a slice of title structs.
 func processResponseItems(items []SearchBookRaw) ([]SearchBook, error) {
 	if len(items) == 0 {
 		return []SearchBook{}, nil

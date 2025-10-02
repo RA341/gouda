@@ -41,16 +41,18 @@ func (srv *MediaManagerService) AddMedia(mediaRequest *downloads.Media, withFree
 	}
 
 	err := srv.ds.DownloadMedia(mediaRequest)
-	if err != nil {
-		mediaRequest.MarkError(err)
-		err = srv.db.Edit(mediaRequest)
-		if err != nil {
-			log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
-			return err
-		}
+	if err == nil {
+		log.Debug().Any("Media", mediaRequest).Msg("Adding media")
+		return nil
 	}
 
-	log.Debug().Any("Media", mediaRequest).Msg("Adding media")
+	mediaRequest.MarkError(err)
+	err = srv.db.Edit(mediaRequest)
+	if err != nil {
+		log.Error().Err(err).Msgf("Failed to process torrent, and saving info to database")
+		return err
+	}
+
 	return nil
 }
 

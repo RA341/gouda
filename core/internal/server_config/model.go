@@ -54,7 +54,7 @@ type Logger struct {
 
 type Downloader struct {
 	Timeout       string `yaml:"timeout" config:"flag=dt,env=TIMEOUT,default=15m,usage=300ms/1.5h/2h45m. Valid units ns/us/ms/s/m/h"`
-	IgnoreTimeout bool   `yaml:"ignoreTimeout" config:"flag=digt,env=IGNORE_TIMEOUT,default=false,usage=Ignore time limit for download"`
+	IgnoreTimeout bool   `yaml:"ignoreTimeout" config:"flag=digt,env=IGNORE_TIMEOUT,default=true,usage=Ignore time limit for download"`
 	CheckInterval string `yaml:"checkInterval" config:"flag=cit,env=CHECK_INTERVAL,default=1m,usage=Download check interval"`
 }
 

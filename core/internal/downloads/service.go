@@ -3,6 +3,7 @@ package downloads
 import (
 	"fmt"
 	"io"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -93,27 +94,28 @@ func (d *Service) ValidateClient(client *sc.TorrentClient) error {
 
 func (d *Service) DownloadMedia(media *Media) error {
 	if err := d.verifyClient(); err != nil {
-		log.Warn().Err(err).Msg("download torrentClient is uninitialized")
-		return err
+		return fmt.Errorf("torrentClient is not setup: %w", err)
 	}
 
-	magnetLink, err := getMagnetLink(media)
+	torrentFilePath, err := d.downloadTorrentFile(media.TorrentDownloadUrl)
 	if err != nil {
-		return fmt.Errorf("unable to get torrent magnet url: %v", err.Error())
+		return err
 	}
-	media.TorrentMagentLink = magnetLink
-	log.Debug().Str("magnet_link", media.TorrentMagentLink).Msg("using magnet URL")
+	media.TorrentFilePath = torrentFilePath
 
 	downloadsDir, err := filepath.Abs(d.dirs().DownloadDir)
 	if err != nil {
-		return fmt.Errorf("unable to determine absolute path: %s", d.dirs().DownloadDir)
+		return fmt.Errorf(
+			"unable to get absolute path: %s\nerr: %w",
+			d.dirs().DownloadDir,
+			err,
+		)
 	}
 
 	if info.IsDev() && runtime.GOOS == "windows" {
 		// converts windows to a wsl path to test with the test transmission client running in docker
 		pathSplit := strings.Split(filepath.ToSlash(downloadsDir), ":/")
 		wslPath := "/mnt/" + strings.ToLower(pathSplit[0]) + "/" + (pathSplit[1])
-
 		downloadsDir = wslPath
 	}
 
@@ -121,18 +123,18 @@ func (d *Service) DownloadMedia(media *Media) error {
 		media.Category = "gouda"
 	}
 
-	torrentId, err := d.torrentClient.DownloadTorrentWithMagnet(
-		media.TorrentMagentLink,
+	torrentId, err := d.torrentClient.DownloadTorrentWithFile(
+		media.TorrentFilePath,
 		downloadsDir,
 		media.Category,
 	)
 	if err != nil {
 		return err
 	}
+
 	log.Debug().Str("torrent_id", torrentId).Msg("Sent media to torrentClient")
 
-	media.TorrentId = torrentId
-	media.CreatedAt = time.Now() // reset time-running for timeout check
+	media.TorrentClientId = torrentId
 	media.MarkDownloading()
 
 	if err = d.db.Save(media); err != nil {
@@ -215,7 +217,7 @@ func (d *Service) checkDownload(
 	}()
 
 	if torrentStatus.ParsedStatus == dc.Complete {
-		log.Info().Str("Media", media.Book).Msg("Download complete, finalizing media...")
+		log.Info().Str("Media", media.Title).Msg("Download complete, finalizing media...")
 		err := d.finalizeDownload(media, torrentStatus)
 		if err != nil {
 			log.Error().Err(err).
@@ -233,7 +235,7 @@ func (d *Service) checkDownload(
 	if torrentStatus.ParsedStatus == dc.Error {
 		// todo notifications
 		log.Error().
-			Str("Media", media.Book).
+			Str("Media", media.Title).
 			Msg("Download failed, check your torrent torrentClient")
 		media.MarkError(fmt.Errorf("download failed, check your torrentClient: %v", torrentStatus.ClientStatus))
 		return
@@ -256,7 +258,7 @@ func (d *Service) checkDownload(
 
 func (d *Service) finalizeDownload(torrentRequest *Media, torrentStatus *dc.TorrentStatus) error {
 	categoryPath := fmt.Sprintf("%s/%s", d.dirs().CompleteDir, torrentRequest.Category)
-	destPath := fmt.Sprintf("%s/%s/%s", categoryPath, torrentRequest.Author, torrentRequest.Book)
+	destPath := fmt.Sprintf("%s/%s/%s", categoryPath, torrentRequest.Author, torrentRequest.Title)
 	torrentStatus.DownloadPath = fmt.Sprintf("%s/%s", torrentStatus.DownloadPath, torrentStatus.Name)
 
 	err := fu.HardLinkFolder(torrentStatus.DownloadPath, destPath)
@@ -297,7 +299,7 @@ func (d *Service) setupTimeoutFunc() func(media *Media) (time.Duration, bool) {
 			Msg("downloads will be monitored until completion; no time limit")
 
 		return func(media *Media) (time.Duration, bool) {
-			return time.Now().Sub(media.CreatedAt), false
+			return time.Now().Sub(media.UpdatedAt), false
 		}
 	}
 
@@ -305,11 +307,11 @@ func (d *Service) setupTimeoutFunc() func(media *Media) (time.Duration, bool) {
 	log.Info().Str("timeout", torrentCheckTimeout.String()).Msg("download timeout is set to...")
 
 	return func(media *Media) (time.Duration, bool) {
-		torrentRunningDuration := time.Now().Sub(media.CreatedAt)
+		torrentRunningDuration := time.Now().Sub(media.UpdatedAt)
 
 		if torrentCheckTimeout < torrentRunningDuration {
 			log.Error().
-				Str("name", media.Book).
+				Str("name", media.Title).
 				Dur("time_running", torrentRunningDuration).
 				Dur("max_timeout", torrentCheckTimeout).
 				Msg("Maximum timeout reached abandoning check for media" +
@@ -321,7 +323,7 @@ func (d *Service) setupTimeoutFunc() func(media *Media) (time.Duration, bool) {
 	}
 }
 
-// getDownloadingMedia returns a map [Media.TorrentId] = Media where Media.Status == Downloading
+// getDownloadingMedia returns a map [Media.TorrentClientId] = Media where Media.Status == Downloading
 func (d *Service) getDownloadingMedia() (map[string]Media, error) {
 	downloadingMedia, err := d.db.GetDownloadingMedia()
 	if err != nil {
@@ -330,7 +332,7 @@ func (d *Service) getDownloadingMedia() (map[string]Media, error) {
 
 	var mediaMap = make(map[string]Media, len(downloadingMedia))
 	for _, med := range downloadingMedia {
-		mediaMap[med.TorrentId] = med
+		mediaMap[med.TorrentClientId] = med
 	}
 
 	return mediaMap, nil
@@ -341,50 +343,77 @@ func (d *Service) verifyClient() error {
 	if d.torrentClient == nil {
 		torrentClient, err := dc.InitializeTorrentClient(d.torrentConfig())
 		if err != nil {
-			return fmt.Errorf("unable to connect to download torrentClient\n\n%v", err.Error())
+			return fmt.Errorf("unable to connect to download torrentClient\n%w", err)
 		}
 		d.torrentClient = torrentClient
 	}
 	return nil
 }
 
-func getMagnetLink(media *Media) (string, error) {
-	if media.TorrentMagentLink != "" {
-		return media.TorrentMagentLink, nil
-	}
-
-	magnetLink, err := downloadAndConvertToMagnetLink(media.FileLink)
+func (d *Service) downloadTorrentFile(downloadLink string) (string, error) {
+	resp, err := downloadTorrent(downloadLink, d.dirs().TorrentDir)
 	if err != nil {
 		return "", err
 	}
 
-	return magnetLink, nil
-}
-
-func getMagnetLinkDirect(media *Media, torrentFileBytes io.ReadCloser) (string, error) {
-	if media.TorrentMagentLink != "" {
-		return media.TorrentMagentLink, nil
+	headers := resp.Header().Get("Content-Disposition")
+	split := strings.Split(resp.Header().Get("Content-Disposition"), "filename=")
+	if len(split) < 2 {
+		return "", fmt.Errorf("expected filename in Content-Disposition got %s", headers)
 	}
+	// remove "
+	filename := strings.ReplaceAll(split[1], "\"", "")
+	fullpath := filepath.Join(d.dirs().TorrentDir, filename)
 
-	toMagnet, err := magnet.TorrentFileToMagnet(torrentFileBytes)
+	file, err := os.OpenFile(
+		fullpath,
+		os.O_RDWR|os.O_CREATE,
+		0600,
+	)
 	if err != nil {
-		return "", fmt.Errorf("unable to convert to magnet: %v", err)
+		return "", fmt.Errorf("could not open/create file for torrent: %w", err)
 	}
 
-	return toMagnet, nil
+	_, err = io.Copy(file, resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("could not copy torrent file: %w", err)
+	}
+
+	return fullpath, nil
 }
+
+//func getMagnetLink(media *Media) (string, error) {
+//	if media.TorrentMagentLink != "" {
+//		return media.TorrentMagentLink, nil
+//	}
+//
+//	magnetLink, err := downloadAndConvertToMagnetLink(media.FinalFilePath)
+//	if err != nil {
+//		return "", err
+//	}
+//
+//	return magnetLink, nil
+//}
+//
+//func getMagnetLinkDirect(media *Media, torrentFileBytes io.ReadCloser) (string, error) {
+//	if media.TorrentMagentLink != "" {
+//		return media.TorrentMagentLink, nil
+//	}
+//
+//	toMagnet, err := magnet.TorrentFileToMagnet(torrentFileBytes)
+//	if err != nil {
+//		return "", fmt.Errorf("unable to convert to magnet: %v", err)
+//	}
+//
+//	return toMagnet, nil
+//}
 
 // downloadLink must be a download url to a torrent file,
 // or it will fail to convert even if file downloads fine
 func downloadAndConvertToMagnetLink(downloadLink string) (string, error) {
-	log.Info().Msg("downloading torrent file")
-	resp, err := resty.New().R().Get(downloadLink)
+	resp, err := downloadTorrent(downloadLink, "")
 	if err != nil {
 		return "", err
-	}
-
-	if resp.IsError() {
-		return "", fmt.Errorf("error downloading file, code: %d, message: %s, body: %s", resp.StatusCode(), resp.Status(), resp.String())
 	}
 
 	toMagnet, err := magnet.TorrentFileToMagnet(resp.Body)
@@ -393,6 +422,26 @@ func downloadAndConvertToMagnetLink(downloadLink string) (string, error) {
 	}
 
 	return toMagnet, nil
+}
+
+func downloadTorrent(downloadLink, saveDir string) (*resty.Response, error) {
+	log.Info().Msg("downloading torrent file")
+
+	req := resty.New()
+	if saveDir != "" {
+		req.SetOutputDirectory(saveDir)
+	}
+
+	resp, err := req.R().Get(downloadLink)
+	if err != nil {
+		return nil, fmt.Errorf("network error while downloading torrent file: %w", err)
+	}
+
+	if resp.IsError() {
+		return nil, fmt.Errorf("unable to download torrent file: %v", err)
+	}
+
+	return resp, err
 }
 
 func getKeys(downloadingMedia map[string]Media) []string {

@@ -5,6 +5,7 @@ import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:brie/ui/mam/ui_narrator.dart';
 import 'package:brie/ui/mam/ui_title_author.dart';
 import 'package:brie/ui/shared/error_dialog.dart';
+import 'package:brie/utils.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -32,6 +33,7 @@ class SearchBookItemMobile extends HookConsumerWidget {
     final mediaType = getMediaIcon(book);
 
     final isSending = useState(false);
+    logger.i(book.torrentLink);
 
     return Card(
       child: ExpansionTile(
