@@ -25,8 +25,8 @@ class TabDownloader extends HookConsumerWidget {
         Row(
           spacing: 10,
           children: [
-            SizedBox(
-              width: 310,
+            Expanded(
+              flex: 5,
               child: SettingsField(
                 controller: timeoutController,
                 enabled: curConfig.downloader.ignoreTimeout,
@@ -39,22 +39,25 @@ class TabDownloader extends HookConsumerWidget {
                 },
               ),
             ),
-            Column(
-              children: [
-                Switch(
-                  value: curConfig.downloader.ignoreTimeout,
-                  onChanged: (value) {
-                    ref.serverUpdateConfig(
-                      (prev) => prev..downloader.ignoreTimeout = value,
-                    );
-                  },
-                ),
-                Text(
-                  curConfig.downloader.ignoreTimeout
-                      ? "Check enabled"
-                      : "Check disabled",
-                ),
-              ],
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Switch(
+                    value: curConfig.downloader.ignoreTimeout,
+                    onChanged: (value) {
+                      ref.serverUpdateConfig(
+                            (prev) => prev..downloader.ignoreTimeout = value,
+                      );
+                    },
+                  ),
+                  Text(
+                    curConfig.downloader.ignoreTimeout
+                        ? "Check enabled"
+                        : "Check disabled",
+                  ),
+                ],
+              ),
             ),
           ],
         ),

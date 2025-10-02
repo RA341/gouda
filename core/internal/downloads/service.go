@@ -257,9 +257,9 @@ func (d *Service) checkDownload(
 }
 
 func (d *Service) finalizeDownload(torrentRequest *Media, torrentStatus *dc.TorrentStatus) error {
-	categoryPath := fmt.Sprintf("%s/%s", d.dirs().CompleteDir, torrentRequest.Category)
-	destPath := fmt.Sprintf("%s/%s/%s", categoryPath, torrentRequest.Author, torrentRequest.Title)
-	torrentStatus.DownloadPath = fmt.Sprintf("%s/%s", torrentStatus.DownloadPath, torrentStatus.Name)
+	categoryPath := filepath.Join(d.dirs().CompleteDir, torrentRequest.Category)
+	destPath := filepath.Join(categoryPath, torrentRequest.Author, torrentRequest.Title)
+	torrentStatus.DownloadPath = filepath.Join(torrentStatus.DownloadPath, torrentStatus.Name)
 
 	err := fu.HardLinkFolder(torrentStatus.DownloadPath, destPath)
 	if err != nil {
@@ -269,7 +269,8 @@ func (d *Service) finalizeDownload(torrentRequest *Media, torrentStatus *dc.Torr
 			Msg("unable to hardlink")
 
 		log.Info().Msg("trying to copy instead")
-		if err = fu.CopyFolder(torrentStatus.DownloadPath, destPath); err != nil {
+		err = fu.CopyFolder(torrentStatus.DownloadPath, destPath)
+		if err != nil {
 			return fmt.Errorf("failed to copy folder: %v", err)
 		}
 	}
@@ -277,7 +278,9 @@ func (d *Service) finalizeDownload(torrentRequest *Media, torrentStatus *dc.Torr
 	sourceUID := d.perms().UID
 	sourceGID := d.perms().GID
 	log.Info().Int("UID", sourceUID).Int("GID", sourceGID).Msg("Changing file perm")
-	if err = fu.RecursiveChown(categoryPath, sourceUID, sourceGID); err != nil {
+
+	err = fu.RecursiveChown(categoryPath, sourceUID, sourceGID)
+	if err != nil {
 		return fmt.Errorf("failed to chown download: %v", err)
 	}
 

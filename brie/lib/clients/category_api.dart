@@ -3,7 +3,7 @@ import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/grpc.dart';
 
-final catProvider = Provider<CategoryServiceClient>((ref) {
+final categoryApiProvider = Provider<CategoryServiceClient>((ref) {
   final channel = ref.watch(grpcChannelProvider);
   final authInterceptor = ref.watch(authInterceptorProvider);
 

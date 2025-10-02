@@ -25,15 +25,26 @@ tasks:
     label: 'brie-build-{{index .MATCH 0}}'
     vars:
       TARGET: '{{index .MATCH 0}}'
+      # Define conditional arguments based on target
+      BUILD_ARGS: |
+        {{- if eq .TARGET "windows" }} 
+        {{- else if eq .TARGET "macos" }} 
+        {{- else if eq .TARGET "linux" }} 
+        {{- else if eq .TARGET "apk" }} --release
+        {{- else if eq .TARGET "ios" }} 
+        {{- else if eq .TARGET "web" }} --wasm 
+        {{- end }}
 
     requires: # validate TARGET
       vars:
         - name: TARGET
           enum: [ windows, macos, linux, apk, ios, web ]
+
     sources:
       - lib/**/*.dart
+
     cmds:
-      - flutter build {{ .TARGET }}
+      - flutter build {{ .TARGET }} {{ .BUILD_ARGS }}
 
   go:*:
     label: 'go-build-{{index .MATCH 0}}'

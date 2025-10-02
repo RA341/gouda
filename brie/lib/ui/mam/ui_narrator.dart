@@ -19,9 +19,7 @@ class SeriesAndNarratorInfo extends StatelessWidget {
       children: [
         Text.rich(
           TextSpan(
-            style: DefaultTextStyle.of(context).style
-              ..copyWith(fontStyle: FontStyle.italic),
-            // style: const TextStyle(fontStyle: FontStyle.italic),
+            style: const TextStyle(fontStyle: FontStyle.italic),
             children: [
               const TextSpan(
                 text: "Narrators: ",

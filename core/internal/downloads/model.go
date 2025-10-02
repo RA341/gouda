@@ -10,9 +10,9 @@ import (
 type MediaStatus string
 
 const (
-	Downloading = "downloading"
-	Complete    = "completed"
-	Error       = "error"
+	Downloading = "Downloading"
+	Complete    = "Completed"
+	Error       = "Error"
 )
 
 type Media struct {

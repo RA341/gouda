@@ -1,10 +1,10 @@
-import 'package:brie/env.dart';
 import 'package:brie/ui/home/home_view.dart';
 import 'package:brie/ui/layout/nav_model.dart';
 import 'package:brie/ui/layout/navbar_mobile.dart';
 import 'package:brie/ui/layout/navbar_vertical.dart';
 import 'package:brie/ui/mam/ui_mam.dart';
 import 'package:brie/ui/settings/settings_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,7 +14,7 @@ final pageIndexProvider = NotifierProvider<PageIndexNotifier, int>(
 
 class PageIndexNotifier extends Notifier<int> {
   @override
-  int build() => Env.initialPage;
+  int build() => kDebugMode ? 1 : 0;
 
   void switchPage(int index) {
     state = index;
