@@ -31,7 +31,7 @@ func LoadConf() (*GoudaConfig, error) {
 	var conf GoudaConfig
 	err = conf.LoadFromYaml()
 	if err != nil {
-		log.Warn().Err(err).Msgf("Error loading gouda.json file previously saved config will be not loaded")
+		log.Warn().Err(err).Msgf("unable to load previous config file, creating new config file")
 	}
 
 	err = argos.Scan(&conf, GoudaEnvPrefix)

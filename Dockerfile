@@ -43,10 +43,6 @@ RUN go build -ldflags "-s -w \
 FROM alpine:latest AS main
 
 ENV GOUDA_LOG_LEVEL=info
-ENV GOUDA_CONFIG=/config
-ENV GOUDA_DOWNLOAD=/downloads
-ENV GOUDA_COMPLETE=/complete
-ENV GOUDA_TORRENT=/torrents
 
 WORKDIR /app/
 

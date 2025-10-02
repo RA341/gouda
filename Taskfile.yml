@@ -82,7 +82,11 @@ tasks:
       IMAGE: "{{ .DOCKMAN_IMAGE_BASE }}:dev"
     cmds:
       - docker build . -t {{.IMAGE}}
-      - docker run --rm -e GOUDA_LOG_LEVEL=debug -p 9862:9862 {{.IMAGE}}
+      - docker run --rm
+        -v ./{{.DEV_BUILD}}/docker/config:/app/config
+        -e GOUDA_LOG_LEVEL=debug
+        -p 9862:9862
+        {{.IMAGE}}
 
   dk:prune:
     desc: "Prune docker images."
