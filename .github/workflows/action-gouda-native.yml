@@ -45,8 +45,7 @@ jobs:
         with:
           go-version: ${{ inputs.go_version }}
           cache-dependency-path: |
-            src/go.sum
-            goub/go.sum
+            core/go.sum
 
       # OS-specific CGO dependencies
       - name: Install Linux CGO dependencies
@@ -56,6 +55,11 @@ jobs:
           sudo apt-get install --no-install-recommends -y \
             gcc libgtk-3-dev libayatana-appindicator3-dev
         shell: bash
+
+      - name: Install coreutils
+        if: runner.os == 'Windows'
+        run: |
+          winget install coreutils
 
       - name: Setup MSYS2 for Windows CGO
         if: runner.os == 'Windows'
