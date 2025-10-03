@@ -57,9 +57,6 @@ jobs:
 
             # `source_branch` input is provided add it as a tag.
             type=raw,value=${{ inputs.source_branch }},enable=${{ inputs.source_branch != '' }}            
-            
-            # short commit SHA tag for traceability.
-            # type=sha,prefix=,suffix=,format=short,enable=${{ inputs.source_branch == 'main' }}
 
             # Add 'dev' tag if the source branch is 'main'.
             type=raw,value=dev,enable=${{ inputs.source_branch == 'main' }}            
