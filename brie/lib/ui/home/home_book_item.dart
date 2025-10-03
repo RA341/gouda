@@ -67,9 +67,9 @@ class HomeBookItem extends HookConsumerWidget {
             Chip(
               label: Text(media.status),
               backgroundColor: switch (media.status) {
-                "completed" => Colors.green[800],
-                "error" => Colors.red[800],
-                "downloading" => Colors.blue[800],
+                "Completed" => Colors.green[800],
+                "Error" => Colors.red[800],
+                "Downloading" => Colors.blue[800],
                 _ => Colors.grey[800],
               },
             ),
