@@ -6,10 +6,12 @@
 >
 > Check Progress [here](#overhaul-progress)
 >
+> If you would like to test drive the dev build [check here](#beta-build)
+>
 > Well, well, well... look who decided to dust off this repository after months! Finally getting around to this project
 > after months of procrastination; this baby is getting a complete makeover.
 >
-> > **What's brewing:**
+> **What's brewing:**
 > - Direct download functionality (no need for the extension, you can also download with wedges)
 > - Overseer-like request system so your family can also get their books
 > - Improved architecture and performance improvements (translation: I'm fixing all the "TODO: refactor this mess"
@@ -38,7 +40,7 @@ if you have any ideas you would like to add modify this section and open a PR
 - [ ] Add direct download functionality
     - [x] Support downloads without the extension
     - [x] Support wedge-based downloads
-    - [ ] [UI] Allow option to download with wedge
+  - [x] [UI] Allow option to download with wedge
     - [ ] [UI] Add searching and filtering for downloaded/requested books
 
 - [ ] Mam search
@@ -61,30 +63,74 @@ if you have any ideas you would like to add modify this section and open a PR
         - [ ] Approve/Disapprove
     - [ ] Notifications ???
 
----
+## Beta Build
 
-## Getting Started
+A beta build is now available for testing!
 
-Gouda is best used with Docker. For platforms where Docker isn't an option, native binaries are provided.
+While the UI is still being refined, the core downloading functionality is operational.
 
-### Docker
+Your feedback is highly appreciated!
 
-Downloads the sample [docker-compose.yml](install/docker-compose.yml), you will need to setup your download client
-correctly
+### Getting Started
 
-* On Linux:
-    ```bash
-    curl -sSL https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/install/install.sh | bash -s -- docker
-    ```
+Follow sections below to get started with the beta build
 
-* On Windows
-    ```powershell
-    & ([scriptblock]::Create((Invoke-RestMethod 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/main/install/install.ps1'))) 'docker'
-    ```
+Currently, the build is only published for docker
 
-### Docs
+#### Docker-compose
 
-For configuration options, usage examples, and detailed explanations, refer to the [docs](https://gouda.radn.dev).
+```yaml
+gouda:
+  container_name: gouda-next
+  image: ghcr.io/ra341/gouda:beta
+  ports:
+    - "9862:9862"
+  volumes:
+    - /path/to/config:/app/config
+    - /path/to/media:/media # Must match download client
+  restart: unless-stopped
+
+transmissionprivate:
+  container_name: transmissionpriv
+  image: lscr.io/linuxserver/transmission:latest
+  environment:
+    - PUID=1000
+    - PGID=1000
+    - TZ=Etc/UTC
+  volumes:
+    - /path/to/media:/media  # Must match gouda's mount exactly
+  ports:
+    - "9092:9091"
+    - "9161:9161"
+  restart: unless-stopped
+```
+
+> [!IMPORTANT]
+> **⚠️ Important Note on Volume Mounts**
+>
+> The `/path/to/media:/media` volume mount must be **identical** in both the gouda and torrent client containers.
+>
+> While you can customize the path to your preference, both gouda and your download client must share the exact same
+> mapping to allow gouda to access the files properly and allow symlink of downloaded files.
+
+#### Configuration
+
+After starting your container, log in with:
+
+```
+username: admin
+password: gouda
+```
+
+Navigate to the settings page and configure the following:
+
+- MAM token
+- File paths
+- Downloader settings
+
+### Reporting Issues
+
+If you encounter any bugs or have suggestions, [open an issue](https://github.com/RA341/gouda/issues)
 
 ## How it Works
 

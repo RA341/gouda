@@ -20,7 +20,7 @@ on:
         description: 'Go version to use'
         required: false
         type: string
-        default: '1.24'
+        default: '1.25'
 
 jobs:
   build:
@@ -70,22 +70,18 @@ jobs:
         # Ensure MSYS2/MinGW paths are correctly added for subsequent steps if 'go install' or 'goub' need them
         # This action usually handles PATH setup for its shell environment.
 
-      - name: Build and install goub build tool
-        working-directory: goub # Assumes 'goub' is a directory in your repo root
-        run: go install
-        shell: bash # Explicitly set shell for consistency, especially on Windows
+      - name: Install Task
+        uses: go-task/setup-task@v1
 
-      - name: Build gouda
-        env:
-          CGO_ENABLED: 1
-        run: goub build all -o=output
-        shell: bash # Explicitly set shell
+      - name: Build for with task
+        run: |
+          task --taskfile .\Taskfile-build.yml build:${{ runner.os == 'Windows' && 'windows' || (runner.os == 'macOS' && 'macos' || 'linux') }}
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            output/*
+            .build/*
           tag_name: ${{ inputs.tag_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
