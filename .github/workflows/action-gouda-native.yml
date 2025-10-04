@@ -59,7 +59,7 @@ jobs:
       - name: Install coreutils
         if: runner.os == 'Windows'
         run: |
-          winget install coreutils
+          winget install --id GnuWin32.CoreUtils --accept-source-agreements --accept-package-agreements
 
       - name: Setup MSYS2 for Windows CGO
         if: runner.os == 'Windows'
