@@ -1,8 +1,11 @@
 import 'package:brie/gen/mam/v1/mam.pb.dart';
+import 'package:brie/ui/mam/mam_search.dart';
+import 'package:brie/ui/mam/provider.dart';
 import 'package:brie/ui/mam/ui_narrator.dart';
 import 'package:brie/ui/mam/ui_serach_book_action_buttons.dart';
 import 'package:brie/ui/mam/ui_title_author.dart';
 import 'package:brie/ui/mam/utils.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -56,24 +59,36 @@ class MetadataView extends ConsumerWidget {
     return Row(
       spacing: 10,
       children: [
-        Column(
-          spacing: 9,
-          children: [
-            mediaType,
-            SizedBox(
-              width: 48,
-              child: Text(
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                book.mediaCategory.endsWith("s")
-                    ? book.mediaCategory.substring(
-                  0,
-                  book.mediaCategory.length - 1,
-                )
-                    : book.mediaCategory,
+        InkWell(
+          onTap: () {
+            final ca = getMediaCategory(book);
+            if (ca == null) {
+              return;
+            }
+
+            ref.updateQuery(
+                  (query) => query..toggleCategory(ca),
+            );
+          },
+          child: Column(
+            spacing: 9,
+            children: [
+              mediaType,
+              SizedBox(
+                width: 48,
+                child: Text(
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 15),
+                  book.mediaCategory.endsWith("s")
+                      ? book.mediaCategory.substring(
+                    0,
+                    book.mediaCategory.length - 1,
+                  )
+                      : book.mediaCategory,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         Expanded(
           child: Column(
@@ -82,11 +97,42 @@ class MetadataView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleAndAuthorInfo(book: book),
-              Text(
-                "Series: ${book.series.take(2).map(
-                      (e) => '${htmlQuickDecode(e.name)} #${e.sequenceNumber}',
-                ).join(", ")}",
-              ),
+              if (book.series.isNotEmpty)
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(text: "Series: "),
+                      ...book.series.take(2).map((e) {
+                        final seriesName = htmlQuickDecode(e.name);
+                        final seriesNum = e.sequenceNumber;
+
+                        return TextSpan(
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                            color: Theme
+                                .of(context)
+                                .colorScheme
+                                .primary,
+                            decoration: TextDecoration.underline,
+                          ),
+                          text: '$seriesName #$seriesNum',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              ref.updateQuery(
+                                    (query) =>
+                                query
+                                  ..text = seriesName
+                                  ..searchInFields.add(SearchInField.series),
+                              );
+                            },
+                        );
+                      }),
+                    ],
+                  ),
+                ),
               if (book.narrator.isNotEmpty) SeriesAndNarratorInfo(book: book),
               Text(book.tags),
               Row(

@@ -25,6 +25,7 @@ dependencies:
   flutter_animate: ^4.5.2
   timeago: ^3.7.1
   font_awesome_flutter: ^10.10.0
+  intl:
 
   # misc
   shared_preferences: ^2.5.3
