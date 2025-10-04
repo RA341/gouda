@@ -1,3 +1,6 @@
+import 'package:brie/ui/mam/ui_mam.dart';
+import 'package:flutter/foundation.dart';
+
 enum SearchType {
   all,
   active,
@@ -15,41 +18,10 @@ enum SearchType {
   String get apiValue => value ?? name;
 }
 
-enum SortType {
-  titleAsc,
-  titleDesc,
-  fileAsc,
-  fileDesc,
-  sizeAsc,
-  sizeDesc,
-  seedersAsc,
-  seedersDesc,
-  leechersAsc,
-  leechersDesc,
-  snatchedAsc,
-  snatchedDesc,
-  dateAsc,
-  dateDesc,
-  bmkaAsc,
-  bmkaDesc,
-  reseedAsc,
-  reseedDesc,
-  categoryAsc,
-  categoryDesc,
-  random,
-  defaultSort('default');
-
-  const SortType([this.value]);
-
-  final String? value;
-
-  String get apiValue => value ?? name;
-}
-
 enum MainCategory {
-  audioBooks(13),
+  audiobooks(13),
   eBooks(14),
-  musicology(15),
+  music(15),
   radio(16);
 
   const MainCategory(this.id);
@@ -68,20 +40,52 @@ enum SearchInField {
   tags,
 }
 
+enum SortType {
+  defaultSort('default'),
+  random,
+  title,
+  category,
+  date,
+  file,
+  size,
+  bmka('Bookmarks'),
+  seeders,
+  reseed,
+  leechers,
+  snatched;
+
+  const SortType([this.value]);
+
+  final String? value;
+
+  String get apiValue => value ?? name;
+}
+
+enum SortOrder {
+  asc,
+  dsc;
+
+  bool get isAsc => this == SortOrder.asc;
+
+  bool get isDsc => this == SortOrder.dsc;
+
+  SortOrder toggle() => this == SortOrder.asc ? SortOrder.dsc : SortOrder.asc;
+}
+
 // Main search query builder class
 class MamSearchQuery {
   MamSearchQuery();
 
   // Core search parameters
-  String? text;
-  List<SearchInField> searchInFields = [];
+  String? text = kDebugMode ? "Guide to the galaxy" : null;
+  Set<SearchInField> searchInFields = {};
   SearchType searchType = SearchType.all;
   String searchIn = 'torrents';
 
   // Categories and languages
   List<String> categories = [];
   List<int> browseLanguages = [];
-  List<MainCategory> mainCategories = [];
+  Set<MainCategory> mainCategories = {};
 
   // Date filters
   DateTime? startDate;
@@ -92,7 +96,11 @@ class MamSearchQuery {
   bool includeIsbn = false;
 
   // Sorting and pagination
-  SortType sortType = SortType.defaultSort;
+  SortType sortField = SortType.defaultSort;
+  SortOrder sortOrder = SortOrder.asc;
+
+  String getSortField() => sortField.apiValue + capitalize(sortOrder.name);
+
   int startNumber = 0;
   int perPage = 25;
 
@@ -103,100 +111,103 @@ class MamSearchQuery {
   bool showThumbnail = false;
   String browseFlagsHideVsShow = '0';
 
-  // Fluent builder methods
-  MamSearchQuery withText(String searchText) {
+  void toggleCategory(MainCategory cat) {
+    final changed = mainCategories.add(cat);
+    if (!changed) {
+      mainCategories.remove(cat);
+    }
+  }
+
+  void toggleSearchIn(SearchInField field) {
+    final changed = searchInFields.add(field);
+    if (!changed) {
+      searchInFields.remove(field);
+    }
+  }
+
+  void withText(String searchText) {
     text = searchText;
-    return this;
+    return;
   }
 
-  MamSearchQuery addSearchIn(List<SearchInField> fields) {
-    searchInFields = List.from(fields);
-    return this;
-  }
-
-  MamSearchQuery ofType(SearchType type) {
+  void ofType(SearchType type) {
     searchType = type;
-    return this;
+    return;
   }
 
-  MamSearchQuery inCategories(List<String> cats) {
+  void inCategories(List<String> cats) {
     categories = List.from(cats);
-    return this;
+    return;
   }
 
-  MamSearchQuery inMainCategories(List<MainCategory> cats) {
-    mainCategories = List.from(cats);
-    return this;
-  }
-
-  MamSearchQuery withLanguages(List<int> langs) {
+  void withLanguages(List<int> langs) {
     browseLanguages = List.from(langs);
-    return this;
+    return;
   }
 
-  MamSearchQuery fromDate(DateTime date) {
+  void fromDate(DateTime date) {
     startDate = date;
-    return this;
+    return;
   }
 
-  MamSearchQuery toDate(DateTime date) {
+  void toDate(DateTime date) {
     endDate = date;
-    return this;
+    return;
   }
 
-  MamSearchQuery withHash(String torrentHash) {
+  void withHash(String torrentHash) {
     hash = torrentHash;
-    return this;
+    return;
   }
 
-  MamSearchQuery sortBy(SortType sort) {
-    sortType = sort;
-    return this;
+  void sortBy(SortType sort) {
+    sortField = sort;
+    return;
   }
 
-  MamSearchQuery startAt(int start) {
+  void startAt(int start) {
     startNumber = start;
-    return this;
+    return;
   }
 
-  MamSearchQuery resultsPerPage(int count) {
+  void resultsPerPage(int count) {
     if (count < 5 || count > 100) {
       throw ArgumentError('perPage must be between 5 and 100');
     }
     perPage = count;
-    return this;
+    return;
   }
 
-  MamSearchQuery includeDescription() {
+  void includeDescription() {
     showDescription = true;
-    return this;
+    return;
   }
 
-  MamSearchQuery includeDlLink() {
+  void includeDlLink() {
     showDlLink = true;
-    return this;
+    return;
   }
 
-  MamSearchQuery includeBookmarks() {
+  void includeBookmarks() {
     showBookmarks = true;
-    return this;
+    return;
   }
 
-  MamSearchQuery includeThumbnail() {
+  void includeThumbnail() {
     showThumbnail = true;
-    return this;
+    return;
   }
 
-  MamSearchQuery withIsbn() {
+  void withIsbn() {
     includeIsbn = true;
-    return this;
+    return;
   }
 
   // Convert to JSON for API request
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> torData = {
+    final torData = <String, dynamic>{
       'cat': categories.isEmpty ? ['0'] : categories,
-      'sortType': sortType.apiValue,
+      'sortType': getSortField(),
       'browseStart': true,
       'startNumber': startNumber.toString(),
       'searchType': searchType.apiValue,
@@ -240,7 +251,7 @@ class MamSearchQuery {
     // Add per page
     torData['perpage'] = perPage;
 
-    final Map<String, dynamic> result = {'tor': torData};
+    final result = <String, dynamic>{'tor': torData};
 
     // Add flags
     if (showDescription) result['description'] = '';
@@ -260,17 +271,18 @@ class MamSearchQuery {
   MamSearchQuery clone() {
     return MamSearchQuery()
       ..text = text
-      ..searchInFields = List.from(searchInFields)
+      ..searchInFields = Set.from(searchInFields)
       ..searchType = searchType
       ..searchIn = searchIn
       ..categories = List.from(categories)
       ..browseLanguages = List.from(browseLanguages)
-      ..mainCategories = List.from(mainCategories)
+      ..mainCategories = Set.from(mainCategories)
       ..startDate = startDate
       ..endDate = endDate
       ..hash = hash
       ..includeIsbn = includeIsbn
-      ..sortType = sortType
+      ..sortField = sortField
+      ..sortOrder = sortOrder
       ..startNumber = startNumber
       ..perPage = perPage
       ..showDescription = showDescription

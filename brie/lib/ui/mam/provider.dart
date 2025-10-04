@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:brie/clients/category_api.dart';
@@ -6,8 +7,119 @@ import 'package:brie/clients/mam_api.dart';
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/gen/category/v1/category.pbgrpc.dart';
 import 'package:brie/gen/mam/v1/mam.pb.dart';
+import 'package:brie/ui/mam/mam_search.dart';
+import 'package:brie/utils.dart';
 import 'package:brie/utils/extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+typedef QueryUpdater = MamSearchQuery Function(MamSearchQuery query);
+
+extension Search on WidgetRef {
+  MamSearchQuery query() {
+    return watch(mamSearchQueryProvider);
+  }
+
+  void updateQuery(QueryUpdater up) {
+    read(mamSearchQueryProvider.notifier).updateQuery(up);
+  }
+
+  Future<void> search(MamSearchQuery q, {bool search = false}) async {
+    await read(mamBooksSearchProvider.notifier).search(q, searchNew: search);
+  }
+}
+
+final mamSearchQueryProvider =
+NotifierProvider<MamSearchQueryNotifier, MamSearchQuery>(
+  MamSearchQueryNotifier.new,
+);
+
+class MamSearchQueryNotifier extends Notifier<MamSearchQuery> {
+  @override
+  MamSearchQuery build() {
+    return MamSearchQuery();
+  }
+
+  final encoder = const JsonEncoder.withIndent('  ');
+
+  void updateQuery(QueryUpdater modify) {
+    state = modify(state.clone());
+
+    final json = encoder.convert(state.toJson());
+    logger.d("query $json");
+  }
+}
+
+final mamBooksSearchProvider =
+AsyncNotifierProvider<MamBooksSearchNotifier, List<SearchBook>>(
+  MamBooksSearchNotifier.new,
+);
+
+class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
+  int found = 0;
+  int total = 0;
+
+  int page = 0;
+  int perPage = 20;
+
+  @override
+  Future<List<SearchBook>> build() async => _runQuery();
+
+  Future<void> search(MamSearchQuery query, {bool searchNew = false}) async {
+    if (searchNew) {
+      page = 0;
+      found = 0;
+      total = 0;
+    }
+
+    // logger.i("ss ${query.toJson()}");
+    // todo cancel prev request
+    // if (state.isLoading) {}
+
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => _runQuery(query: query));
+  }
+
+  Future<List<SearchBook>> _runQuery({MamSearchQuery? query}) async {
+    if (query == null) {
+      return [];
+    }
+    if ((query.text ?? '').isEmpty) {
+      return [];
+    }
+
+    final jsonQuery = jsonEncode(query.toJson());
+    final mam = ref.watch(mamApiProvider);
+    final results = await mustRunGrpcRequest(
+          () => mam.search(Query(query: jsonQuery)),
+    );
+
+    found = results.found;
+    total = results.total;
+    return results.results;
+  }
+
+  Future<void> paginateForward() async {
+    if (!lastPage()) {
+      page += 1;
+      await paginate();
+    }
+  }
+
+  Future<void> paginateBack() async {
+    if (page > 0) {
+      page -= 1;
+      await paginate();
+    }
+  }
+
+  Future<void> paginate() async {
+    final query = ref.read(mamSearchQueryProvider)
+      ..startAt(page * perPage);
+    await search(query);
+  }
+
+  bool lastPage() => found < perPage;
+}
 
 final categoryListProvider =
 AsyncNotifierProvider<CategoryNotifier, List<Category>>(

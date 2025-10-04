@@ -23,19 +23,19 @@ jobs:
       is_latest: true
       source_branch: ${{ github.ref_name }}
     secrets: inherit
-
-  build_and_release_linux:
-    name: Build and Release for Linux
-    uses: ./.github/workflows/action-gouda-native.yml
-    with:
-      os: ubuntu-latest
-      tag_name: ${{ github.event.inputs.tag_name }}
-    secrets: inherit
-
-  build_and_release_windows:
-    name: Build and Release for Windows
-    uses: ./.github/workflows/action-gouda-native.yml
-    with:
-      os: windows-latest
-      tag_name: ${{ github.event.inputs.tag_name }}
-    secrets: inherit
+# todo
+#  build_and_release_linux:
+#    name: Build and Release for Linux
+#    uses: ./.github/workflows/action-gouda-native.yml
+#    with:
+#      os: ubuntu-latest
+#      tag_name: ${{ github.event.inputs.tag_name }}
+#    secrets: inherit
+#
+#  build_and_release_windows:
+#    name: Build and Release for Windows
+#    uses: ./.github/workflows/action-gouda-native.yml
+#    with:
+#      os: windows-latest
+#      tag_name: ${{ github.event.inputs.tag_name }}
+#    secrets: inherit
