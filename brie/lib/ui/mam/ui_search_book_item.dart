@@ -67,7 +67,7 @@ class MetadataView extends ConsumerWidget {
             }
 
             ref.updateQuery(
-                  (query) => query..toggleCategory(ca),
+              (query) => query..toggleCategory(ca),
             );
           },
           child: Column(
@@ -81,9 +81,9 @@ class MetadataView extends ConsumerWidget {
                   style: const TextStyle(fontSize: 15),
                   book.mediaCategory.endsWith("s")
                       ? book.mediaCategory.substring(
-                    0,
-                    book.mediaCategory.length - 1,
-                  )
+                          0,
+                          book.mediaCategory.length - 1,
+                        )
                       : book.mediaCategory,
                 ),
               ),
@@ -97,6 +97,67 @@ class MetadataView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleAndAuthorInfo(book: book),
+              Row(
+                spacing: 8,
+                children: [
+                  // Media Size chip
+                  Chip(
+                    label: Text(
+                      book.mediaSize,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+                    backgroundColor: const Color(0xFF667eea),
+                    shadowColor: const Color(0xFF667eea),
+                    elevation: 4,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                  ),
+
+                  // Language Code chip
+                  Chip(
+                    label: Text(
+                      book.languageCode,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+                    backgroundColor: const Color(0xFFf5576c),
+                    shadowColor: const Color(0xFFf5576c),
+                    elevation: 4,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                  ),
+
+                  // Media Format chip
+                  Chip(
+                    label: Text(
+                      book.mediaFormat,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+                    backgroundColor: const Color(0xFF4facfe),
+                    shadowColor: const Color(0xFF4facfe),
+                    elevation: 4,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                  ),
+                ],
+              ),
               if (book.series.isNotEmpty)
                 Text.rich(
                   TextSpan(
@@ -107,23 +168,16 @@ class MetadataView extends ConsumerWidget {
                         final seriesNum = e.sequenceNumber;
 
                         return TextSpan(
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyMedium
+                          style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
-                            color: Theme
-                                .of(context)
-                                .colorScheme
-                                .primary,
-                            decoration: TextDecoration.underline,
-                          ),
+                                color: Theme.of(context).colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                              ),
                           text: '$seriesName #$seriesNum',
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               ref.updateQuery(
-                                    (query) =>
-                                query
+                                (query) => query
                                   ..text = seriesName
                                   ..searchInFields.add(SearchInField.series),
                               );
