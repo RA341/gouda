@@ -40,7 +40,7 @@ func NewQbitClient(client *sc.TorrentClient) (DownloadClient, error) {
 		return nil, fmt.Errorf("failed to login: %s", err)
 	}
 
-	return nil, fmt.Errorf("unimplemented qbit")
+	return qbit, nil
 }
 
 type QbitClient struct {
