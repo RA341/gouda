@@ -36,25 +36,31 @@ func (s *BackgroundService) Start() {
 
 func (s *BackgroundService) autoBuy() {
 	log.Info().Msg("starting autobuy")
-	profile, err := s.srv.SafeGetProfile()
-	if err != nil {
-		// todo add notif here
-		log.Warn().Err(err).Msg("unable to verify auth with mam, check your token")
-		return
-	}
 
-	curPoints := profile.Seedbonus
-	currentVIPWeeks, err := CalculateWeeksRemaining(profile.VipUntil)
-	if err != nil {
-		// todo add notif here
-		log.Warn().Err(err).Msg("unable calculate points to buy, check your token")
-	}
+	var vip *BuyVIPResponse
+	var err error
 
-	// Calculate current VIP weeks remaining
-	gb, weeks := CalculateOptimalPurchase(curPoints, currentVIPWeeks)
+	if !s.srv.provider().AutoBuyVip {
+		log.Info().Msg("AutoBuy vip is disabled, skipping....")
+	} else {
+		vip, err = s.srv.BuyVIP(0)
+		if err != nil {
+			log.Warn().Err(err).Msg("unable buy vip")
+		} else {
+			log.Info().Any("vip", vip).Msg("bought vip weeks")
+		}
+
+	}
 
 	if s.srv.provider().AutoBuyBonus {
-		bonus, err := s.srv.BuyBonus(uint(gb))
+		gbToBuy := 0
+		if vip != nil {
+			if vip.SeedBonus > MinPointsToKeep {
+				gbToBuy = int((vip.SeedBonus - MinPointsToKeep) / PointsPerGB)
+			}
+		}
+
+		bonus, err := s.srv.BuyBonus(uint(gbToBuy))
 		if err != nil {
 			log.Warn().Err(err).Msg("unable buy bonus")
 		} else {
@@ -62,17 +68,6 @@ func (s *BackgroundService) autoBuy() {
 		}
 	} else {
 		log.Info().Msg("AutoBuy bonus is disabled, skipping....")
-	}
-
-	if s.srv.provider().AutoBuyVip {
-		vip, err := s.srv.BuyVIP(uint(weeks))
-		if err != nil {
-			log.Warn().Err(err).Msg("unable buy vip")
-		} else {
-			log.Info().Any("vip", vip).Msg("bought vip weeks")
-		}
-	} else {
-		log.Info().Msg("AutoBuy vip is disabled, skipping....")
 	}
 }
 
