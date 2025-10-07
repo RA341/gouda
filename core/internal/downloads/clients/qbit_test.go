@@ -3,13 +3,15 @@ package clients
 import (
 	"context"
 	"fmt"
+	"testing"
+	"time"
+
+	"github.com/RA341/gouda/internal/server_config"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/go-connections/nat"
 	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"testing"
-	"time"
 )
 
 var (
@@ -36,7 +38,7 @@ func TestQbitClient(t *testing.T) {
 	qbitUrl := extractExposedPort(t, qbitCont, qbitNATPort)
 	t.Log("qbit url: ", "http://"+qbitUrl)
 
-	qbit, err := NewQbitClient(&TorrentClient{
+	qbit, err := NewQbitClient(&server_config.TorrentClient{
 		Host: qbitUrl, Protocol: protocol, User: qbitTestUser, Password: qbitTestPass,
 	})
 	assert.NoError(t, err)

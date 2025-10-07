@@ -3,11 +3,13 @@ package clients
 import (
 	"context"
 	"fmt"
+	"testing"
+
+	"github.com/RA341/gouda/internal/server_config"
 	"github.com/docker/go-connections/nat"
 	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"testing"
 )
 
 const (
@@ -36,7 +38,7 @@ func TestTransmissionClient(t *testing.T) {
 	transmissionUrl := extractExposedPort(t, cont, transmissionPort)
 	t.Log("transmission url: ", "http://"+transmissionUrl)
 
-	client, err := NewTransmissionClient(&TorrentClient{
+	client, err := NewTransmissionClient(&server_config.TorrentClient{
 		Host:     transmissionUrl,
 		Protocol: protocol,
 		User:     testTransmissionUser,
