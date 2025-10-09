@@ -1,5 +1,6 @@
 ---
-title: About
+title: Gouda
+sidebar_position: 1
 ---
 
 # Gouda

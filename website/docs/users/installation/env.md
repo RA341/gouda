@@ -4,7 +4,7 @@ sidebar:
     order: 999
 ---
 
-You can set the following environment variables for gouda
+Available environment variables for gouda
 
 | Variable             | Description                               | Default              | Additional notes                                                                 |
 |----------------------|-------------------------------------------|----------------------|----------------------------------------------------------------------------------|

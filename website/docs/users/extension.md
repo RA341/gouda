@@ -48,9 +48,11 @@ curl -s 'https://raw.githubusercontent.com/RA341/gouda/refs/heads/release/instal
 ## Chrome setup
 
 1. Open your browser, in the extensions tab, on the top right side corner enable `developer mode`
-   > ![chrome_dev_mode](../../../assets/chrome_dev.png)
+
+[//]: # (   > ![chrome_dev_mode]&#40;../../../assets/chrome_dev.png&#41;)
 2. Next click on the `load unpacked` button and select the folder you unzipped.
-    >![img.png](../../../assets/load_button.png)
+
+[//]: # (    >![img.png]&#40;../../../assets/load_button.png&#41;)
 3. Next, [setup extension](#extension-setup)
 
 ##  Firefox setup
@@ -61,9 +63,11 @@ Unlike chrome, firefox can load the zip file directly.
 
 1. Open firefox and go to the extensions page.
 2. Click the settings icon here,
-    > ![firefox](../../../assets/firefox.png)
+
+[//]: # (    > ![firefox]&#40;../../../assets/firefox.png&#41;)
 3. Then click `install addon from file`
-   > ![firefox](../../../assets/firefox-popup.png)
+
+[//]: # (   > ![firefox]&#40;../../../assets/firefox-popup.png&#41;)
 4. Select the zip file, you downloaded and install.
 5. Next, [setup extension](#extension-setup)
 
@@ -85,7 +89,8 @@ If you are using gouda locally i.e. it is running on your machine, then you can 
 2. Click it, and enter your api instance url and apikey (can be found from the gouda web ui settings page)
 3. That's all folks!!
 4. Go to any book release on the site, and you should have this button near the download button.
-    > ![download](../../../assets/download_button.png)
+
+[//]: # (    > ![download]&#40;../../../assets/download_button.png&#41;)
 
 :::note
 The dropdown will show an error, if you have not created any [categories](category.md).
