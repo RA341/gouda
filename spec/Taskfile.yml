@@ -102,7 +102,7 @@ tasks:
     desc: Run an interactive shell inside the Docker container
     deps: [ build ]
     cmds:
-      - docker run --rm --name gouda_grpc_shell -v "{{.WORKING_DIR}}:/workspace" -it protobuilder:latest /bin/bash
+      - docker run --rm --name gouda_grpc_shell -v "{{.WORKING_DIR}}:/workspace" -it {{ .IMAGE_NAME}} /bin/bash
 
   bpsh:
     desc: Build and push via Makefile

@@ -1,10 +1,11 @@
 import 'package:brie/config.dart';
-import 'package:brie/gen/auth/v1/auth.pbgrpc.dart';
+import 'package:brie/gen/auth/v1/auth.connect.client.dart';
+import 'package:brie/gen/auth/v1/auth.pb.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authApiProvider = Provider<AuthServiceClient>((ref) {
-  final channel = ref.watch(grpcChannelProvider);
+  final channel = ref.watch(connectTransportProvider);
   final client = AuthServiceClient(channel);
 
   return client;

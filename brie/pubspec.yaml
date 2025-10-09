@@ -18,8 +18,10 @@ dependencies:
   # networking
   web: ^1.1.1
   http: ^1.5.0
+  connectrpc:
   grpc: ^4.1.0
   protobuf: ^4.2.0
+
 
   # ui
   flutter_animate: ^4.5.2
@@ -31,7 +33,7 @@ dependencies:
   shared_preferences: ^2.5.3
   url_launcher:
   fixnum: ^1.1.1
-  logger: ^2.6.1
+  logger: ^2.6.2
   flutter_html: ^3.0.0
 
 dev_dependencies:

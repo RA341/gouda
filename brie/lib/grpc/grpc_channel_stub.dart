@@ -1,7 +1,8 @@
-import 'package:grpc/grpc.dart';
+import 'package:connectrpc/connect.dart';
 
-typedef Channel = ClientChannel;
-
-Channel setupClientChannel(String basePath) {
-  throw Exception('This should never happen');
+Transport setupClientTransport(
+  String? basePath,
+  List<Interceptor> interceptors,
+) {
+  throw Exception('This should never execute you idiot');
 }

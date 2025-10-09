@@ -10,11 +10,120 @@
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
+class UpdateMamAdminConfigRequest extends $pb.GeneratedMessage {
+  factory UpdateMamAdminConfigRequest() => create();
+
+  UpdateMamAdminConfigRequest._();
+
+  factory UpdateMamAdminConfigRequest.fromBuffer($core.List<$core.int> data,
+      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()
+        ..mergeFromBuffer(data, registry);
+
+  factory UpdateMamAdminConfigRequest.fromJson($core.String json,
+      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()
+        ..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateMamAdminConfigRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamAdminConfigRequest clone() =>
+      UpdateMamAdminConfigRequest()
+        ..mergeFromMessage(this);
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamAdminConfigRequest copyWith(
+      void Function(UpdateMamAdminConfigRequest) updates) =>
+      super.copyWith(
+              (message) => updates(message as UpdateMamAdminConfigRequest))
+      as UpdateMamAdminConfigRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamAdminConfigRequest create() =>
+      UpdateMamAdminConfigRequest._();
+
+  @$core.override
+  UpdateMamAdminConfigRequest createEmptyInstance() => create();
+
+  static $pb.PbList<UpdateMamAdminConfigRequest> createRepeated() =>
+      $pb.PbList<UpdateMamAdminConfigRequest>();
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamAdminConfigRequest getDefault() =>
+      _defaultInstance ??=
+          $pb.GeneratedMessage.$_defaultFor<UpdateMamAdminConfigRequest>(
+              create);
+  static UpdateMamAdminConfigRequest? _defaultInstance;
+}
+
+class UpdateMamAdminConfigResponse extends $pb.GeneratedMessage {
+  factory UpdateMamAdminConfigResponse() => create();
+
+  UpdateMamAdminConfigResponse._();
+
+  factory UpdateMamAdminConfigResponse.fromBuffer($core.List<$core.int> data,
+      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()
+        ..mergeFromBuffer(data, registry);
+
+  factory UpdateMamAdminConfigResponse.fromJson($core.String json,
+      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()
+        ..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UpdateMamAdminConfigResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'settings.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamAdminConfigResponse clone() =>
+      UpdateMamAdminConfigResponse()
+        ..mergeFromMessage(this);
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UpdateMamAdminConfigResponse copyWith(
+      void Function(UpdateMamAdminConfigResponse) updates) =>
+      super.copyWith(
+              (message) => updates(message as UpdateMamAdminConfigResponse))
+      as UpdateMamAdminConfigResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamAdminConfigResponse create() =>
+      UpdateMamAdminConfigResponse._();
+
+  @$core.override
+  UpdateMamAdminConfigResponse createEmptyInstance() => create();
+
+  static $pb.PbList<UpdateMamAdminConfigResponse> createRepeated() =>
+      $pb.PbList<UpdateMamAdminConfigResponse>();
+
+  @$core.pragma('dart2js:noInline')
+  static UpdateMamAdminConfigResponse getDefault() =>
+      _defaultInstance ??=
+          $pb.GeneratedMessage.$_defaultFor<UpdateMamAdminConfigResponse>(
+              create);
+  static UpdateMamAdminConfigResponse? _defaultInstance;
+}
 
 class ListDirectoriesRequest extends $pb.GeneratedMessage {
   factory ListDirectoriesRequest({
@@ -1552,6 +1661,57 @@ class TorrentClient extends $pb.GeneratedMessage {
   $core.bool hasUser() => $_has(4);
   @$pb.TagNumber(5)
   void clearUser() => $_clearField(5);
+}
+
+class SettingsServiceApi {
+  final $pb.RpcClient _client;
+
+  SettingsServiceApi(this._client);
+
+  $async.Future<LoadSettingsResponse> loadSettings($pb.ClientContext? ctx,
+      LoadSettingsRequest request) =>
+      _client.invoke<LoadSettingsResponse>(ctx, 'SettingsService',
+          'LoadSettings', request, LoadSettingsResponse());
+
+  $async.Future<UpdateSettingsResponse> updateSettings($pb.ClientContext? ctx,
+      UpdateSettingsRequest request) =>
+      _client.invoke<UpdateSettingsResponse>(ctx, 'SettingsService',
+          'UpdateSettings', request, UpdateSettingsResponse());
+
+  $async.Future<UpdateMamResponse> updateMam($pb.ClientContext? ctx,
+      UpdateMamRequest request) =>
+      _client.invoke<UpdateMamResponse>(
+          ctx, 'SettingsService', 'UpdateMam', request, UpdateMamResponse());
+
+  $async.Future<UpdateDownloaderResponse> updateDownloader(
+      $pb.ClientContext? ctx, UpdateDownloaderRequest request) =>
+      _client.invoke<UpdateDownloaderResponse>(ctx, 'SettingsService',
+          'UpdateDownloader', request, UpdateDownloaderResponse());
+
+  $async.Future<UpdateDirResponse> updateDir($pb.ClientContext? ctx,
+      UpdateDirRequest request) =>
+      _client.invoke<UpdateDirResponse>(
+          ctx, 'SettingsService', 'UpdateDir', request, UpdateDirResponse());
+
+  $async.Future<ListDirectoriesResponse> listDirectories($pb.ClientContext? ctx,
+      ListDirectoriesRequest request) =>
+      _client.invoke<ListDirectoriesResponse>(ctx, 'SettingsService',
+          'ListDirectories', request, ListDirectoriesResponse());
+
+  $async.Future<ListSupportedClientsResponse> listSupportedClients(
+      $pb.ClientContext? ctx, ListSupportedClientsRequest request) =>
+      _client.invoke<ListSupportedClientsResponse>(ctx, 'SettingsService',
+          'ListSupportedClients', request, ListSupportedClientsResponse());
+
+  $async.Future<TestTorrentResponse> testClient($pb.ClientContext? ctx,
+      TorrentClient request) =>
+      _client.invoke<TestTorrentResponse>(
+          ctx, 'SettingsService', 'TestClient', request, TestTorrentResponse());
+
+  $async.Future<GetMetadataResponse> getMetadata($pb.ClientContext? ctx,
+      GetMetadataRequest request) =>
+      _client.invoke<GetMetadataResponse>(ctx, 'SettingsService', 'GetMetadata',
+          request, GetMetadataResponse());
 }
 
 const $core.bool _omitFieldNames =

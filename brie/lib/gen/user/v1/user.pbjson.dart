@@ -48,3 +48,28 @@ const User$json = {
 /// Descriptor for `User`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'CgRVc2VyEhoKCHVzZXJuYW1lGAEgASgJUgh1c2VybmFtZRISCgRyb2xlGAIgASgJUgRyb2xl');
+
+const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = {
+  '1': 'UserService',
+  '2': [
+    {
+      '1': 'GetUserInfo',
+      '2': '.user.v1.GetUserInfoRequest',
+      '3': '.user.v1.GetUserInfoResponse',
+      '4': {}
+    },
+  ],
+};
+
+@$core.Deprecated('Use userServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+UserServiceBase$messageJson = {
+  '.user.v1.GetUserInfoRequest': GetUserInfoRequest$json,
+  '.user.v1.GetUserInfoResponse': GetUserInfoResponse$json,
+  '.user.v1.User': User$json,
+};
+
+/// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode(
+    'CgtVc2VyU2VydmljZRJKCgtHZXRVc2VySW5mbxIbLnVzZXIudjEuR2V0VXNlckluZm9SZXF1ZX'
+        'N0GhwudXNlci52MS5HZXRVc2VySW5mb1Jlc3BvbnNlIgA=');

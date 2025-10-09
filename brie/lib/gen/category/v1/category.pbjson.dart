@@ -107,3 +107,48 @@ const Category$json = {
 /// Descriptor for `Category`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List categoryDescriptor = $convert.base64Decode(
     'CghDYXRlZ29yeRIOCgJJRBgBIAEoBFICSUQSGgoIY2F0ZWdvcnkYAiABKAlSCGNhdGVnb3J5');
+
+const $core.Map<$core.String, $core.dynamic> CategoryServiceBase$json = {
+  '1': 'CategoryService',
+  '2': [
+    {
+      '1': 'ListCategories',
+      '2': '.category.v1.ListCategoriesRequest',
+      '3': '.category.v1.ListCategoriesResponse',
+      '4': {}
+    },
+    {
+      '1': 'AddCategories',
+      '2': '.category.v1.AddCategoriesRequest',
+      '3': '.category.v1.AddCategoriesResponse',
+      '4': {}
+    },
+    {
+      '1': 'DeleteCategories',
+      '2': '.category.v1.DelCategoriesRequest',
+      '3': '.category.v1.DelCategoriesResponse',
+      '4': {}
+    },
+  ],
+};
+
+@$core.Deprecated('Use categoryServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+CategoryServiceBase$messageJson = {
+  '.category.v1.ListCategoriesRequest': ListCategoriesRequest$json,
+  '.category.v1.ListCategoriesResponse': ListCategoriesResponse$json,
+  '.category.v1.Category': Category$json,
+  '.category.v1.AddCategoriesRequest': AddCategoriesRequest$json,
+  '.category.v1.AddCategoriesResponse': AddCategoriesResponse$json,
+  '.category.v1.DelCategoriesRequest': DelCategoriesRequest$json,
+  '.category.v1.DelCategoriesResponse': DelCategoriesResponse$json,
+};
+
+/// Descriptor for `CategoryService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List categoryServiceDescriptor = $convert.base64Decode(
+    'Cg9DYXRlZ29yeVNlcnZpY2USWwoOTGlzdENhdGVnb3JpZXMSIi5jYXRlZ29yeS52MS5MaXN0Q2'
+        'F0ZWdvcmllc1JlcXVlc3QaIy5jYXRlZ29yeS52MS5MaXN0Q2F0ZWdvcmllc1Jlc3BvbnNlIgAS'
+        'WAoNQWRkQ2F0ZWdvcmllcxIhLmNhdGVnb3J5LnYxLkFkZENhdGVnb3JpZXNSZXF1ZXN0GiIuY2'
+        'F0ZWdvcnkudjEuQWRkQ2F0ZWdvcmllc1Jlc3BvbnNlIgASWwoQRGVsZXRlQ2F0ZWdvcmllcxIh'
+        'LmNhdGVnb3J5LnYxLkRlbENhdGVnb3JpZXNSZXF1ZXN0GiIuY2F0ZWdvcnkudjEuRGVsQ2F0ZW'
+        'dvcmllc1Jlc3BvbnNlIgA=');

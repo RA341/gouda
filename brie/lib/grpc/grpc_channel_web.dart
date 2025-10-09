@@ -1,23 +1,25 @@
-import 'package:brie/utils.dart';
-import 'package:grpc/grpc_web.dart';
+import 'package:connectrpc/connect.dart';
+import 'package:connectrpc/protobuf.dart';
+import 'package:connectrpc/protocol/grpc_web.dart' as protocol;
+import 'package:connectrpc/web.dart';
 import 'package:web/web.dart';
 
 String getWindowUrl() {
   return window.location.toString();
 }
 
-typedef Channel = GrpcWebClientChannel;
+Transport setupClientTransport(
+  String? basePath,
+  List<Interceptor> interceptors,
+) {
+  var base = basePath;
+  base ??= getWindowUrl();
 
-Channel setupClientChannel(String basePath) {
-  logger.i('using Web channel');
-
-  var bas = basePath;
-
-  if (bas.isEmpty) {
-    bas = window.location.toString();
-  }
-
-  logger.i('using base path $bas');
-
-  return GrpcWebClientChannel.xhr(Uri.parse(bas));
+  return protocol.Transport(
+    baseUrl: base,
+    codec: const ProtoCodec(),
+    statusParser: const StatusParser(),
+    httpClient: createHttpClient(),
+    interceptors: interceptors,
+  );
 }

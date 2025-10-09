@@ -10,6 +10,7 @@
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
@@ -178,6 +179,17 @@ class User extends $pb.GeneratedMessage {
   $core.bool hasRole() => $_has(1);
   @$pb.TagNumber(2)
   void clearRole() => $_clearField(2);
+}
+
+class UserServiceApi {
+  final $pb.RpcClient _client;
+
+  UserServiceApi(this._client);
+
+  $async.Future<GetUserInfoResponse> getUserInfo($pb.ClientContext? ctx,
+      GetUserInfoRequest request) =>
+      _client.invoke<GetUserInfoResponse>(
+          ctx, 'UserService', 'GetUserInfo', request, GetUserInfoResponse());
 }
 
 const $core.bool _omitFieldNames =

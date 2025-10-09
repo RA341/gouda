@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:brie/clients/history_api.dart';
 import 'package:brie/clients/settings_api.dart';
-import 'package:brie/gen/media_requests/v1/media_requests.pbgrpc.dart';
+import 'package:brie/gen/media_requests/v1/media_requests.connect.client.dart';
+import 'package:brie/gen/media_requests/v1/media_requests.pb.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final AsyncNotifierProvider<BookRequestHistoryNotifier, List<Media>>

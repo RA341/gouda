@@ -163,3 +163,65 @@ const Session$json = {
 final $typed_data.Uint8List sessionDescriptor = $convert.base64Decode(
     'CgdTZXNzaW9uEiIKDHJlZnJlc2hUb2tlbhgBIAEoCVIMcmVmcmVzaFRva2VuEiIKDHNlc3Npb2'
     '5Ub2tlbhgCIAEoCVIMc2Vzc2lvblRva2Vu');
+
+const $core.Map<$core.String, $core.dynamic> AuthServiceBase$json = {
+  '1': 'AuthService',
+  '2': [
+    {
+      '1': 'Login',
+      '2': '.auth.v1.LoginRequest',
+      '3': '.auth.v1.LoginResponse',
+      '4': {}
+    },
+    {
+      '1': 'Logout',
+      '2': '.auth.v1.LogoutRequest',
+      '3': '.auth.v1.LogoutResponse',
+      '4': {}
+    },
+    {
+      '1': 'Register',
+      '2': '.auth.v1.RegisterRequest',
+      '3': '.auth.v1.RegisterResponse',
+      '4': {}
+    },
+    {
+      '1': 'VerifySession',
+      '2': '.auth.v1.VerifySessionRequest',
+      '3': '.auth.v1.VerifySessionResponse',
+      '4': {}
+    },
+    {
+      '1': 'RefreshSession',
+      '2': '.auth.v1.RefreshSessionRequest',
+      '3': '.auth.v1.RefreshSessionResponse',
+      '4': {}
+    },
+  ],
+};
+
+@$core.Deprecated('Use authServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+AuthServiceBase$messageJson = {
+  '.auth.v1.LoginRequest': LoginRequest$json,
+  '.auth.v1.LoginResponse': LoginResponse$json,
+  '.auth.v1.Session': Session$json,
+  '.auth.v1.LogoutRequest': LogoutRequest$json,
+  '.auth.v1.LogoutResponse': LogoutResponse$json,
+  '.auth.v1.RegisterRequest': RegisterRequest$json,
+  '.auth.v1.RegisterResponse': RegisterResponse$json,
+  '.auth.v1.VerifySessionRequest': VerifySessionRequest$json,
+  '.auth.v1.VerifySessionResponse': VerifySessionResponse$json,
+  '.auth.v1.RefreshSessionRequest': RefreshSessionRequest$json,
+  '.auth.v1.RefreshSessionResponse': RefreshSessionResponse$json,
+};
+
+/// Descriptor for `AuthService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List authServiceDescriptor = $convert.base64Decode(
+    'CgtBdXRoU2VydmljZRI4CgVMb2dpbhIVLmF1dGgudjEuTG9naW5SZXF1ZXN0GhYuYXV0aC52MS'
+        '5Mb2dpblJlc3BvbnNlIgASOwoGTG9nb3V0EhYuYXV0aC52MS5Mb2dvdXRSZXF1ZXN0GhcuYXV0'
+        'aC52MS5Mb2dvdXRSZXNwb25zZSIAEkEKCFJlZ2lzdGVyEhguYXV0aC52MS5SZWdpc3RlclJlcX'
+        'Vlc3QaGS5hdXRoLnYxLlJlZ2lzdGVyUmVzcG9uc2UiABJQCg1WZXJpZnlTZXNzaW9uEh0uYXV0'
+        'aC52MS5WZXJpZnlTZXNzaW9uUmVxdWVzdBoeLmF1dGgudjEuVmVyaWZ5U2Vzc2lvblJlc3Bvbn'
+        'NlIgASUwoOUmVmcmVzaFNlc3Npb24SHi5hdXRoLnYxLlJlZnJlc2hTZXNzaW9uUmVxdWVzdBof'
+        'LmF1dGgudjEuUmVmcmVzaFNlc3Npb25SZXNwb25zZSIA');

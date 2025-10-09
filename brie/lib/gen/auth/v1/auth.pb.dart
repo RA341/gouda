@@ -10,6 +10,7 @@
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
@@ -642,6 +643,37 @@ class Session extends $pb.GeneratedMessage {
   $core.bool hasSessionToken() => $_has(1);
   @$pb.TagNumber(2)
   void clearSessionToken() => $_clearField(2);
+}
+
+class AuthServiceApi {
+  final $pb.RpcClient _client;
+
+  AuthServiceApi(this._client);
+
+  $async.Future<LoginResponse> login($pb.ClientContext? ctx,
+      LoginRequest request) =>
+      _client.invoke<LoginResponse>(
+          ctx, 'AuthService', 'Login', request, LoginResponse());
+
+  $async.Future<LogoutResponse> logout($pb.ClientContext? ctx,
+      LogoutRequest request) =>
+      _client.invoke<LogoutResponse>(
+          ctx, 'AuthService', 'Logout', request, LogoutResponse());
+
+  $async.Future<RegisterResponse> register($pb.ClientContext? ctx,
+      RegisterRequest request) =>
+      _client.invoke<RegisterResponse>(
+          ctx, 'AuthService', 'Register', request, RegisterResponse());
+
+  $async.Future<VerifySessionResponse> verifySession($pb.ClientContext? ctx,
+      VerifySessionRequest request) =>
+      _client.invoke<VerifySessionResponse>(ctx, 'AuthService', 'VerifySession',
+          request, VerifySessionResponse());
+
+  $async.Future<RefreshSessionResponse> refreshSession($pb.ClientContext? ctx,
+      RefreshSessionRequest request) =>
+      _client.invoke<RefreshSessionResponse>(ctx, 'AuthService',
+          'RefreshSession', request, RefreshSessionResponse());
 }
 
 const $core.bool _omitFieldNames =

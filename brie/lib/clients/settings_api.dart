@@ -1,21 +1,14 @@
 import 'dart:async';
 
-import 'package:brie/gen/settings/v1/settings.pbgrpc.dart';
+import 'package:brie/gen/settings/v1/settings.connect.client.dart';
 import 'package:brie/grpc/api.dart';
 import 'package:brie/utils.dart';
+import 'package:connectrpc/connect.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grpc/grpc.dart';
 
 final settingsApiProvider = Provider<SettingsServiceClient>((ref) {
-  final channel = ref.watch(grpcChannelProvider);
-  final authInterceptor = ref.watch(authInterceptorProvider);
-
-  final client = SettingsServiceClient(
-    channel,
-    interceptors: [authInterceptor],
-  );
-
-  return client;
+  final channel = ref.watch(connectTransportProvider);
+  return SettingsServiceClient(channel);
 });
 
 /// throws if error occurs
@@ -31,7 +24,7 @@ Future<(T?, String)> runGrpcRequest<T>(Future<T> Function() request) async {
   try {
     final res = await request();
     return (res, '');
-  } on GrpcError catch (e) {
+  } on ConnectException catch (e) {
     logger.e('Grpc error, $e');
     return (null, e.message ?? 'Empty error details in grpc error');
   } catch (e) {

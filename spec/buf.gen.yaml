@@ -17,3 +17,11 @@ plugins:
     out: generated/web
     include_imports: true
     opt: target=ts
+
+  - local: protoc-gen-connect-dart
+    out: generated/dart
+
+  - local: protoc-gen-dart
+    out: generated/dart
+    include_wkt: true
+    include_imports: true

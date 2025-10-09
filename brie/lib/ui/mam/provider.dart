@@ -5,7 +5,8 @@ import 'dart:typed_data';
 import 'package:brie/clients/category_api.dart';
 import 'package:brie/clients/mam_api.dart';
 import 'package:brie/clients/settings_api.dart';
-import 'package:brie/gen/category/v1/category.pbgrpc.dart';
+import 'package:brie/gen/category/v1/category.connect.client.dart';
+import 'package:brie/gen/category/v1/category.pb.dart';
 import 'package:brie/gen/mam/v1/mam.pb.dart';
 import 'package:brie/ui/mam/mam_search.dart';
 import 'package:brie/utils.dart';
@@ -29,9 +30,9 @@ extension Search on WidgetRef {
 }
 
 final mamSearchQueryProvider =
-NotifierProvider<MamSearchQueryNotifier, MamSearchQuery>(
-  MamSearchQueryNotifier.new,
-);
+    NotifierProvider<MamSearchQueryNotifier, MamSearchQuery>(
+      MamSearchQueryNotifier.new,
+    );
 
 class MamSearchQueryNotifier extends Notifier<MamSearchQuery> {
   @override
@@ -50,9 +51,9 @@ class MamSearchQueryNotifier extends Notifier<MamSearchQuery> {
 }
 
 final mamBooksSearchProvider =
-AsyncNotifierProvider<MamBooksSearchNotifier, List<SearchBook>>(
-  MamBooksSearchNotifier.new,
-);
+    AsyncNotifierProvider<MamBooksSearchNotifier, List<SearchBook>>(
+      MamBooksSearchNotifier.new,
+    );
 
 class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
   int found = 0;
@@ -90,7 +91,7 @@ class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
     final jsonQuery = jsonEncode(query.toJson());
     final mam = ref.watch(mamApiProvider);
     final results = await mustRunGrpcRequest(
-          () => mam.search(Query(query: jsonQuery)),
+      () => mam.search(Query(query: jsonQuery)),
     );
 
     found = results.found;
@@ -113,8 +114,7 @@ class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
   }
 
   Future<void> paginate() async {
-    final query = ref.read(mamSearchQueryProvider)
-      ..startAt(page * perPage);
+    final query = ref.read(mamSearchQueryProvider)..startAt(page * perPage);
     await search(query);
   }
 
@@ -122,9 +122,9 @@ class MamBooksSearchNotifier extends AsyncNotifier<List<SearchBook>> {
 }
 
 final categoryListProvider =
-AsyncNotifierProvider<CategoryNotifier, List<Category>>(
-  CategoryNotifier.new,
-);
+    AsyncNotifierProvider<CategoryNotifier, List<Category>>(
+      CategoryNotifier.new,
+    );
 
 class CategoryNotifier extends AsyncNotifier<List<Category>> {
   late final CategoryServiceClient api = ref.watch(categoryApiProvider);
@@ -134,10 +134,9 @@ class CategoryNotifier extends AsyncNotifier<List<Category>> {
 
   Future<String?> add(String catName) async {
     final (_, err) = await runGrpcRequest(
-          () =>
-          api.addCategories(
-            AddCategoriesRequest(category: catName),
-          ),
+      () => api.addCategories(
+        AddCategoriesRequest(category: catName),
+      ),
     );
 
     await refetch();
@@ -146,10 +145,9 @@ class CategoryNotifier extends AsyncNotifier<List<Category>> {
 
   Future<String?> delete(Category cat) async {
     final (_, err) = await runGrpcRequest(
-          () =>
-          api.deleteCategories(
-            DelCategoriesRequest(category: cat),
-          ),
+      () => api.deleteCategories(
+        DelCategoriesRequest(category: cat),
+      ),
     );
 
     if (err.isNotEmpty) {

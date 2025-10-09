@@ -10,12 +10,17 @@
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'media_requests.pbenum.dart';
+
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
+export 'media_requests.pbenum.dart';
 
 class SearchRequest extends $pb.GeneratedMessage {
   factory SearchRequest({
@@ -804,12 +809,13 @@ class Media extends $pb.GeneratedMessage {
     $core.int? seriesNumber,
     $core.String? category,
     $fixnum.Int64? mamBookId,
-    $core.String? status,
+    DownloadStatus? status,
     $core.String? torrentId,
     $core.String? torrentFileLocation,
     $core.String? fileLink,
     $core.String? createdAt,
     $core.String? updatedAt,
+    $core.String? statusMessage,
   }) {
     final result = create();
     if (iD != null) result.iD = iD;
@@ -826,6 +832,7 @@ class Media extends $pb.GeneratedMessage {
     if (fileLink != null) result.fileLink = fileLink;
     if (createdAt != null) result.createdAt = createdAt;
     if (updatedAt != null) result.updatedAt = updatedAt;
+    if (statusMessage != null) result.statusMessage = statusMessage;
     return result;
   }
 
@@ -854,12 +861,17 @@ class Media extends $pb.GeneratedMessage {
     ..a<$fixnum.Int64>(
         7, _omitFieldNames ? '' : 'mamBookId', $pb.PbFieldType.OU6,
         defaultOrMaker: $fixnum.Int64.ZERO)
-    ..aOS(8, _omitFieldNames ? '' : 'status')
+    ..e<DownloadStatus>(8, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE,
+        defaultOrMaker: DownloadStatus.Downloading,
+        valueOf: DownloadStatus.valueOf,
+        enumValues: DownloadStatus.values)
     ..aOS(9, _omitFieldNames ? '' : 'torrentId')
     ..aOS(11, _omitFieldNames ? '' : 'torrentFileLocation')
     ..aOS(12, _omitFieldNames ? '' : 'fileLink')
     ..aOS(13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')
-    ..aOS(14, _omitFieldNames ? '' : 'updatedAt', protoName: 'updatedAt')
+    ..aOS(14, _omitFieldNames ? '' : 'updatedAt', protoName: 'updatedAt')..aOS(
+        15, _omitFieldNames ? '' : 'statusMessage',
+        protoName: 'statusMessage')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -945,9 +957,9 @@ class Media extends $pb.GeneratedMessage {
   void clearMamBookId() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get status => $_getSZ(7);
+  DownloadStatus get status => $_getN(7);
   @$pb.TagNumber(8)
-  set status($core.String value) => $_setString(7, value);
+  set status(DownloadStatus value) => $_setField(8, value);
   @$pb.TagNumber(8)
   $core.bool hasStatus() => $_has(7);
   @$pb.TagNumber(8)
@@ -997,6 +1009,64 @@ class Media extends $pb.GeneratedMessage {
   $core.bool hasUpdatedAt() => $_has(12);
   @$pb.TagNumber(14)
   void clearUpdatedAt() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get statusMessage => $_getSZ(13);
+
+  @$pb.TagNumber(15)
+  set statusMessage($core.String value) => $_setString(13, value);
+
+  @$pb.TagNumber(15)
+  $core.bool hasStatusMessage() => $_has(13);
+
+  @$pb.TagNumber(15)
+  void clearStatusMessage() => $_clearField(15);
+}
+
+class MediaRequestServiceApi {
+  final $pb.RpcClient _client;
+
+  MediaRequestServiceApi(this._client);
+
+  $async.Future<SearchResponse> search($pb.ClientContext? ctx,
+      SearchRequest request) =>
+      _client.invoke<SearchResponse>(
+          ctx, 'MediaRequestService', 'Search', request, SearchResponse());
+
+  $async.Future<ListResponse> list($pb.ClientContext? ctx,
+      ListRequest request) =>
+      _client.invoke<ListResponse>(
+          ctx, 'MediaRequestService', 'List', request, ListResponse());
+
+  $async.Future<DeleteResponse> delete($pb.ClientContext? ctx,
+      DeleteRequest request) =>
+      _client.invoke<DeleteResponse>(
+          ctx, 'MediaRequestService', 'Delete', request, DeleteResponse());
+
+  $async.Future<EditResponse> edit($pb.ClientContext? ctx,
+      EditRequest request) =>
+      _client.invoke<EditResponse>(
+          ctx, 'MediaRequestService', 'Edit', request, EditResponse());
+
+  $async.Future<ExistsResponse> exists($pb.ClientContext? ctx,
+      ExistsRequest request) =>
+      _client.invoke<ExistsResponse>(
+          ctx, 'MediaRequestService', 'Exists', request, ExistsResponse());
+
+  $async.Future<RetryResponse> retry($pb.ClientContext? ctx,
+      RetryRequest request) =>
+      _client.invoke<RetryResponse>(
+          ctx, 'MediaRequestService', 'Retry', request, RetryResponse());
+
+  $async.Future<AddMediaResponse> addMedia($pb.ClientContext? ctx,
+      AddMediaRequest request) =>
+      _client.invoke<AddMediaResponse>(
+          ctx, 'MediaRequestService', 'AddMedia', request, AddMediaResponse());
+
+  $async.Future<AddMediaResponse> addMediaWithFreeleech($pb.ClientContext? ctx,
+      AddMediaRequest request) =>
+      _client.invoke<AddMediaResponse>(ctx, 'MediaRequestService',
+          'AddMediaWithFreeleech', request, AddMediaResponse());
 }
 
 const $core.bool _omitFieldNames =
