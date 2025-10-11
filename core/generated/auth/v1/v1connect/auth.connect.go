@@ -45,6 +45,8 @@ const (
 	AuthServiceUserDeleteProcedure = "/auth.v1.AuthService/UserDelete"
 	// AuthServiceUserEditProcedure is the fully-qualified name of the AuthService's UserEdit RPC.
 	AuthServiceUserEditProcedure = "/auth.v1.AuthService/UserEdit"
+	// AuthServiceUserProfileProcedure is the fully-qualified name of the AuthService's UserProfile RPC.
+	AuthServiceUserProfileProcedure = "/auth.v1.AuthService/UserProfile"
 	// AuthServiceVerifySessionProcedure is the fully-qualified name of the AuthService's VerifySession
 	// RPC.
 	AuthServiceVerifySessionProcedure = "/auth.v1.AuthService/VerifySession"
@@ -61,6 +63,7 @@ type AuthServiceClient interface {
 	UserAdd(context.Context, *connect.Request[v1.AddUserRequest]) (*connect.Response[v1.AddUserResponse], error)
 	UserDelete(context.Context, *connect.Request[v1.UserDeleteRequest]) (*connect.Response[v1.UserDeleteResponse], error)
 	UserEdit(context.Context, *connect.Request[v1.UserEditRequest]) (*connect.Response[v1.UserEditResponse], error)
+	UserProfile(context.Context, *connect.Request[v1.UserProfileRequest]) (*connect.Response[v1.UserProfileResponse], error)
 	VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error)
 	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
 }
@@ -112,6 +115,12 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(authServiceMethods.ByName("UserEdit")),
 			connect.WithClientOptions(opts...),
 		),
+		userProfile: connect.NewClient[v1.UserProfileRequest, v1.UserProfileResponse](
+			httpClient,
+			baseURL+AuthServiceUserProfileProcedure,
+			connect.WithSchema(authServiceMethods.ByName("UserProfile")),
+			connect.WithClientOptions(opts...),
+		),
 		verifySession: connect.NewClient[v1.VerifySessionRequest, v1.VerifySessionResponse](
 			httpClient,
 			baseURL+AuthServiceVerifySessionProcedure,
@@ -135,6 +144,7 @@ type authServiceClient struct {
 	userAdd        *connect.Client[v1.AddUserRequest, v1.AddUserResponse]
 	userDelete     *connect.Client[v1.UserDeleteRequest, v1.UserDeleteResponse]
 	userEdit       *connect.Client[v1.UserEditRequest, v1.UserEditResponse]
+	userProfile    *connect.Client[v1.UserProfileRequest, v1.UserProfileResponse]
 	verifySession  *connect.Client[v1.VerifySessionRequest, v1.VerifySessionResponse]
 	refreshSession *connect.Client[v1.RefreshSessionRequest, v1.RefreshSessionResponse]
 }
@@ -169,6 +179,11 @@ func (c *authServiceClient) UserEdit(ctx context.Context, req *connect.Request[v
 	return c.userEdit.CallUnary(ctx, req)
 }
 
+// UserProfile calls auth.v1.AuthService.UserProfile.
+func (c *authServiceClient) UserProfile(ctx context.Context, req *connect.Request[v1.UserProfileRequest]) (*connect.Response[v1.UserProfileResponse], error) {
+	return c.userProfile.CallUnary(ctx, req)
+}
+
 // VerifySession calls auth.v1.AuthService.VerifySession.
 func (c *authServiceClient) VerifySession(ctx context.Context, req *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {
 	return c.verifySession.CallUnary(ctx, req)
@@ -187,6 +202,7 @@ type AuthServiceHandler interface {
 	UserAdd(context.Context, *connect.Request[v1.AddUserRequest]) (*connect.Response[v1.AddUserResponse], error)
 	UserDelete(context.Context, *connect.Request[v1.UserDeleteRequest]) (*connect.Response[v1.UserDeleteResponse], error)
 	UserEdit(context.Context, *connect.Request[v1.UserEditRequest]) (*connect.Response[v1.UserEditResponse], error)
+	UserProfile(context.Context, *connect.Request[v1.UserProfileRequest]) (*connect.Response[v1.UserProfileResponse], error)
 	VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error)
 	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
 }
@@ -234,6 +250,12 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(authServiceMethods.ByName("UserEdit")),
 		connect.WithHandlerOptions(opts...),
 	)
+	authServiceUserProfileHandler := connect.NewUnaryHandler(
+		AuthServiceUserProfileProcedure,
+		svc.UserProfile,
+		connect.WithSchema(authServiceMethods.ByName("UserProfile")),
+		connect.WithHandlerOptions(opts...),
+	)
 	authServiceVerifySessionHandler := connect.NewUnaryHandler(
 		AuthServiceVerifySessionProcedure,
 		svc.VerifySession,
@@ -260,6 +282,8 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 			authServiceUserDeleteHandler.ServeHTTP(w, r)
 		case AuthServiceUserEditProcedure:
 			authServiceUserEditHandler.ServeHTTP(w, r)
+		case AuthServiceUserProfileProcedure:
+			authServiceUserProfileHandler.ServeHTTP(w, r)
 		case AuthServiceVerifySessionProcedure:
 			authServiceVerifySessionHandler.ServeHTTP(w, r)
 		case AuthServiceRefreshSessionProcedure:
@@ -295,6 +319,10 @@ func (UnimplementedAuthServiceHandler) UserDelete(context.Context, *connect.Requ
 
 func (UnimplementedAuthServiceHandler) UserEdit(context.Context, *connect.Request[v1.UserEditRequest]) (*connect.Response[v1.UserEditResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.UserEdit is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) UserProfile(context.Context, *connect.Request[v1.UserProfileRequest]) (*connect.Response[v1.UserProfileResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.UserProfile is not implemented"))
 }
 
 func (UnimplementedAuthServiceHandler) VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {

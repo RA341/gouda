@@ -29,7 +29,6 @@ class Role extends $pb.ProtobufEnum {
 
   static final $core.Map<$core.int, Role> _byValue =
   $pb.ProtobufEnum.initByValue(values);
-
   static Role? valueOf($core.int value) => _byValue[value];
 
   const Role._(super.value, super.name);

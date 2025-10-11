@@ -28,6 +28,29 @@ const Role$json = {
 final $typed_data.Uint8List roleDescriptor = $convert
     .base64Decode('CgRSb2xlEgkKBUFkbWluEAASCQoFTW91c2UQARIMCgdVbmtub3duEOcH');
 
+@$core.Deprecated('Use userProfileRequestDescriptor instead')
+const UserProfileRequest$json = {
+  '1': 'UserProfileRequest',
+};
+
+/// Descriptor for `UserProfileRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userProfileRequestDescriptor =
+$convert.base64Decode('ChJVc2VyUHJvZmlsZVJlcXVlc3Q=');
+
+@$core.Deprecated('Use userProfileResponseDescriptor instead')
+const UserProfileResponse$json = {
+  '1': 'UserProfileResponse',
+  '2': [
+    {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.auth.v1.User', '10': 'user'},
+  ],
+};
+
+/// Descriptor for `UserProfileResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userProfileResponseDescriptor = $convert
+    .base64Decode(
+    'ChNVc2VyUHJvZmlsZVJlc3BvbnNlEiEKBHVzZXIYASABKAsyDS5hdXRoLnYxLlVzZXJSBHVzZX'
+        'I=');
+
 @$core.Deprecated('Use userDeleteRequestDescriptor instead')
 const UserDeleteRequest$json = {
   '1': 'UserDeleteRequest',
@@ -333,6 +356,12 @@ const $core.Map<$core.String, $core.dynamic> AuthServiceBase$json = {
       '4': {}
     },
     {
+      '1': 'UserProfile',
+      '2': '.auth.v1.UserProfileRequest',
+      '3': '.auth.v1.UserProfileResponse',
+      '4': {}
+    },
+    {
       '1': 'VerifySession',
       '2': '.auth.v1.VerifySessionRequest',
       '3': '.auth.v1.VerifySessionResponse',
@@ -364,6 +393,8 @@ AuthServiceBase$messageJson = {
   '.auth.v1.UserDeleteResponse': UserDeleteResponse$json,
   '.auth.v1.UserEditRequest': UserEditRequest$json,
   '.auth.v1.UserEditResponse': UserEditResponse$json,
+  '.auth.v1.UserProfileRequest': UserProfileRequest$json,
+  '.auth.v1.UserProfileResponse': UserProfileResponse$json,
   '.auth.v1.VerifySessionRequest': VerifySessionRequest$json,
   '.auth.v1.VerifySessionResponse': VerifySessionResponse$json,
   '.auth.v1.RefreshSessionRequest': RefreshSessionRequest$json,
@@ -379,7 +410,8 @@ final $typed_data.Uint8List authServiceDescriptor = $convert.base64Decode(
         'LkFkZFVzZXJSZXF1ZXN0GhguYXV0aC52MS5BZGRVc2VyUmVzcG9uc2UiABJHCgpVc2VyRGVsZX'
         'RlEhouYXV0aC52MS5Vc2VyRGVsZXRlUmVxdWVzdBobLmF1dGgudjEuVXNlckRlbGV0ZVJlc3Bv'
         'bnNlIgASQQoIVXNlckVkaXQSGC5hdXRoLnYxLlVzZXJFZGl0UmVxdWVzdBoZLmF1dGgudjEuVX'
-        'NlckVkaXRSZXNwb25zZSIAElAKDVZlcmlmeVNlc3Npb24SHS5hdXRoLnYxLlZlcmlmeVNlc3Np'
-        'b25SZXF1ZXN0Gh4uYXV0aC52MS5WZXJpZnlTZXNzaW9uUmVzcG9uc2UiABJTCg5SZWZyZXNoU2'
-        'Vzc2lvbhIeLmF1dGgudjEuUmVmcmVzaFNlc3Npb25SZXF1ZXN0Gh8uYXV0aC52MS5SZWZyZXNo'
-        'U2Vzc2lvblJlc3BvbnNlIgA=');
+        'NlckVkaXRSZXNwb25zZSIAEkoKC1VzZXJQcm9maWxlEhsuYXV0aC52MS5Vc2VyUHJvZmlsZVJl'
+        'cXVlc3QaHC5hdXRoLnYxLlVzZXJQcm9maWxlUmVzcG9uc2UiABJQCg1WZXJpZnlTZXNzaW9uEh'
+        '0uYXV0aC52MS5WZXJpZnlTZXNzaW9uUmVxdWVzdBoeLmF1dGgudjEuVmVyaWZ5U2Vzc2lvblJl'
+        'c3BvbnNlIgASUwoOUmVmcmVzaFNlc3Npb24SHi5hdXRoLnYxLlJlZnJlc2hTZXNzaW9uUmVxdW'
+        'VzdBofLmF1dGgudjEuUmVmcmVzaFNlc3Npb25SZXNwb25zZSIA');

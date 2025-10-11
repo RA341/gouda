@@ -12,11 +12,18 @@ service AuthService {
   rpc UserAdd(AddUserRequest) returns (AddUserResponse) {}
   rpc UserDelete(UserDeleteRequest) returns (UserDeleteResponse) {}
   rpc UserEdit(UserEditRequest) returns (UserEditResponse) {}
+  rpc UserProfile(UserProfileRequest) returns (UserProfileResponse) {}
 
   rpc VerifySession(VerifySessionRequest) returns (VerifySessionResponse) {}
   rpc RefreshSession(RefreshSessionRequest) returns (RefreshSessionResponse) {}
 }
 
+
+message UserProfileRequest {}
+
+message UserProfileResponse {
+  User user = 1;
+}
 
 message UserDeleteRequest {
   User user = 1;

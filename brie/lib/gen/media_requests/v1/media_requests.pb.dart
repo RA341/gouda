@@ -867,8 +867,8 @@ class Media extends $pb.GeneratedMessage {
         enumValues: DownloadStatus.values)
     ..aOS(9, _omitFieldNames ? '' : 'torrentId')
     ..aOS(11, _omitFieldNames ? '' : 'torrentFileLocation')
-    ..aOS(12, _omitFieldNames ? '' : 'fileLink')
-    ..aOS(13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')..aOS(
+    ..aOS(12, _omitFieldNames ? '' : 'fileLink')..aOS(
+        13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')..aOS(
         14, _omitFieldNames ? '' : 'updatedAt', protoName: 'updatedAt')..aOS(
         15, _omitFieldNames ? '' : 'statusMessage',
         protoName: 'statusMessage')

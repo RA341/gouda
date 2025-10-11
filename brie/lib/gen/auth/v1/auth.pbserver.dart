@@ -39,6 +39,9 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
   $async.Future<$0.UserEditResponse> userEdit($pb.ServerContext ctx,
       $0.UserEditRequest request);
 
+  $async.Future<$0.UserProfileResponse> userProfile($pb.ServerContext ctx,
+      $0.UserProfileRequest request);
+
   $async.Future<$0.VerifySessionResponse> verifySession($pb.ServerContext ctx,
       $0.VerifySessionRequest request);
 
@@ -59,6 +62,8 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
         return $0.UserDeleteRequest();
       case 'UserEdit':
         return $0.UserEditRequest();
+      case 'UserProfile':
+        return $0.UserProfileRequest();
       case 'VerifySession':
         return $0.VerifySessionRequest();
       case 'RefreshSession':
@@ -83,6 +88,8 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
         return userDelete(ctx, request as $0.UserDeleteRequest);
       case 'UserEdit':
         return userEdit(ctx, request as $0.UserEditRequest);
+      case 'UserProfile':
+        return userProfile(ctx, request as $0.UserProfileRequest);
       case 'VerifySession':
         return verifySession(ctx, request as $0.VerifySessionRequest);
       case 'RefreshSession':

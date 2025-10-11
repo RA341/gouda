@@ -107,6 +107,23 @@ extension type AuthServiceClient (connect.Transport _transport) {
     );
   }
 
+  Future<authv1auth.UserProfileResponse> userProfile(
+      authv1auth.UserProfileRequest input, {
+        connect.Headers? headers,
+        connect.AbortSignal? signal,
+        Function(connect.Headers)? onHeader,
+        Function(connect.Headers)? onTrailer,
+      }) {
+    return connect.Client(_transport).unary(
+      specs.AuthService.userProfile,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
   Future<authv1auth.VerifySessionResponse> verifySession(
       authv1auth.VerifySessionRequest input, {
         connect.Headers? headers,

@@ -52,6 +52,13 @@ abstract final class AuthService {
     authv1auth.UserEditResponse.new,
   );
 
+  static const userProfile = connect.Spec(
+    '/$name/UserProfile',
+    connect.StreamType.unary,
+    authv1auth.UserProfileRequest.new,
+    authv1auth.UserProfileResponse.new,
+  );
+
   static const verifySession = connect.Spec(
     '/$name/VerifySession',
     connect.StreamType.unary,
