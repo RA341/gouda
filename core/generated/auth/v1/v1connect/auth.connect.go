@@ -37,8 +37,14 @@ const (
 	AuthServiceLoginProcedure = "/auth.v1.AuthService/Login"
 	// AuthServiceLogoutProcedure is the fully-qualified name of the AuthService's Logout RPC.
 	AuthServiceLogoutProcedure = "/auth.v1.AuthService/Logout"
-	// AuthServiceRegisterProcedure is the fully-qualified name of the AuthService's Register RPC.
-	AuthServiceRegisterProcedure = "/auth.v1.AuthService/Register"
+	// AuthServiceUserListProcedure is the fully-qualified name of the AuthService's UserList RPC.
+	AuthServiceUserListProcedure = "/auth.v1.AuthService/UserList"
+	// AuthServiceUserAddProcedure is the fully-qualified name of the AuthService's UserAdd RPC.
+	AuthServiceUserAddProcedure = "/auth.v1.AuthService/UserAdd"
+	// AuthServiceUserDeleteProcedure is the fully-qualified name of the AuthService's UserDelete RPC.
+	AuthServiceUserDeleteProcedure = "/auth.v1.AuthService/UserDelete"
+	// AuthServiceUserEditProcedure is the fully-qualified name of the AuthService's UserEdit RPC.
+	AuthServiceUserEditProcedure = "/auth.v1.AuthService/UserEdit"
 	// AuthServiceVerifySessionProcedure is the fully-qualified name of the AuthService's VerifySession
 	// RPC.
 	AuthServiceVerifySessionProcedure = "/auth.v1.AuthService/VerifySession"
@@ -51,7 +57,10 @@ const (
 type AuthServiceClient interface {
 	Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error)
 	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
-	Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error)
+	UserList(context.Context, *connect.Request[v1.ListUsersRequest]) (*connect.Response[v1.ListUsersResponse], error)
+	UserAdd(context.Context, *connect.Request[v1.AddUserRequest]) (*connect.Response[v1.AddUserResponse], error)
+	UserDelete(context.Context, *connect.Request[v1.UserDeleteRequest]) (*connect.Response[v1.UserDeleteResponse], error)
+	UserEdit(context.Context, *connect.Request[v1.UserEditRequest]) (*connect.Response[v1.UserEditResponse], error)
 	VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error)
 	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
 }
@@ -79,10 +88,28 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(authServiceMethods.ByName("Logout")),
 			connect.WithClientOptions(opts...),
 		),
-		register: connect.NewClient[v1.RegisterRequest, v1.RegisterResponse](
+		userList: connect.NewClient[v1.ListUsersRequest, v1.ListUsersResponse](
 			httpClient,
-			baseURL+AuthServiceRegisterProcedure,
-			connect.WithSchema(authServiceMethods.ByName("Register")),
+			baseURL+AuthServiceUserListProcedure,
+			connect.WithSchema(authServiceMethods.ByName("UserList")),
+			connect.WithClientOptions(opts...),
+		),
+		userAdd: connect.NewClient[v1.AddUserRequest, v1.AddUserResponse](
+			httpClient,
+			baseURL+AuthServiceUserAddProcedure,
+			connect.WithSchema(authServiceMethods.ByName("UserAdd")),
+			connect.WithClientOptions(opts...),
+		),
+		userDelete: connect.NewClient[v1.UserDeleteRequest, v1.UserDeleteResponse](
+			httpClient,
+			baseURL+AuthServiceUserDeleteProcedure,
+			connect.WithSchema(authServiceMethods.ByName("UserDelete")),
+			connect.WithClientOptions(opts...),
+		),
+		userEdit: connect.NewClient[v1.UserEditRequest, v1.UserEditResponse](
+			httpClient,
+			baseURL+AuthServiceUserEditProcedure,
+			connect.WithSchema(authServiceMethods.ByName("UserEdit")),
 			connect.WithClientOptions(opts...),
 		),
 		verifySession: connect.NewClient[v1.VerifySessionRequest, v1.VerifySessionResponse](
@@ -104,7 +131,10 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 type authServiceClient struct {
 	login          *connect.Client[v1.LoginRequest, v1.LoginResponse]
 	logout         *connect.Client[v1.LogoutRequest, v1.LogoutResponse]
-	register       *connect.Client[v1.RegisterRequest, v1.RegisterResponse]
+	userList       *connect.Client[v1.ListUsersRequest, v1.ListUsersResponse]
+	userAdd        *connect.Client[v1.AddUserRequest, v1.AddUserResponse]
+	userDelete     *connect.Client[v1.UserDeleteRequest, v1.UserDeleteResponse]
+	userEdit       *connect.Client[v1.UserEditRequest, v1.UserEditResponse]
 	verifySession  *connect.Client[v1.VerifySessionRequest, v1.VerifySessionResponse]
 	refreshSession *connect.Client[v1.RefreshSessionRequest, v1.RefreshSessionResponse]
 }
@@ -119,9 +149,24 @@ func (c *authServiceClient) Logout(ctx context.Context, req *connect.Request[v1.
 	return c.logout.CallUnary(ctx, req)
 }
 
-// Register calls auth.v1.AuthService.Register.
-func (c *authServiceClient) Register(ctx context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
-	return c.register.CallUnary(ctx, req)
+// UserList calls auth.v1.AuthService.UserList.
+func (c *authServiceClient) UserList(ctx context.Context, req *connect.Request[v1.ListUsersRequest]) (*connect.Response[v1.ListUsersResponse], error) {
+	return c.userList.CallUnary(ctx, req)
+}
+
+// UserAdd calls auth.v1.AuthService.UserAdd.
+func (c *authServiceClient) UserAdd(ctx context.Context, req *connect.Request[v1.AddUserRequest]) (*connect.Response[v1.AddUserResponse], error) {
+	return c.userAdd.CallUnary(ctx, req)
+}
+
+// UserDelete calls auth.v1.AuthService.UserDelete.
+func (c *authServiceClient) UserDelete(ctx context.Context, req *connect.Request[v1.UserDeleteRequest]) (*connect.Response[v1.UserDeleteResponse], error) {
+	return c.userDelete.CallUnary(ctx, req)
+}
+
+// UserEdit calls auth.v1.AuthService.UserEdit.
+func (c *authServiceClient) UserEdit(ctx context.Context, req *connect.Request[v1.UserEditRequest]) (*connect.Response[v1.UserEditResponse], error) {
+	return c.userEdit.CallUnary(ctx, req)
 }
 
 // VerifySession calls auth.v1.AuthService.VerifySession.
@@ -138,7 +183,10 @@ func (c *authServiceClient) RefreshSession(ctx context.Context, req *connect.Req
 type AuthServiceHandler interface {
 	Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error)
 	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
-	Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error)
+	UserList(context.Context, *connect.Request[v1.ListUsersRequest]) (*connect.Response[v1.ListUsersResponse], error)
+	UserAdd(context.Context, *connect.Request[v1.AddUserRequest]) (*connect.Response[v1.AddUserResponse], error)
+	UserDelete(context.Context, *connect.Request[v1.UserDeleteRequest]) (*connect.Response[v1.UserDeleteResponse], error)
+	UserEdit(context.Context, *connect.Request[v1.UserEditRequest]) (*connect.Response[v1.UserEditResponse], error)
 	VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error)
 	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
 }
@@ -162,10 +210,28 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(authServiceMethods.ByName("Logout")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authServiceRegisterHandler := connect.NewUnaryHandler(
-		AuthServiceRegisterProcedure,
-		svc.Register,
-		connect.WithSchema(authServiceMethods.ByName("Register")),
+	authServiceUserListHandler := connect.NewUnaryHandler(
+		AuthServiceUserListProcedure,
+		svc.UserList,
+		connect.WithSchema(authServiceMethods.ByName("UserList")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authServiceUserAddHandler := connect.NewUnaryHandler(
+		AuthServiceUserAddProcedure,
+		svc.UserAdd,
+		connect.WithSchema(authServiceMethods.ByName("UserAdd")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authServiceUserDeleteHandler := connect.NewUnaryHandler(
+		AuthServiceUserDeleteProcedure,
+		svc.UserDelete,
+		connect.WithSchema(authServiceMethods.ByName("UserDelete")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authServiceUserEditHandler := connect.NewUnaryHandler(
+		AuthServiceUserEditProcedure,
+		svc.UserEdit,
+		connect.WithSchema(authServiceMethods.ByName("UserEdit")),
 		connect.WithHandlerOptions(opts...),
 	)
 	authServiceVerifySessionHandler := connect.NewUnaryHandler(
@@ -186,8 +252,14 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 			authServiceLoginHandler.ServeHTTP(w, r)
 		case AuthServiceLogoutProcedure:
 			authServiceLogoutHandler.ServeHTTP(w, r)
-		case AuthServiceRegisterProcedure:
-			authServiceRegisterHandler.ServeHTTP(w, r)
+		case AuthServiceUserListProcedure:
+			authServiceUserListHandler.ServeHTTP(w, r)
+		case AuthServiceUserAddProcedure:
+			authServiceUserAddHandler.ServeHTTP(w, r)
+		case AuthServiceUserDeleteProcedure:
+			authServiceUserDeleteHandler.ServeHTTP(w, r)
+		case AuthServiceUserEditProcedure:
+			authServiceUserEditHandler.ServeHTTP(w, r)
 		case AuthServiceVerifySessionProcedure:
 			authServiceVerifySessionHandler.ServeHTTP(w, r)
 		case AuthServiceRefreshSessionProcedure:
@@ -209,8 +281,20 @@ func (UnimplementedAuthServiceHandler) Logout(context.Context, *connect.Request[
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.Logout is not implemented"))
 }
 
-func (UnimplementedAuthServiceHandler) Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.Register is not implemented"))
+func (UnimplementedAuthServiceHandler) UserList(context.Context, *connect.Request[v1.ListUsersRequest]) (*connect.Response[v1.ListUsersResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.UserList is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) UserAdd(context.Context, *connect.Request[v1.AddUserRequest]) (*connect.Response[v1.AddUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.UserAdd is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) UserDelete(context.Context, *connect.Request[v1.UserDeleteRequest]) (*connect.Response[v1.UserDeleteResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.UserDelete is not implemented"))
+}
+
+func (UnimplementedAuthServiceHandler) UserEdit(context.Context, *connect.Request[v1.UserEditRequest]) (*connect.Response[v1.UserEditResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.UserEdit is not implemented"))
 }
 
 func (UnimplementedAuthServiceHandler) VerifySession(context.Context, *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {

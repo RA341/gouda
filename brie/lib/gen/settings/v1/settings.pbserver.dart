@@ -29,16 +29,13 @@ abstract class SettingsServiceBase extends $pb.GeneratedService {
 
   $async.Future<$0.UpdateMamResponse> updateMam($pb.ServerContext ctx,
       $0.UpdateMamRequest request);
-
   $async.Future<$0.UpdateDownloaderResponse> updateDownloader(
       $pb.ServerContext ctx, $0.UpdateDownloaderRequest request);
 
   $async.Future<$0.UpdateDirResponse> updateDir($pb.ServerContext ctx,
       $0.UpdateDirRequest request);
-
   $async.Future<$0.ListDirectoriesResponse> listDirectories(
       $pb.ServerContext ctx, $0.ListDirectoriesRequest request);
-
   $async.Future<$0.ListSupportedClientsResponse> listSupportedClients(
       $pb.ServerContext ctx, $0.ListSupportedClientsRequest request);
 
@@ -101,7 +98,6 @@ abstract class SettingsServiceBase extends $pb.GeneratedService {
   }
 
   $core.Map<$core.String, $core.dynamic> get $json => SettingsServiceBase$json;
-
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
   get $messageJson => SettingsServiceBase$messageJson;
 }

@@ -41,7 +41,6 @@ abstract class MediaRequestServiceBase extends $pb.GeneratedService {
 
   $async.Future<$0.AddMediaResponse> addMedia($pb.ServerContext ctx,
       $0.AddMediaRequest request);
-
   $async.Future<$0.AddMediaResponse> addMediaWithFreeleech(
       $pb.ServerContext ctx, $0.AddMediaRequest request);
 
@@ -94,7 +93,6 @@ abstract class MediaRequestServiceBase extends $pb.GeneratedService {
 
   $core.Map<$core.String, $core.dynamic> get $json =>
       MediaRequestServiceBase$json;
-
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
   get $messageJson => MediaRequestServiceBase$messageJson;
 }

@@ -27,8 +27,17 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
   $async.Future<$0.LogoutResponse> logout($pb.ServerContext ctx,
       $0.LogoutRequest request);
 
-  $async.Future<$0.RegisterResponse> register($pb.ServerContext ctx,
-      $0.RegisterRequest request);
+  $async.Future<$0.ListUsersResponse> userList($pb.ServerContext ctx,
+      $0.ListUsersRequest request);
+
+  $async.Future<$0.AddUserResponse> userAdd($pb.ServerContext ctx,
+      $0.AddUserRequest request);
+
+  $async.Future<$0.UserDeleteResponse> userDelete($pb.ServerContext ctx,
+      $0.UserDeleteRequest request);
+
+  $async.Future<$0.UserEditResponse> userEdit($pb.ServerContext ctx,
+      $0.UserEditRequest request);
 
   $async.Future<$0.VerifySessionResponse> verifySession($pb.ServerContext ctx,
       $0.VerifySessionRequest request);
@@ -42,8 +51,14 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
         return $0.LoginRequest();
       case 'Logout':
         return $0.LogoutRequest();
-      case 'Register':
-        return $0.RegisterRequest();
+      case 'UserList':
+        return $0.ListUsersRequest();
+      case 'UserAdd':
+        return $0.AddUserRequest();
+      case 'UserDelete':
+        return $0.UserDeleteRequest();
+      case 'UserEdit':
+        return $0.UserEditRequest();
       case 'VerifySession':
         return $0.VerifySessionRequest();
       case 'RefreshSession':
@@ -60,8 +75,14 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
         return login(ctx, request as $0.LoginRequest);
       case 'Logout':
         return logout(ctx, request as $0.LogoutRequest);
-      case 'Register':
-        return register(ctx, request as $0.RegisterRequest);
+      case 'UserList':
+        return userList(ctx, request as $0.ListUsersRequest);
+      case 'UserAdd':
+        return userAdd(ctx, request as $0.AddUserRequest);
+      case 'UserDelete':
+        return userDelete(ctx, request as $0.UserDeleteRequest);
+      case 'UserEdit':
+        return userEdit(ctx, request as $0.UserEditRequest);
       case 'VerifySession':
         return verifySession(ctx, request as $0.VerifySessionRequest);
       case 'RefreshSession':
@@ -72,7 +93,6 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
   }
 
   $core.Map<$core.String, $core.dynamic> get $json => AuthServiceBase$json;
-
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
   get $messageJson => AuthServiceBase$messageJson;
 }

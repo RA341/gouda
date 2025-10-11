@@ -868,8 +868,8 @@ class Media extends $pb.GeneratedMessage {
     ..aOS(9, _omitFieldNames ? '' : 'torrentId')
     ..aOS(11, _omitFieldNames ? '' : 'torrentFileLocation')
     ..aOS(12, _omitFieldNames ? '' : 'fileLink')
-    ..aOS(13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')
-    ..aOS(14, _omitFieldNames ? '' : 'updatedAt', protoName: 'updatedAt')..aOS(
+    ..aOS(13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')..aOS(
+        14, _omitFieldNames ? '' : 'updatedAt', protoName: 'updatedAt')..aOS(
         15, _omitFieldNames ? '' : 'statusMessage',
         protoName: 'statusMessage')
     ..hasRequiredFields = false;
@@ -1012,13 +1012,10 @@ class Media extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(15)
   $core.String get statusMessage => $_getSZ(13);
-
   @$pb.TagNumber(15)
   set statusMessage($core.String value) => $_setString(13, value);
-
   @$pb.TagNumber(15)
   $core.bool hasStatusMessage() => $_has(13);
-
   @$pb.TagNumber(15)
   void clearStatusMessage() => $_clearField(15);
 }

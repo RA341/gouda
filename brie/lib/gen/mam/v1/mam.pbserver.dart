@@ -79,7 +79,6 @@ abstract class MamServiceBase extends $pb.GeneratedService {
   }
 
   $core.Map<$core.String, $core.dynamic> get $json => MamServiceBase$json;
-
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
   get $messageJson => MamServiceBase$messageJson;
 }

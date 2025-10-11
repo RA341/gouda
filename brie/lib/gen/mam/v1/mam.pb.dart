@@ -1441,7 +1441,6 @@ class MamServiceApi {
       GetThumbnailRequest request) =>
       _client.invoke<GetThumbnailResponse>(
           ctx, 'MamService', 'GetThumbnail', request, GetThumbnailResponse());
-
   $async.Future<UserData> getProfile($pb.ClientContext? ctx, Empty request) =>
       _client.invoke<UserData>(
           ctx, 'MamService', 'GetProfile', request, UserData());

@@ -33,7 +33,6 @@ class DownloadStatus extends $pb.ProtobufEnum {
 
   static final $core.List<DownloadStatus?> _byValue =
   $pb.ProtobufEnum.$_initByValueList(values, 3);
-
   static DownloadStatus? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 

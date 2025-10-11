@@ -40,7 +40,57 @@ extension type AuthServiceClient (connect.Transport _transport) {
     );
   }
 
-  Future<authv1auth.RegisterResponse> register(authv1auth.RegisterRequest input,
+  Future<authv1auth.ListUsersResponse> userList(
+      authv1auth.ListUsersRequest input, {
+        connect.Headers? headers,
+        connect.AbortSignal? signal,
+        Function(connect.Headers)? onHeader,
+        Function(connect.Headers)? onTrailer,
+      }) {
+    return connect.Client(_transport).unary(
+      specs.AuthService.userList,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  Future<authv1auth.AddUserResponse> userAdd(authv1auth.AddUserRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
+    return connect.Client(_transport).unary(
+      specs.AuthService.userAdd,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  Future<authv1auth.UserDeleteResponse> userDelete(
+      authv1auth.UserDeleteRequest input, {
+        connect.Headers? headers,
+        connect.AbortSignal? signal,
+        Function(connect.Headers)? onHeader,
+        Function(connect.Headers)? onTrailer,
+      }) {
+    return connect.Client(_transport).unary(
+      specs.AuthService.userDelete,
+      input,
+      signal: signal,
+      headers: headers,
+      onHeader: onHeader,
+      onTrailer: onTrailer,
+    );
+  }
+
+  Future<authv1auth.UserEditResponse> userEdit(authv1auth.UserEditRequest input,
       {
         connect.Headers? headers,
         connect.AbortSignal? signal,
@@ -48,7 +98,7 @@ extension type AuthServiceClient (connect.Transport _transport) {
         Function(connect.Headers)? onTrailer,
       }) {
     return connect.Client(_transport).unary(
-      specs.AuthService.register,
+      specs.AuthService.userEdit,
       input,
       signal: signal,
       headers: headers,

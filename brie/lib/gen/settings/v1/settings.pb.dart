@@ -26,7 +26,6 @@ class UpdateMamAdminConfigRequest extends $pb.GeneratedMessage {
       [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()
         ..mergeFromBuffer(data, registry);
-
   factory UpdateMamAdminConfigRequest.fromJson($core.String json,
       [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()
@@ -42,7 +41,6 @@ class UpdateMamAdminConfigRequest extends $pb.GeneratedMessage {
   UpdateMamAdminConfigRequest clone() =>
       UpdateMamAdminConfigRequest()
         ..mergeFromMessage(this);
-
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateMamAdminConfigRequest copyWith(
       void Function(UpdateMamAdminConfigRequest) updates) =>
@@ -56,13 +54,10 @@ class UpdateMamAdminConfigRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdateMamAdminConfigRequest create() =>
       UpdateMamAdminConfigRequest._();
-
   @$core.override
   UpdateMamAdminConfigRequest createEmptyInstance() => create();
-
   static $pb.PbList<UpdateMamAdminConfigRequest> createRepeated() =>
       $pb.PbList<UpdateMamAdminConfigRequest>();
-
   @$core.pragma('dart2js:noInline')
   static UpdateMamAdminConfigRequest getDefault() =>
       _defaultInstance ??=
@@ -80,7 +75,6 @@ class UpdateMamAdminConfigResponse extends $pb.GeneratedMessage {
       [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()
         ..mergeFromBuffer(data, registry);
-
   factory UpdateMamAdminConfigResponse.fromJson($core.String json,
       [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
       create()
@@ -96,7 +90,6 @@ class UpdateMamAdminConfigResponse extends $pb.GeneratedMessage {
   UpdateMamAdminConfigResponse clone() =>
       UpdateMamAdminConfigResponse()
         ..mergeFromMessage(this);
-
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateMamAdminConfigResponse copyWith(
       void Function(UpdateMamAdminConfigResponse) updates) =>
@@ -110,13 +103,10 @@ class UpdateMamAdminConfigResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdateMamAdminConfigResponse create() =>
       UpdateMamAdminConfigResponse._();
-
   @$core.override
   UpdateMamAdminConfigResponse createEmptyInstance() => create();
-
   static $pb.PbList<UpdateMamAdminConfigResponse> createRepeated() =>
       $pb.PbList<UpdateMamAdminConfigResponse>();
-
   @$core.pragma('dart2js:noInline')
   static UpdateMamAdminConfigResponse getDefault() =>
       _defaultInstance ??=
@@ -1682,7 +1672,6 @@ class SettingsServiceApi {
       UpdateMamRequest request) =>
       _client.invoke<UpdateMamResponse>(
           ctx, 'SettingsService', 'UpdateMam', request, UpdateMamResponse());
-
   $async.Future<UpdateDownloaderResponse> updateDownloader(
       $pb.ClientContext? ctx, UpdateDownloaderRequest request) =>
       _client.invoke<UpdateDownloaderResponse>(ctx, 'SettingsService',
@@ -1697,7 +1686,6 @@ class SettingsServiceApi {
       ListDirectoriesRequest request) =>
       _client.invoke<ListDirectoriesResponse>(ctx, 'SettingsService',
           'ListDirectories', request, ListDirectoriesResponse());
-
   $async.Future<ListSupportedClientsResponse> listSupportedClients(
       $pb.ClientContext? ctx, ListSupportedClientsRequest request) =>
       _client.invoke<ListSupportedClientsResponse>(ctx, 'SettingsService',

@@ -9,14 +9,14 @@ plugins:
     out: generated/go
     opt: paths=source_relative
 
-  - local: protoc-gen-connect-go
-    out: generated/go
-    opt: paths=source_relative
-
-  - local: protoc-gen-es
-    out: generated/web
-    include_imports: true
-    opt: target=ts
+  #  - local: protoc-gen-connect-go
+  #    out: generated/go
+  #    opt: paths=source_relative
+  #
+  #  - local: protoc-gen-es
+  #    out: generated/web
+  #    include_imports: true
+  #    opt: target=ts
 
   - local: protoc-gen-connect-dart
     out: generated/dart
