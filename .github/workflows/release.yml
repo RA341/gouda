@@ -9,7 +9,7 @@ on:
       - brie/**
       - core/**
       - .github/workflows/action-*
-      - .github/workflows/build.yml
+      - release-build.yml
       - .github/workflows/release.yml
       - Dockerfile
       - .dockerignore
