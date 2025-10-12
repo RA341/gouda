@@ -1,35 +1,35 @@
-name: Dev Native Build
+#name: Dev Native Build
+#
+#on:
+#  workflow_dispatch:
 
-on:
-  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - brie/**
+#      - core/**
+#      - .github/workflows/dev-android.yml
+#      - .github/workflows/action-gouda-native.yml
+#      - Taskfile-build.yml
+#
+#permissions:
+#  contents: write   # To checkout the repository
+#  packages: write  # To push Docker images to GHCR
 
-  push:
-    branches:
-      - main
-    paths:
-      - brie/**
-      - core/**
-      - .github/workflows/dev-android.yml
-      - .github/workflows/action-gouda-native.yml
-      - Taskfile-build.yml
-
-permissions:
-  contents: write   # To checkout the repository
-  packages: write  # To push Docker images to GHCR
-
-jobs:
-  build_and_release_windows:
-    name: Build and Release for Windows
-    uses: ./.github/workflows/action-gouda-native.yml
-    with:
-      os: windows-latest
-      tag_name: dev
-    secrets: inherit
-
-  build_and_release_linux:
-    name: Build and Release for Linux
-    uses: ./.github/workflows/action-gouda-native.yml
-    with:
-      os: ubuntu-latest
-      tag_name: dev
-    secrets: inherit
+#jobs:
+#  build_and_release_windows:
+#    name: Build and Release for Windows
+#    uses: ./.github/workflows/action-gouda-native.yml
+#    with:
+#      os: windows-latest
+#      tag_name: dev
+#    secrets: inherit
+#
+#  build_and_release_linux:
+#    name: Build and Release for Linux
+#    uses: ./.github/workflows/action-gouda-native.yml
+#    with:
+#      os: ubuntu-latest
+#      tag_name: dev
+#    secrets: inherit
