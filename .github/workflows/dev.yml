@@ -7,11 +7,13 @@ on:
     branches:
       - main
     paths:
-      - Dockerfile
       - brie/**
       - core/**
+      - Dockerfile
       - .github/workflows/dev.yml
+      - .github/workflows/dev-android.yml
       - .github/workflows/action-gouda-docker.yml
+      - .github/workflows/action-gouda-native.yml
 
 permissions:
   contents: write   # To checkout the repository
