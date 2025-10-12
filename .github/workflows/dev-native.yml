@@ -30,7 +30,5 @@ jobs:
     uses: ./.github/workflows/action-gouda-native.yml
     with:
       os: ubuntu-latest
-      flutter_version: '3.27.1'
-      go_version: '1.24'
       tag_name: dev
     secrets: inherit
