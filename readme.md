@@ -45,7 +45,7 @@ if you have any ideas you would like to add modify this section and open a PR
 
 - [ ] Mam search
     - [x] Basic Search
-    - [ ] Advanced filtering and sorting
+  - [x] Advanced filtering and sorting
     - [ ] Wedge usage Recommendation similar to mam ratio protect
 
 - [ ] Mam admin tasks
@@ -54,8 +54,8 @@ if you have any ideas you would like to add modify this section and open a PR
     - [ ] Auto IP updates
     - [ ] add frontend settings page
 
-- [ ] Settings
-    - [ ] File picker file paths
+- [x] Settings
+    - [x] File picker file paths
 
 - [ ] Request System
     - [ ] Implement user request page
