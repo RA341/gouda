@@ -1,4 +1,4 @@
-name: Dev Build
+name: Dev Native Build
 
 on:
   workflow_dispatch:
