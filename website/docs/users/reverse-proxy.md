@@ -1,5 +1,6 @@
 ---
-title: Help
+title: Reverse Proxy
+sidebar_position: 6
 ---
 # Reverse Proxy
 

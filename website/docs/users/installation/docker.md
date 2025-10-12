@@ -4,9 +4,15 @@ sidebar_position: 2
 ---
 # Docker
 
-**Setup gouda on docker.**
+Gouda images are published on GitHub container registry
 
-[Docker hub](https://hub.docker.com/repository/docker/ras334/gouda/general)
+https://github.com/RA341/gouda/pkgs/container/gouda
+
+We have the following tags available
+
+latest
+release
+v1.
 
 :::important
 To get hardlink support, you MUST follow a specific folder structure [guide](#storage-setup-guide)
