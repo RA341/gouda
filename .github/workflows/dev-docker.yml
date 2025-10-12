@@ -11,7 +11,7 @@ on:
       - core/**
       - Dockerfile
       - .github/workflows/dev-docker.yml
-      - action-docker.yml
+      - .github/workflows/action-docker.yml
 
 permissions:
   contents: write   # To checkout the repository
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build-docker:
-    name: Build docker dev build
+    name: Dev docker build
     uses: .github/workflows/action-docker.yml
     with:
       source_branch: ${{ github.ref_name }}
