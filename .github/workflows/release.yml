@@ -58,7 +58,7 @@ jobs:
         if: ${{ steps.get_tag.outputs.tag != '' }}
         # ref_name will be release
         run: |
-          gh workflow run build.yml \
+          gh workflow run release-build.yml \
             --repo ${{ github.repository }} \
             --ref ${{ github.ref_name }} \
             -f tag_name=${{ steps.get_tag.outputs.tag }}
