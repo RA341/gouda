@@ -17,7 +17,7 @@ permissions:
 jobs:
   build-docker:
     name: Gouda Docker Build
-    uses: .github/workflows/action-docker.yml
+    uses: ./.github/workflows/action-docker.yml
     with:
       version_tag: ${{ github.event.inputs.tag_name }}
       is_latest: true
@@ -26,7 +26,7 @@ jobs:
 
   build_and_release_linux:
     name: Gouda Linux Build
-    uses: .github/workflows/action-native.yml
+    uses: ./.github/workflows/action-native.yml
     with:
       os: ubuntu-latest
       tag_name: ${{ github.event.inputs.tag_name }}
@@ -34,7 +34,7 @@ jobs:
 
   build_and_release_windows:
     name: Gouda Windows Build
-    uses: .github/workflows/action-native.yml
+    uses: ./.github/workflows/action-native.yml
     with:
       os: windows-latest
       tag_name: ${{ github.event.inputs.tag_name }}
