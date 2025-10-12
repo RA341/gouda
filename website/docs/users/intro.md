@@ -1,5 +1,5 @@
 ---
-title: Gouda
+title: About
 sidebar_position: 1
 ---
 
@@ -8,76 +8,88 @@ sidebar_position: 1
 **A lightweight download automation tool for MyAnonaMouse users, offering a simpler alternative
 to [Readarr](https://github.com/Readarr/Readarr).**
 
-## Motivation
+---
 
-I tried readarr, but it was buggy for me, and I don't need to use its monitoring features.
+## What is Gouda?
 
-This makes it easier than readarr, as you can directly download the release without monitoring the
-entire authors' collection.
+Gouda is a streamlined tool designed to automate book downloads from MyAnonaMouse. Unlike more complex alternatives like
+Readarr, Gouda focuses on simplicity—allowing you to search and download individual releases without the overhead of
+monitoring entire author catalogs.
 
-Hence, it is intended to work with the [extension](extension.md).
+## Why Gouda?
 
-## How it Works
+I created Gouda after experiencing reliability issues with Readarr and realizing I didn't need its extensive monitoring
+features. Gouda offers a more straightforward approach: search for what you want, download it, and let the tool handle
+the rest.
 
-* When you download something from myanonmouse, You use the gouda button (from the [extension](extension.md)) instead of the
-  download button.
+**Key advantages:**
 
-* The extension then sends the book, author, series info and the [category](category.md), to gouda.
+- **Direct downloads** – Grab specific releases without setting up complex monitoring rules
+- **Lightweight** – Minimal resource usage and simple configuration
+- **Automated organization** – Files are automatically organized by author and book title
 
-* Gouda then downloads the torrent file, sends it to the download client.
+---
 
-* Gouda will continue to monitor downloads until,
-    * Its complete
-        * then [hardlinks](installation/docker.md#storage-setup-guide) to save storage space, to the location you specify while setting up
-          gouda.
-    * It fails
-        * if it takes to long (default limit is 15 minutes, this can be changed).
-        * Or there was an issue hardlinking, (e.g. the file path already exists).
-      * In either case, gouda will not do anything (only display an error), the original downloaded file will remain
-        untouched (if it successfully downloaded)
+## How It Works
+
+1. **Search** – Open Gouda and navigate to the search page
+2. **Download** – Find your book and click download
+3. **Automation begins** – Gouda automatically:
+    - Downloads the torrent file
+    - Sends it to your configured torrent client
+    - Monitors the download progress until completion (with optional timeout)
+4. **Organization** – Once complete, Gouda organizes your files:
+    - Creates symlinks (or copies if symlinking fails) to your designated complete directory
+    - Organizes files in a clean structure:
+
+   ```
+   <complete directory>
+   ├── <Author Name>
+   │   └── <Book Title>
+   │       └── <downloaded files>
+   ```
+
+---
 
 ## Requirements
 
+### MyAnonaMouse Account & API Token
+
+You'll need an active MyAnonaMouse account and an API token to use Gouda:
+
+1. Log in to your MyAnonaMouse account
+2. Head over to this [link](https://www.myanonamouse.net/preferences/index.php?view=security)
+3. Generate an token
+4. Keep this token handy for Gouda configuration
+
 ### Supported Torrent Clients
 
-Gouda provides integration with the following torrent clients:
+Gouda integrates seamlessly with the following torrent clients:
 
-| Client       | Support | Issues |
-|--------------|---------|--------|
-| Transmission | ✅ Full  | None   |
-| Deluge       | ✅ Full  | None   |
-| qBittorrent  | ✅ Full  | None   |
+| Client       | Support Status    | Known Issues |
+|--------------|-------------------|--------------|
+| Transmission | ✅ Fully supported | None         |
+| qBittorrent  | ✅ Fully supported | None         |
 
-### Supported platforms
+## Getting Started
 
-#### Docker Package
+Ready to install? Head over to the [Installation Guide](installation) to get Gouda up and running.
 
-The application is available as [docker image](installation/docker.md).
+## Configuration
 
-#### OS executables
+After installing Gouda, you'll need to configure:
 
-Executables are available for 
- 
-* [Windows](installation/windows.md) 
-* [Linux](installation/linux.md)
-* [Macos](installation/macos.md)
+- **MyAnonaMouse API token** – Required for authentication and searches
+- **Torrent client connection settings** – Host, port, and credentials
+- **Complete directory path** – Where your organized files will be stored
 
-There are two distinct variants for each OS:
+Head over to the [setup guide](setup.md)
 
-##### Desktop Edition
+---
 
-The Desktop Edition is designed for personal computer usage and includes:
+## Support
 
-- Native UI implementation
-- Web-based user interface
-- System tray integration
-- Full functionality optimized for desktop environments
+Have questions or issues? You can ask me on the
 
-##### Server Edition
-
-The Server Edition is designed for headless environments such as seedboxes and servers:
-
-- Lightweight binary without desktop dependencies
-- Web-based user interface only
-- No system tray implementation
-- Designed for remote access and management
+- [MAM forum](https://www.myanonamouse.net/f/t/81042)
+- [GitHub discussions](https://github.com/RA341/gouda/discussions)

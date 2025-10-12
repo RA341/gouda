@@ -46,14 +46,13 @@ tasks:
     cmds:
       - flutter build {{ .TARGET }} {{ .BUILD_ARGS }}
 
-  go:*:
+  core:*:
     label: 'go-build-{{index .MATCH 0}}'
     desc: builds the go binary depending on the target, usage gouda:<target>
     dir: '{{ .CORE_DIR }}'
     vars:
       TARGET: '{{index .MATCH 0}}'
-      BIN: 'cmd/{{ .TARGET }}'
-      MAIN: '{{ .BIN }}/main.go'
+      CMD: './cmd/{{ .TARGET }}'
 
       # strip out terminal on windows build
       FLAVOUR: '{{ .TARGET }}'
@@ -86,15 +85,15 @@ tasks:
         -X {{ .INFO_PACKAGE }}.CommitInfo={{ .COMMIT_INFO }}
         -X {{ .INFO_PACKAGE }}.BuildDate={{ .BUILD_DATE }}
         -X {{ .INFO_PACKAGE }}.Branch={{ .BRANCH }}
-
-    sources:
-      - /**/*.go
     deps:
       - brie:web
       - go:build-out
     cmds:
-      - '{{ .cu }} cp -r ../{{ .BRIE_DIR }}/build/web {{ .BIN }}/web'
-      - 'go build -ldflags "{{ .LDFLAGS }}" -o {{ .GO_OUT }}/gouda-{{ .TARGET }}{{ .EXE }} {{ .MAIN }}'
+      - '{{ .cu }} cp -r ../{{ .BRIE_DIR }}/build/web {{ .CMD }}/web'
+      - 'go build -v 
+            -ldflags "{{ .LDFLAGS }}"
+            -o {{ .GO_OUT }}/gouda-{{ .TARGET }}{{ .EXE }} 
+            {{ .CMD }}'
 
   go:build-out:
     internal: true
@@ -140,7 +139,7 @@ tasks:
       OS: '{{index .MATCH 0}}'
       TARGET: server
     deps:
-      - go:{{ .TARGET }}
+      - core:{{ .TARGET }}
       - build-out
     cmds:
       - '{{ .cu }} cp -r 
@@ -157,14 +156,14 @@ tasks:
       DESK_OUT:
         # Flutter's default output paths
         map:
-          linux: 'build/linux/x64/bundle'
+          linux: 'build/linux/x64/release/bundle'
           macos: 'build/macos/Build/Products/Release'
           windows: 'build/windows/x64/runner/Release'
       FLUT: '{{ .BRIE_DIR }}/{{ index .DESK_OUT .OS }}'
 
       TARGET: desktop
     deps:
-      - go:{{ .TARGET }}
+      - core:{{ .TARGET }}
       - brie:{{ .OS }}
       - build-out
     cmds:
