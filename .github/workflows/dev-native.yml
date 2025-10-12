@@ -11,6 +11,7 @@ on:
       - core/**
       - .github/workflows/dev-android.yml
       - .github/workflows/action-gouda-native.yml
+      - Taskfile-build.yml
 
 permissions:
   contents: write   # To checkout the repository

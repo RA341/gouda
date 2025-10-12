@@ -1,0 +1,46 @@
+FROM ubuntu:latest AS base
+
+RUN apt update && apt install -y \
+    wget \
+    curl \
+    clang \
+    git \
+    ninja-build \
+    unzip \
+    xz-utils \
+    p7zip-full p7zip-rar \
+    zip \
+    gcc libgtk-3-dev libayatana-appindicator3-dev \
+    libglu1-mesa \
+    cmake
+
+# Flutter
+ENV FLUTTER_VERSION=3.35.4
+# Clone Flutter from source
+RUN git clone https://github.com/flutter/flutter.git -b stable /flutter
+# Add Flutter to PATH
+ENV PATH="/flutter/bin:${PATH}"
+# Build Flutter from source (this runs the initial setup)
+RUN flutter doctor -v && \
+    flutter config --no-analytics && \
+    flutter precache web linux
+
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/task/task/setup.deb.sh' | bash && \
+    apt install task -y
+
+# GO setup
+ENV GO_VERSION=1.25.0
+RUN curl -OL https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go$GO_VERSION.linux-amd64.tar.gz && \
+    rm go$GO_VERSION.linux-amd64.tar.gz
+ENV PATH=$PATH:/usr/local/go/bin
+ENV GOPATH=/go
+ENV PATH=$PATH:$GOPATH/bin
+
+FROM base
+
+WORKDIR /gouda
+
+# task --taskfile Taskfile-build.yml build:linux
+
+CMD ["task", "--taskfile", "Taskfile-build.yml", "build:linux"]

@@ -89,7 +89,7 @@ tasks:
       - brie:web
       - go:build-out
     cmds:
-      - '{{ .cu }} cp -r ../{{ .BRIE_DIR }}/build/web {{ .BIN }}/web'
+      - '{{ .cu }} cp -r ../{{ .BRIE_DIR }}/build/web {{ .CMD }}/web'
       - 'go build -v 
             -ldflags "{{ .LDFLAGS }}"
             -o {{ .GO_OUT }}/gouda-{{ .TARGET }}{{ .EXE }} 
