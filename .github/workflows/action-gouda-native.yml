@@ -56,10 +56,14 @@ jobs:
             gcc libgtk-3-dev libayatana-appindicator3-dev
         shell: bash
 
-      - name: Install coreutils
+      - name: Setup Rust
+        if: runner.os == 'Windows'
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - name: Install coreutils via cargo
         if: runner.os == 'Windows'
         run: |
-          winget install --id GnuWin32.CoreUtils --accept-source-agreements --accept-package-agreements
+          cargo install coreutils
 
       - name: Setup MSYS2 for Windows CGO
         if: runner.os == 'Windows'
