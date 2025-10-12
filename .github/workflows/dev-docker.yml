@@ -20,7 +20,7 @@ permissions:
 jobs:
   build-docker:
     name: Dev docker build
-    uses: .github/workflows/action-docker.yml
+    uses: ./.github/workflows/action-docker.yml
     with:
       source_branch: ${{ github.ref_name }}
     secrets: inherit
