@@ -328,7 +328,7 @@ const $core.Map<$core.String, $core.dynamic> MamServiceBase$json = {
 
 @$core.Deprecated('Use mamServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-MamServiceBase$messageJson = {
+    MamServiceBase$messageJson = {
   '.mam.v1.Query': Query$json,
   '.mam.v1.SearchResults': SearchResults$json,
   '.mam.v1.SearchBook': SearchBook$json,
@@ -349,9 +349,9 @@ MamServiceBase$messageJson = {
 /// Descriptor for `MamService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
 final $typed_data.Uint8List mamServiceDescriptor = $convert.base64Decode(
     'CgpNYW1TZXJ2aWNlEi4KBlNlYXJjaBINLm1hbS52MS5RdWVyeRoVLm1hbS52MS5TZWFyY2hSZX'
-        'N1bHRzEjEKBkJ1eVZpcBISLm1hbS52MS5WaXBSZXF1ZXN0GhMubWFtLnYxLlZpcFJlc3BvbnNl'
-        'EksKDEdldFRodW1ibmFpbBIbLm1hbS52MS5HZXRUaHVtYm5haWxSZXF1ZXN0GhwubWFtLnYxLk'
-        'dldFRodW1ibmFpbFJlc3BvbnNlIgASLQoKR2V0UHJvZmlsZRINLm1hbS52MS5FbXB0eRoQLm1h'
-        'bS52MS5Vc2VyRGF0YRI3CghCdXlCb251cxIULm1hbS52MS5Cb251c1JlcXVlc3QaFS5tYW0udj'
-        'EuQm9udXNSZXNwb25zZRJFCgpJc01hbVNldHVwEhkubWFtLnYxLklzTWFtU2V0dXBSZXF1ZXN0'
-        'GhoubWFtLnYxLklzTWFtU2V0dXBSZXNwb25zZSIA');
+    'N1bHRzEjEKBkJ1eVZpcBISLm1hbS52MS5WaXBSZXF1ZXN0GhMubWFtLnYxLlZpcFJlc3BvbnNl'
+    'EksKDEdldFRodW1ibmFpbBIbLm1hbS52MS5HZXRUaHVtYm5haWxSZXF1ZXN0GhwubWFtLnYxLk'
+    'dldFRodW1ibmFpbFJlc3BvbnNlIgASLQoKR2V0UHJvZmlsZRINLm1hbS52MS5FbXB0eRoQLm1h'
+    'bS52MS5Vc2VyRGF0YRI3CghCdXlCb251cxIULm1hbS52MS5Cb251c1JlcXVlc3QaFS5tYW0udj'
+    'EuQm9udXNSZXNwb25zZRJFCgpJc01hbVNldHVwEhkubWFtLnYxLklzTWFtU2V0dXBSZXF1ZXN0'
+    'GhoubWFtLnYxLklzTWFtU2V0dXBSZXNwb25zZSIA');

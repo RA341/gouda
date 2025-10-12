@@ -15,59 +15,35 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'auth.pb.dart' as $0;
+import 'auth.pb.dart' as $1;
 import 'auth.pbjson.dart';
 
 export 'auth.pb.dart';
 
 abstract class AuthServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.LoginResponse> login($pb.ServerContext ctx,
-      $0.LoginRequest request);
-
-  $async.Future<$0.LogoutResponse> logout($pb.ServerContext ctx,
-      $0.LogoutRequest request);
-
-  $async.Future<$0.ListUsersResponse> userList($pb.ServerContext ctx,
-      $0.ListUsersRequest request);
-
-  $async.Future<$0.AddUserResponse> userAdd($pb.ServerContext ctx,
-      $0.AddUserRequest request);
-
-  $async.Future<$0.UserDeleteResponse> userDelete($pb.ServerContext ctx,
-      $0.UserDeleteRequest request);
-
-  $async.Future<$0.UserEditResponse> userEdit($pb.ServerContext ctx,
-      $0.UserEditRequest request);
-
-  $async.Future<$0.UserProfileResponse> userProfile($pb.ServerContext ctx,
-      $0.UserProfileRequest request);
-
-  $async.Future<$0.VerifySessionResponse> verifySession($pb.ServerContext ctx,
-      $0.VerifySessionRequest request);
-
-  $async.Future<$0.RefreshSessionResponse> refreshSession($pb.ServerContext ctx,
-      $0.RefreshSessionRequest request);
+  $async.Future<$1.LoginResponse> login(
+      $pb.ServerContext ctx, $1.LoginRequest request);
+  $async.Future<$1.LogoutResponse> logout(
+      $pb.ServerContext ctx, $1.LogoutRequest request);
+  $async.Future<$1.UserProfileResponse> userProfile(
+      $pb.ServerContext ctx, $1.UserProfileRequest request);
+  $async.Future<$1.VerifySessionResponse> verifySession(
+      $pb.ServerContext ctx, $1.VerifySessionRequest request);
+  $async.Future<$1.RefreshSessionResponse> refreshSession(
+      $pb.ServerContext ctx, $1.RefreshSessionRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
       case 'Login':
-        return $0.LoginRequest();
+        return $1.LoginRequest();
       case 'Logout':
-        return $0.LogoutRequest();
-      case 'UserList':
-        return $0.ListUsersRequest();
-      case 'UserAdd':
-        return $0.AddUserRequest();
-      case 'UserDelete':
-        return $0.UserDeleteRequest();
-      case 'UserEdit':
-        return $0.UserEditRequest();
+        return $1.LogoutRequest();
       case 'UserProfile':
-        return $0.UserProfileRequest();
+        return $1.UserProfileRequest();
       case 'VerifySession':
-        return $0.VerifySessionRequest();
+        return $1.VerifySessionRequest();
       case 'RefreshSession':
-        return $0.RefreshSessionRequest();
+        return $1.RefreshSessionRequest();
       default:
         throw $core.ArgumentError('Unknown method: $methodName');
     }
@@ -77,23 +53,15 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
       $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
       case 'Login':
-        return login(ctx, request as $0.LoginRequest);
+        return login(ctx, request as $1.LoginRequest);
       case 'Logout':
-        return logout(ctx, request as $0.LogoutRequest);
-      case 'UserList':
-        return userList(ctx, request as $0.ListUsersRequest);
-      case 'UserAdd':
-        return userAdd(ctx, request as $0.AddUserRequest);
-      case 'UserDelete':
-        return userDelete(ctx, request as $0.UserDeleteRequest);
-      case 'UserEdit':
-        return userEdit(ctx, request as $0.UserEditRequest);
+        return logout(ctx, request as $1.LogoutRequest);
       case 'UserProfile':
-        return userProfile(ctx, request as $0.UserProfileRequest);
+        return userProfile(ctx, request as $1.UserProfileRequest);
       case 'VerifySession':
-        return verifySession(ctx, request as $0.VerifySessionRequest);
+        return verifySession(ctx, request as $1.VerifySessionRequest);
       case 'RefreshSession':
-        return refreshSession(ctx, request as $0.RefreshSessionRequest);
+        return refreshSession(ctx, request as $1.RefreshSessionRequest);
       default:
         throw $core.ArgumentError('Unknown method: $methodName');
     }
@@ -101,5 +69,5 @@ abstract class AuthServiceBase extends $pb.GeneratedService {
 
   $core.Map<$core.String, $core.dynamic> get $json => AuthServiceBase$json;
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-  get $messageJson => AuthServiceBase$messageJson;
+      get $messageJson => AuthServiceBase$messageJson;
 }

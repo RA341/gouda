@@ -24,34 +24,6 @@ abstract final class AuthService {
     authv1auth.LogoutResponse.new,
   );
 
-  static const userList = connect.Spec(
-    '/$name/UserList',
-    connect.StreamType.unary,
-    authv1auth.ListUsersRequest.new,
-    authv1auth.ListUsersResponse.new,
-  );
-
-  static const userAdd = connect.Spec(
-    '/$name/UserAdd',
-    connect.StreamType.unary,
-    authv1auth.AddUserRequest.new,
-    authv1auth.AddUserResponse.new,
-  );
-
-  static const userDelete = connect.Spec(
-    '/$name/UserDelete',
-    connect.StreamType.unary,
-    authv1auth.UserDeleteRequest.new,
-    authv1auth.UserDeleteResponse.new,
-  );
-
-  static const userEdit = connect.Spec(
-    '/$name/UserEdit',
-    connect.StreamType.unary,
-    authv1auth.UserEditRequest.new,
-    authv1auth.UserEditResponse.new,
-  );
-
   static const userProfile = connect.Spec(
     '/$name/UserProfile',
     connect.StreamType.unary,

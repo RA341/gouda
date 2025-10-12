@@ -1431,27 +1431,23 @@ class MamServiceApi {
   $async.Future<SearchResults> search($pb.ClientContext? ctx, Query request) =>
       _client.invoke<SearchResults>(
           ctx, 'MamService', 'Search', request, SearchResults());
-
-  $async.Future<VipResponse> buyVip($pb.ClientContext? ctx,
-      VipRequest request) =>
+  $async.Future<VipResponse> buyVip(
+          $pb.ClientContext? ctx, VipRequest request) =>
       _client.invoke<VipResponse>(
           ctx, 'MamService', 'BuyVip', request, VipResponse());
-
-  $async.Future<GetThumbnailResponse> getThumbnail($pb.ClientContext? ctx,
-      GetThumbnailRequest request) =>
+  $async.Future<GetThumbnailResponse> getThumbnail(
+          $pb.ClientContext? ctx, GetThumbnailRequest request) =>
       _client.invoke<GetThumbnailResponse>(
           ctx, 'MamService', 'GetThumbnail', request, GetThumbnailResponse());
   $async.Future<UserData> getProfile($pb.ClientContext? ctx, Empty request) =>
       _client.invoke<UserData>(
           ctx, 'MamService', 'GetProfile', request, UserData());
-
-  $async.Future<BonusResponse> buyBonus($pb.ClientContext? ctx,
-      BonusRequest request) =>
+  $async.Future<BonusResponse> buyBonus(
+          $pb.ClientContext? ctx, BonusRequest request) =>
       _client.invoke<BonusResponse>(
           ctx, 'MamService', 'BuyBonus', request, BonusResponse());
-
-  $async.Future<IsMamSetupResponse> isMamSetup($pb.ClientContext? ctx,
-      IsMamSetupRequest request) =>
+  $async.Future<IsMamSetupResponse> isMamSetup(
+          $pb.ClientContext? ctx, IsMamSetupRequest request) =>
       _client.invoke<IsMamSetupResponse>(
           ctx, 'MamService', 'IsMamSetup', request, IsMamSetupResponse());
 }

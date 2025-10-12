@@ -23,13 +23,11 @@ class UpdateMamAdminConfigRequest extends $pb.GeneratedMessage {
   UpdateMamAdminConfigRequest._();
 
   factory UpdateMamAdminConfigRequest.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory UpdateMamAdminConfigRequest.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateMamAdminConfigRequest',
@@ -39,14 +37,13 @@ class UpdateMamAdminConfigRequest extends $pb.GeneratedMessage {
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateMamAdminConfigRequest clone() =>
-      UpdateMamAdminConfigRequest()
-        ..mergeFromMessage(this);
+      UpdateMamAdminConfigRequest()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateMamAdminConfigRequest copyWith(
-      void Function(UpdateMamAdminConfigRequest) updates) =>
+          void Function(UpdateMamAdminConfigRequest) updates) =>
       super.copyWith(
               (message) => updates(message as UpdateMamAdminConfigRequest))
-      as UpdateMamAdminConfigRequest;
+          as UpdateMamAdminConfigRequest;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -59,10 +56,8 @@ class UpdateMamAdminConfigRequest extends $pb.GeneratedMessage {
   static $pb.PbList<UpdateMamAdminConfigRequest> createRepeated() =>
       $pb.PbList<UpdateMamAdminConfigRequest>();
   @$core.pragma('dart2js:noInline')
-  static UpdateMamAdminConfigRequest getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateMamAdminConfigRequest>(
-              create);
+  static UpdateMamAdminConfigRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateMamAdminConfigRequest>(create);
   static UpdateMamAdminConfigRequest? _defaultInstance;
 }
 
@@ -72,13 +67,11 @@ class UpdateMamAdminConfigResponse extends $pb.GeneratedMessage {
   UpdateMamAdminConfigResponse._();
 
   factory UpdateMamAdminConfigResponse.fromBuffer($core.List<$core.int> data,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromBuffer(data, registry);
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory UpdateMamAdminConfigResponse.fromJson($core.String json,
-      [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
-      create()
-        ..mergeFromJson(json, registry);
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateMamAdminConfigResponse',
@@ -88,14 +81,13 @@ class UpdateMamAdminConfigResponse extends $pb.GeneratedMessage {
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateMamAdminConfigResponse clone() =>
-      UpdateMamAdminConfigResponse()
-        ..mergeFromMessage(this);
+      UpdateMamAdminConfigResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateMamAdminConfigResponse copyWith(
-      void Function(UpdateMamAdminConfigResponse) updates) =>
+          void Function(UpdateMamAdminConfigResponse) updates) =>
       super.copyWith(
               (message) => updates(message as UpdateMamAdminConfigResponse))
-      as UpdateMamAdminConfigResponse;
+          as UpdateMamAdminConfigResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
@@ -108,10 +100,8 @@ class UpdateMamAdminConfigResponse extends $pb.GeneratedMessage {
   static $pb.PbList<UpdateMamAdminConfigResponse> createRepeated() =>
       $pb.PbList<UpdateMamAdminConfigResponse>();
   @$core.pragma('dart2js:noInline')
-  static UpdateMamAdminConfigResponse getDefault() =>
-      _defaultInstance ??=
-          $pb.GeneratedMessage.$_defaultFor<UpdateMamAdminConfigResponse>(
-              create);
+  static UpdateMamAdminConfigResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UpdateMamAdminConfigResponse>(create);
   static UpdateMamAdminConfigResponse? _defaultInstance;
 }
 
@@ -1658,46 +1648,40 @@ class SettingsServiceApi {
 
   SettingsServiceApi(this._client);
 
-  $async.Future<LoadSettingsResponse> loadSettings($pb.ClientContext? ctx,
-      LoadSettingsRequest request) =>
+  $async.Future<LoadSettingsResponse> loadSettings(
+          $pb.ClientContext? ctx, LoadSettingsRequest request) =>
       _client.invoke<LoadSettingsResponse>(ctx, 'SettingsService',
           'LoadSettings', request, LoadSettingsResponse());
-
-  $async.Future<UpdateSettingsResponse> updateSettings($pb.ClientContext? ctx,
-      UpdateSettingsRequest request) =>
+  $async.Future<UpdateSettingsResponse> updateSettings(
+          $pb.ClientContext? ctx, UpdateSettingsRequest request) =>
       _client.invoke<UpdateSettingsResponse>(ctx, 'SettingsService',
           'UpdateSettings', request, UpdateSettingsResponse());
-
-  $async.Future<UpdateMamResponse> updateMam($pb.ClientContext? ctx,
-      UpdateMamRequest request) =>
+  $async.Future<UpdateMamResponse> updateMam(
+          $pb.ClientContext? ctx, UpdateMamRequest request) =>
       _client.invoke<UpdateMamResponse>(
           ctx, 'SettingsService', 'UpdateMam', request, UpdateMamResponse());
   $async.Future<UpdateDownloaderResponse> updateDownloader(
-      $pb.ClientContext? ctx, UpdateDownloaderRequest request) =>
+          $pb.ClientContext? ctx, UpdateDownloaderRequest request) =>
       _client.invoke<UpdateDownloaderResponse>(ctx, 'SettingsService',
           'UpdateDownloader', request, UpdateDownloaderResponse());
-
-  $async.Future<UpdateDirResponse> updateDir($pb.ClientContext? ctx,
-      UpdateDirRequest request) =>
+  $async.Future<UpdateDirResponse> updateDir(
+          $pb.ClientContext? ctx, UpdateDirRequest request) =>
       _client.invoke<UpdateDirResponse>(
           ctx, 'SettingsService', 'UpdateDir', request, UpdateDirResponse());
-
-  $async.Future<ListDirectoriesResponse> listDirectories($pb.ClientContext? ctx,
-      ListDirectoriesRequest request) =>
+  $async.Future<ListDirectoriesResponse> listDirectories(
+          $pb.ClientContext? ctx, ListDirectoriesRequest request) =>
       _client.invoke<ListDirectoriesResponse>(ctx, 'SettingsService',
           'ListDirectories', request, ListDirectoriesResponse());
   $async.Future<ListSupportedClientsResponse> listSupportedClients(
-      $pb.ClientContext? ctx, ListSupportedClientsRequest request) =>
+          $pb.ClientContext? ctx, ListSupportedClientsRequest request) =>
       _client.invoke<ListSupportedClientsResponse>(ctx, 'SettingsService',
           'ListSupportedClients', request, ListSupportedClientsResponse());
-
-  $async.Future<TestTorrentResponse> testClient($pb.ClientContext? ctx,
-      TorrentClient request) =>
+  $async.Future<TestTorrentResponse> testClient(
+          $pb.ClientContext? ctx, TorrentClient request) =>
       _client.invoke<TestTorrentResponse>(
           ctx, 'SettingsService', 'TestClient', request, TestTorrentResponse());
-
-  $async.Future<GetMetadataResponse> getMetadata($pb.ClientContext? ctx,
-      GetMetadataRequest request) =>
+  $async.Future<GetMetadataResponse> getMetadata(
+          $pb.ClientContext? ctx, GetMetadataRequest request) =>
       _client.invoke<GetMetadataResponse>(ctx, 'SettingsService', 'GetMetadata',
           request, GetMetadataResponse());
 }

@@ -14,19 +14,7 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use roleDescriptor instead')
-const Role$json = {
-  '1': 'Role',
-  '2': [
-    {'1': 'Admin', '2': 0},
-    {'1': 'Mouse', '2': 1},
-    {'1': 'Unknown', '2': 999},
-  ],
-};
-
-/// Descriptor for `Role`. Decode as a `google.protobuf.EnumDescriptorProto`.
-final $typed_data.Uint8List roleDescriptor = $convert
-    .base64Decode('CgRSb2xlEgkKBUFkbWluEAASCQoFTW91c2UQARIMCgdVbmtub3duEOcH');
+import '../../user/v1/user.pbjson.dart' as $0;
 
 @$core.Deprecated('Use userProfileRequestDescriptor instead')
 const UserProfileRequest$json = {
@@ -35,136 +23,20 @@ const UserProfileRequest$json = {
 
 /// Descriptor for `UserProfileRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List userProfileRequestDescriptor =
-$convert.base64Decode('ChJVc2VyUHJvZmlsZVJlcXVlc3Q=');
+    $convert.base64Decode('ChJVc2VyUHJvZmlsZVJlcXVlc3Q=');
 
 @$core.Deprecated('Use userProfileResponseDescriptor instead')
 const UserProfileResponse$json = {
   '1': 'UserProfileResponse',
   '2': [
-    {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.auth.v1.User', '10': 'user'},
+    {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.user.v1.User', '10': 'user'},
   ],
 };
 
 /// Descriptor for `UserProfileResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userProfileResponseDescriptor = $convert
-    .base64Decode(
-    'ChNVc2VyUHJvZmlsZVJlc3BvbnNlEiEKBHVzZXIYASABKAsyDS5hdXRoLnYxLlVzZXJSBHVzZX'
-        'I=');
-
-@$core.Deprecated('Use userDeleteRequestDescriptor instead')
-const UserDeleteRequest$json = {
-  '1': 'UserDeleteRequest',
-  '2': [
-    {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.auth.v1.User', '10': 'user'},
-  ],
-};
-
-/// Descriptor for `UserDeleteRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userDeleteRequestDescriptor = $convert.base64Decode(
-    'ChFVc2VyRGVsZXRlUmVxdWVzdBIhCgR1c2VyGAEgASgLMg0uYXV0aC52MS5Vc2VyUgR1c2Vy');
-
-@$core.Deprecated('Use userDeleteResponseDescriptor instead')
-const UserDeleteResponse$json = {
-  '1': 'UserDeleteResponse',
-};
-
-/// Descriptor for `UserDeleteResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userDeleteResponseDescriptor =
-$convert.base64Decode('ChJVc2VyRGVsZXRlUmVzcG9uc2U=');
-
-@$core.Deprecated('Use userEditRequestDescriptor instead')
-const UserEditRequest$json = {
-  '1': 'UserEditRequest',
-  '2': [
-    {
-      '1': 'editUser',
-      '3': 1,
-      '4': 1,
-      '5': 11,
-      '6': '.auth.v1.User',
-      '10': 'editUser'
-    },
-  ],
-};
-
-/// Descriptor for `UserEditRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userEditRequestDescriptor = $convert.base64Decode(
-    'Cg9Vc2VyRWRpdFJlcXVlc3QSKQoIZWRpdFVzZXIYASABKAsyDS5hdXRoLnYxLlVzZXJSCGVkaX'
-        'RVc2Vy');
-
-@$core.Deprecated('Use userEditResponseDescriptor instead')
-const UserEditResponse$json = {
-  '1': 'UserEditResponse',
-};
-
-/// Descriptor for `UserEditResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userEditResponseDescriptor =
-$convert.base64Decode('ChBVc2VyRWRpdFJlc3BvbnNl');
-
-@$core.Deprecated('Use addUserRequestDescriptor instead')
-const AddUserRequest$json = {
-  '1': 'AddUserRequest',
-  '2': [
-    {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.auth.v1.User', '10': 'user'},
-  ],
-};
-
-/// Descriptor for `AddUserRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addUserRequestDescriptor = $convert.base64Decode(
-    'Cg5BZGRVc2VyUmVxdWVzdBIhCgR1c2VyGAEgASgLMg0uYXV0aC52MS5Vc2VyUgR1c2Vy');
-
-@$core.Deprecated('Use addUserResponseDescriptor instead')
-const AddUserResponse$json = {
-  '1': 'AddUserResponse',
-};
-
-/// Descriptor for `AddUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List addUserResponseDescriptor =
-$convert.base64Decode('Cg9BZGRVc2VyUmVzcG9uc2U=');
-
-@$core.Deprecated('Use listUsersRequestDescriptor instead')
-const ListUsersRequest$json = {
-  '1': 'ListUsersRequest',
-};
-
-/// Descriptor for `ListUsersRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listUsersRequestDescriptor =
-$convert.base64Decode('ChBMaXN0VXNlcnNSZXF1ZXN0');
-
-@$core.Deprecated('Use listUsersResponseDescriptor instead')
-const ListUsersResponse$json = {
-  '1': 'ListUsersResponse',
-  '2': [
-    {
-      '1': 'users',
-      '3': 1,
-      '4': 3,
-      '5': 11,
-      '6': '.auth.v1.User',
-      '10': 'users'
-    },
-  ],
-};
-
-/// Descriptor for `ListUsersResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listUsersResponseDescriptor = $convert.base64Decode(
-    'ChFMaXN0VXNlcnNSZXNwb25zZRIjCgV1c2VycxgBIAMoCzINLmF1dGgudjEuVXNlclIFdXNlcn'
-        'M=');
-
-@$core.Deprecated('Use userDescriptor instead')
-const User$json = {
-  '1': 'User',
-  '2': [
-    {'1': 'username', '3': 1, '4': 1, '5': 9, '10': 'username'},
-    {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
-    {'1': 'role', '3': 3, '4': 1, '5': 14, '6': '.auth.v1.Role', '10': 'role'},
-  ],
-};
-
-/// Descriptor for `User`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
-    'CgRVc2VyEhoKCHVzZXJuYW1lGAEgASgJUgh1c2VybmFtZRIaCghwYXNzd29yZBgCIAEoCVIIcG'
-        'Fzc3dvcmQSIQoEcm9sZRgDIAEoDjINLmF1dGgudjEuUm9sZVIEcm9sZQ==');
+final $typed_data.Uint8List userProfileResponseDescriptor = $convert.base64Decode(
+    'ChNVc2VyUHJvZmlsZVJlc3BvbnNlEiEKBHVzZXIYASABKAsyDS51c2VyLnYxLlVzZXJSBHVzZX'
+    'I=');
 
 @$core.Deprecated('Use logoutRequestDescriptor instead')
 const LogoutRequest$json = {
@@ -332,30 +204,6 @@ const $core.Map<$core.String, $core.dynamic> AuthServiceBase$json = {
       '4': {}
     },
     {
-      '1': 'UserList',
-      '2': '.auth.v1.ListUsersRequest',
-      '3': '.auth.v1.ListUsersResponse',
-      '4': {}
-    },
-    {
-      '1': 'UserAdd',
-      '2': '.auth.v1.AddUserRequest',
-      '3': '.auth.v1.AddUserResponse',
-      '4': {}
-    },
-    {
-      '1': 'UserDelete',
-      '2': '.auth.v1.UserDeleteRequest',
-      '3': '.auth.v1.UserDeleteResponse',
-      '4': {}
-    },
-    {
-      '1': 'UserEdit',
-      '2': '.auth.v1.UserEditRequest',
-      '3': '.auth.v1.UserEditResponse',
-      '4': {}
-    },
-    {
       '1': 'UserProfile',
       '2': '.auth.v1.UserProfileRequest',
       '3': '.auth.v1.UserProfileResponse',
@@ -378,23 +226,15 @@ const $core.Map<$core.String, $core.dynamic> AuthServiceBase$json = {
 
 @$core.Deprecated('Use authServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-AuthServiceBase$messageJson = {
+    AuthServiceBase$messageJson = {
   '.auth.v1.LoginRequest': LoginRequest$json,
   '.auth.v1.LoginResponse': LoginResponse$json,
   '.auth.v1.Session': Session$json,
   '.auth.v1.LogoutRequest': LogoutRequest$json,
   '.auth.v1.LogoutResponse': LogoutResponse$json,
-  '.auth.v1.ListUsersRequest': ListUsersRequest$json,
-  '.auth.v1.ListUsersResponse': ListUsersResponse$json,
-  '.auth.v1.User': User$json,
-  '.auth.v1.AddUserRequest': AddUserRequest$json,
-  '.auth.v1.AddUserResponse': AddUserResponse$json,
-  '.auth.v1.UserDeleteRequest': UserDeleteRequest$json,
-  '.auth.v1.UserDeleteResponse': UserDeleteResponse$json,
-  '.auth.v1.UserEditRequest': UserEditRequest$json,
-  '.auth.v1.UserEditResponse': UserEditResponse$json,
   '.auth.v1.UserProfileRequest': UserProfileRequest$json,
   '.auth.v1.UserProfileResponse': UserProfileResponse$json,
+  '.user.v1.User': $0.User$json,
   '.auth.v1.VerifySessionRequest': VerifySessionRequest$json,
   '.auth.v1.VerifySessionResponse': VerifySessionResponse$json,
   '.auth.v1.RefreshSessionRequest': RefreshSessionRequest$json,
@@ -404,14 +244,9 @@ AuthServiceBase$messageJson = {
 /// Descriptor for `AuthService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
 final $typed_data.Uint8List authServiceDescriptor = $convert.base64Decode(
     'CgtBdXRoU2VydmljZRI4CgVMb2dpbhIVLmF1dGgudjEuTG9naW5SZXF1ZXN0GhYuYXV0aC52MS'
-        '5Mb2dpblJlc3BvbnNlIgASOwoGTG9nb3V0EhYuYXV0aC52MS5Mb2dvdXRSZXF1ZXN0GhcuYXV0'
-        'aC52MS5Mb2dvdXRSZXNwb25zZSIAEkMKCFVzZXJMaXN0EhkuYXV0aC52MS5MaXN0VXNlcnNSZX'
-        'F1ZXN0GhouYXV0aC52MS5MaXN0VXNlcnNSZXNwb25zZSIAEj4KB1VzZXJBZGQSFy5hdXRoLnYx'
-        'LkFkZFVzZXJSZXF1ZXN0GhguYXV0aC52MS5BZGRVc2VyUmVzcG9uc2UiABJHCgpVc2VyRGVsZX'
-        'RlEhouYXV0aC52MS5Vc2VyRGVsZXRlUmVxdWVzdBobLmF1dGgudjEuVXNlckRlbGV0ZVJlc3Bv'
-        'bnNlIgASQQoIVXNlckVkaXQSGC5hdXRoLnYxLlVzZXJFZGl0UmVxdWVzdBoZLmF1dGgudjEuVX'
-        'NlckVkaXRSZXNwb25zZSIAEkoKC1VzZXJQcm9maWxlEhsuYXV0aC52MS5Vc2VyUHJvZmlsZVJl'
-        'cXVlc3QaHC5hdXRoLnYxLlVzZXJQcm9maWxlUmVzcG9uc2UiABJQCg1WZXJpZnlTZXNzaW9uEh'
-        '0uYXV0aC52MS5WZXJpZnlTZXNzaW9uUmVxdWVzdBoeLmF1dGgudjEuVmVyaWZ5U2Vzc2lvblJl'
-        'c3BvbnNlIgASUwoOUmVmcmVzaFNlc3Npb24SHi5hdXRoLnYxLlJlZnJlc2hTZXNzaW9uUmVxdW'
-        'VzdBofLmF1dGgudjEuUmVmcmVzaFNlc3Npb25SZXNwb25zZSIA');
+    '5Mb2dpblJlc3BvbnNlIgASOwoGTG9nb3V0EhYuYXV0aC52MS5Mb2dvdXRSZXF1ZXN0GhcuYXV0'
+    'aC52MS5Mb2dvdXRSZXNwb25zZSIAEkoKC1VzZXJQcm9maWxlEhsuYXV0aC52MS5Vc2VyUHJvZm'
+    'lsZVJlcXVlc3QaHC5hdXRoLnYxLlVzZXJQcm9maWxlUmVzcG9uc2UiABJQCg1WZXJpZnlTZXNz'
+    'aW9uEh0uYXV0aC52MS5WZXJpZnlTZXNzaW9uUmVxdWVzdBoeLmF1dGgudjEuVmVyaWZ5U2Vzc2'
+    'lvblJlc3BvbnNlIgASUwoOUmVmcmVzaFNlc3Npb24SHi5hdXRoLnYxLlJlZnJlc2hTZXNzaW9u'
+    'UmVxdWVzdBofLmF1dGgudjEuUmVmcmVzaFNlc3Npb25SZXNwb25zZSIA');

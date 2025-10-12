@@ -8,7 +8,8 @@ import "mam.pb.dart" as mamv1mam;
 import "mam.connect.spec.dart" as specs;
 
 extension type MamServiceClient (connect.Transport _transport) {
-  Future<mamv1mam.SearchResults> search(mamv1mam.Query input, {
+  Future<mamv1mam.SearchResults> search(
+    mamv1mam.Query input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
@@ -24,7 +25,8 @@ extension type MamServiceClient (connect.Transport _transport) {
     );
   }
 
-  Future<mamv1mam.VipResponse> buyVip(mamv1mam.VipRequest input, {
+  Future<mamv1mam.VipResponse> buyVip(
+    mamv1mam.VipRequest input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
@@ -41,12 +43,12 @@ extension type MamServiceClient (connect.Transport _transport) {
   }
 
   Future<mamv1mam.GetThumbnailResponse> getThumbnail(
-      mamv1mam.GetThumbnailRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    mamv1mam.GetThumbnailRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.MamService.getThumbnail,
       input,
@@ -57,7 +59,8 @@ extension type MamServiceClient (connect.Transport _transport) {
     );
   }
 
-  Future<mamv1mam.UserData> getProfile(mamv1mam.Empty input, {
+  Future<mamv1mam.UserData> getProfile(
+    mamv1mam.Empty input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
@@ -73,7 +76,8 @@ extension type MamServiceClient (connect.Transport _transport) {
     );
   }
 
-  Future<mamv1mam.BonusResponse> buyBonus(mamv1mam.BonusRequest input, {
+  Future<mamv1mam.BonusResponse> buyBonus(
+    mamv1mam.BonusRequest input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
@@ -90,12 +94,12 @@ extension type MamServiceClient (connect.Transport _transport) {
   }
 
   Future<mamv1mam.IsMamSetupResponse> isMamSetup(
-      mamv1mam.IsMamSetupRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    mamv1mam.IsMamSetupRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.MamService.isMamSetup,
       input,

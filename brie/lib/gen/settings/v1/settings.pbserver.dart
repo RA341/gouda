@@ -21,29 +21,24 @@ import 'settings.pbjson.dart';
 export 'settings.pb.dart';
 
 abstract class SettingsServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.LoadSettingsResponse> loadSettings($pb.ServerContext ctx,
-      $0.LoadSettingsRequest request);
-
-  $async.Future<$0.UpdateSettingsResponse> updateSettings($pb.ServerContext ctx,
-      $0.UpdateSettingsRequest request);
-
-  $async.Future<$0.UpdateMamResponse> updateMam($pb.ServerContext ctx,
-      $0.UpdateMamRequest request);
+  $async.Future<$0.LoadSettingsResponse> loadSettings(
+      $pb.ServerContext ctx, $0.LoadSettingsRequest request);
+  $async.Future<$0.UpdateSettingsResponse> updateSettings(
+      $pb.ServerContext ctx, $0.UpdateSettingsRequest request);
+  $async.Future<$0.UpdateMamResponse> updateMam(
+      $pb.ServerContext ctx, $0.UpdateMamRequest request);
   $async.Future<$0.UpdateDownloaderResponse> updateDownloader(
       $pb.ServerContext ctx, $0.UpdateDownloaderRequest request);
-
-  $async.Future<$0.UpdateDirResponse> updateDir($pb.ServerContext ctx,
-      $0.UpdateDirRequest request);
+  $async.Future<$0.UpdateDirResponse> updateDir(
+      $pb.ServerContext ctx, $0.UpdateDirRequest request);
   $async.Future<$0.ListDirectoriesResponse> listDirectories(
       $pb.ServerContext ctx, $0.ListDirectoriesRequest request);
   $async.Future<$0.ListSupportedClientsResponse> listSupportedClients(
       $pb.ServerContext ctx, $0.ListSupportedClientsRequest request);
-
-  $async.Future<$0.TestTorrentResponse> testClient($pb.ServerContext ctx,
-      $0.TorrentClient request);
-
-  $async.Future<$0.GetMetadataResponse> getMetadata($pb.ServerContext ctx,
-      $0.GetMetadataRequest request);
+  $async.Future<$0.TestTorrentResponse> testClient(
+      $pb.ServerContext ctx, $0.TorrentClient request);
+  $async.Future<$0.GetMetadataResponse> getMetadata(
+      $pb.ServerContext ctx, $0.GetMetadataRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -99,5 +94,5 @@ abstract class SettingsServiceBase extends $pb.GeneratedService {
 
   $core.Map<$core.String, $core.dynamic> get $json => SettingsServiceBase$json;
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-  get $messageJson => SettingsServiceBase$messageJson;
+      get $messageJson => SettingsServiceBase$messageJson;
 }

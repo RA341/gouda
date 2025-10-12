@@ -867,10 +867,10 @@ class Media extends $pb.GeneratedMessage {
         enumValues: DownloadStatus.values)
     ..aOS(9, _omitFieldNames ? '' : 'torrentId')
     ..aOS(11, _omitFieldNames ? '' : 'torrentFileLocation')
-    ..aOS(12, _omitFieldNames ? '' : 'fileLink')..aOS(
-        13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')..aOS(
-        14, _omitFieldNames ? '' : 'updatedAt', protoName: 'updatedAt')..aOS(
-        15, _omitFieldNames ? '' : 'statusMessage',
+    ..aOS(12, _omitFieldNames ? '' : 'fileLink')
+    ..aOS(13, _omitFieldNames ? '' : 'createdAt', protoName: 'createdAt')
+    ..aOS(14, _omitFieldNames ? '' : 'updatedAt', protoName: 'updatedAt')
+    ..aOS(15, _omitFieldNames ? '' : 'statusMessage',
         protoName: 'statusMessage')
     ..hasRequiredFields = false;
 
@@ -1025,43 +1025,36 @@ class MediaRequestServiceApi {
 
   MediaRequestServiceApi(this._client);
 
-  $async.Future<SearchResponse> search($pb.ClientContext? ctx,
-      SearchRequest request) =>
+  $async.Future<SearchResponse> search(
+          $pb.ClientContext? ctx, SearchRequest request) =>
       _client.invoke<SearchResponse>(
           ctx, 'MediaRequestService', 'Search', request, SearchResponse());
-
-  $async.Future<ListResponse> list($pb.ClientContext? ctx,
-      ListRequest request) =>
+  $async.Future<ListResponse> list(
+          $pb.ClientContext? ctx, ListRequest request) =>
       _client.invoke<ListResponse>(
           ctx, 'MediaRequestService', 'List', request, ListResponse());
-
-  $async.Future<DeleteResponse> delete($pb.ClientContext? ctx,
-      DeleteRequest request) =>
+  $async.Future<DeleteResponse> delete(
+          $pb.ClientContext? ctx, DeleteRequest request) =>
       _client.invoke<DeleteResponse>(
           ctx, 'MediaRequestService', 'Delete', request, DeleteResponse());
-
-  $async.Future<EditResponse> edit($pb.ClientContext? ctx,
-      EditRequest request) =>
+  $async.Future<EditResponse> edit(
+          $pb.ClientContext? ctx, EditRequest request) =>
       _client.invoke<EditResponse>(
           ctx, 'MediaRequestService', 'Edit', request, EditResponse());
-
-  $async.Future<ExistsResponse> exists($pb.ClientContext? ctx,
-      ExistsRequest request) =>
+  $async.Future<ExistsResponse> exists(
+          $pb.ClientContext? ctx, ExistsRequest request) =>
       _client.invoke<ExistsResponse>(
           ctx, 'MediaRequestService', 'Exists', request, ExistsResponse());
-
-  $async.Future<RetryResponse> retry($pb.ClientContext? ctx,
-      RetryRequest request) =>
+  $async.Future<RetryResponse> retry(
+          $pb.ClientContext? ctx, RetryRequest request) =>
       _client.invoke<RetryResponse>(
           ctx, 'MediaRequestService', 'Retry', request, RetryResponse());
-
-  $async.Future<AddMediaResponse> addMedia($pb.ClientContext? ctx,
-      AddMediaRequest request) =>
+  $async.Future<AddMediaResponse> addMedia(
+          $pb.ClientContext? ctx, AddMediaRequest request) =>
       _client.invoke<AddMediaResponse>(
           ctx, 'MediaRequestService', 'AddMedia', request, AddMediaResponse());
-
-  $async.Future<AddMediaResponse> addMediaWithFreeleech($pb.ClientContext? ctx,
-      AddMediaRequest request) =>
+  $async.Future<AddMediaResponse> addMediaWithFreeleech(
+          $pb.ClientContext? ctx, AddMediaRequest request) =>
       _client.invoke<AddMediaResponse>(ctx, 'MediaRequestService',
           'AddMediaWithFreeleech', request, AddMediaResponse());
 }

@@ -21,23 +21,18 @@ import 'mam.pbjson.dart';
 export 'mam.pb.dart';
 
 abstract class MamServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.SearchResults> search($pb.ServerContext ctx,
-      $0.Query request);
-
-  $async.Future<$0.VipResponse> buyVip($pb.ServerContext ctx,
-      $0.VipRequest request);
-
-  $async.Future<$0.GetThumbnailResponse> getThumbnail($pb.ServerContext ctx,
-      $0.GetThumbnailRequest request);
-
-  $async.Future<$0.UserData> getProfile($pb.ServerContext ctx,
-      $0.Empty request);
-
-  $async.Future<$0.BonusResponse> buyBonus($pb.ServerContext ctx,
-      $0.BonusRequest request);
-
-  $async.Future<$0.IsMamSetupResponse> isMamSetup($pb.ServerContext ctx,
-      $0.IsMamSetupRequest request);
+  $async.Future<$0.SearchResults> search(
+      $pb.ServerContext ctx, $0.Query request);
+  $async.Future<$0.VipResponse> buyVip(
+      $pb.ServerContext ctx, $0.VipRequest request);
+  $async.Future<$0.GetThumbnailResponse> getThumbnail(
+      $pb.ServerContext ctx, $0.GetThumbnailRequest request);
+  $async.Future<$0.UserData> getProfile(
+      $pb.ServerContext ctx, $0.Empty request);
+  $async.Future<$0.BonusResponse> buyBonus(
+      $pb.ServerContext ctx, $0.BonusRequest request);
+  $async.Future<$0.IsMamSetupResponse> isMamSetup(
+      $pb.ServerContext ctx, $0.IsMamSetupRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
@@ -80,5 +75,5 @@ abstract class MamServiceBase extends $pb.GeneratedService {
 
   $core.Map<$core.String, $core.dynamic> get $json => MamServiceBase$json;
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-  get $messageJson => MamServiceBase$messageJson;
+      get $messageJson => MamServiceBase$messageJson;
 }

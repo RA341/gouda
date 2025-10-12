@@ -9,12 +9,12 @@ import "settings.connect.spec.dart" as specs;
 
 extension type SettingsServiceClient (connect.Transport _transport) {
   Future<settingsv1settings.LoadSettingsResponse> loadSettings(
-      settingsv1settings.LoadSettingsRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.LoadSettingsRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.loadSettings,
       input,
@@ -26,12 +26,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.UpdateSettingsResponse> updateSettings(
-      settingsv1settings.UpdateSettingsRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.UpdateSettingsRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.updateSettings,
       input,
@@ -43,12 +43,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.UpdateMamResponse> updateMam(
-      settingsv1settings.UpdateMamRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.UpdateMamRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.updateMam,
       input,
@@ -60,12 +60,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.UpdateDownloaderResponse> updateDownloader(
-      settingsv1settings.UpdateDownloaderRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.UpdateDownloaderRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.updateDownloader,
       input,
@@ -77,12 +77,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.UpdateDirResponse> updateDir(
-      settingsv1settings.UpdateDirRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.UpdateDirRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.updateDir,
       input,
@@ -94,12 +94,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.ListDirectoriesResponse> listDirectories(
-      settingsv1settings.ListDirectoriesRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.ListDirectoriesRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.listDirectories,
       input,
@@ -111,12 +111,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.ListSupportedClientsResponse> listSupportedClients(
-      settingsv1settings.ListSupportedClientsRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.ListSupportedClientsRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.listSupportedClients,
       input,
@@ -128,12 +128,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.TestTorrentResponse> testClient(
-      settingsv1settings.TorrentClient input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.TorrentClient input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.testClient,
       input,
@@ -145,12 +145,12 @@ extension type SettingsServiceClient (connect.Transport _transport) {
   }
 
   Future<settingsv1settings.GetMetadataResponse> getMetadata(
-      settingsv1settings.GetMetadataRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    settingsv1settings.GetMetadataRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.SettingsService.getMetadata,
       input,

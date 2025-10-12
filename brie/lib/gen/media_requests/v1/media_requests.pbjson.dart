@@ -28,7 +28,7 @@ const DownloadStatus$json = {
 /// Descriptor for `DownloadStatus`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List downloadStatusDescriptor = $convert.base64Decode(
     'Cg5Eb3dubG9hZFN0YXR1cxIPCgtEb3dubG9hZGluZxAAEgkKBUVycm9yEAESDAoIQ29tcGxldG'
-        'UQAhILCgdVbmtub3duEAM=');
+    'UQAhILCgdVbmtub3duEAM=');
 
 @$core.Deprecated('Use searchRequestDescriptor instead')
 const SearchRequest$json = {
@@ -279,12 +279,12 @@ final $typed_data.Uint8List mediaDescriptor = $convert.base64Decode(
     'CgVNZWRpYRIOCgJJRBgBIAEoBFICSUQSFgoGYXV0aG9yGAIgASgJUgZhdXRob3ISEgoEYm9vax'
     'gDIAEoCVIEYm9vaxIWCgZzZXJpZXMYBCABKAlSBnNlcmllcxIjCg1zZXJpZXNfbnVtYmVyGAUg'
     'ASgNUgxzZXJpZXNOdW1iZXISGgoIY2F0ZWdvcnkYBiABKAlSCGNhdGVnb3J5Eh4KC21hbV9ib2'
-        '9rX2lkGAcgASgEUgltYW1Cb29rSWQSGwoJZmlsZV9saW5rGAwgASgJUghmaWxlTGluaxI5CgZz'
-        'dGF0dXMYCCABKA4yIS5tZWRpYV9yZXF1ZXN0cy52MS5Eb3dubG9hZFN0YXR1c1IGc3RhdHVzEi'
-        'QKDXN0YXR1c01lc3NhZ2UYDyABKAlSDXN0YXR1c01lc3NhZ2USHQoKdG9ycmVudF9pZBgJIAEo'
-        'CVIJdG9ycmVudElkEjIKFXRvcnJlbnRfZmlsZV9sb2NhdGlvbhgLIAEoCVITdG9ycmVudEZpbG'
-        'VMb2NhdGlvbhIcCgljcmVhdGVkQXQYDSABKAlSCWNyZWF0ZWRBdBIcCgl1cGRhdGVkQXQYDiAB'
-        'KAlSCXVwZGF0ZWRBdA==');
+    '9rX2lkGAcgASgEUgltYW1Cb29rSWQSGwoJZmlsZV9saW5rGAwgASgJUghmaWxlTGluaxI5CgZz'
+    'dGF0dXMYCCABKA4yIS5tZWRpYV9yZXF1ZXN0cy52MS5Eb3dubG9hZFN0YXR1c1IGc3RhdHVzEi'
+    'QKDXN0YXR1c01lc3NhZ2UYDyABKAlSDXN0YXR1c01lc3NhZ2USHQoKdG9ycmVudF9pZBgJIAEo'
+    'CVIJdG9ycmVudElkEjIKFXRvcnJlbnRfZmlsZV9sb2NhdGlvbhgLIAEoCVITdG9ycmVudEZpbG'
+    'VMb2NhdGlvbhIcCgljcmVhdGVkQXQYDSABKAlSCWNyZWF0ZWRBdBIcCgl1cGRhdGVkQXQYDiAB'
+    'KAlSCXVwZGF0ZWRBdA==');
 
 const $core.Map<$core.String, $core.dynamic> MediaRequestServiceBase$json = {
   '1': 'MediaRequestService',
@@ -342,7 +342,7 @@ const $core.Map<$core.String, $core.dynamic> MediaRequestServiceBase$json = {
 
 @$core.Deprecated('Use mediaRequestServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-MediaRequestServiceBase$messageJson = {
+    MediaRequestServiceBase$messageJson = {
   '.media_requests.v1.SearchRequest': SearchRequest$json,
   '.media_requests.v1.SearchResponse': SearchResponse$json,
   '.media_requests.v1.Media': Media$json,
@@ -361,18 +361,17 @@ MediaRequestServiceBase$messageJson = {
 };
 
 /// Descriptor for `MediaRequestService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List mediaRequestServiceDescriptor = $convert
-    .base64Decode(
+final $typed_data.Uint8List mediaRequestServiceDescriptor = $convert.base64Decode(
     'ChNNZWRpYVJlcXVlc3RTZXJ2aWNlEk8KBlNlYXJjaBIgLm1lZGlhX3JlcXVlc3RzLnYxLlNlYX'
-        'JjaFJlcXVlc3QaIS5tZWRpYV9yZXF1ZXN0cy52MS5TZWFyY2hSZXNwb25zZSIAEkkKBExpc3QS'
-        'Hi5tZWRpYV9yZXF1ZXN0cy52MS5MaXN0UmVxdWVzdBofLm1lZGlhX3JlcXVlc3RzLnYxLkxpc3'
-        'RSZXNwb25zZSIAEk8KBkRlbGV0ZRIgLm1lZGlhX3JlcXVlc3RzLnYxLkRlbGV0ZVJlcXVlc3Qa'
-        'IS5tZWRpYV9yZXF1ZXN0cy52MS5EZWxldGVSZXNwb25zZSIAEkkKBEVkaXQSHi5tZWRpYV9yZX'
-        'F1ZXN0cy52MS5FZGl0UmVxdWVzdBofLm1lZGlhX3JlcXVlc3RzLnYxLkVkaXRSZXNwb25zZSIA'
-        'Ek8KBkV4aXN0cxIgLm1lZGlhX3JlcXVlc3RzLnYxLkV4aXN0c1JlcXVlc3QaIS5tZWRpYV9yZX'
-        'F1ZXN0cy52MS5FeGlzdHNSZXNwb25zZSIAEkwKBVJldHJ5Eh8ubWVkaWFfcmVxdWVzdHMudjEu'
-        'UmV0cnlSZXF1ZXN0GiAubWVkaWFfcmVxdWVzdHMudjEuUmV0cnlSZXNwb25zZSIAElUKCEFkZE'
-        '1lZGlhEiIubWVkaWFfcmVxdWVzdHMudjEuQWRkTWVkaWFSZXF1ZXN0GiMubWVkaWFfcmVxdWVz'
-        'dHMudjEuQWRkTWVkaWFSZXNwb25zZSIAEmIKFUFkZE1lZGlhV2l0aEZyZWVsZWVjaBIiLm1lZG'
-        'lhX3JlcXVlc3RzLnYxLkFkZE1lZGlhUmVxdWVzdBojLm1lZGlhX3JlcXVlc3RzLnYxLkFkZE1l'
-        'ZGlhUmVzcG9uc2UiAA==');
+    'JjaFJlcXVlc3QaIS5tZWRpYV9yZXF1ZXN0cy52MS5TZWFyY2hSZXNwb25zZSIAEkkKBExpc3QS'
+    'Hi5tZWRpYV9yZXF1ZXN0cy52MS5MaXN0UmVxdWVzdBofLm1lZGlhX3JlcXVlc3RzLnYxLkxpc3'
+    'RSZXNwb25zZSIAEk8KBkRlbGV0ZRIgLm1lZGlhX3JlcXVlc3RzLnYxLkRlbGV0ZVJlcXVlc3Qa'
+    'IS5tZWRpYV9yZXF1ZXN0cy52MS5EZWxldGVSZXNwb25zZSIAEkkKBEVkaXQSHi5tZWRpYV9yZX'
+    'F1ZXN0cy52MS5FZGl0UmVxdWVzdBofLm1lZGlhX3JlcXVlc3RzLnYxLkVkaXRSZXNwb25zZSIA'
+    'Ek8KBkV4aXN0cxIgLm1lZGlhX3JlcXVlc3RzLnYxLkV4aXN0c1JlcXVlc3QaIS5tZWRpYV9yZX'
+    'F1ZXN0cy52MS5FeGlzdHNSZXNwb25zZSIAEkwKBVJldHJ5Eh8ubWVkaWFfcmVxdWVzdHMudjEu'
+    'UmV0cnlSZXF1ZXN0GiAubWVkaWFfcmVxdWVzdHMudjEuUmV0cnlSZXNwb25zZSIAElUKCEFkZE'
+    '1lZGlhEiIubWVkaWFfcmVxdWVzdHMudjEuQWRkTWVkaWFSZXF1ZXN0GiMubWVkaWFfcmVxdWVz'
+    'dHMudjEuQWRkTWVkaWFSZXNwb25zZSIAEmIKFUFkZE1lZGlhV2l0aEZyZWVsZWVjaBIiLm1lZG'
+    'lhX3JlcXVlc3RzLnYxLkFkZE1lZGlhUmVxdWVzdBojLm1lZGlhX3JlcXVlc3RzLnYxLkFkZE1l'
+    'ZGlhUmVzcG9uc2UiAA==');

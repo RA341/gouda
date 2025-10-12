@@ -4,62 +4,22 @@ package auth.v1;
 
 option go_package = "github.com/RA341/gouda/generated/auth/v1";
 
+import "user/v1/user.proto";
+
 service AuthService {
   rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc Logout(LogoutRequest) returns (LogoutResponse) {}
 
-  rpc UserList(ListUsersRequest) returns (ListUsersResponse) {}
-  rpc UserAdd(AddUserRequest) returns (AddUserResponse) {}
-  rpc UserDelete(UserDeleteRequest) returns (UserDeleteResponse) {}
-  rpc UserEdit(UserEditRequest) returns (UserEditResponse) {}
   rpc UserProfile(UserProfileRequest) returns (UserProfileResponse) {}
 
   rpc VerifySession(VerifySessionRequest) returns (VerifySessionResponse) {}
   rpc RefreshSession(RefreshSessionRequest) returns (RefreshSessionResponse) {}
 }
 
-
 message UserProfileRequest {}
 
 message UserProfileResponse {
-  User user = 1;
-}
-
-message UserDeleteRequest {
-  User user = 1;
-}
-
-message UserDeleteResponse {}
-
-message UserEditRequest {
-  User editUser = 1;
-}
-
-message UserEditResponse {}
-
-message AddUserRequest {
-  User user = 1;
-}
-
-message AddUserResponse {}
-
-message ListUsersRequest {}
-
-message ListUsersResponse {
-  repeated User users = 1;
-}
-
-enum Role {
-  Admin = 0;
-  // normal user
-  Mouse = 1;
-  Unknown = 999;
-}
-
-message User {
-  string username = 1;
-  string password = 2;
-  Role role = 3;
+  user.v1.User user = 1;
 }
 
 message LogoutRequest {

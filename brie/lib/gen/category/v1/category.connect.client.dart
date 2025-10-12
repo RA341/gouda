@@ -9,12 +9,12 @@ import "category.connect.spec.dart" as specs;
 
 extension type CategoryServiceClient (connect.Transport _transport) {
   Future<categoryv1category.ListCategoriesResponse> listCategories(
-      categoryv1category.ListCategoriesRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    categoryv1category.ListCategoriesRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.CategoryService.listCategories,
       input,
@@ -26,12 +26,12 @@ extension type CategoryServiceClient (connect.Transport _transport) {
   }
 
   Future<categoryv1category.AddCategoriesResponse> addCategories(
-      categoryv1category.AddCategoriesRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    categoryv1category.AddCategoriesRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.CategoryService.addCategories,
       input,
@@ -43,12 +43,12 @@ extension type CategoryServiceClient (connect.Transport _transport) {
   }
 
   Future<categoryv1category.DelCategoriesResponse> deleteCategories(
-      categoryv1category.DelCategoriesRequest input, {
-        connect.Headers? headers,
-        connect.AbortSignal? signal,
-        Function(connect.Headers)? onHeader,
-        Function(connect.Headers)? onTrailer,
-      }) {
+    categoryv1category.DelCategoriesRequest input, {
+    connect.Headers? headers,
+    connect.AbortSignal? signal,
+    Function(connect.Headers)? onHeader,
+    Function(connect.Headers)? onTrailer,
+  }) {
     return connect.Client(_transport).unary(
       specs.CategoryService.deleteCategories,
       input,

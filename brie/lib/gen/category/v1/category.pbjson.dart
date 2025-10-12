@@ -134,7 +134,7 @@ const $core.Map<$core.String, $core.dynamic> CategoryServiceBase$json = {
 
 @$core.Deprecated('Use categoryServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-CategoryServiceBase$messageJson = {
+    CategoryServiceBase$messageJson = {
   '.category.v1.ListCategoriesRequest': ListCategoriesRequest$json,
   '.category.v1.ListCategoriesResponse': ListCategoriesResponse$json,
   '.category.v1.Category': Category$json,
@@ -147,8 +147,8 @@ CategoryServiceBase$messageJson = {
 /// Descriptor for `CategoryService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
 final $typed_data.Uint8List categoryServiceDescriptor = $convert.base64Decode(
     'Cg9DYXRlZ29yeVNlcnZpY2USWwoOTGlzdENhdGVnb3JpZXMSIi5jYXRlZ29yeS52MS5MaXN0Q2'
-        'F0ZWdvcmllc1JlcXVlc3QaIy5jYXRlZ29yeS52MS5MaXN0Q2F0ZWdvcmllc1Jlc3BvbnNlIgAS'
-        'WAoNQWRkQ2F0ZWdvcmllcxIhLmNhdGVnb3J5LnYxLkFkZENhdGVnb3JpZXNSZXF1ZXN0GiIuY2'
-        'F0ZWdvcnkudjEuQWRkQ2F0ZWdvcmllc1Jlc3BvbnNlIgASWwoQRGVsZXRlQ2F0ZWdvcmllcxIh'
-        'LmNhdGVnb3J5LnYxLkRlbENhdGVnb3JpZXNSZXF1ZXN0GiIuY2F0ZWdvcnkudjEuRGVsQ2F0ZW'
-        'dvcmllc1Jlc3BvbnNlIgA=');
+    'F0ZWdvcmllc1JlcXVlc3QaIy5jYXRlZ29yeS52MS5MaXN0Q2F0ZWdvcmllc1Jlc3BvbnNlIgAS'
+    'WAoNQWRkQ2F0ZWdvcmllcxIhLmNhdGVnb3J5LnYxLkFkZENhdGVnb3JpZXNSZXF1ZXN0GiIuY2'
+    'F0ZWdvcnkudjEuQWRkQ2F0ZWdvcmllc1Jlc3BvbnNlIgASWwoQRGVsZXRlQ2F0ZWdvcmllcxIh'
+    'LmNhdGVnb3J5LnYxLkRlbENhdGVnb3JpZXNSZXF1ZXN0GiIuY2F0ZWdvcnkudjEuRGVsQ2F0ZW'
+    'dvcmllc1Jlc3BvbnNlIgA=');

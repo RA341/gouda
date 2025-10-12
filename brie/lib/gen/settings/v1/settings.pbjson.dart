@@ -21,7 +21,7 @@ const UpdateMamAdminConfigRequest$json = {
 
 /// Descriptor for `UpdateMamAdminConfigRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateMamAdminConfigRequestDescriptor =
-$convert.base64Decode('ChtVcGRhdGVNYW1BZG1pbkNvbmZpZ1JlcXVlc3Q=');
+    $convert.base64Decode('ChtVcGRhdGVNYW1BZG1pbkNvbmZpZ1JlcXVlc3Q=');
 
 @$core.Deprecated('Use updateMamAdminConfigResponseDescriptor instead')
 const UpdateMamAdminConfigResponse$json = {
@@ -30,7 +30,7 @@ const UpdateMamAdminConfigResponse$json = {
 
 /// Descriptor for `UpdateMamAdminConfigResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateMamAdminConfigResponseDescriptor =
-$convert.base64Decode('ChxVcGRhdGVNYW1BZG1pbkNvbmZpZ1Jlc3BvbnNl');
+    $convert.base64Decode('ChxVcGRhdGVNYW1BZG1pbkNvbmZpZ1Jlc3BvbnNl');
 
 @$core.Deprecated('Use listDirectoriesRequestDescriptor instead')
 const ListDirectoriesRequest$json = {
@@ -488,7 +488,7 @@ const $core.Map<$core.String, $core.dynamic> SettingsServiceBase$json = {
 
 @$core.Deprecated('Use settingsServiceDescriptor instead')
 const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-SettingsServiceBase$messageJson = {
+    SettingsServiceBase$messageJson = {
   '.settings.v1.LoadSettingsRequest': LoadSettingsRequest$json,
   '.settings.v1.LoadSettingsResponse': LoadSettingsResponse$json,
   '.settings.v1.GoudaConfig': GoudaConfig$json,
@@ -509,7 +509,7 @@ SettingsServiceBase$messageJson = {
   '.settings.v1.ListDirectoriesResponse': ListDirectoriesResponse$json,
   '.settings.v1.ListSupportedClientsRequest': ListSupportedClientsRequest$json,
   '.settings.v1.ListSupportedClientsResponse':
-  ListSupportedClientsResponse$json,
+      ListSupportedClientsResponse$json,
   '.settings.v1.TestTorrentResponse': TestTorrentResponse$json,
   '.settings.v1.GetMetadataRequest': GetMetadataRequest$json,
   '.settings.v1.GetMetadataResponse': GetMetadataResponse$json,
@@ -518,17 +518,17 @@ SettingsServiceBase$messageJson = {
 /// Descriptor for `SettingsService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
 final $typed_data.Uint8List settingsServiceDescriptor = $convert.base64Decode(
     'Cg9TZXR0aW5nc1NlcnZpY2USVQoMTG9hZFNldHRpbmdzEiAuc2V0dGluZ3MudjEuTG9hZFNldH'
-        'RpbmdzUmVxdWVzdBohLnNldHRpbmdzLnYxLkxvYWRTZXR0aW5nc1Jlc3BvbnNlIgASWwoOVXBk'
-        'YXRlU2V0dGluZ3MSIi5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1JlcXVlc3QaIy5zZXR0aW'
-        '5ncy52MS5VcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIgASTAoJVXBkYXRlTWFtEh0uc2V0dGluZ3Mu'
-        'djEuVXBkYXRlTWFtUmVxdWVzdBoeLnNldHRpbmdzLnYxLlVwZGF0ZU1hbVJlc3BvbnNlIgASYQ'
-        'oQVXBkYXRlRG93bmxvYWRlchIkLnNldHRpbmdzLnYxLlVwZGF0ZURvd25sb2FkZXJSZXF1ZXN0'
-        'GiUuc2V0dGluZ3MudjEuVXBkYXRlRG93bmxvYWRlclJlc3BvbnNlIgASTAoJVXBkYXRlRGlyEh'
-        '0uc2V0dGluZ3MudjEuVXBkYXRlRGlyUmVxdWVzdBoeLnNldHRpbmdzLnYxLlVwZGF0ZURpclJl'
-        'c3BvbnNlIgASXgoPTGlzdERpcmVjdG9yaWVzEiMuc2V0dGluZ3MudjEuTGlzdERpcmVjdG9yaW'
-        'VzUmVxdWVzdBokLnNldHRpbmdzLnYxLkxpc3REaXJlY3Rvcmllc1Jlc3BvbnNlIgASbQoUTGlz'
-        'dFN1cHBvcnRlZENsaWVudHMSKC5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1JlcX'
-        'Vlc3QaKS5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlIgASTAoKVGVz'
-        'dENsaWVudBIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQaIC5zZXR0aW5ncy52MS5UZXN0VG'
-        '9ycmVudFJlc3BvbnNlIgASUgoLR2V0TWV0YWRhdGESHy5zZXR0aW5ncy52MS5HZXRNZXRhZGF0'
-        'YVJlcXVlc3QaIC5zZXR0aW5ncy52MS5HZXRNZXRhZGF0YVJlc3BvbnNlIgA=');
+    'RpbmdzUmVxdWVzdBohLnNldHRpbmdzLnYxLkxvYWRTZXR0aW5nc1Jlc3BvbnNlIgASWwoOVXBk'
+    'YXRlU2V0dGluZ3MSIi5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1JlcXVlc3QaIy5zZXR0aW'
+    '5ncy52MS5VcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIgASTAoJVXBkYXRlTWFtEh0uc2V0dGluZ3Mu'
+    'djEuVXBkYXRlTWFtUmVxdWVzdBoeLnNldHRpbmdzLnYxLlVwZGF0ZU1hbVJlc3BvbnNlIgASYQ'
+    'oQVXBkYXRlRG93bmxvYWRlchIkLnNldHRpbmdzLnYxLlVwZGF0ZURvd25sb2FkZXJSZXF1ZXN0'
+    'GiUuc2V0dGluZ3MudjEuVXBkYXRlRG93bmxvYWRlclJlc3BvbnNlIgASTAoJVXBkYXRlRGlyEh'
+    '0uc2V0dGluZ3MudjEuVXBkYXRlRGlyUmVxdWVzdBoeLnNldHRpbmdzLnYxLlVwZGF0ZURpclJl'
+    'c3BvbnNlIgASXgoPTGlzdERpcmVjdG9yaWVzEiMuc2V0dGluZ3MudjEuTGlzdERpcmVjdG9yaW'
+    'VzUmVxdWVzdBokLnNldHRpbmdzLnYxLkxpc3REaXJlY3Rvcmllc1Jlc3BvbnNlIgASbQoUTGlz'
+    'dFN1cHBvcnRlZENsaWVudHMSKC5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1JlcX'
+    'Vlc3QaKS5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlIgASTAoKVGVz'
+    'dENsaWVudBIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQaIC5zZXR0aW5ncy52MS5UZXN0VG'
+    '9ycmVudFJlc3BvbnNlIgASUgoLR2V0TWV0YWRhdGESHy5zZXR0aW5ncy52MS5HZXRNZXRhZGF0'
+    'YVJlcXVlc3QaIC5zZXR0aW5ncy52MS5HZXRNZXRhZGF0YVJlc3BvbnNlIgA=');

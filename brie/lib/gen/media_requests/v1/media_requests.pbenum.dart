@@ -16,13 +16,13 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 class DownloadStatus extends $pb.ProtobufEnum {
   static const DownloadStatus Downloading =
-  DownloadStatus._(0, _omitEnumNames ? '' : 'Downloading');
+      DownloadStatus._(0, _omitEnumNames ? '' : 'Downloading');
   static const DownloadStatus Error =
-  DownloadStatus._(1, _omitEnumNames ? '' : 'Error');
+      DownloadStatus._(1, _omitEnumNames ? '' : 'Error');
   static const DownloadStatus Complete =
-  DownloadStatus._(2, _omitEnumNames ? '' : 'Complete');
+      DownloadStatus._(2, _omitEnumNames ? '' : 'Complete');
   static const DownloadStatus Unknown =
-  DownloadStatus._(3, _omitEnumNames ? '' : 'Unknown');
+      DownloadStatus._(3, _omitEnumNames ? '' : 'Unknown');
 
   static const $core.List<DownloadStatus> values = <DownloadStatus>[
     Downloading,
@@ -32,7 +32,7 @@ class DownloadStatus extends $pb.ProtobufEnum {
   ];
 
   static final $core.List<DownloadStatus?> _byValue =
-  $pb.ProtobufEnum.$_initByValueList(values, 3);
+      $pb.ProtobufEnum.$_initByValueList(values, 3);
   static DownloadStatus? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
@@ -40,4 +40,4 @@ class DownloadStatus extends $pb.ProtobufEnum {
 }
 
 const $core.bool _omitEnumNames =
-$core.bool.fromEnvironment('protobuf.omit_enum_names');
+    $core.bool.fromEnvironment('protobuf.omit_enum_names');

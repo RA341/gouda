@@ -1,22 +1,22 @@
 //
 //  Generated code. Do not modify.
-//  source: auth/v1/auth.proto
+//  source: user/v1/user.proto
 //
 
 import "package:connectrpc/connect.dart" as connect;
-import "auth.pb.dart" as authv1auth;
-import "auth.connect.spec.dart" as specs;
+import "user.pb.dart" as userv1user;
+import "user.connect.spec.dart" as specs;
 
-extension type AuthServiceClient (connect.Transport _transport) {
-  Future<authv1auth.LoginResponse> login(
-    authv1auth.LoginRequest input, {
+extension type UserServiceClient (connect.Transport _transport) {
+  Future<userv1user.ListUsersResponse> userList(
+    userv1user.ListUsersRequest input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
     Function(connect.Headers)? onTrailer,
   }) {
     return connect.Client(_transport).unary(
-      specs.AuthService.login,
+      specs.UserService.userList,
       input,
       signal: signal,
       headers: headers,
@@ -25,15 +25,15 @@ extension type AuthServiceClient (connect.Transport _transport) {
     );
   }
 
-  Future<authv1auth.LogoutResponse> logout(
-    authv1auth.LogoutRequest input, {
+  Future<userv1user.AddUserResponse> userAdd(
+    userv1user.AddUserRequest input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
     Function(connect.Headers)? onTrailer,
   }) {
     return connect.Client(_transport).unary(
-      specs.AuthService.logout,
+      specs.UserService.userAdd,
       input,
       signal: signal,
       headers: headers,
@@ -42,15 +42,15 @@ extension type AuthServiceClient (connect.Transport _transport) {
     );
   }
 
-  Future<authv1auth.UserProfileResponse> userProfile(
-    authv1auth.UserProfileRequest input, {
+  Future<userv1user.UserDeleteResponse> userDelete(
+    userv1user.UserDeleteRequest input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
     Function(connect.Headers)? onTrailer,
   }) {
     return connect.Client(_transport).unary(
-      specs.AuthService.userProfile,
+      specs.UserService.userDelete,
       input,
       signal: signal,
       headers: headers,
@@ -59,32 +59,15 @@ extension type AuthServiceClient (connect.Transport _transport) {
     );
   }
 
-  Future<authv1auth.VerifySessionResponse> verifySession(
-    authv1auth.VerifySessionRequest input, {
+  Future<userv1user.UserEditResponse> userEdit(
+    userv1user.UserEditRequest input, {
     connect.Headers? headers,
     connect.AbortSignal? signal,
     Function(connect.Headers)? onHeader,
     Function(connect.Headers)? onTrailer,
   }) {
     return connect.Client(_transport).unary(
-      specs.AuthService.verifySession,
-      input,
-      signal: signal,
-      headers: headers,
-      onHeader: onHeader,
-      onTrailer: onTrailer,
-    );
-  }
-
-  Future<authv1auth.RefreshSessionResponse> refreshSession(
-    authv1auth.RefreshSessionRequest input, {
-    connect.Headers? headers,
-    connect.AbortSignal? signal,
-    Function(connect.Headers)? onHeader,
-    Function(connect.Headers)? onTrailer,
-  }) {
-    return connect.Client(_transport).unary(
-      specs.AuthService.refreshSession,
+      specs.UserService.userEdit,
       input,
       signal: signal,
       headers: headers,

@@ -22,6 +22,9 @@ type UserStore interface {
 	DeleteUser(model *User) error
 	GetUser(username string) (*User, error)
 	GetUserById(id uint) (*User, error)
+	EditUser(model *User) error
+
+	ListUsers() ([]User, error)
 
 	UpdateRole(uid uint, role Role) error
 	UpdatePassword(uid uint, hashedPassword string) error
@@ -32,7 +35,8 @@ type Role = string
 
 const (
 	RoleAdmin = "admin"
-	RoleUser  = "user"
+	// RoleMouse normal user
+	RoleMouse = "mouse"
 )
 
 type User struct {

@@ -21,26 +21,20 @@ import 'media_requests.pbjson.dart';
 export 'media_requests.pb.dart';
 
 abstract class MediaRequestServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.SearchResponse> search($pb.ServerContext ctx,
-      $0.SearchRequest request);
-
-  $async.Future<$0.ListResponse> list($pb.ServerContext ctx,
-      $0.ListRequest request);
-
-  $async.Future<$0.DeleteResponse> delete($pb.ServerContext ctx,
-      $0.DeleteRequest request);
-
-  $async.Future<$0.EditResponse> edit($pb.ServerContext ctx,
-      $0.EditRequest request);
-
-  $async.Future<$0.ExistsResponse> exists($pb.ServerContext ctx,
-      $0.ExistsRequest request);
-
-  $async.Future<$0.RetryResponse> retry($pb.ServerContext ctx,
-      $0.RetryRequest request);
-
-  $async.Future<$0.AddMediaResponse> addMedia($pb.ServerContext ctx,
-      $0.AddMediaRequest request);
+  $async.Future<$0.SearchResponse> search(
+      $pb.ServerContext ctx, $0.SearchRequest request);
+  $async.Future<$0.ListResponse> list(
+      $pb.ServerContext ctx, $0.ListRequest request);
+  $async.Future<$0.DeleteResponse> delete(
+      $pb.ServerContext ctx, $0.DeleteRequest request);
+  $async.Future<$0.EditResponse> edit(
+      $pb.ServerContext ctx, $0.EditRequest request);
+  $async.Future<$0.ExistsResponse> exists(
+      $pb.ServerContext ctx, $0.ExistsRequest request);
+  $async.Future<$0.RetryResponse> retry(
+      $pb.ServerContext ctx, $0.RetryRequest request);
+  $async.Future<$0.AddMediaResponse> addMedia(
+      $pb.ServerContext ctx, $0.AddMediaRequest request);
   $async.Future<$0.AddMediaResponse> addMediaWithFreeleech(
       $pb.ServerContext ctx, $0.AddMediaRequest request);
 
@@ -94,5 +88,5 @@ abstract class MediaRequestServiceBase extends $pb.GeneratedService {
   $core.Map<$core.String, $core.dynamic> get $json =>
       MediaRequestServiceBase$json;
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-  get $messageJson => MediaRequestServiceBase$messageJson;
+      get $messageJson => MediaRequestServiceBase$messageJson;
 }

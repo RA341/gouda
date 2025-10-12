@@ -386,18 +386,16 @@ class CategoryServiceApi {
 
   CategoryServiceApi(this._client);
 
-  $async.Future<ListCategoriesResponse> listCategories($pb.ClientContext? ctx,
-      ListCategoriesRequest request) =>
+  $async.Future<ListCategoriesResponse> listCategories(
+          $pb.ClientContext? ctx, ListCategoriesRequest request) =>
       _client.invoke<ListCategoriesResponse>(ctx, 'CategoryService',
           'ListCategories', request, ListCategoriesResponse());
-
-  $async.Future<AddCategoriesResponse> addCategories($pb.ClientContext? ctx,
-      AddCategoriesRequest request) =>
+  $async.Future<AddCategoriesResponse> addCategories(
+          $pb.ClientContext? ctx, AddCategoriesRequest request) =>
       _client.invoke<AddCategoriesResponse>(ctx, 'CategoryService',
           'AddCategories', request, AddCategoriesResponse());
-
-  $async.Future<DelCategoriesResponse> deleteCategories($pb.ClientContext? ctx,
-      DelCategoriesRequest request) =>
+  $async.Future<DelCategoriesResponse> deleteCategories(
+          $pb.ClientContext? ctx, DelCategoriesRequest request) =>
       _client.invoke<DelCategoriesResponse>(ctx, 'CategoryService',
           'DeleteCategories', request, DelCategoriesResponse());
 }

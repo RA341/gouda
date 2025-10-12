@@ -3,18 +3,35 @@ package auth
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"connectrpc.com/connect"
 )
 
 const SessionHeader = "Authorization"
-const ContextKeySession = "Session"
 
-func NewAuthInterceptor(srv *Service) connect.UnaryInterceptorFunc {
+// ContextKeySessionToken stores the string auth token fomr SessionHeader token
+const ContextKeySessionToken = "AuthToken"
+
+// NewSessionExtractor extracts SessionHeader from headers if present, else sets empty
+func NewSessionExtractor() connect.UnaryInterceptorFunc {
 	return func(next connect.UnaryFunc) connect.UnaryFunc {
 		return func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
-			ctx, err := checkAuth(ctx, req, srv)
+			sessionToken := req.Header().Get(SessionHeader)
+			ctx = context.WithValue(ctx, ContextKeySessionToken, sessionToken)
+			return next(ctx, req)
+		}
+	}
+}
+
+// ContextKeyUserSession stores the actual Session object in context
+const ContextKeyUserSession = "UserSession"
+
+type VerifySessionToken = func(token string) (*Session, error)
+
+func NewAuthInterceptor(verifier VerifySessionToken) connect.UnaryInterceptorFunc {
+	return func(next connect.UnaryFunc) connect.UnaryFunc {
+		return func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
+			ctx, err := checkSessionAuth(verifier, ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -24,13 +41,13 @@ func NewAuthInterceptor(srv *Service) connect.UnaryInterceptorFunc {
 	}
 }
 
-func checkAuth(ctx context.Context, req connect.AnyRequest, a *Service) (context.Context, error) {
-	authToken, err := extractTokenFromHeaders(req.Header())
-	if err != nil {
-		return nil, err
+func checkSessionAuth(verifier VerifySessionToken, ctx context.Context) (context.Context, error) {
+	authToken, ok := ctx.Value(ContextKeySessionToken).(string)
+	if !ok || authToken == "" {
+		return nil, ErrNoAuthHeader
 	}
 
-	session, err := a.SessionVerifyToken(authToken)
+	session, err := verifier(authToken)
 	if err != nil {
 		return nil, connect.NewError(
 			connect.CodeUnauthenticated,
@@ -38,16 +55,8 @@ func checkAuth(ctx context.Context, req connect.AnyRequest, a *Service) (context
 		)
 	}
 
-	ctx = context.WithValue(ctx, ContextKeySession, session)
+	ctx = context.WithValue(ctx, ContextKeyUserSession, session)
 	return ctx, nil
-}
-
-func extractTokenFromHeaders(header http.Header) (string, error) {
-	key := header.Get(SessionHeader)
-	if key == "" {
-		return "", ErrNoAuthHeader
-	}
-	return key, nil
 }
 
 // NewAdminInterceptor checks if user is admin
@@ -80,7 +89,7 @@ func checkAdmin(ctx context.Context) error {
 }
 
 func GetUserSessionFromCtx(ctx context.Context) (*Session, error) {
-	val := ctx.Value(ContextKeySession)
+	val := ctx.Value(ContextKeyUserSession)
 	if val == nil {
 		return nil, fmt.Errorf("session data not found")
 	}

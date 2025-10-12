@@ -21,11 +21,10 @@ import 'category.pbjson.dart';
 export 'category.pb.dart';
 
 abstract class CategoryServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.ListCategoriesResponse> listCategories($pb.ServerContext ctx,
-      $0.ListCategoriesRequest request);
-
-  $async.Future<$0.AddCategoriesResponse> addCategories($pb.ServerContext ctx,
-      $0.AddCategoriesRequest request);
+  $async.Future<$0.ListCategoriesResponse> listCategories(
+      $pb.ServerContext ctx, $0.ListCategoriesRequest request);
+  $async.Future<$0.AddCategoriesResponse> addCategories(
+      $pb.ServerContext ctx, $0.AddCategoriesRequest request);
   $async.Future<$0.DelCategoriesResponse> deleteCategories(
       $pb.ServerContext ctx, $0.DelCategoriesRequest request);
 
@@ -58,5 +57,5 @@ abstract class CategoryServiceBase extends $pb.GeneratedService {
 
   $core.Map<$core.String, $core.dynamic> get $json => CategoryServiceBase$json;
   $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
-  get $messageJson => CategoryServiceBase$messageJson;
+      get $messageJson => CategoryServiceBase$messageJson;
 }
