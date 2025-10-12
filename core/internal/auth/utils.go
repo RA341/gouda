@@ -29,7 +29,7 @@ func checkEncryptedString(input string, hashedInput string) error {
 	return nil
 }
 
-func encryptPassword(password string) (string, error) {
+func EncryptPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", fmt.Errorf("unable to encrypt password")

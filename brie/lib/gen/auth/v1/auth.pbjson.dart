@@ -14,6 +14,30 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+import '../../user/v1/user.pbjson.dart' as $0;
+
+@$core.Deprecated('Use userProfileRequestDescriptor instead')
+const UserProfileRequest$json = {
+  '1': 'UserProfileRequest',
+};
+
+/// Descriptor for `UserProfileRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userProfileRequestDescriptor =
+    $convert.base64Decode('ChJVc2VyUHJvZmlsZVJlcXVlc3Q=');
+
+@$core.Deprecated('Use userProfileResponseDescriptor instead')
+const UserProfileResponse$json = {
+  '1': 'UserProfileResponse',
+  '2': [
+    {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.user.v1.User', '10': 'user'},
+  ],
+};
+
+/// Descriptor for `UserProfileResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userProfileResponseDescriptor = $convert.base64Decode(
+    'ChNVc2VyUHJvZmlsZVJlc3BvbnNlEiEKBHVzZXIYASABKAsyDS51c2VyLnYxLlVzZXJSBHVzZX'
+    'I=');
+
 @$core.Deprecated('Use logoutRequestDescriptor instead')
 const LogoutRequest$json = {
   '1': 'LogoutRequest',
@@ -163,3 +187,66 @@ const Session$json = {
 final $typed_data.Uint8List sessionDescriptor = $convert.base64Decode(
     'CgdTZXNzaW9uEiIKDHJlZnJlc2hUb2tlbhgBIAEoCVIMcmVmcmVzaFRva2VuEiIKDHNlc3Npb2'
     '5Ub2tlbhgCIAEoCVIMc2Vzc2lvblRva2Vu');
+
+const $core.Map<$core.String, $core.dynamic> AuthServiceBase$json = {
+  '1': 'AuthService',
+  '2': [
+    {
+      '1': 'Login',
+      '2': '.auth.v1.LoginRequest',
+      '3': '.auth.v1.LoginResponse',
+      '4': {}
+    },
+    {
+      '1': 'Logout',
+      '2': '.auth.v1.LogoutRequest',
+      '3': '.auth.v1.LogoutResponse',
+      '4': {}
+    },
+    {
+      '1': 'UserProfile',
+      '2': '.auth.v1.UserProfileRequest',
+      '3': '.auth.v1.UserProfileResponse',
+      '4': {}
+    },
+    {
+      '1': 'VerifySession',
+      '2': '.auth.v1.VerifySessionRequest',
+      '3': '.auth.v1.VerifySessionResponse',
+      '4': {}
+    },
+    {
+      '1': 'RefreshSession',
+      '2': '.auth.v1.RefreshSessionRequest',
+      '3': '.auth.v1.RefreshSessionResponse',
+      '4': {}
+    },
+  ],
+};
+
+@$core.Deprecated('Use authServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+    AuthServiceBase$messageJson = {
+  '.auth.v1.LoginRequest': LoginRequest$json,
+  '.auth.v1.LoginResponse': LoginResponse$json,
+  '.auth.v1.Session': Session$json,
+  '.auth.v1.LogoutRequest': LogoutRequest$json,
+  '.auth.v1.LogoutResponse': LogoutResponse$json,
+  '.auth.v1.UserProfileRequest': UserProfileRequest$json,
+  '.auth.v1.UserProfileResponse': UserProfileResponse$json,
+  '.user.v1.User': $0.User$json,
+  '.auth.v1.VerifySessionRequest': VerifySessionRequest$json,
+  '.auth.v1.VerifySessionResponse': VerifySessionResponse$json,
+  '.auth.v1.RefreshSessionRequest': RefreshSessionRequest$json,
+  '.auth.v1.RefreshSessionResponse': RefreshSessionResponse$json,
+};
+
+/// Descriptor for `AuthService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List authServiceDescriptor = $convert.base64Decode(
+    'CgtBdXRoU2VydmljZRI4CgVMb2dpbhIVLmF1dGgudjEuTG9naW5SZXF1ZXN0GhYuYXV0aC52MS'
+    '5Mb2dpblJlc3BvbnNlIgASOwoGTG9nb3V0EhYuYXV0aC52MS5Mb2dvdXRSZXF1ZXN0GhcuYXV0'
+    'aC52MS5Mb2dvdXRSZXNwb25zZSIAEkoKC1VzZXJQcm9maWxlEhsuYXV0aC52MS5Vc2VyUHJvZm'
+    'lsZVJlcXVlc3QaHC5hdXRoLnYxLlVzZXJQcm9maWxlUmVzcG9uc2UiABJQCg1WZXJpZnlTZXNz'
+    'aW9uEh0uYXV0aC52MS5WZXJpZnlTZXNzaW9uUmVxdWVzdBoeLmF1dGgudjEuVmVyaWZ5U2Vzc2'
+    'lvblJlc3BvbnNlIgASUwoOUmVmcmVzaFNlc3Npb24SHi5hdXRoLnYxLlJlZnJlc2hTZXNzaW9u'
+    'UmVxdWVzdBofLmF1dGgudjEuUmVmcmVzaFNlc3Npb25SZXNwb25zZSIA');

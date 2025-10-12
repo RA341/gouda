@@ -47,7 +47,7 @@ class TabDownloader extends HookConsumerWidget {
                     value: curConfig.downloader.ignoreTimeout,
                     onChanged: (value) {
                       ref.serverUpdateConfig(
-                            (prev) => prev..downloader.ignoreTimeout = value,
+                        (prev) => prev..downloader.ignoreTimeout = value,
                       );
                     },
                   ),
@@ -159,10 +159,9 @@ class TorrentClientSettings extends HookConsumerWidget {
                     Expanded(
                       flex: 7,
                       child: TextField(
-                        onChanged: (value) =>
-                            ref.serverUpdateConfig(
-                                  (con) => con..torrentClient.host = value,
-                            ),
+                        onChanged: (value) => ref.serverUpdateConfig(
+                          (con) => con..torrentClient.host = value,
+                        ),
                         controller: hostController,
                         decoration: const InputDecoration(
                           label: Text("Host"),
@@ -191,7 +190,7 @@ class TorrentClientSettings extends HookConsumerWidget {
           ),
         ],
       ),
-      error: (error, stackTrace) => ErrorDisplay(message: error.toString()),
+      error: errorHandler,
       loading: LoadingSpinner.new,
     );
   }

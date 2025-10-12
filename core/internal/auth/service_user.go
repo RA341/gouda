@@ -46,7 +46,12 @@ func (s *Service) CreateInitialAdmin() error {
 		return nil
 	}
 
-	err = s.Register(DefaultAdminUsername, DefaultAdminPassword, RoleAdmin)
+	err = s.Register(
+		DefaultAdminUsername,
+		DefaultAdminPassword,
+		RoleAdmin,
+		&User{Role: RoleAdmin, Username: "System"},
+	)
 	if err != nil {
 		return err
 	}
@@ -73,8 +78,16 @@ func (s *Service) Login(user, pass string) (*Session, error) {
 	return session, nil
 }
 
-func (s *Service) Register(user, pass string, role Role) error {
-	pass, err := encryptPassword(pass)
+func (s *Service) Register(
+	user, pass string,
+	role Role,
+	admin *User,
+) error {
+	if admin.Role != RoleAdmin {
+		return fmt.Errorf("user must be admin to registered new users")
+	}
+
+	pass, err := EncryptPassword(pass)
 	if err != nil {
 		return fmt.Errorf("failed to encrypt password: %w", err)
 	}

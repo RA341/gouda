@@ -7,6 +7,7 @@ import 'package:brie/ui/settings/tab_account.dart';
 import 'package:brie/ui/settings/tab_admin_downloader.dart';
 import 'package:brie/ui/settings/tab_admin_files.dart';
 import 'package:brie/ui/settings/tab_admin_mam.dart';
+import 'package:brie/ui/settings/tab_admin_users.dart';
 import 'package:brie/ui/settings/utils.dart';
 import 'package:brie/ui/shared/error_dialog.dart';
 import 'package:flutter/material.dart';
@@ -94,6 +95,12 @@ final settingsPageConfigProvider = FutureProvider<List<SettingsPageConfig>>((
           ),
         ],
       ),
+      SettingsPageConfig(
+        title: 'Users',
+        iconData: Icons.supervised_user_circle,
+        child: const ServerSettingsView(child: TabUserManagement()),
+        buttons: [],
+      ),
     ];
 
     allSettings.addAll(adminPages);
@@ -160,7 +167,9 @@ class SettingsCoreDesktop extends HookConsumerWidget {
             children: [
               if (pages[curTab].buttons.isNotEmpty)
                 SettingsActionBar(config: pages[curTab]),
-              pages[curTab].child,
+              Expanded(
+                child: pages[curTab].child,
+              ),
             ],
           ),
         ),
@@ -247,9 +256,14 @@ class SettingsCoreMobile extends HookConsumerWidget {
 class SettingsUpdateButton extends HookConsumerWidget {
   const SettingsUpdateButton({
     required this.onTap,
+    this.label = "Save",
+    this.iconData = Icons.save,
     this.errorMessage = "Error occurred while saving",
     super.key,
   });
+
+  final String label;
+  final IconData iconData;
 
   final String errorMessage;
   final Future<void> Function() onTap;
@@ -259,6 +273,8 @@ class SettingsUpdateButton extends HookConsumerWidget {
     final isLoading = useState(false);
 
     return IconLabelButton(
+      label: label,
+      icon: iconData,
       onTap: () async {
         isLoading.value = true;
 
@@ -275,8 +291,6 @@ class SettingsUpdateButton extends HookConsumerWidget {
 
         isLoading.value = false;
       },
-      label: "Save",
-      icon: Icons.save,
       isRefreshing:
           ref.watch(serverConfigProvider).isLoading || isLoading.value,
     );

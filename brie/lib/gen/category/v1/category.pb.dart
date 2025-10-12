@@ -10,6 +10,7 @@
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
@@ -378,6 +379,25 @@ class Category extends $pb.GeneratedMessage {
   $core.bool hasCategory() => $_has(1);
   @$pb.TagNumber(2)
   void clearCategory() => $_clearField(2);
+}
+
+class CategoryServiceApi {
+  final $pb.RpcClient _client;
+
+  CategoryServiceApi(this._client);
+
+  $async.Future<ListCategoriesResponse> listCategories(
+          $pb.ClientContext? ctx, ListCategoriesRequest request) =>
+      _client.invoke<ListCategoriesResponse>(ctx, 'CategoryService',
+          'ListCategories', request, ListCategoriesResponse());
+  $async.Future<AddCategoriesResponse> addCategories(
+          $pb.ClientContext? ctx, AddCategoriesRequest request) =>
+      _client.invoke<AddCategoriesResponse>(ctx, 'CategoryService',
+          'AddCategories', request, AddCategoriesResponse());
+  $async.Future<DelCategoriesResponse> deleteCategories(
+          $pb.ClientContext? ctx, DelCategoriesRequest request) =>
+      _client.invoke<DelCategoriesResponse>(ctx, 'CategoryService',
+          'DeleteCategories', request, DelCategoriesResponse());
 }
 
 const $core.bool _omitFieldNames =

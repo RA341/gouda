@@ -1,12 +1,13 @@
 import 'package:brie/clients/settings_api.dart';
 import 'package:brie/clients/user_api.dart';
 import 'package:brie/gen/settings/v1/settings.pb.dart';
+import 'package:brie/gen/user/v1/user.pb.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TabIndexNotifier extends Notifier<int> {
   @override
-  int build() => kDebugMode ? 3 : 0;
+  int build() => kDebugMode ? 4 : 0;
 
   void set(int newIndex) => state = newIndex;
 }
@@ -17,7 +18,7 @@ final settingsTabIndexProvider = NotifierProvider<TabIndexNotifier, int>(
 
 final isAdminProvider = FutureProvider<bool>((ref) async {
   final userData = await ref.watch(userInfoProvider.future);
-  return userData.role == "admin";
+  return userData.role == Role.Admin;
 });
 
 extension ConfigUpdateExtension on WidgetRef {

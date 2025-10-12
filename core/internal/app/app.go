@@ -11,7 +11,6 @@ import (
 	mediarpc "github.com/RA341/gouda/generated/media_requests/v1/v1connect"
 	settingsrpc "github.com/RA341/gouda/generated/settings/v1/v1connect"
 	userrpc "github.com/RA341/gouda/generated/user/v1/v1connect"
-
 	"github.com/RA341/gouda/internal/auth"
 	"github.com/RA341/gouda/internal/category"
 	"github.com/RA341/gouda/internal/database"
@@ -33,6 +32,7 @@ type App struct {
 	authSrv     *auth.Service
 	downloadSrv *downloads.Service
 	mediaSrv    *mediaManager.MediaManagerService
+	userSrv     *user.Service
 }
 
 func NewApp(conf *sc.GoudaConfig) *App {
@@ -76,12 +76,15 @@ func NewApp(conf *sc.GoudaConfig) *App {
 
 	mediaSrv := mediaManager.NewService(db, downloadSrv, mamSrv)
 
+	userSrv := user.NewService(authSrv)
+
 	a := &App{
+		conf:        conf,
+		authSrv:     authSrv,
+		userSrv:     userSrv,
+		settingSrv:  settingSrv,
 		categorySrv: catSrv,
 		mamSrv:      mamSrv,
-		authSrv:     authSrv,
-		settingSrv:  settingSrv,
-		conf:        conf,
 		downloadSrv: downloadSrv,
 		mediaSrv:    mediaSrv,
 	}
@@ -90,15 +93,30 @@ func NewApp(conf *sc.GoudaConfig) *App {
 }
 
 func (a *App) registerEndpoints(mux *http.ServeMux) {
-	authInterceptor := auth.NewAuthInterceptor(a.authSrv)
-	adminInterceptor := auth.NewAdminInterceptor()
+	sessionExtractor := auth.NewSessionExtractor()
+	authInterceptor := auth.NewAuthInterceptor(a.authSrv.SessionVerifyToken)
+	globalInterceptor := connect.WithInterceptors(
+		sessionExtractor,
+		authInterceptor,
+	)
 
-	globalInterceptor := connect.WithInterceptors(authInterceptor)
+	adminInterceptor := auth.NewAdminInterceptor()
 
 	endpoints := []func() (string, http.Handler){
 		// auth
 		func() (string, http.Handler) {
-			return authrpc.NewAuthServiceHandler(auth.NewAuthHandler(a.authSrv))
+			return authrpc.NewAuthServiceHandler(
+				auth.NewAuthHandler(a.authSrv),
+				connect.WithInterceptors(sessionExtractor),
+			)
+		},
+		// user
+		func() (string, http.Handler) {
+			return userrpc.NewUserServiceHandler(
+				user.NewHandler(a.userSrv),
+				globalInterceptor,
+				connect.WithInterceptors(adminInterceptor),
+			)
 		},
 		// category
 		func() (string, http.Handler) {
@@ -113,13 +131,6 @@ func (a *App) registerEndpoints(mux *http.ServeMux) {
 			return mamrpc.NewMamServiceHandler(
 				mam.NewHandler(a.mamSrv),
 				globalInterceptor,
-			)
-		},
-		func() (string, http.Handler) {
-			return userrpc.NewUserServiceHandler(
-				user.NewHandler(),
-				globalInterceptor,
-				connect.WithInterceptors(adminInterceptor),
 			)
 		},
 		// settings

@@ -10,6 +10,7 @@
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
@@ -1420,6 +1421,35 @@ class Empty extends $pb.GeneratedMessage {
   static Empty getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Empty>(create);
   static Empty? _defaultInstance;
+}
+
+class MamServiceApi {
+  final $pb.RpcClient _client;
+
+  MamServiceApi(this._client);
+
+  $async.Future<SearchResults> search($pb.ClientContext? ctx, Query request) =>
+      _client.invoke<SearchResults>(
+          ctx, 'MamService', 'Search', request, SearchResults());
+  $async.Future<VipResponse> buyVip(
+          $pb.ClientContext? ctx, VipRequest request) =>
+      _client.invoke<VipResponse>(
+          ctx, 'MamService', 'BuyVip', request, VipResponse());
+  $async.Future<GetThumbnailResponse> getThumbnail(
+          $pb.ClientContext? ctx, GetThumbnailRequest request) =>
+      _client.invoke<GetThumbnailResponse>(
+          ctx, 'MamService', 'GetThumbnail', request, GetThumbnailResponse());
+  $async.Future<UserData> getProfile($pb.ClientContext? ctx, Empty request) =>
+      _client.invoke<UserData>(
+          ctx, 'MamService', 'GetProfile', request, UserData());
+  $async.Future<BonusResponse> buyBonus(
+          $pb.ClientContext? ctx, BonusRequest request) =>
+      _client.invoke<BonusResponse>(
+          ctx, 'MamService', 'BuyBonus', request, BonusResponse());
+  $async.Future<IsMamSetupResponse> isMamSetup(
+          $pb.ClientContext? ctx, IsMamSetupRequest request) =>
+      _client.invoke<IsMamSetupResponse>(
+          ctx, 'MamService', 'IsMamSetup', request, IsMamSetupResponse());
 }
 
 const $core.bool _omitFieldNames =

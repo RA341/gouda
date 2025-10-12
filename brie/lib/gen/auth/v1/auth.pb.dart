@@ -10,11 +10,112 @@
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import '../../user/v1/user.pb.dart' as $0;
+
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
+class UserProfileRequest extends $pb.GeneratedMessage {
+  factory UserProfileRequest() => create();
+
+  UserProfileRequest._();
+
+  factory UserProfileRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserProfileRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserProfileRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserProfileRequest clone() => UserProfileRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserProfileRequest copyWith(void Function(UserProfileRequest) updates) =>
+      super.copyWith((message) => updates(message as UserProfileRequest))
+          as UserProfileRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UserProfileRequest create() => UserProfileRequest._();
+  @$core.override
+  UserProfileRequest createEmptyInstance() => create();
+  static $pb.PbList<UserProfileRequest> createRepeated() =>
+      $pb.PbList<UserProfileRequest>();
+  @$core.pragma('dart2js:noInline')
+  static UserProfileRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UserProfileRequest>(create);
+  static UserProfileRequest? _defaultInstance;
+}
+
+class UserProfileResponse extends $pb.GeneratedMessage {
+  factory UserProfileResponse({
+    $0.User? user,
+  }) {
+    final result = create();
+    if (user != null) result.user = user;
+    return result;
+  }
+
+  UserProfileResponse._();
+
+  factory UserProfileResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UserProfileResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UserProfileResponse',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'auth.v1'),
+      createEmptyInstance: create)
+    ..aOM<$0.User>(1, _omitFieldNames ? '' : 'user', subBuilder: $0.User.create)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserProfileResponse clone() => UserProfileResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UserProfileResponse copyWith(void Function(UserProfileResponse) updates) =>
+      super.copyWith((message) => updates(message as UserProfileResponse))
+          as UserProfileResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UserProfileResponse create() => UserProfileResponse._();
+  @$core.override
+  UserProfileResponse createEmptyInstance() => create();
+  static $pb.PbList<UserProfileResponse> createRepeated() =>
+      $pb.PbList<UserProfileResponse>();
+  @$core.pragma('dart2js:noInline')
+  static UserProfileResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UserProfileResponse>(create);
+  static UserProfileResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $0.User get user => $_getN(0);
+  @$pb.TagNumber(1)
+  set user($0.User value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasUser() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUser() => $_clearField(1);
+  @$pb.TagNumber(1)
+  $0.User ensureUser() => $_ensure(0);
+}
 
 class LogoutRequest extends $pb.GeneratedMessage {
   factory LogoutRequest({
@@ -642,6 +743,33 @@ class Session extends $pb.GeneratedMessage {
   $core.bool hasSessionToken() => $_has(1);
   @$pb.TagNumber(2)
   void clearSessionToken() => $_clearField(2);
+}
+
+class AuthServiceApi {
+  final $pb.RpcClient _client;
+
+  AuthServiceApi(this._client);
+
+  $async.Future<LoginResponse> login(
+          $pb.ClientContext? ctx, LoginRequest request) =>
+      _client.invoke<LoginResponse>(
+          ctx, 'AuthService', 'Login', request, LoginResponse());
+  $async.Future<LogoutResponse> logout(
+          $pb.ClientContext? ctx, LogoutRequest request) =>
+      _client.invoke<LogoutResponse>(
+          ctx, 'AuthService', 'Logout', request, LogoutResponse());
+  $async.Future<UserProfileResponse> userProfile(
+          $pb.ClientContext? ctx, UserProfileRequest request) =>
+      _client.invoke<UserProfileResponse>(
+          ctx, 'AuthService', 'UserProfile', request, UserProfileResponse());
+  $async.Future<VerifySessionResponse> verifySession(
+          $pb.ClientContext? ctx, VerifySessionRequest request) =>
+      _client.invoke<VerifySessionResponse>(ctx, 'AuthService', 'VerifySession',
+          request, VerifySessionResponse());
+  $async.Future<RefreshSessionResponse> refreshSession(
+          $pb.ClientContext? ctx, RefreshSessionRequest request) =>
+      _client.invoke<RefreshSessionResponse>(ctx, 'AuthService',
+          'RefreshSession', request, RefreshSessionResponse());
 }
 
 const $core.bool _omitFieldNames =

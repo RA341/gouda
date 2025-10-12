@@ -5,16 +5,46 @@ package user.v1;
 option go_package = "github.com/RA341/gouda/generated/user/v1";
 
 service UserService {
-  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse) {}
+  rpc UserList(ListUsersRequest) returns (ListUsersResponse) {}
+  rpc UserAdd(AddUserRequest) returns (AddUserResponse) {}
+  rpc UserDelete(UserDeleteRequest) returns (UserDeleteResponse) {}
+  rpc UserEdit(UserEditRequest) returns (UserEditResponse) {}
 }
 
-message GetUserInfoRequest {}
+message UserDeleteRequest {
+  uint32 userId = 1;
+}
 
-message GetUserInfoResponse {
+message UserDeleteResponse {}
+
+message UserEditRequest {
+  User editUser = 1;
+}
+
+message UserEditResponse {}
+
+message AddUserRequest {
   User user = 1;
 }
 
+message AddUserResponse {}
+
+message ListUsersRequest {}
+
+message ListUsersResponse {
+  repeated User users = 1;
+}
+
+enum Role {
+  Admin = 0;
+  // normal user
+  Mouse = 1;
+  Unknown = 999;
+}
+
 message User {
-  string username = 1;
-  string role = 2;
+  uint32 UserId = 1;
+  string username = 2;
+  string password = 3;
+  Role role = 4;
 }

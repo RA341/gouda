@@ -65,29 +65,24 @@ class HomeBookItem extends HookConsumerWidget {
               ),
 
             Chip(
-              label: Text(media.status),
+              label: Text(media.status.toString()),
               backgroundColor: switch (media.status) {
-                "Completed" => Colors.green[800],
-                "Error" => Colors.red[800],
-                "Downloading" => Colors.blue[800],
+                DownloadStatus.Complete => Colors.green[800],
+                DownloadStatus.Error => Colors.red[800],
+                DownloadStatus.Downloading => Colors.blue[800],
                 _ => Colors.grey[800],
               },
             ),
+
+            if (media.status == DownloadStatus.Error) Text(media.statusMessage),
 
             Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
                     text: getMamLink(media.mamBookId.toString()).toString(),
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(
-                      color: Theme
-                          .of(context)
-                          .colorScheme
-                          .primary,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
                       decoration: TextDecoration.underline,
                     ),
                     recognizer: TapGestureRecognizer()

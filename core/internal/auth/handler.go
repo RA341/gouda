@@ -6,6 +6,7 @@ import (
 
 	"connectrpc.com/connect"
 	v1 "github.com/RA341/gouda/generated/auth/v1"
+	userrpc "github.com/RA341/gouda/generated/user/v1"
 )
 
 type Handler struct {
@@ -30,6 +31,17 @@ func (a *Handler) Login(_ context.Context, req *connect.Request[v1.LoginRequest]
 	}), err
 }
 
+func (a *Handler) UserProfile(ctx context.Context, c *connect.Request[v1.UserProfileRequest]) (*connect.Response[v1.UserProfileResponse], error) {
+	ctx, err := checkSessionAuth(a.srv.SessionVerifyToken, ctx)
+	session, err := GetUserSessionFromCtx(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	rpcUser := UserToRpc(&session.User)
+	return connect.NewResponse(&v1.UserProfileResponse{User: rpcUser}), nil
+}
+
 func (a *Handler) Logout(_ context.Context, req *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error) {
 	err := a.srv.Logout(req.Msg.Refresh)
 	if err != nil {
@@ -37,10 +49,6 @@ func (a *Handler) Logout(_ context.Context, req *connect.Request[v1.LogoutReques
 	}
 
 	return connect.NewResponse(&v1.LogoutResponse{}), nil
-}
-
-func (a *Handler) Register(_ context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
-	return nil, fmt.Errorf("implement Register")
 }
 
 func (a *Handler) VerifySession(_ context.Context, req *connect.Request[v1.VerifySessionRequest]) (*connect.Response[v1.VerifySessionResponse], error) {
@@ -77,5 +85,24 @@ func SessionToRPC(ses *Session) *v1.Session {
 	return &v1.Session{
 		RefreshToken: ses.RefreshToken,
 		SessionToken: ses.SessionToken,
+	}
+}
+
+func RoleToRpc(role Role) userrpc.Role {
+	switch role {
+	case RoleAdmin:
+		return userrpc.Role_Admin
+	case RoleMouse:
+		return userrpc.Role_Mouse
+	default:
+		return userrpc.Role_Unknown // or handle the default case appropriately
+	}
+}
+
+func UserToRpc(user *User) *userrpc.User {
+	return &userrpc.User{
+		Username: user.Username,
+		Role:     RoleToRpc(user.Role),
+		UserId:   uint32(user.ID),
 	}
 }

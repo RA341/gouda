@@ -1,49 +1,19 @@
 import 'package:brie/config.dart';
 import 'package:brie/grpc/grpc_channel_shared.dart';
+import 'package:connectrpc/connect.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grpc/grpc.dart';
 
-final grpcChannelProvider = Provider<Channel>((ref) {
+final connectTransportProvider = Provider<Transport>((ref) {
   final localConfig = ref.watch(appSettingsProvider);
-  final channel = setupClientChannel(localConfig.basePath);
+  final basePath = localConfig.basePath;
+  final sessionToken = localConfig.sessionToken;
 
-  return channel;
+  final Interceptor authentiation = <I extends Object, O extends Object>(next) {
+    return (req) {
+      req.headers.add('Authorization', sessionToken);
+      return next(req);
+    };
+  };
+
+  return setupClientTransport(basePath, [authentiation]);
 });
-
-final authInterceptorProvider = Provider<AuthInterceptor>((ref) {
-  final localSettings = ref.watch(appSettingsProvider);
-  return AuthInterceptor(localSettings.sessionToken);
-});
-
-class AuthInterceptor implements ClientInterceptor {
-  AuthInterceptor(this.authToken);
-
-  final String authToken;
-
-  @override
-  ResponseStream<R> interceptStreaming<Q, R>(
-    ClientMethod<Q, R> method,
-    Stream<Q> requests,
-    CallOptions options,
-    ClientStreamingInvoker<Q, R> invoker,
-  ) {
-    return invoker(method, requests, options);
-  }
-
-  @override
-  ResponseFuture<R> interceptUnary<Q, R>(
-    ClientMethod<Q, R> method,
-    Q request,
-    CallOptions options,
-    ClientUnaryInvoker<Q, R> invoker,
-  ) {
-    final metadata = Map<String, String>.from(options.metadata);
-    metadata['Authorization'] = authToken;
-
-    final newOptions = options.mergedWith(
-      CallOptions(metadata: metadata),
-    );
-
-    return invoker(method, request, newOptions);
-  }
-}

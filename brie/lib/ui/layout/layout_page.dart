@@ -14,7 +14,7 @@ final pageIndexProvider = NotifierProvider<PageIndexNotifier, int>(
 
 class PageIndexNotifier extends Notifier<int> {
   @override
-  int build() => kDebugMode ? 1 : 0;
+  int build() => kDebugMode ? 2 : 0;
 
   void switchPage(int index) {
     state = index;

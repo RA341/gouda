@@ -29,25 +29,32 @@ func (a *AuthStore) CreateUser(user *auth.User) error {
 	return nil
 }
 
-// DeleteUser deletes a user from the database
+func (a *AuthStore) ListUsers() ([]auth.User, error) {
+	var users []auth.User
+	err := a.db.Select("id", "username", "role").Find(&users).Error
+	return users, err
+}
+
+func (a *AuthStore) EditUser(model *auth.User) error {
+	id := model.ID
+	model.ID = 0
+
+	result := a.db.
+		Model(&auth.User{}).
+		Where("id = ?", id).
+		Updates(model)
+
+	return result.Error
+}
+
 func (a *AuthStore) DeleteUser(user *auth.User) error {
-	// Delete by ID if provided, otherwise by username
+	if user.ID == 0 {
+		return fmt.Errorf("user must have a nonzero ID")
+	}
+
 	var result *gorm.DB
-	if user.ID != 0 {
-		result = a.db.Delete(&auth.User{}, user.ID)
-	} else {
-		return fmt.Errorf("user must have a ID set")
-	}
-
-	if result.Error != nil {
-		return result.Error
-	}
-
-	if result.RowsAffected == 0 {
-		return fmt.Errorf("user not found")
-	}
-
-	return nil
+	result = a.db.Unscoped().Delete(&auth.User{}, user.ID)
+	return result.Error
 }
 
 func (a *AuthStore) GetUserById(id uint) (*auth.User, error) {
@@ -92,7 +99,7 @@ func (a *AuthStore) UpdateRole(uid uint, role auth.Role) error {
 	}
 
 	// todo make this more scalable
-	if role != auth.RoleAdmin && role != auth.RoleUser {
+	if role != auth.RoleAdmin && role != auth.RoleMouse {
 		return fmt.Errorf("invalid role")
 	}
 

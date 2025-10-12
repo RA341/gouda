@@ -11,6 +11,10 @@ class LoadingSpinner extends StatelessWidget {
   }
 }
 
+Widget errorHandler(Object error, StackTrace stackTrace) {
+  return ErrorDisplay(message: error.toString());
+}
+
 class ErrorDisplay extends StatelessWidget {
   const ErrorDisplay({required this.message, super.key});
 

@@ -14,6 +14,24 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use updateMamAdminConfigRequestDescriptor instead')
+const UpdateMamAdminConfigRequest$json = {
+  '1': 'UpdateMamAdminConfigRequest',
+};
+
+/// Descriptor for `UpdateMamAdminConfigRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateMamAdminConfigRequestDescriptor =
+    $convert.base64Decode('ChtVcGRhdGVNYW1BZG1pbkNvbmZpZ1JlcXVlc3Q=');
+
+@$core.Deprecated('Use updateMamAdminConfigResponseDescriptor instead')
+const UpdateMamAdminConfigResponse$json = {
+  '1': 'UpdateMamAdminConfigResponse',
+};
+
+/// Descriptor for `UpdateMamAdminConfigResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateMamAdminConfigResponseDescriptor =
+    $convert.base64Decode('ChxVcGRhdGVNYW1BZG1pbkNvbmZpZ1Jlc3BvbnNl');
+
 @$core.Deprecated('Use listDirectoriesRequestDescriptor instead')
 const ListDirectoriesRequest$json = {
   '1': 'ListDirectoriesRequest',
@@ -407,3 +425,110 @@ final $typed_data.Uint8List torrentClientDescriptor = $convert.base64Decode(
     'Cg1Ub3JyZW50Q2xpZW50Eh4KCmNsaWVudFR5cGUYAiABKAlSCmNsaWVudFR5cGUSEgoEaG9zdB'
     'gBIAEoCVIEaG9zdBIaCghwYXNzd29yZBgDIAEoCVIIcGFzc3dvcmQSGgoIcHJvdG9jb2wYBCAB'
     'KAlSCHByb3RvY29sEhIKBHVzZXIYBSABKAlSBHVzZXI=');
+
+const $core.Map<$core.String, $core.dynamic> SettingsServiceBase$json = {
+  '1': 'SettingsService',
+  '2': [
+    {
+      '1': 'LoadSettings',
+      '2': '.settings.v1.LoadSettingsRequest',
+      '3': '.settings.v1.LoadSettingsResponse',
+      '4': {}
+    },
+    {
+      '1': 'UpdateSettings',
+      '2': '.settings.v1.UpdateSettingsRequest',
+      '3': '.settings.v1.UpdateSettingsResponse',
+      '4': {}
+    },
+    {
+      '1': 'UpdateMam',
+      '2': '.settings.v1.UpdateMamRequest',
+      '3': '.settings.v1.UpdateMamResponse',
+      '4': {}
+    },
+    {
+      '1': 'UpdateDownloader',
+      '2': '.settings.v1.UpdateDownloaderRequest',
+      '3': '.settings.v1.UpdateDownloaderResponse',
+      '4': {}
+    },
+    {
+      '1': 'UpdateDir',
+      '2': '.settings.v1.UpdateDirRequest',
+      '3': '.settings.v1.UpdateDirResponse',
+      '4': {}
+    },
+    {
+      '1': 'ListDirectories',
+      '2': '.settings.v1.ListDirectoriesRequest',
+      '3': '.settings.v1.ListDirectoriesResponse',
+      '4': {}
+    },
+    {
+      '1': 'ListSupportedClients',
+      '2': '.settings.v1.ListSupportedClientsRequest',
+      '3': '.settings.v1.ListSupportedClientsResponse',
+      '4': {}
+    },
+    {
+      '1': 'TestClient',
+      '2': '.settings.v1.TorrentClient',
+      '3': '.settings.v1.TestTorrentResponse',
+      '4': {}
+    },
+    {
+      '1': 'GetMetadata',
+      '2': '.settings.v1.GetMetadataRequest',
+      '3': '.settings.v1.GetMetadataResponse',
+      '4': {}
+    },
+  ],
+};
+
+@$core.Deprecated('Use settingsServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>>
+    SettingsServiceBase$messageJson = {
+  '.settings.v1.LoadSettingsRequest': LoadSettingsRequest$json,
+  '.settings.v1.LoadSettingsResponse': LoadSettingsResponse$json,
+  '.settings.v1.GoudaConfig': GoudaConfig$json,
+  '.settings.v1.Directories': Directories$json,
+  '.settings.v1.Logger': Logger$json,
+  '.settings.v1.Downloader': Downloader$json,
+  '.settings.v1.UserPermissions': UserPermissions$json,
+  '.settings.v1.TorrentClient': TorrentClient$json,
+  '.settings.v1.UpdateSettingsRequest': UpdateSettingsRequest$json,
+  '.settings.v1.UpdateSettingsResponse': UpdateSettingsResponse$json,
+  '.settings.v1.UpdateMamRequest': UpdateMamRequest$json,
+  '.settings.v1.UpdateMamResponse': UpdateMamResponse$json,
+  '.settings.v1.UpdateDownloaderRequest': UpdateDownloaderRequest$json,
+  '.settings.v1.UpdateDownloaderResponse': UpdateDownloaderResponse$json,
+  '.settings.v1.UpdateDirRequest': UpdateDirRequest$json,
+  '.settings.v1.UpdateDirResponse': UpdateDirResponse$json,
+  '.settings.v1.ListDirectoriesRequest': ListDirectoriesRequest$json,
+  '.settings.v1.ListDirectoriesResponse': ListDirectoriesResponse$json,
+  '.settings.v1.ListSupportedClientsRequest': ListSupportedClientsRequest$json,
+  '.settings.v1.ListSupportedClientsResponse':
+      ListSupportedClientsResponse$json,
+  '.settings.v1.TestTorrentResponse': TestTorrentResponse$json,
+  '.settings.v1.GetMetadataRequest': GetMetadataRequest$json,
+  '.settings.v1.GetMetadataResponse': GetMetadataResponse$json,
+};
+
+/// Descriptor for `SettingsService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List settingsServiceDescriptor = $convert.base64Decode(
+    'Cg9TZXR0aW5nc1NlcnZpY2USVQoMTG9hZFNldHRpbmdzEiAuc2V0dGluZ3MudjEuTG9hZFNldH'
+    'RpbmdzUmVxdWVzdBohLnNldHRpbmdzLnYxLkxvYWRTZXR0aW5nc1Jlc3BvbnNlIgASWwoOVXBk'
+    'YXRlU2V0dGluZ3MSIi5zZXR0aW5ncy52MS5VcGRhdGVTZXR0aW5nc1JlcXVlc3QaIy5zZXR0aW'
+    '5ncy52MS5VcGRhdGVTZXR0aW5nc1Jlc3BvbnNlIgASTAoJVXBkYXRlTWFtEh0uc2V0dGluZ3Mu'
+    'djEuVXBkYXRlTWFtUmVxdWVzdBoeLnNldHRpbmdzLnYxLlVwZGF0ZU1hbVJlc3BvbnNlIgASYQ'
+    'oQVXBkYXRlRG93bmxvYWRlchIkLnNldHRpbmdzLnYxLlVwZGF0ZURvd25sb2FkZXJSZXF1ZXN0'
+    'GiUuc2V0dGluZ3MudjEuVXBkYXRlRG93bmxvYWRlclJlc3BvbnNlIgASTAoJVXBkYXRlRGlyEh'
+    '0uc2V0dGluZ3MudjEuVXBkYXRlRGlyUmVxdWVzdBoeLnNldHRpbmdzLnYxLlVwZGF0ZURpclJl'
+    'c3BvbnNlIgASXgoPTGlzdERpcmVjdG9yaWVzEiMuc2V0dGluZ3MudjEuTGlzdERpcmVjdG9yaW'
+    'VzUmVxdWVzdBokLnNldHRpbmdzLnYxLkxpc3REaXJlY3Rvcmllc1Jlc3BvbnNlIgASbQoUTGlz'
+    'dFN1cHBvcnRlZENsaWVudHMSKC5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1JlcX'
+    'Vlc3QaKS5zZXR0aW5ncy52MS5MaXN0U3VwcG9ydGVkQ2xpZW50c1Jlc3BvbnNlIgASTAoKVGVz'
+    'dENsaWVudBIaLnNldHRpbmdzLnYxLlRvcnJlbnRDbGllbnQaIC5zZXR0aW5ncy52MS5UZXN0VG'
+    '9ycmVudFJlc3BvbnNlIgASUgoLR2V0TWV0YWRhdGESHy5zZXR0aW5ncy52MS5HZXRNZXRhZGF0'
+    'YVJlcXVlc3QaIC5zZXR0aW5ncy52MS5HZXRNZXRhZGF0YVJlc3BvbnNlIgA=');

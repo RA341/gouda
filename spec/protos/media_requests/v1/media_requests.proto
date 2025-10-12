@@ -60,6 +60,12 @@ message AddMediaRequest {
 }
 message AddMediaResponse {}
 
+enum DownloadStatus {
+  Downloading = 0;
+  Error = 1;
+  Complete = 2;
+  Unknown = 3;
+}
 
 message Media {
   uint64 ID = 1;
@@ -70,7 +76,8 @@ message Media {
   string category = 6;
   uint64 mam_book_id = 7;
   string file_link = 12;
-  string status = 8;
+  DownloadStatus status = 8;
+  string statusMessage = 15;
   string torrent_id = 9;
   string torrent_file_location = 11;
   string createdAt = 13;

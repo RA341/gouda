@@ -57,7 +57,7 @@ tasks:
     desc: Generate and copy generated files to their respective destinations
     deps: [ geno ]
     cmds:
-      - task --parallel go dart web
+      - task --parallel go dart
 
   go:
     desc: Move generated Go files
@@ -78,15 +78,15 @@ tasks:
           SOURCE_PATTERN: '{{.GENERATED_DIR}}/dart/*'
       - coreutils rm -rf {{.GENERATED_DIR}}/dart
 
-  web:
-    desc: Move generated web files
-    cmds:
-      - echo "moving web files"
-      - task: _copy
-        vars:
-          TARGET_DIR: '{{.WEB_DIR}}'
-          SOURCE_PATTERN: '{{.GENERATED_DIR}}/web/*'
-      - coreutils rm -rf {{.GENERATED_DIR}}/web
+  #  web:
+  #    desc: Move generated web files
+  #    cmds:
+  #      - echo "moving web files"
+  #      - task: _copy
+  #        vars:
+  #          TARGET_DIR: '{{.WEB_DIR}}'
+  #          SOURCE_PATTERN: '{{.GENERATED_DIR}}/web/*'
+  #      - coreutils rm -rf {{.GENERATED_DIR}}/web
 
   _copy:
     internal: true
@@ -102,7 +102,7 @@ tasks:
     desc: Run an interactive shell inside the Docker container
     deps: [ build ]
     cmds:
-      - docker run --rm --name gouda_grpc_shell -v "{{.WORKING_DIR}}:/workspace" -it protobuilder:latest /bin/bash
+      - docker run --rm --name gouda_grpc_shell -v "{{.WORKING_DIR}}:/workspace" -it {{ .IMAGE_NAME}} /bin/bash
 
   bpsh:
     desc: Build and push via Makefile

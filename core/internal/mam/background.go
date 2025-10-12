@@ -60,6 +60,8 @@ func (s *BackgroundService) autoBuy() {
 			}
 		}
 
+		log.Info().Int("gb", gbToBuy).Msg("buying bonus")
+
 		bonus, err := s.srv.BuyBonus(uint(gbToBuy))
 		if err != nil {
 			log.Warn().Err(err).Msg("unable buy bonus")

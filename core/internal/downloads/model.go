@@ -65,11 +65,24 @@ func (r *Media) ToProto() *v1.Media {
 		Category:            r.Category,
 		MamBookId:           r.MAMBookID,
 		FileLink:            r.FinalFilePath,
-		Status:              string(r.Status),
+		Status:              ToGrpcDownloadStatus(r.Status),
 		TorrentId:           r.TorrentClientId,
 		TorrentFileLocation: r.TorrentFilePath,
 		CreatedAt:           r.CreatedAt.Format(time.RFC3339),
 		UpdatedAt:           r.UpdatedAt.Format(time.RFC3339),
+	}
+}
+
+func ToGrpcDownloadStatus(status MediaStatus) v1.DownloadStatus {
+	switch status {
+	case Downloading:
+		return v1.DownloadStatus_Downloading
+	case Complete:
+		return v1.DownloadStatus_Complete
+	case Error:
+		return v1.DownloadStatus_Error
+	default:
+		return v1.DownloadStatus_Unknown
 	}
 }
 

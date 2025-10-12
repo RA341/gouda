@@ -3,10 +3,12 @@ package clients
 import (
 	"context"
 	"fmt"
+	"testing"
+
+	"github.com/RA341/gouda/internal/server_config"
 	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"testing"
 )
 
 const (
@@ -31,7 +33,7 @@ func TestDelugeClient(t *testing.T) {
 	//delugeUrl = "localhost:" + delugeWebuiPort
 	t.Log("delugeUrl: ", delugeUrl)
 
-	client, err := NewDelugeClient(&TorrentClient{
+	client, err := NewDelugeClient(&server_config.TorrentClient{
 		Host:     delugeUrl,
 		Protocol: protocol,
 		User:     delugeTestUser,
