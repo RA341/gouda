@@ -11,7 +11,7 @@ on:
       - core/**
       - Dockerfile
       - .github/workflows/dev-docker.yml
-      - .github/workflows/action-gouda-docker.yml
+      - action-docker.yml
 
 permissions:
   contents: write   # To checkout the repository
@@ -20,7 +20,7 @@ permissions:
 jobs:
   build-docker:
     name: Build docker dev build
-    uses: ./.github/workflows/action-gouda-docker.yml
+    uses: .github/workflows/action-docker.yml
     with:
       source_branch: ${{ github.ref_name }}
     secrets: inherit

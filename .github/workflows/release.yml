@@ -8,8 +8,8 @@ on:
     paths:
       - brie/**
       - core/**
-      - .github/workflows/action-*
       - release-build.yml
+      - .github/workflows/action-*
       - .github/workflows/release.yml
       - Dockerfile
       - .dockerignore
