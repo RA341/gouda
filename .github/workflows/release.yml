@@ -55,6 +55,7 @@ jobs:
       - name: Trigger CircleCI Pipeline
         env:
           CIRCLECI_TOKEN: ${{ secrets.CIRCLE_CI_TOKEN }}
+          CIRCLE_CI_ID: ${{ secrets.CIRCLE_CI_ID }}
         if: ${{ steps.get_tag.outputs.tag != '' }}
         run: |
           VERSION_TAG="${{ steps.get_tag.outputs.tag }}"
@@ -72,10 +73,11 @@ jobs:
           echo "  Is Latest: $IS_LATEST"
 
           # Trigger CircleCI pipeline
-          curl -X POST https://circleci.com/api/v2/project/gh/${{ github.repository }}/pipeline \
+          curl -X POST https://circleci.com/api/v2/project/gh/gouda/pipeline \
             -H "Circle-Token: $CIRCLECI_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
+              "definition_id": "${{ CIRCLE_CI_ID }}",
               "parameters": {
                 "version_tag": "'"$VERSION_TAG"'",
                 "is_latest": '"$IS_LATEST"',
