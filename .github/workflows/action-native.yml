@@ -1,4 +1,4 @@
-name: Build gouda native binaries
+name: Action Gouda native
 
 on:
   workflow_call:

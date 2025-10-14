@@ -20,9 +20,17 @@ tasks:
     status:
       - test -d {{ .BUILD_DIR }}
 
+  brie-dep:
+    dir: '{{ .BRIE_DIR }}'
+    label: 'brie-dep'
+    cmds:
+      - flutter pub get
+
   brie:*:
     dir: '{{ .BRIE_DIR }}'
     label: 'brie-build-{{index .MATCH 0}}'
+    deps:
+      - brie-dep
     vars:
       TARGET: '{{index .MATCH 0}}'
       # Define conditional arguments based on target
@@ -34,17 +42,20 @@ tasks:
         {{- else if eq .TARGET "ios" }} 
         {{- else if eq .TARGET "web" }} --wasm 
         {{- end }}
-
     requires: # validate TARGET
       vars:
         - name: TARGET
           enum: [ windows, macos, linux, apk, ios, web ]
-
     sources:
       - lib/**/*.dart
-
     cmds:
       - flutter build {{ .TARGET }} {{ .BUILD_ARGS }}
+
+  go-dep:
+    dir: '{{ .CORE_DIR }}'
+    label: 'brie-dep'
+    cmds:
+      - go mod download
 
   core:*:
     label: 'go-build-{{index .MATCH 0}}'
@@ -86,6 +97,7 @@ tasks:
         -X {{ .INFO_PACKAGE }}.BuildDate={{ .BUILD_DATE }}
         -X {{ .INFO_PACKAGE }}.Branch={{ .BRANCH }}
     deps:
+      - go-dep
       - brie:web
       - go:build-out
     cmds:

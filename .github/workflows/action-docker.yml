@@ -1,4 +1,4 @@
-name: Gouda Docker build and release
+name: Action Gouda Docker
 
 on:
   workflow_call:

@@ -145,3 +145,10 @@ tasks:
         -p 17693:17693/udp
         -p 58846:58846
         linuxserver/deluge:latest
+
+  dklx:
+    vars:
+      LINUX: gouda:linux
+    cmds:
+      - docker build -f Dockerfile.linux.build  . -t {{ .LINUX }}
+      - docker run --rm -v ./:/workspace -it {{ .LINUX }} /bin/bash
