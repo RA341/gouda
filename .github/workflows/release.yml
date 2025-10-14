@@ -55,7 +55,7 @@ jobs:
       - name: Trigger CircleCI Pipeline
         env:
           CIRCLECI_TOKEN: ${{ secrets.CIRCLE_CI_TOKEN }}
-          CIRCLE_ID: ${{ secrets.CIRCLE_CI_ID }}
+          CIRCLE_PROJECT_ID: ${{ secrets.CIRCLE_SLUG }}
         if: ${{ steps.get_tag.outputs.tag != '' }}
         run: |
           VERSION_TAG="${{ steps.get_tag.outputs.tag }}"
@@ -67,20 +67,26 @@ jobs:
             IS_LATEST="false"
           fi
 
-          echo "Triggering CircleCI pipeline with:"
-          echo "  Version: $VERSION_TAG"
-          echo "  Branch: $SOURCE_BRANCH"
-          echo "  Is Latest: $IS_LATEST"
-
-          # Trigger CircleCI pipeline
-          curl -X POST https://circleci.com/api/v2/project/gh/gouda/pipeline \
+          # Trigger CircleCI pipeline using project ID
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST \
+            "https://circleci.com/api/v2/project/$CIRCLE_PROJECT_ID/pipeline" \
             -H "Circle-Token: $CIRCLECI_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
-              "definition_id": "${{ CIRCLE_ID }}",
               "parameters": {
                 "version_tag": "'"$VERSION_TAG"'",
                 "is_latest": '"$IS_LATEST"',
                 "source_branch": "'"$SOURCE_BRANCH"'"
               }
-            }'
+            }')
+
+          echo "Response:"
+          echo "$RESPONSE"
+
+          HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
+          if [ "$HTTP_STATUS" = "201" ] || [ "$HTTP_STATUS" = "200" ]; then
+            echo "✅ Pipeline triggered successfully!"
+          else
+            echo "❌ Failed to trigger pipeline. Status: $HTTP_STATUS"
+            exit 1
+          fi
