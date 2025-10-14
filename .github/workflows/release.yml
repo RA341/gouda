@@ -56,6 +56,7 @@ jobs:
         env:
           CIRCLECI_TOKEN: ${{ secrets.CIRCLE_CI_TOKEN }}
           CIRCLE_PROJECT_ID: ${{ secrets.CIRCLE_SLUG }}
+          CIRCLE_DEFINITION: ${{ secrets.CIRCLE_DEFINITION }}
         if: ${{ steps.get_tag.outputs.tag != '' }}
         run: |
           VERSION_TAG="${{ steps.get_tag.outputs.tag }}"
@@ -69,10 +70,17 @@ jobs:
 
           # Trigger CircleCI pipeline using project ID
           RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST \
-            "https://circleci.com/api/v2/project/$CIRCLE_PROJECT_ID/pipeline" \
+            "https://circleci.com/api/v2/project/$CIRCLE_PROJECT_ID/pipeline/run" \
             -H "Circle-Token: $CIRCLECI_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
+              "definition_id": "'"$CIRCLE_DEFINITION"'",
+              "config": {
+                "branch": "main"
+              },
+              "checkout": {
+                "branch": "'"$SOURCE_BRANCH"'"
+              },
               "parameters": {
                 "version_tag": "'"$VERSION_TAG"'",
                 "is_latest": '"$IS_LATEST"',
