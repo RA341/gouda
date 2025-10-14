@@ -113,11 +113,11 @@ jobs:
             IMAGE_NAME=${IMAGE_BASE}:intermediate-amd64
             
             docker build \
+              --platform linux/amd64 \
               --build-arg VERSION=$VERSION_ARG \
               --build-arg COMMIT_INFO=$COMMIT_INFO \
               --build-arg BRANCH=$BRANCH_ARG \
               -t ${IMAGE_NAME} \
-              --load \
               .
             
             echo "export AMD64_IMAGE=${IMAGE_NAME}" >> $BASH_ENV
@@ -142,11 +142,11 @@ jobs:
             IMAGE_NAME=${IMAGE_BASE}:intermediate-arm64
             
             docker build \
+              --platform linux/arm64 \
               --build-arg VERSION=$VERSION_ARG \
               --build-arg COMMIT_INFO=$COMMIT_INFO \
               --build-arg BRANCH=$BRANCH_ARG \
               -t ${IMAGE_NAME} \
-              --load \
               .
             
             echo "export ARM64_IMAGE=${IMAGE_NAME}" >> $BASH_ENV
