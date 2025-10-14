@@ -13,7 +13,7 @@ jobs:
             IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda:build-linux
             docker build --platform linux/amd64 -t ${IMAGE_NAME}:${CIRCLE_SHA1}-amd64 .
       - run:
-          name: "Login to GitHub Container Registry"
+          name: "Login to GitHub test Registry"
           command: echo "$GITHUB_TOKEN" | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
       - run:
           name: "Push AMD64 Image"
