@@ -1,0 +1,227 @@
+version: 2.1
+
+# Reusable parameters that can be passed to the workflow
+parameters:
+  version_tag:
+    type: string
+    default: ""
+    description: "The primary version identifier (e.g., v1.2.3, a branch name like main, or a descriptive tag)"
+  is_latest:
+    type: boolean
+    default: false
+    description: "Boolean to indicate if this tag should also be pushed as 'latest'"
+  source_branch:
+    type: string
+    default: ""
+    description: "The name of the source Git branch (e.g., main, develop, feature/xyz)"
+
+# Reusable commands
+commands:
+  setup-docker-buildx:
+    steps:
+      - run:
+          name: "Install Docker Buildx"
+          command: |
+            mkdir -p ~/.docker/cli-plugins
+            curl -Lo ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.12.0/buildx-v0.12.0.linux-amd64
+            chmod +x ~/.docker/cli-plugins/docker-buildx
+            docker buildx version
+            docker buildx create --use --name multiarch-builder || docker buildx use multiarch-builder
+
+  login-to-ghcr:
+    steps:
+      - run:
+          name: "Login to GitHub Container Registry"
+          command: echo "$GITHUB_TOKEN" | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
+
+  generate-image-metadata:
+    steps:
+      - run:
+          name: "Generate Docker image tags and set environment variables"
+          command: |
+            # Set base image name - using 'gouda' as the image name
+            echo 'export IMAGE_BASE=ghcr.io/$GITHUB_USERNAME/gouda' >> $BASH_ENV
+            
+            # Initialize tags array
+            TAGS=""
+            
+            # Add version_tag if provided
+            if [ -n "<< pipeline.parameters.version_tag >>" ]; then
+              VERSION="<< pipeline.parameters.version_tag >>"
+            
+              # Extract semver tags if version_tag looks like semver (v1.2.3 or 1.2.3)
+              if [[ $VERSION =~ ^v?([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+                MAJOR="${BASH_REMATCH[1]}"
+                MINOR="${BASH_REMATCH[2]}"
+                PATCH="${BASH_REMATCH[3]}"
+            
+                # Add full version, major.minor, and major tags
+                TAGS="$TAGS v$MAJOR.$MINOR.$PATCH v$MAJOR.$MINOR v$MAJOR"
+              else
+                # If not semver, just add the version tag as-is
+                TAGS="$TAGS $VERSION"
+              fi
+            fi
+            
+            # Add source_branch if provided
+            if [ -n "<< pipeline.parameters.source_branch >>" ]; then
+              BRANCH="<< pipeline.parameters.source_branch >>"
+              TAGS="$TAGS $BRANCH"
+            else
+              # Use CircleCI's branch if source_branch not provided
+              if [ -n "$CIRCLE_BRANCH" ]; then
+                TAGS="$TAGS $CIRCLE_BRANCH"
+              fi
+            fi
+            
+            # Add 'latest' tag if is_latest is true
+            if [ "<< pipeline.parameters.is_latest >>" = "true" ]; then
+              TAGS="$TAGS latest"
+            fi
+            
+            # Export tags
+            echo "export IMAGE_TAGS=\"$TAGS\"" >> $BASH_ENV
+            
+            # Generate full image names with tags
+            FULL_TAGS=""
+            for tag in $TAGS; do
+              FULL_TAGS="$FULL_TAGS -t ghcr.io/$GITHUB_USERNAME/gouda:$tag"
+            done
+            echo "export DOCKER_TAGS=\"$FULL_TAGS\"" >> $BASH_ENV
+            
+            # Set build args
+            VERSION_ARG="<< pipeline.parameters.version_tag >>"
+            if [ -z "$VERSION_ARG" ]; then
+              VERSION_ARG="$CIRCLE_SHA1"
+            fi
+            
+            BRANCH_ARG="<< pipeline.parameters.source_branch >>"
+            if [ -z "$BRANCH_ARG" ]; then
+              BRANCH_ARG="$CIRCLE_BRANCH"
+            fi
+            
+            echo "export VERSION_ARG=\"$VERSION_ARG\"" >> $BASH_ENV
+            echo "export BRANCH_ARG=\"$BRANCH_ARG\"" >> $BASH_ENV
+            echo "export COMMIT_INFO=\"$CIRCLE_SHA1\"" >> $BASH_ENV
+            
+            # Display generated tags
+            echo "Generated tags: $TAGS"
+            source $BASH_ENV
+
+jobs:
+  build-amd64:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: medium
+    steps:
+      - checkout
+      - setup-docker-buildx
+      - login-to-ghcr
+      - generate-image-metadata
+      - run:
+          name: "Build AMD64 Docker Image"
+          command: |
+            source $BASH_ENV
+            IMAGE_NAME=${IMAGE_BASE}:intermediate-amd64
+            
+            docker buildx build \
+              --platform linux/amd64 \
+              --build-arg VERSION=$VERSION_ARG \
+              --build-arg COMMIT_INFO=$COMMIT_INFO \
+              --build-arg BRANCH=$BRANCH_ARG \
+              -t ${IMAGE_NAME} \
+              --load \
+              .
+            
+            echo "export AMD64_IMAGE=${IMAGE_NAME}" >> $BASH_ENV
+      - run:
+          name: "Push AMD64 Image"
+          command: |
+            source $BASH_ENV
+            docker push ${AMD64_IMAGE}
+
+  build-arm64:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - setup-docker-buildx
+      - login-to-ghcr
+      - generate-image-metadata
+      - run:
+          name: "Build ARM64 Docker Image"
+          command: |
+            source $BASH_ENV
+            IMAGE_NAME=${IMAGE_BASE}:intermediate-arm64
+            
+            docker buildx build \
+              --platform linux/arm64 \
+              --build-arg VERSION=$VERSION_ARG \
+              --build-arg COMMIT_INFO=$COMMIT_INFO \
+              --build-arg BRANCH=$BRANCH_ARG \
+              -t ${IMAGE_NAME} \
+              --load \
+              .
+            
+            echo "export ARM64_IMAGE=${IMAGE_NAME}" >> $BASH_ENV
+      - run:
+          name: "Push ARM64 Image"
+          command: |
+            source $BASH_ENV
+            docker push ${ARM64_IMAGE}
+
+  create-manifest:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - login-to-ghcr
+      - generate-image-metadata
+      - run:
+          name: "Create and Push Multi-Arch Manifests"
+          command: |
+            source $BASH_ENV
+            
+            AMD64_IMAGE=${IMAGE_BASE}:intermediate-amd64
+            ARM64_IMAGE=${IMAGE_BASE}:intermediate-arm64
+            
+            # Create and push manifest for each tag
+            for tag in $IMAGE_TAGS; do
+              MANIFEST_IMAGE=${IMAGE_BASE}:${tag}
+              echo "Creating manifest for: $MANIFEST_IMAGE"
+            
+              docker manifest create ${MANIFEST_IMAGE} \
+                ${AMD64_IMAGE} \
+                ${ARM64_IMAGE}
+            
+              docker manifest push ${MANIFEST_IMAGE}
+            done
+      - run:
+          name: "Echo image details"
+          command: |
+            source $BASH_ENV
+            echo "🚀 Docker image build and push complete for: ${IMAGE_BASE}"
+            echo "🏷️ Tags created:"
+            for tag in $IMAGE_TAGS; do
+              echo "  - ${IMAGE_BASE}:${tag}"
+            done
+            echo "📋 Build arguments:"
+            echo "  - VERSION: $VERSION_ARG"
+            echo "  - COMMIT_INFO: $COMMIT_INFO"
+            echo "  - BRANCH: $BRANCH_ARG"
+
+workflows:
+  build-workflow:
+    jobs:
+      - build-amd64:
+          context:
+            - docker-credentials  # Create a context with GITHUB_TOKEN and GITHUB_USERNAME
+      - build-arm64:
+          context:
+            - docker-credentials
+      - create-manifest:
+          context:
+            - docker-credentials
+          requires:
+            - build-amd64
+            - build-arm64

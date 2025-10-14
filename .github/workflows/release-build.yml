@@ -15,14 +15,14 @@ permissions:
   packages: write
 
 jobs:
-  build-docker:
-    name: Gouda Docker Build
-    uses: ./.github/workflows/action-docker.yml
-    with:
-      version_tag: ${{ github.event.inputs.tag_name }}
-      is_latest: true
-      source_branch: ${{ github.ref_name }}
-    secrets: inherit
+  #  build-docker:
+  #    name: Gouda Docker Build
+  #    uses: ./.github/workflows/action-docker.yml
+  #    with:
+  #      version_tag: ${{ github.event.inputs.tag_name }}
+  #      is_latest: true
+  #      source_branch: ${{ github.ref_name }}
+  #    secrets: inherit
 
   build_and_release_linux:
     name: Gouda Linux Build

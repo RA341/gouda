@@ -52,13 +52,33 @@ jobs:
         id: get_tag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
-      - name: Trigger docker.yml workflow
+      - name: Trigger CircleCI Pipeline
         env:
-          GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+          CIRCLECI_TOKEN: ${{ secrets.CIRCLE_CI_TOKEN }}
         if: ${{ steps.get_tag.outputs.tag != '' }}
-        # ref_name will be release
         run: |
-          gh workflow run release-build.yml \
-            --repo ${{ github.repository }} \
-            --ref ${{ github.ref_name }} \
-            -f tag_name=${{ steps.get_tag.outputs.tag }}
+          VERSION_TAG="${{ steps.get_tag.outputs.tag }}"
+          SOURCE_BRANCH="${{ github.ref_name }}"
+
+          if [ "$SOURCE_BRANCH" = "release" ]; then
+            IS_LATEST="true"
+          else
+            IS_LATEST="false"
+          fi
+
+          echo "Triggering CircleCI pipeline with:"
+          echo "  Version: $VERSION_TAG"
+          echo "  Branch: $SOURCE_BRANCH"
+          echo "  Is Latest: $IS_LATEST"
+
+          # Trigger CircleCI pipeline
+          curl -X POST https://circleci.com/api/v2/project/gh/${{ github.repository }}/pipeline \
+            -H "Circle-Token: $CIRCLECI_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "parameters": {
+                "version_tag": "'"$VERSION_TAG"'",
+                "is_latest": '"$IS_LATEST"',
+                "source_branch": "'"$SOURCE_BRANCH"'"
+              }
+            }'
