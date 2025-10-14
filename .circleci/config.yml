@@ -10,16 +10,16 @@ jobs:
       - run:
           name: "Build AMD64 Docker Image"
           command: |
-            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda:build-linux
-            docker build -f Dockerfile.linux.build --platform linux/amd64 -t ${IMAGE_NAME}:${CIRCLE_SHA1}-amd64 .
+            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda:build-linux-${CIRCLE_SHA1}-amd64
+            docker build -f Dockerfile.linux.build --platform linux/amd64 -t ${IMAGE_NAME} .
       - run:
           name: "Login to GitHub Container Registry"
           command: echo "$GITHUB_TOKEN" | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
       - run:
           name: "Push AMD64 Image"
           command: |
-            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda:build-linux
-            docker push ${IMAGE_NAME}:${CIRCLE_SHA1}-amd64
+            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda:build-linux-${CIRCLE_SHA1}-amd64
+            docker push ${IMAGE_NAME}
 
   build-arm64:
     machine:
@@ -30,16 +30,16 @@ jobs:
       - run:
           name: "Build ARM64 Docker Image"
           command: |
-            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda
-            docker build -f Dockerfile.linux.build --platform linux/arm64 -t ${IMAGE_NAME}:build-linux-${CIRCLE_SHA1}-arm64 .
+            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda:build-linux-${CIRCLE_SHA1}-arm64
+            docker build -f Dockerfile.linux.build --platform linux/arm64 -t ${IMAGE_NAME} .
       - run:
           name: "Login to GitHub Container Registry"
           command: echo "$GITHUB_TOKEN" | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
       - run:
           name: "Push ARM64 Image"
           command: |
-            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda
-            docker push ${IMAGE_NAME}:build-linux-${CIRCLE_SHA1}-arm64
+            IMAGE_NAME=ghcr.io/${GITHUB_USERNAME}/gouda:build-linux-${CIRCLE_SHA1}-arm64
+            docker push ${IMAGE_NAME}
 
   create-manifest:
     docker:
