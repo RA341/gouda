@@ -39,16 +39,12 @@ commands:
             if [ -n "<< pipeline.parameters.version_tag >>" ]; then
               VERSION="<< pipeline.parameters.version_tag >>"
 
-              # Extract flavor if present (e.g., v1.2.3-beta -> beta)
-              if [[ $VERSION =~ -([a-zA-Z0-9]+)$ ]]; then
-                FLAVOR="${BASH_REMATCH[1]}"
-              fi
-
-              # Extract semver tags if version_tag looks like semver (v1.2.3 or 1.2.3, optionally with -flavor)
-              if [[ $VERSION =~ ^v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z0-9]+)?$ ]]; then
+              # Extract semver and flavor (e.g., v1.2.3-beta)
+              if [[ $VERSION =~ ^v?([0-9]+)\.([0-9]+)\.([0-9]+)(-(.+))?$ ]]; then
                 MAJOR="${BASH_REMATCH[1]}"
                 MINOR="${BASH_REMATCH[2]}"
                 PATCH="${BASH_REMATCH[3]}"
+                FLAVOR="${BASH_REMATCH[5]}"  # Capture group 5 contains the flavor without the dash
 
                 # Add full version, major.minor, and major tags
                 if [ -n "$FLAVOR" ]; then
@@ -62,32 +58,20 @@ commands:
               fi
             fi
 
-            # Add source_branch if provided
+            # Add source_branch if provided (NO FLAVOR)
             if [ -n "<< pipeline.parameters.source_branch >>" ]; then
               BRANCH="<< pipeline.parameters.source_branch >>"
-              if [ -n "$FLAVOR" ]; then
-                TAGS="$TAGS $BRANCH-$FLAVOR"
-              else
-                TAGS="$TAGS $BRANCH"
-              fi
+              TAGS="$TAGS $BRANCH"
             else
-              # Use CircleCI's branch if source_branch not provided
+              # Use CircleCI's branch if source_branch not provided (NO FLAVOR)
               if [ -n "$CIRCLE_BRANCH" ]; then
-                if [ -n "$FLAVOR" ]; then
-                  TAGS="$TAGS $CIRCLE_BRANCH-$FLAVOR"
-                else
-                  TAGS="$TAGS $CIRCLE_BRANCH"
-                fi
+                TAGS="$TAGS $CIRCLE_BRANCH"
               fi
             fi
 
-            # Add 'latest' tag if is_latest is true
+            # Add 'latest' tag if is_latest is true (NO FLAVOR)
             if [ "<< pipeline.parameters.is_latest >>" = "true" ]; then
-              if [ -n "$FLAVOR" ]; then
-                TAGS="$TAGS latest-$FLAVOR"
-              else
-                TAGS="$TAGS latest"
-              fi
+              TAGS="$TAGS latest"
             fi
 
             # Export tags
@@ -118,7 +102,6 @@ commands:
             # Display generated tags
             echo "Generated tags: $TAGS"
             source $BASH_ENV
-
 jobs:
   build-amd64:
     machine:
