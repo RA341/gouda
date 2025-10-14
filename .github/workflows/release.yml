@@ -55,7 +55,7 @@ jobs:
       - name: Trigger CircleCI Pipeline
         env:
           CIRCLECI_TOKEN: ${{ secrets.CIRCLE_CI_TOKEN }}
-          CIRCLE_CI_ID: ${{ secrets.CIRCLE_CI_ID }}
+          CIRCLE_ID: ${{ secrets.CIRCLE_CI_ID }}
         if: ${{ steps.get_tag.outputs.tag != '' }}
         run: |
           VERSION_TAG="${{ steps.get_tag.outputs.tag }}"
@@ -77,7 +77,7 @@ jobs:
             -H "Circle-Token: $CIRCLECI_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
-              "definition_id": "${{ CIRCLE_CI_ID }}",
+              "definition_id": "${{ CIRCLE_ID }}",
               "parameters": {
                 "version_tag": "'"$VERSION_TAG"'",
                 "is_latest": '"$IS_LATEST"',
