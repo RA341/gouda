@@ -40,7 +40,7 @@ RUN go build -ldflags "-s -w \
              -X ${INFO_PACKAGE}.Branch=${BRANCH}" \
     -o gouda "./cmd/${TARGET}"
 
-FROM alpine:latest AS main
+FROM alpine:latest
 
 ENV GOUDA_LOG_LEVEL=info
 
