@@ -11,6 +11,8 @@ install_scripts
 brie/.dart_tool
 brie/build
 brie/.idea
+core/.build
+brie/**/ephemeral
 
 ## extension
 
@@ -68,3 +70,4 @@ brie/android/app/release
 
 /**/.build
 core/**/web
+

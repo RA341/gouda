@@ -1,4 +1,17 @@
-FROM ghcr.io/ra341/docker-flutter-web:latest AS flutter_builder
+FROM debian:13-slim AS flutter_builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    unzip \
+    xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV FLUTTER_VERSION=3.35.4
+RUN git clone https://github.com/flutter/flutter.git -b stable /flutter
+ENV PATH="/flutter/bin:${PATH}"
 
 WORKDIR /web/
 
