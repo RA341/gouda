@@ -31,18 +31,21 @@ commands:
             # Set base image name - using 'gouda' as the image name
             echo 'export IMAGE_BASE=ghcr.io/$GITHUB_USERNAME/gouda' >> $BASH_ENV
 
-            # Get flavor parameter
-            FLAVOR="<< pipeline.parameters.flavor >>"
-
             # Initialize tags array
             TAGS=""
+            FLAVOR=""
 
             # Add version_tag if provided
             if [ -n "<< pipeline.parameters.version_tag >>" ]; then
               VERSION="<< pipeline.parameters.version_tag >>"
 
-              # Extract semver tags if version_tag looks like semver (v1.2.3 or 1.2.3)
-              if [[ $VERSION =~ ^v?([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+              # Extract flavor if present (e.g., v1.2.3-beta -> beta)
+              if [[ $VERSION =~ -([a-zA-Z0-9]+)$ ]]; then
+                FLAVOR="${BASH_REMATCH[1]}"
+              fi
+
+              # Extract semver tags if version_tag looks like semver (v1.2.3 or 1.2.3, optionally with -flavor)
+              if [[ $VERSION =~ ^v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[a-zA-Z0-9]+)?$ ]]; then
                 MAJOR="${BASH_REMATCH[1]}"
                 MINOR="${BASH_REMATCH[2]}"
                 PATCH="${BASH_REMATCH[3]}"
@@ -55,11 +58,7 @@ commands:
                 fi
               else
                 # If not semver, just add the version tag as-is
-                if [ -n "$FLAVOR" ]; then
-                  TAGS="$TAGS $VERSION-$FLAVOR"
-                else
-                  TAGS="$TAGS $VERSION"
-                fi
+                TAGS="$TAGS $VERSION"
               fi
             fi
 
@@ -81,7 +80,7 @@ commands:
                 fi
               fi
             fi
-            
+
             # Add 'latest' tag if is_latest is true
             if [ "<< pipeline.parameters.is_latest >>" = "true" ]; then
               if [ -n "$FLAVOR" ]; then
@@ -90,32 +89,32 @@ commands:
                 TAGS="$TAGS latest"
               fi
             fi
-            
+
             # Export tags
             echo "export IMAGE_TAGS=\"$TAGS\"" >> $BASH_ENV
-            
+
             # Generate full image names with tags
             FULL_TAGS=""
             for tag in $TAGS; do
               FULL_TAGS="$FULL_TAGS -t ghcr.io/$GITHUB_USERNAME/gouda:$tag"
             done
             echo "export DOCKER_TAGS=\"$FULL_TAGS\"" >> $BASH_ENV
-            
+
             # Set build args
             VERSION_ARG="<< pipeline.parameters.version_tag >>"
             if [ -z "$VERSION_ARG" ]; then
               VERSION_ARG="$CIRCLE_SHA1"
             fi
-            
+
             BRANCH_ARG="<< pipeline.parameters.source_branch >>"
             if [ -z "$BRANCH_ARG" ]; then
               BRANCH_ARG="$CIRCLE_BRANCH"
             fi
-            
+
             echo "export VERSION_ARG=\"$VERSION_ARG\"" >> $BASH_ENV
             echo "export BRANCH_ARG=\"$BRANCH_ARG\"" >> $BASH_ENV
             echo "export COMMIT_INFO=\"$CIRCLE_SHA1\"" >> $BASH_ENV
-            
+
             # Display generated tags
             echo "Generated tags: $TAGS"
             source $BASH_ENV
