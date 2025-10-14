@@ -30,42 +30,65 @@ commands:
           command: |
             # Set base image name - using 'gouda' as the image name
             echo 'export IMAGE_BASE=ghcr.io/$GITHUB_USERNAME/gouda' >> $BASH_ENV
-            
+
+            # Get flavor parameter
+            FLAVOR="<< pipeline.parameters.flavor >>"
+
             # Initialize tags array
             TAGS=""
-            
+
             # Add version_tag if provided
             if [ -n "<< pipeline.parameters.version_tag >>" ]; then
               VERSION="<< pipeline.parameters.version_tag >>"
-            
+
               # Extract semver tags if version_tag looks like semver (v1.2.3 or 1.2.3)
               if [[ $VERSION =~ ^v?([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
                 MAJOR="${BASH_REMATCH[1]}"
                 MINOR="${BASH_REMATCH[2]}"
                 PATCH="${BASH_REMATCH[3]}"
-            
+
                 # Add full version, major.minor, and major tags
-                TAGS="$TAGS v$MAJOR.$MINOR.$PATCH v$MAJOR.$MINOR v$MAJOR"
+                if [ -n "$FLAVOR" ]; then
+                  TAGS="$TAGS v$MAJOR.$MINOR.$PATCH-$FLAVOR v$MAJOR.$MINOR-$FLAVOR v$MAJOR-$FLAVOR"
+                else
+                  TAGS="$TAGS v$MAJOR.$MINOR.$PATCH v$MAJOR.$MINOR v$MAJOR"
+                fi
               else
                 # If not semver, just add the version tag as-is
-                TAGS="$TAGS $VERSION"
+                if [ -n "$FLAVOR" ]; then
+                  TAGS="$TAGS $VERSION-$FLAVOR"
+                else
+                  TAGS="$TAGS $VERSION"
+                fi
               fi
             fi
-            
+
             # Add source_branch if provided
             if [ -n "<< pipeline.parameters.source_branch >>" ]; then
               BRANCH="<< pipeline.parameters.source_branch >>"
-              TAGS="$TAGS $BRANCH"
+              if [ -n "$FLAVOR" ]; then
+                TAGS="$TAGS $BRANCH-$FLAVOR"
+              else
+                TAGS="$TAGS $BRANCH"
+              fi
             else
               # Use CircleCI's branch if source_branch not provided
               if [ -n "$CIRCLE_BRANCH" ]; then
-                TAGS="$TAGS $CIRCLE_BRANCH"
+                if [ -n "$FLAVOR" ]; then
+                  TAGS="$TAGS $CIRCLE_BRANCH-$FLAVOR"
+                else
+                  TAGS="$TAGS $CIRCLE_BRANCH"
+                fi
               fi
             fi
             
             # Add 'latest' tag if is_latest is true
             if [ "<< pipeline.parameters.is_latest >>" = "true" ]; then
-              TAGS="$TAGS latest"
+              if [ -n "$FLAVOR" ]; then
+                TAGS="$TAGS latest-$FLAVOR"
+              else
+                TAGS="$TAGS latest"
+              fi
             fi
             
             # Export tags
