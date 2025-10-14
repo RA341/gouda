@@ -17,17 +17,6 @@ parameters:
 
 # Reusable commands
 commands:
-  setup-docker-buildx:
-    steps:
-      - run:
-          name: "Install Docker Buildx"
-          command: |
-            mkdir -p ~/.docker/cli-plugins
-            curl -Lo ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.12.0/buildx-v0.12.0.linux-amd64
-            chmod +x ~/.docker/cli-plugins/docker-buildx
-            docker buildx version
-            docker buildx create --use --name multiarch-builder || docker buildx use multiarch-builder
-
   login-to-ghcr:
     steps:
       - run:
@@ -115,7 +104,6 @@ jobs:
     resource_class: medium
     steps:
       - checkout
-      - setup-docker-buildx
       - login-to-ghcr
       - generate-image-metadata
       - run:
@@ -124,8 +112,7 @@ jobs:
             source $BASH_ENV
             IMAGE_NAME=${IMAGE_BASE}:intermediate-amd64
             
-            docker buildx build \
-              --platform linux/amd64 \
+            docker build \
               --build-arg VERSION=$VERSION_ARG \
               --build-arg COMMIT_INFO=$COMMIT_INFO \
               --build-arg BRANCH=$BRANCH_ARG \
@@ -146,7 +133,6 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
-      - setup-docker-buildx
       - login-to-ghcr
       - generate-image-metadata
       - run:
@@ -155,8 +141,7 @@ jobs:
             source $BASH_ENV
             IMAGE_NAME=${IMAGE_BASE}:intermediate-arm64
             
-            docker buildx build \
-              --platform linux/arm64 \
+            docker build \
               --build-arg VERSION=$VERSION_ARG \
               --build-arg COMMIT_INFO=$COMMIT_INFO \
               --build-arg BRANCH=$BRANCH_ARG \
