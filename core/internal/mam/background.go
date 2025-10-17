@@ -49,7 +49,6 @@ func (s *BackgroundService) autoBuy() {
 		} else {
 			log.Info().Any("vip", vip).Msg("bought vip weeks")
 		}
-
 	}
 
 	if s.srv.provider().AutoBuyBonus {
@@ -57,6 +56,11 @@ func (s *BackgroundService) autoBuy() {
 		if vip != nil {
 			if vip.SeedBonus > MinPointsToKeep {
 				gbToBuy = int((vip.SeedBonus - MinPointsToKeep) / PointsPerGB)
+				// reduce by safeMargin incase we are at the edge
+				safeMargin := 1
+				if gbToBuy > safeMargin {
+					gbToBuy -= safeMargin
+				}
 			}
 		}
 

@@ -24,11 +24,13 @@ type Service struct {
 	client   func() *resty.Client
 	provider ApiKeyProvider
 }
-type ApiKeyProvider func() sc.MamConfig
+type ApiKeyProvider func() *sc.MamConfig
+
+type LoggerConfig func() *sc.Logger
 
 // NewService creates a new instance of the MAM service.
-func NewService(provider ApiKeyProvider) *Service {
-	client := setupClient(provider)
+func NewService(provider ApiKeyProvider, logger LoggerConfig) *Service {
+	client := setupClient(provider, logger)
 	s := &Service{
 		client:   client,
 		provider: provider,
@@ -40,10 +42,16 @@ func NewService(provider ApiKeyProvider) *Service {
 }
 
 func NewMamValidator(token string) error {
-	provider := func() sc.MamConfig {
-		return sc.MamConfig{MamToken: token}
+	provider := func() *sc.MamConfig {
+		return &sc.MamConfig{MamToken: token}
 	}
-	client := setupClient(provider)
+	logger := func() *sc.Logger {
+		return &sc.Logger{
+			Verbose: false,
+		}
+	}
+
+	client := setupClient(provider, logger)
 	service := Service{
 		client:   client,
 		provider: provider,
@@ -613,7 +621,7 @@ func extractFormatFromTags(tags string) string {
 
 const baseURL = "https://www.myanonamouse.net"
 
-func setupClient(provider ApiKeyProvider) func() *resty.Client {
+func setupClient(provider ApiKeyProvider, logger LoggerConfig) func() *resty.Client {
 	return func() *resty.Client {
 		authCookie := &http.Cookie{
 			Name:  IDCookieKey,
@@ -626,6 +634,10 @@ func setupClient(provider ApiKeyProvider) func() *resty.Client {
 				fmt.Sprintf("gouda/%s (+https://github.com/RA341/gouda)", info.Version),
 			).
 			SetBaseURL(baseURL)
+
+		if logger().Verbose || info.IsDev() {
+			client.EnableDebug()
+		}
 
 		return client
 	}

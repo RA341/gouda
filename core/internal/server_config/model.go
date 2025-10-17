@@ -19,7 +19,7 @@ type GoudaConfig struct {
 	Mam            MamConfig       `yaml:"mam" config:""`
 }
 
-func (cfg *GoudaConfig) GetVal() *GoudaConfig {
+func (cfg *GoudaConfig) Load() *GoudaConfig {
 	cfg.RW.RLock()
 	defer cfg.RW.RUnlock()
 
