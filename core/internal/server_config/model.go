@@ -31,6 +31,7 @@ type MamConfig struct {
 	ServiceInterval string `yaml:"timeout" config:"flag=mst,env=MAM_ADMIN_INTERVAL,default=24h,usage=interval to run mam admin tasks"`
 	AutoBuyBonus    bool   `yaml:"autoBuyBonus" config:"flag=mab,env=MAM_AUTO_BUY_BONUS,default=false,usage=enable auto buy bonus points"`
 	AutoBuyVip      bool   `yaml:"autoBuyVip" config:"flag=mav,env=MAM_AUTO_BUY_VIP,default=false,usage=enable auto buy vip duration"`
+	MinPointsToKeep int    `yaml:"minPointsToKeep" config:"flag=minPoints,env=MAM_AUTOBUY_MIN_POINTS,default=2000,usage=Mimimum points to leave alone when gouda auto buys"`
 }
 
 func (d MamConfig) GetMamInterval(defaultTime time.Duration) time.Duration {
