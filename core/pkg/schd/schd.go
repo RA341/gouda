@@ -12,18 +12,21 @@ type Scheduler struct {
 	task     Task
 	interval time.Duration
 	// used to send cancel task loop
-	cancelChan chan interface{}
+	cancelChan chan struct{}
 	// used to initiate task
-	manualChan chan interface{}
+	manualChan chan struct{}
 }
 
+// NewScheduler task is expected to be a long-running function that will run in a go routine
 func NewScheduler(task Task, interval time.Duration) *Scheduler {
-	return &Scheduler{
+	s := &Scheduler{
 		task:       task,
 		interval:   interval,
-		cancelChan: make(chan interface{}),
-		manualChan: make(chan interface{}),
+		cancelChan: make(chan struct{}, 1),
+		manualChan: make(chan struct{}, 1),
 	}
+	go s.loop()
+	return s
 }
 
 // Manual Trigger the task manually
@@ -32,8 +35,9 @@ func NewScheduler(task Task, interval time.Duration) *Scheduler {
 func (s *Scheduler) Manual() {
 	select {
 	case s.manualChan <- struct{}{}:
+		log.Debug().Msg("starting task")
 	default:
-		log.Debug().Msg("updater is already running chill")
+		log.Debug().Msg("task is already running")
 	}
 }
 
@@ -60,9 +64,7 @@ func (s *Scheduler) Start() {
 }
 
 func (s *Scheduler) loop() {
-	interval := s.interval
-
-	ticker := time.NewTicker(interval)
+	ticker := time.NewTicker(s.interval)
 	defer ticker.Stop()
 	for {
 		select {
