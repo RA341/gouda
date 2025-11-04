@@ -48,6 +48,7 @@ func NewService(config ConfigProvider, logger LoggerConfig) *Service {
 		s.autoBuy,
 		interval,
 	)
+	s.scd.Manual()
 
 	return s
 }

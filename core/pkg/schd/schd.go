@@ -25,7 +25,7 @@ func NewScheduler(task Task, interval time.Duration) *Scheduler {
 		cancelChan: make(chan struct{}, 1),
 		manualChan: make(chan struct{}, 1),
 	}
-	go s.loop()
+	s.start()
 	return s
 }
 
@@ -44,7 +44,7 @@ func (s *Scheduler) Manual() {
 // Restart the loop read in new interval if modified
 func (s *Scheduler) Restart() {
 	s.Stop()
-	s.Start()
+	s.start()
 }
 
 // Stop the loop exiting the go routine as immediately
@@ -59,7 +59,7 @@ func (s *Scheduler) Stop() {
 }
 
 // Start the task loop
-func (s *Scheduler) Start() {
+func (s *Scheduler) start() {
 	go s.loop()
 }
 
