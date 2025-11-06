@@ -77,15 +77,15 @@ func (s *Service) autoBuy() {
 	var vip *BuyVIPResponse
 	var err error
 
-	if !s.conf().AutoBuyVip {
-		log.Info().Msg("AutoBuy vip is disabled, skipping....")
-	} else {
+	if s.conf().AutoBuyVip {
 		vip, err = s.BuyVIP(0)
 		if err != nil {
 			log.Warn().Err(err).Msg("unable buy vip")
 		} else {
 			log.Info().Any("vip", vip).Msg("bought vip weeks")
 		}
+	} else {
+		log.Info().Msg("AutoBuy vip is disabled, skipping....")
 	}
 
 	if s.conf().AutoBuyBonus {

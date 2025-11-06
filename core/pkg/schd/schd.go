@@ -72,9 +72,7 @@ func (s *Scheduler) loop() {
 			s.Manual()
 		case <-s.manualChan:
 			s.task()
-			_ = <-s.manualChan
 		case <-s.cancelChan:
-			_ = <-s.cancelChan
 			return
 		}
 	}
