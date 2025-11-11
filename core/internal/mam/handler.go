@@ -18,7 +18,7 @@ func NewHandler(srv *Service) *Handler {
 }
 
 func (h *Handler) IsMamSetup(context.Context, *connect.Request[v1.IsMamSetupRequest]) (*connect.Response[v1.IsMamSetupResponse], error) {
-	if h.srv.provider().MamToken == "" {
+	if h.srv.conf().MamToken == "" {
 		return nil, fmt.Errorf("mam key not set")
 	}
 

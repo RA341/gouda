@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	sc "github.com/RA341/gouda/internal/server_config"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/require"
 )
@@ -14,10 +15,16 @@ func TestService_GetProfile(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func Test_divideIntoMamGBAmounts(t *testing.T) {
+	res := divideIntoMamGBAmounts(112)
+	require.Equal(t, []int{100, 10}, res)
+}
+
 func TestService_BuyVault(t *testing.T) {
-	//srv := setup(t)
-	//err := srv.BuyVault(srv.cookie, 1000)
-	//require.NoError(t, err)
+	srv := setup(t)
+	resp, err := srv.BuyBonus(8)
+	require.NoError(t, err)
+	t.Log(resp)
 }
 
 func TestService_SearchRaw(t *testing.T) {
@@ -39,9 +46,24 @@ func TestService_SearchRaw(t *testing.T) {
 }
 
 func setup(t *testing.T) *Service {
-	//cookie := getMamCookie(t)
-	//srv := NewService(cookie)
-	return nil
+	cookie := getMamCookie(t)
+	srv := NewService(
+		func() *sc.MamConfig {
+			return &sc.MamConfig{
+				MamToken:        cookie,
+				ServiceInterval: "",
+				AutoBuyBonus:    false,
+				AutoBuyVip:      false,
+			}
+		},
+		func() *sc.Logger {
+			return &sc.Logger{
+				Level:   "debug",
+				Verbose: true,
+			}
+		},
+	)
+	return srv
 }
 
 func getMamCookie(t *testing.T) string {

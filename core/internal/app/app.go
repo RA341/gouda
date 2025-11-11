@@ -43,26 +43,27 @@ func NewApp(conf *sc.GoudaConfig) *App {
 
 	authSrv := auth.NewService(db, db)
 	catSrv := category.NewService(db)
-	mamSrv := mam.NewService(func() sc.MamConfig {
-		return conf.GetVal().Mam
-	})
+	mamSrv := mam.NewService(
+		func() *sc.MamConfig {
+			return &conf.Load().Mam
+		},
+		func() *sc.Logger {
+			return &conf.Load().Log
+		},
+	)
 	downloadSrv := downloads.NewService(
 		db,
 		func() *sc.TorrentClient {
-			val := conf.GetVal().TorrentClient
-			return &val
+			return &conf.Load().TorrentClient
 		},
 		func() *sc.UserPermissions {
-			val := conf.GetVal().Permissions
-			return &val
+			return &conf.Load().Permissions
 		},
 		func() *sc.Directories {
-			val := conf.GetVal().Dir
-			return &val
+			return &conf.Load().Dir
 		},
 		func() *sc.Downloader {
-			val := conf.GetVal().Downloader
-			return &val
+			return &conf.Load().Downloader
 		},
 	)
 

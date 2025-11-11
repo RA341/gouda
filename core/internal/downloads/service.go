@@ -82,7 +82,7 @@ func (d *Service) TestAndUpdateClient() error {
 func (d *Service) TestClient(client *sc.TorrentClient) (dc.DownloadClient, error) {
 	newClient, err := dc.TestTorrentClient(client)
 	if err != nil {
-		return nil, fmt.Errorf("unable to connect torrent torrentClient: %v", err)
+		return nil, fmt.Errorf("unable to connect torrent client: %w", err)
 	}
 	return newClient, nil
 }

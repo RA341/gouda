@@ -52,6 +52,7 @@ func (s *Service) updateMamAdminConfig(config MamConfig) error {
 
 	return s.conf.DumpToYaml()
 }
+
 func (s *Service) updateMamToken(mamToken string) error {
 	s.conf.RW.RLock()
 	defer s.conf.RW.RUnlock()

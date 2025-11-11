@@ -13,42 +13,108 @@ import (
 	"github.com/RA341/gouda/internal/info"
 	sc "github.com/RA341/gouda/internal/server_config"
 	fu "github.com/RA341/gouda/pkg/file_utils"
+	"github.com/RA341/gouda/pkg/schd"
 	"github.com/rs/zerolog/log"
 	"resty.dev/v3"
 )
 
-const IDCookieKey = "mam_id"
+const (
+	// CookieKeyID Cookie key name for auth
+	CookieKeyID     = "mam_id"
+	defaultDuration = time.Hour * 24
+	PointsPerGB     = 500
+)
 
 // Service holds the necessary information to interact with the MAM API.
 type Service struct {
-	client   func() *resty.Client
-	provider ApiKeyProvider
+	client func() *resty.Client
+	conf   ConfigProvider
+
+	scd *schd.Scheduler
 }
-type ApiKeyProvider func() sc.MamConfig
+type ConfigProvider func() *sc.MamConfig
 
-// NewService creates a new instance of the MAM service.
-func NewService(provider ApiKeyProvider) *Service {
-	client := setupClient(provider)
+type LoggerConfig func() *sc.Logger
+
+func NewService(config ConfigProvider, logger LoggerConfig) *Service {
+	client := setupClient(config, logger)
+
+	interval := config().GetMamInterval(defaultDuration)
 	s := &Service{
-		client:   client,
-		provider: provider,
+		client: client,
+		conf:   config,
 	}
-
-	go NewBackgroundService(s).Start()
+	s.scd = schd.NewScheduler(
+		s.autoBuy,
+		interval,
+	)
+	s.scd.Manual()
 
 	return s
 }
 
 func NewMamValidator(token string) error {
-	provider := func() sc.MamConfig {
-		return sc.MamConfig{MamToken: token}
+	provider := func() *sc.MamConfig {
+		return &sc.MamConfig{MamToken: token}
 	}
-	client := setupClient(provider)
+	logger := func() *sc.Logger {
+		return &sc.Logger{
+			Verbose: false,
+		}
+	}
+
+	client := setupClient(provider, logger)
 	service := Service{
-		client:   client,
-		provider: provider,
+		client: client,
+		conf:   provider,
 	}
 	return service.IsMamSetup()
+}
+
+func (s *Service) autoBuy() {
+	log.Info().Msg("starting autobuy")
+
+	var vip *BuyVIPResponse
+	var err error
+
+	if s.conf().AutoBuyVip {
+		vip, err = s.BuyVIP(0)
+		if err != nil {
+			log.Warn().Err(err).Msg("unable buy vip")
+		} else {
+			log.Info().Any("vip", vip).Msg("bought vip weeks")
+		}
+	} else {
+		log.Info().Msg("AutoBuy vip is disabled, skipping....")
+	}
+
+	if s.conf().AutoBuyBonus {
+		gbToBuy := 0
+		if vip != nil {
+			MinPointsToKeep := float64(s.conf().MinPointsToKeep)
+
+			if vip.SeedBonus > MinPointsToKeep {
+
+				gbToBuy = int((vip.SeedBonus - MinPointsToKeep) / PointsPerGB)
+				// reduce by safeMargin incase we are at the edge
+				safeMargin := 1
+				if gbToBuy > safeMargin {
+					gbToBuy -= safeMargin
+				}
+			}
+		}
+
+		log.Info().Int("gb", gbToBuy).Msg("buying bonus")
+
+		bonus, err := s.BuyBonus(uint(gbToBuy))
+		if err != nil {
+			log.Warn().Err(err).Msg("unable buy bonus")
+		} else {
+			log.Info().Any("bonus", bonus).Msg("bought bonus points")
+		}
+	} else {
+		log.Info().Msg("AutoBuy bonus is disabled, skipping....")
+	}
 }
 
 // BuyVIP 0 for max
@@ -76,17 +142,71 @@ func (s *Service) BuyVIP(durationInWeeks uint) (*BuyVIPResponse, error) {
 	return &result, nil
 }
 
+// Divides a number into the specified integer intervals: 100, 20, 5, 1.
+// since mam requires the gb to be 100, 20, 5, 1 GB
+// It returns a slice of the gbs to buy dividing the original amount.
+func divideIntoMamGBAmounts(num uint) []uint {
+	n := num
+	intervals := []uint{100, 20, 5, 1}
+
+	var result []uint
+
+	for _, interval := range intervals {
+		// Calculate how many times the current interval fits into the remaining number
+		count := n / interval
+
+		for i := uint(0); i < count; i++ {
+			// Add the interval to the result array
+			result = append(result, interval)
+			// Subtract the interval from the remaining number
+			n -= interval
+		}
+	}
+
+	// 'n' will be the final remainder, which should be 0 since 1 is the smallest interval
+	// If you wanted to return a remainder, you'd check 'n' here.
+
+	return result
+}
+
 // BuyBonus 0 for max
 func (s *Service) BuyBonus(amountInGB uint) (*BuyBonusResponse, error) {
 	strAmount := ""
 	if amountInGB == 0 {
 		strAmount = "Max%20Affordable%20"
-	} else {
-		strAmount = strconv.Itoa(int(amountInGB))
+		return s.buyBonusRequest(strAmount)
 	}
 
+	res := divideIntoMamGBAmounts(amountInGB)
+	log.Debug().Uints("amounts", res).Msg("buying amounts")
+	var errs error
+	var resp *BuyBonusResponse
+
+	for _, amount := range res {
+		var err error
+		resp, err = s.buyBonusRequest(strconv.Itoa(int(amount)))
+
+		if err != nil {
+			currentErr := fmt.Errorf("buyBonus Amount: %d failed: %w", amount, err)
+			if errs != nil {
+				errs = fmt.Errorf("%w\n%w", currentErr, errs)
+			} else {
+				errs = currentErr
+			}
+		}
+
+		log.Debug().Any("response", resp).Msg("bought amount")
+
+		time.Sleep(time.Second * 2)
+	}
+
+	return resp, errs
+}
+
+// strAmount
+func (s *Service) buyBonusRequest(amount string) (*BuyBonusResponse, error) {
 	now := time.Now().Unix()
-	base := fmt.Sprintf("/json/bonusBuy.php/?spendtype=upload&amount=%s&_=%d", strAmount, now)
+	base := fmt.Sprintf("/json/bonusBuy.php/?spendtype=upload&amount=%s&_=%d", amount, now)
 	body, err := s.runGet(base)
 	if err != nil {
 		return nil, err
@@ -102,7 +222,7 @@ func (s *Service) BuyBonus(amountInGB uint) (*BuyBonusResponse, error) {
 }
 
 func (s *Service) SafeGetProfile() (*UserData, error) {
-	key := s.provider().MamToken
+	key := s.conf().MamToken
 	if key == "" {
 		return nil, fmt.Errorf("mam api key is empty")
 	}
@@ -204,7 +324,7 @@ func (s *Service) BuyVault(apiKey string, amount uint) error {
 		}).
 		SetCookie(&http.Cookie{Name: "uid", Value: uid}).
 		SetCookie(&http.Cookie{
-			Name:  IDCookieKey,
+			Name:  CookieKeyID,
 			Value: apiKey,
 		}).
 		SetFormData(map[string]string{
@@ -613,10 +733,10 @@ func extractFormatFromTags(tags string) string {
 
 const baseURL = "https://www.myanonamouse.net"
 
-func setupClient(provider ApiKeyProvider) func() *resty.Client {
+func setupClient(provider ConfigProvider, logger LoggerConfig) func() *resty.Client {
 	return func() *resty.Client {
 		authCookie := &http.Cookie{
-			Name:  IDCookieKey,
+			Name:  CookieKeyID,
 			Value: provider().MamToken,
 		}
 		client := resty.New().
@@ -626,6 +746,10 @@ func setupClient(provider ApiKeyProvider) func() *resty.Client {
 				fmt.Sprintf("gouda/%s (+https://github.com/RA341/gouda)", info.Version),
 			).
 			SetBaseURL(baseURL)
+
+		if logger().Verbose || info.IsDev() {
+			client.EnableDebug()
+		}
 
 		return client
 	}
