@@ -74,15 +74,15 @@ func NewMamValidator(token string) error {
 func (s *Service) autoBuy() {
 	log.Info().Msg("starting autobuy")
 
-	var vip *BuyVIPResponse
-	var err error
+	var availableBonus float64 = 0
 
 	if s.conf().AutoBuyVip {
-		vip, err = s.BuyVIP(0)
+		vip, err := s.BuyVIP(0)
 		if err != nil {
 			log.Warn().Err(err).Msg("unable buy vip")
 		} else {
 			log.Info().Any("vip", vip).Msg("bought vip weeks")
+			availableBonus = vip.SeedBonus
 		}
 	} else {
 		log.Info().Msg("AutoBuy vip is disabled, skipping....")
@@ -90,27 +90,30 @@ func (s *Service) autoBuy() {
 
 	if s.conf().AutoBuyBonus {
 		gbToBuy := 0
-		if vip != nil {
-			MinPointsToKeep := float64(s.conf().MinPointsToKeep)
-
-			if vip.SeedBonus > MinPointsToKeep {
-
-				gbToBuy = int((vip.SeedBonus - MinPointsToKeep) / PointsPerGB)
-				// reduce by safeMargin incase we are at the edge
-				safeMargin := 1
-				if gbToBuy > safeMargin {
-					gbToBuy -= safeMargin
-				}
+		if availableBonus == 0 {
+			profile, err := s.GetProfile()
+			if err != nil {
+				log.Warn().Err(err).Msg("unable to get profile, available points will be 0")
+			} else {
+				availableBonus = float64(profile.Seedbonus)
 			}
 		}
 
-		log.Info().Int("gb", gbToBuy).Msg("buying bonus")
-
-		bonus, err := s.BuyBonus(uint(gbToBuy))
-		if err != nil {
-			log.Warn().Err(err).Msg("unable buy bonus")
+		minPointsToKeep := float64(s.conf().MinPointsToKeep)
+		if availableBonus > minPointsToKeep {
+			gbToBuy = int((availableBonus - minPointsToKeep) / PointsPerGB)
+			log.Info().Int("gb", gbToBuy).Msg("buying bonus")
+			bonus, err := s.BuyBonus(uint(gbToBuy))
+			if err != nil {
+				log.Warn().Err(err).Msg("unable buy bonus")
+			} else {
+				log.Info().Any("bonus", bonus).Msg("bought bonus points")
+			}
 		} else {
-			log.Info().Any("bonus", bonus).Msg("bought bonus points")
+			log.Info().
+				Float64("available", availableBonus).
+				Float64("minimum required", minPointsToKeep).
+				Msg("Insufficient Bonus, skipping")
 		}
 	} else {
 		log.Info().Msg("AutoBuy bonus is disabled, skipping....")
@@ -150,21 +153,14 @@ func divideIntoMamGBAmounts(num uint) []uint {
 	intervals := []uint{100, 20, 5, 1}
 
 	var result []uint
-
 	for _, interval := range intervals {
-		// Calculate how many times the current interval fits into the remaining number
 		count := n / interval
 
 		for i := uint(0); i < count; i++ {
-			// Add the interval to the result array
 			result = append(result, interval)
-			// Subtract the interval from the remaining number
 			n -= interval
 		}
 	}
-
-	// 'n' will be the final remainder, which should be 0 since 1 is the smallest interval
-	// If you wanted to return a remainder, you'd check 'n' here.
 
 	return result
 }
