@@ -565,39 +565,16 @@ func processResponseItems(items []SearchBookRaw) ([]SearchBook, error) {
 
 	books := make([]SearchBook, 0, len(items))
 	for _, item := range items {
-		authors, err := parseAuthorInfo(item.AuthorInfo)
-		if err != nil {
-			log.Warn().Err(err).
-				Str("authorInfoRaw", item.AuthorInfo).
-				Msg("failed to parse author info")
-			continue
-		}
-		narrators, err := parseAuthorInfo(item.NarratorInfo)
-		if err != nil {
-			log.Warn().Err(err).
-				Str("narratorInfoRaw", item.AuthorInfo).
-				Msg("failed to parse narrator info")
-			continue
-		}
-
-		series, err := parseSeriesInfo(item.SeriesInfo)
-		if err != nil {
-			log.Warn().Err(err).
-				Str("seriesInfoRaw", item.SeriesInfo).
-				Msg("failed to parse series info")
-			continue
-		}
-
-		books = append(books, SearchBook{
+		bk := SearchBook{
 			MamID: item.Id,
 			Title: item.Title,
 			// todo thumbnail are protected, make a proxy endpoint
 			Thumbnail:     processThumbnails(&item),
 			Description:   item.Description,
-			Author:        authors,
-			Narrator:      narrators,
+			// Author:        authors,
+			// Narrator:      narrators,
 			UploaderName:  item.OwnerName,
-			Series:        series,
+			// Series:        series,
 			Tags:          item.Tags,
 			DateAddedIso:  item.Added,
 			Snatched:      item.MySnatched != 0,
@@ -611,7 +588,36 @@ func processResponseItems(items []SearchBookRaw) ([]SearchBook, error) {
 			Leechers:      item.Leechers,
 			Completed:     item.TimesCompleted,
 			TorrentLink:   appendMamDownloadBase(item.Dl),
-		})
+		}
+		
+		authors, err := parseAuthorInfo(item.AuthorInfo)
+		if err != nil {
+			log.Warn().Err(err).
+				Str("authorInfoRaw", item.AuthorInfo).
+				Msg("failed to parse author info")
+		} else {
+			bk.Author = authors
+		}
+
+		narrators, err := parseAuthorInfo(item.NarratorInfo)
+		if err != nil {
+			log.Warn().Err(err).
+				Str("narratorInfoRaw", item.AuthorInfo).
+				Msg("failed to parse narrator info")
+		} else {
+			bk.Narrator = narrators
+		}
+
+		series, err := parseSeriesInfo(item.SeriesInfo)
+		if err != nil {
+			log.Warn().Err(err).
+				Str("seriesInfoRaw", item.SeriesInfo).
+				Msg("failed to parse series info")
+		} else {
+			bk.Series = series
+		}
+
+		books = append(books, bk)
 	}
 
 	return books, nil
