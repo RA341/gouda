@@ -150,8 +150,10 @@ func (s *Service) BuyVIP(durationInWeeks uint) (*BuyVIPResponse, error) {
 // It returns a slice of the gbs to buy dividing the original amount.
 func divideIntoMamGBAmounts(num uint) []uint {
 	n := num
-	intervals := []uint{100, 20, 5, 1}
-
+	// intervals := []uint{100, 20, 5, 1}
+	// mam requires buying atleast above 50 gb
+	intervals := []uint{100}
+	
 	var result []uint
 	for _, interval := range intervals {
 		count := n / interval
