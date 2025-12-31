@@ -1,3 +1,16 @@
+# [1.7.0-beta.1](https://github.com/RA341/gouda/compare/v1.6.0...v1.7.0-beta.1) (2025-12-31)
+
+
+### Bug Fixes
+
+* loop time to a 1 minute ([8c609ef](https://github.com/RA341/gouda/commit/8c609efc69ef06b1b09564469fd9315a12dfa2cd))
+* refactored service and api handlers ([5f7ce01](https://github.com/RA341/gouda/commit/5f7ce019e93e530d05e63c2f07a5f6da05bcb4d2))
+
+
+### Features
+
+* added setup page ([faabe42](https://github.com/RA341/gouda/commit/faabe42006531d4cf6089342474c5a0c6202c052))
+
 # [1.7.0-beta.1](https://github.com/RA341/gouda/compare/v1.6.0...v1.7.0-beta.1) (2025-10-03)
 
 
