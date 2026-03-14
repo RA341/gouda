@@ -10,38 +10,39 @@ dependencies:
   flutter:
     sdk: flutter
   # state management
-  flutter_riverpod: ^3.0.3
-  riverpod_annotation: ^3.0.3
+  flutter_riverpod: ^3.3.1
+  riverpod_annotation: ^4.0.2
   flutter_hooks: ^0.21.3+1
-  hooks_riverpod: ^3.0.3
+  hooks_riverpod: ^3.3.1
 
   # networking
   web: ^1.1.1
-  http: ^1.5.0
+  http: ^1.6.0
   connectrpc:
   grpc: ^4.1.0
   protobuf: ^4.2.0
 
-
   # ui
   flutter_animate: ^4.5.2
   timeago: ^3.7.1
-  font_awesome_flutter: ^10.10.0
+  font_awesome_flutter: ^11.0.0
   intl:
 
   # misc
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.4
   url_launcher:
   fixnum: ^1.1.1
   logger: ^2.6.2
   flutter_html: ^3.0.0
 
 dev_dependencies:
-  custom_lint:
-  riverpod_lint: ^3.0.3
+  custom_lint: ^0.8.1
   flutter_lints: ^6.0.0
-  very_good_analysis: ^10.0.0
+  very_good_analysis: ^10.2.0
   flutter_launcher_icons: ^0.14.4
+
+dependency_overrides:
+  analyzer: ^10.0.0
 
 flutter_launcher_icons:
   image_path: "assets/gouda.png"
