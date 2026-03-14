@@ -64,7 +64,7 @@ class SearchItemActionButtons extends HookConsumerWidget {
           label: isSending.value
               ? const Text("Sending")
               : const Text("Wedge Download"),
-          icon: const Icon(FontAwesomeIcons.cheese),
+          icon: const FaIcon(FontAwesomeIcons.cheese),
           style: ElevatedButton.styleFrom(
             foregroundColor: const Color(0xffe19103),
           ),
