@@ -12,6 +12,7 @@ vars:
   GENERATED_DIR: generated
   PROTODIR: protos
   GO_PACKAGE_BASE: "github.com/RA341/gouda/generated"
+  cu: '{{ if eq .OS "Windows_NT" }}coreutils{{ else }}{{ end }}'
 
 tasks:
   proto:*:*:
@@ -22,9 +23,9 @@ tasks:
       PACKAGE_PATH: "{{ .PROTODIR }}/{{ .PROTO_PACKAGE }}/{{ .VERSION }}"
       FILE_PATH: "{{ .PACKAGE_PATH }}/{{ .PROTO_PACKAGE }}.proto"
     cmds:
-      - coreutils mkdir -p {{ .PACKAGE_PATH }}
+      - '{{.cu}} mkdir -p {{ .PACKAGE_PATH }}'
       - |
-        coreutils cat <<EOF > {{ .FILE_PATH }}
+        {{.cu}} cat <<EOF > {{ .FILE_PATH }}
         syntax = "proto3";
 
         package {{ .PROTO_PACKAGE }}.{{ .VERSION }};
@@ -57,7 +58,7 @@ tasks:
     desc: Generate and copy generated files to their respective destinations
     deps: [ geno ]
     cmds:
-      - task --parallel go dart
+      - task --parallel web go dart
 
   go:
     desc: Move generated Go files
@@ -67,7 +68,7 @@ tasks:
         vars:
           TARGET_DIR: '{{.CORE_DIR}}'
           SOURCE_PATTERN: '{{.GENERATED_DIR}}/go/*'
-      - coreutils rm -rf {{.GENERATED_DIR}}/go
+      - '{{.cu}} rm -rf {{.GENERATED_DIR}}/go'
 
   dart:
     desc: Move generated Dart files
@@ -76,17 +77,17 @@ tasks:
         vars:
           TARGET_DIR: '{{.UI_DIR}}'
           SOURCE_PATTERN: '{{.GENERATED_DIR}}/dart/*'
-      - coreutils rm -rf {{.GENERATED_DIR}}/dart
+      - '{{.cu}} rm -rf {{.GENERATED_DIR}}/dart'
 
-  #  web:
-  #    desc: Move generated web files
-  #    cmds:
-  #      - echo "moving web files"
-  #      - task: _copy
-  #        vars:
-  #          TARGET_DIR: '{{.WEB_DIR}}'
-  #          SOURCE_PATTERN: '{{.GENERATED_DIR}}/web/*'
-  #      - coreutils rm -rf {{.GENERATED_DIR}}/web
+  web:
+    desc: Move generated web files
+    cmds:
+      - echo "moving web files"
+      - task: _copy
+        vars:
+          TARGET_DIR: '{{.WEB_DIR}}'
+          SOURCE_PATTERN: '{{.GENERATED_DIR}}/web/*'
+      - '{{.cu}} rm -rf {{.GENERATED_DIR}}/web'
 
   _copy:
     internal: true
@@ -94,9 +95,9 @@ tasks:
       TARGET_DIR: '{{.TARGET_DIR}}'
       SOURCE_PATTERN: '{{.SOURCE_PATTERN}}'
     cmds:
-      - coreutils rm -f -r {{.TARGET_DIR}}/*
-      - coreutils mkdir -p {{.TARGET_DIR}}
-      - coreutils cp -r {{.SOURCE_PATTERN}} {{.TARGET_DIR}}/
+      - '{{.cu}} rm -f -r {{.TARGET_DIR}}/*'
+      - '{{.cu}} mkdir -p {{.TARGET_DIR}}'
+      - '{{.cu}} cp -r {{.SOURCE_PATTERN}} {{.TARGET_DIR}}/'
 
   it:
     desc: Run an interactive shell inside the Docker container

@@ -15,3 +15,5 @@ buf generate
 
 # Fix permissions on generated files
 chmod -R 770 ./generated
+
+chown -R 1000:1000 ./generated
