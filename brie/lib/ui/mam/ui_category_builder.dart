@@ -30,7 +30,7 @@ class CategoryDropDown extends ConsumerWidget {
       requestFocusOnTap: false,
       enabled: !isLoading,
       initialSelection: initialSelection,
-      onSelected: (String? value) async {
+      onSelected: (value) async {
         if (value == '__add_new__') {
           await _showAddCategoryDialog(context, ref);
           return;

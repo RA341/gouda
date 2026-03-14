@@ -40,7 +40,7 @@ Future<void> showErrorDialog(
   await showDialog<void>(
     context: context,
     barrierDismissible: false,
-    builder: (BuildContext context) {
+    builder: (context) {
       return AlertDialog(
         title: Text(
           title,

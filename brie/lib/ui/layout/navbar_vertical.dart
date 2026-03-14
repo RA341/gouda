@@ -40,7 +40,7 @@ class VerticalNavBar extends ConsumerWidget {
               backgroundColor: Colors.transparent,
               selectedIndex: pageIndex,
               groupAlignment: -0.955,
-              onDestinationSelected: (int index) =>
+              onDestinationSelected: (index) =>
                   ref.read(pageIndexProvider.notifier).switchPage(index),
               labelType: labelType,
               leading: const GoudaHeader(),

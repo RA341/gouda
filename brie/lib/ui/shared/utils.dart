@@ -17,7 +17,7 @@ Widget createUpdateButtons(
     onEditingComplete: editingController,
     onChanged: onChanged,
     decoration: InputDecoration(
-      border: OutlineInputBorder(),
+      border: const OutlineInputBorder(),
       labelText: label,
       hintText: hintText,
     ),
@@ -42,11 +42,11 @@ Widget createDropDown(
     requestFocusOnTap: false,
     // disable text editing
     initialSelection: options[selectedIndex == -1 ? 0 : selectedIndex],
-    onSelected: (String? value) {
+    onSelected: (value) {
       controller.text = value ?? options.first;
       onChanged(controller.text);
     },
-    dropdownMenuEntries: options.map<DropdownMenuEntry<String>>((String value) {
+    dropdownMenuEntries: options.map<DropdownMenuEntry<String>>((value) {
       return DropdownMenuEntry<String>(
         value: value,
         label: value,

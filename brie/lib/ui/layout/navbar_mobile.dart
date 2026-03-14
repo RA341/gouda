@@ -28,7 +28,7 @@ class MobileNavbar extends ConsumerWidget {
       // elevation: 0,
       // height: 20,
       selectedIndex: pageIndex,
-      onDestinationSelected: (int index) =>
+      onDestinationSelected: (index) =>
           ref.read(pageIndexProvider.notifier).switchPage(index),
       destinations: navItems,
     );

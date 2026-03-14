@@ -9,7 +9,7 @@ List<Widget> pageHeaderBuilder({
         alignment: Alignment.centerLeft,
         child: Text(
           header,
-          style: TextStyle(fontSize: 40),
+          style: const TextStyle(fontSize: 40),
         ),
       ),
       Align(

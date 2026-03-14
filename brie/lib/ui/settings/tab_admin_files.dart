@@ -208,7 +208,7 @@ final directoryListingsProvider =
       final settingsApi = ref.read(settingsApiProvider);
       logger.d("getting path $path");
 
-      return await settingsApi.listDirectories(
+      return settingsApi.listDirectories(
         ListDirectoriesRequest(filePath: path),
       );
     });
